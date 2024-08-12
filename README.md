@@ -1,1 +1,1 @@
-# diplomski-rad-2024
+# Diplomski Rad 2024
