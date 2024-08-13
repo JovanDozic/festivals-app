@@ -44,6 +44,7 @@
 
 - Svakakvi razni pregledi, izvestaji i slicno ce biti dostupno svim vrstama korisnika u kontekstima koji ti korisnici imaju (korisnik moze da vidi stanje na narukvici, admin moze da vidi sve porudzbine itd.).
 - Postojace vrsta korisnika `superadmin`, on ce moci da dodeljuje ostale administratore, i uopsteno da upravlja sistemom i ostalim korisnicima. Međutim, superadmin nece moci da upravlja festivalima, paketima itd.
+- Admin moze da upravlja jednim festivalom. Jedan festival moze da ima vise administratora, i jednog vlasnika. Vlasnik je admin koji je kreirao festival. Vlasnik moze da dodeli druge admine za taj festival. Vlasnik moze da kreira pakete, da ih menja, i da uređuje svaki aspekt festivala. Vlasnik moze i da doda festival currency ili da koristi EUR kao default.
 
 ## Upit za [čet](https://chatgpt.com/)
 
