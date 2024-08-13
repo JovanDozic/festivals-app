@@ -4,8 +4,8 @@
 
 ## TODO:
 
-- [] Promeniti naslov da ima smisla, ne sviđa mi se `Prodaja i menadzment festivala`.
-- [] Mozda napomenuti da se narukvice prodaju po dropovima? Ili da ostavimo da je on-demand znaci kako ko bude hteo da kupi da kupi - TJ. pretpostavljamo da festival nece biti rasprodat u nekoliko sati.
+- [ ] Promeniti naslov da ima smisla, ne sviđa mi se `Prodaja i menadzment festivala`.
+- [ ] Mozda napomenuti da se narukvice prodaju po dropovima? Ili da ostavimo da je on-demand znaci kako ko bude hteo da kupi da kupi - TJ. pretpostavljamo da festival nece biti rasprodat u nekoliko sati.
 
 ## Opis osnovne funkcionalnosti
 
