@@ -5,7 +5,7 @@
 1. Specifikacija softverskih zahteva
 2. Use-case dijagrami
 3. Dijagrami sekvence (za 2-3 funkcionalnosti sistema)
-4. Sema baze podataka ER
+4. Sema baze podataka EER
 5. Sema baze podataka implementaciona (relaciona) - nije vezana za odredišni DBMS
 6. Sema baze podataka fizička (relaciona) vezana za konkretni SUBP - ukoliko alat za modelovanje podržava ovako nešto
 7. Implementacija aplikacije nad projektovanom bazom - frontend i bekend u bilo kojim tehnologijama

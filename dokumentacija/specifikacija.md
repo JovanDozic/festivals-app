@@ -16,8 +16,10 @@
 5. Korisniku je prikazan portal u koji ima vise koraka. Na vrhu ekrana nalazi se neki counter ili progress bar ili slicno koji pokazuje koliko je korisnik odmakao u procesu kupovine.
    a. Korisnik prvo bira kontinent, drzavu i grad odakle zeli da departuje.
    b. Korisnik bira dostupnu vrstu prevoza za taj grad/drzavu (avion, autobus, voz).
-   c. Korisnik bira vrstu smestaja (hotel, kamp).
-   d. U oba slucaja, korisniku ce biti prikazane sve opcije za hotel/kamp. Korisnik moze svaku od opcija da klikne i vidi vise detalja o njoj, ukljucujuci i slike i detaljniji opis.
+   b2. Korisnik bira termin polaska.
+   b3. Korisnik bira termin povratka.
+   c. Korisnik bira vrstu smestaja (koji kamp).
+   d. Korisniku ce biti prikazane sve opcije za kamp. Korisnik moze svaku od opcija da klikne i vidi vise detalja o njoj, ukljucujuci i slike i detaljniji opis.
    e. Potom, korisniku su ponuđene dve vrste festivalskih karata - regular i comfort tj. VIP. Korisnik bira jednu od njih.
    f. Korisniku je konacno prikazan pregled svih izabranih opcija, i potom moze da ide da "kupi" kartu.
    g. Korisnik unosi sve informacije o sebi, adresi, i nacinu placanja. Posle "placanja", korisnik dobija potvrdu o kupovini (na portalu kao i na email adresu).
