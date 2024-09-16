@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="D4F98E8D-01D1-F48B-5426-4C78938EABA0" containerWithKeyObject="B36DDD2E-AC9D-8B8B-A7A5-D71BB21884AA" localFKIndex="53351437-0A45-BA7A-B928-5D46D1A48F4B" name="VIPTicket_VIPArea_FK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>53BEB18F-87D7-9CA5-8BA6-E57D1300A28E</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<referredTableLongName>VIPArea</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>060924D1-10EC-7147-5EB3-77E66F9779A3</referredTableID>
+<keyObject>C3133EA0-DC65-B936-3ECE-DF8256738275</keyObject>
+<referredKeyID>C3133EA0-DC65-B936-3ECE-DF8256738275</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>VIP_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

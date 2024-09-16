@@ -1,0 +1,75 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="1510068B-0855-6B0D-A4F4-413099BAB6CF" name="Ticket">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>028D8FED-FF97-2513-ECAA-07ADC3F6C331</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="TCK_ID" id="5E591F5B-E8F2-91C8-D750-8D7B41CAB99C">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>27B0F425-3B11-7FAC-B27A-2024094FEB97</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="TCK_PRICE" id="EB22CAFC-789D-CEAD-7330-CA68F9BF22AD">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>181B62B6-B2B2-EF24-721A-6A78660C43BA</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT021</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="TicketType_TTY_ID" id="6FA8E9EA-F67F-B61D-DCA1-8EF64DBCEF48">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>182A5BEC-09C2-A922-8431-C63631DF02E6</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="3C6BFE4C-8090-83DD-EC1E-2764D40E614D" referredColumn="5E27EE5A-5094-FA8B-255D-0021859BEC81"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="C4641F1B-5A68-EFC5-96D6-B8D993FFDD7A" name="Ticket_PK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>B16B8CB1-C5A4-913A-15E3-FED54FC7ADE9</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="5E591F5B-E8F2-91C8-D750-8D7B41CAB99C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="D1E4E8F0-7993-F461-AAAA-0EE0DC861FF2" name="Ticket_TicketType_FK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>54D1FF90-B89E-72F5-AD62-61ADCD77EEBD</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="6FA8E9EA-F67F-B61D-DCA1-8EF64DBCEF48"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

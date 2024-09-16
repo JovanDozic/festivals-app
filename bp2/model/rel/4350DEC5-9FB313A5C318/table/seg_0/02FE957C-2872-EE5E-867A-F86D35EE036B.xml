@@ -1,0 +1,77 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="02FE957C-2872-EE5E-867A-F86D35EE036B" name="VIPTicket">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>C5500BF1-7AD5-1CC3-ECAE-DA080C29EDCE</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="TTY_ID" id="C0D757F6-F61A-257A-EB46-2457E9AE3926">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>2F84A659-7FBE-AD01-4CC9-941A0913C6A2</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="4938D632-B21F-0828-076C-9A6E03EB1F07" referredColumn="BCC4689F-9E8B-7760-8F9A-0904F75B0041"/>
+</associations>
+</Column>
+<Column name="VIPArea_VIP_ID" id="85CEF03A-5673-D53D-E6B1-804C29F45867">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>832FFADC-3EF6-6735-630E-81F77B63844A</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="BFC35E12-B24A-A528-6F85-0C11178A7B00" referredColumn="A4284642-10E5-4256-C1E0-484B147A9DBA"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="3FB2A06E-EE88-E4B7-5489-C807C818402F" name="VIPTicket_PK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>616FA139-DBA2-76A5-DE30-32C38A3D08C8</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C0D757F6-F61A-257A-EB46-2457E9AE3926"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="7A9430F4-11A5-EBDD-4FDE-4F9FD9071E56" name="VIPTicket_TicketType_FK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>DA5FCE8F-3A10-477E-7034-6D572123608E</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C0D757F6-F61A-257A-EB46-2457E9AE3926"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="2EF6FCF2-D248-AE12-346A-0272394DAC34" name="VIPTicket_VIPArea_FK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>53BEB18F-87D7-9CA5-8BA6-E57D1300A28E</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="85CEF03A-5673-D53D-E6B1-804C29F45867"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

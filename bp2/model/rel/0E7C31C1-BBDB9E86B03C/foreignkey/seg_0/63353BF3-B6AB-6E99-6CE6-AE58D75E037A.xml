@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="63353BF3-B6AB-6E99-6CE6-AE58D75E037A" containerWithKeyObject="9B31DDFF-4BE8-0411-C5B5-44BFA471377E" localFKIndex="F3DF10FF-281F-2D64-F30F-4E04BCD074D7" name="GAPlusTicket_Discount_FK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>2AE440BE-5745-6B3D-E3E9-18DBDF7E63D8</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<referredTableLongName>Discount</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>690FEA53-DAB9-12EF-4957-9035C5ECD01F</referredTableID>
+<keyObject>2329A4B1-3553-8576-D590-9385E86C7DCE</keyObject>
+<referredKeyID>2329A4B1-3553-8576-D590-9385E86C7DCE</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>DSC_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

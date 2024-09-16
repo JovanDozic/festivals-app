@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="4938D632-B21F-0828-076C-9A6E03EB1F07" containerWithKeyObject="02FE957C-2872-EE5E-867A-F86D35EE036B" localFKIndex="7A9430F4-11A5-EBDD-4FDE-4F9FD9071E56" name="VIPTicket_TicketType_FK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>DA5FCE8F-3A10-477E-7034-6D572123608E</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<referredTableLongName>TicketType</referredTableLongName>
+<arc>38FB54FB-57DA-C30D-A291-8ACACC04EF05</arc>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>C37E1E08-A717-8F02-175F-2CD9CF1B5AD8</referredTableID>
+<keyObject>2ACF9243-20AC-2B79-1E3D-3199DFE80DE0</keyObject>
+<referredKeyID>2ACF9243-20AC-2B79-1E3D-3199DFE80DE0</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>TTY_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<discriminatorValue>VIPTicket</discriminatorValue>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

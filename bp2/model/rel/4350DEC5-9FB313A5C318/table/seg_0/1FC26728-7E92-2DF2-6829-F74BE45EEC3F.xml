@@ -1,0 +1,143 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="1FC26728-7E92-2DF2-6829-F74BE45EEC3F" name="Performs">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<ownerDesignName>model</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="Stage_STG_ID" id="1E897EB4-5719-B08F-F663-E30C263E9ECF">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="6E98611C-2CA2-8850-8E85-2299D961AB12" referredColumn="4CCB789C-912E-CAEF-E1B5-88E5AF42EA77"/>
+</associations>
+</Column>
+<Column name="Stage_Event_EVT_ID" id="550E5415-66BC-2CB6-D79A-313A411A5563">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="6E98611C-2CA2-8850-8E85-2299D961AB12" referredColumn="EB039733-6486-BCCD-0400-B17F4176A022"/>
+</associations>
+</Column>
+<Column name="Performer_PER_ID" id="64A49345-4129-C646-33FB-0CE7F77EBFB6">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="7169298B-9BFF-37B5-4AEE-53892F7BDEE4" referredColumn="D1AE5D44-CB72-02F4-6F8E-19F899F6ADC2"/>
+</associations>
+</Column>
+<Column name="PRF_ID" id="65D7F550-BC1F-771C-3294-3172F67A25CF">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>9F3A89F4-0949-989F-75BF-4D50C0611D61</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<isRelationshipColumn>true</isRelationshipColumn>
+<isDependOnFK_AsMandatory>true</isDependOnFK_AsMandatory>
+</Column>
+<Column name="PRF_DATE" id="E4C3D01B-332E-C02A-88B2-7743CC2129BD">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>8AFB7312-74BC-58FA-D8C1-62C2DA764CA7</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<isRelationshipColumn>true</isRelationshipColumn>
+<isDependOnFK_AsMandatory>true</isDependOnFK_AsMandatory>
+</Column>
+<Column name="PRF_START_TIME" id="C3F31ECC-2FD0-ED6D-3DB9-726232670C22">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>70BC7FE6-3782-10E3-66BF-09BC6AA23469</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT014</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<isRelationshipColumn>true</isRelationshipColumn>
+<isDependOnFK_AsMandatory>true</isDependOnFK_AsMandatory>
+</Column>
+<Column name="PRF_END_TIME" id="9874D998-B6B8-521E-C6BE-6C5A45A5305F">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>4A812FAD-286E-E63F-6521-700A626417AF</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT014</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<isRelationshipColumn>true</isRelationshipColumn>
+<isDependOnFK_AsMandatory>true</isDependOnFK_AsMandatory>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="024275A1-9D29-8B9E-8C3E-356BAE2D03D6" name="Performs_PK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<ownerDesignName>model</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="1E897EB4-5719-B08F-F663-E30C263E9ECF"/>
+<colUsage columnID="550E5415-66BC-2CB6-D79A-313A411A5563"/>
+<colUsage columnID="64A49345-4129-C646-33FB-0CE7F77EBFB6"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="86D8B54F-7C41-3136-A8CE-BF5200346592" name="Performs_Stage_FK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>3843B105-554E-5487-F12E-7E39FADB2AF6</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="1E897EB4-5719-B08F-F663-E30C263E9ECF"/>
+<colUsage columnID="550E5415-66BC-2CB6-D79A-313A411A5563"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="3A912BE4-3B9C-06CB-4199-0891A508B762" name="Performs_Performer_FK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>3843B105-554E-5487-F12E-7E39FADB2AF6</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="64A49345-4129-C646-33FB-0CE7F77EBFB6"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

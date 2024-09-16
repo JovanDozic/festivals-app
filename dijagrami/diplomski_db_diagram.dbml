@@ -1,0 +1,40 @@
+
+Table users {
+  user_id uuid [primary key]
+  username varchar [not null]
+  role_id varchar
+  created_at timestamp
+}
+
+Table user_profiles {
+  user_profile_id uuid [primary key]
+  user_id uuid [unique]
+  first_name string [not null]
+  last_name string
+  email string [not null]
+  date_of_birth date
+}
+Ref: user_profiles.user_id - users.user_id
+
+Table admins {
+  admin_id uuid [primary key]
+  user_id uuid
+}
+Ref: admins.user_id - users.user_id
+
+Table organizers {
+  organizer_id uuid [primary key]
+  user_id uuid
+}
+Ref: organizers.user_id - users.user_id
+
+Table festivals {
+  festival_id uuid [primary key]
+  organizer_id uuid
+  name string [not null]
+  description string
+  start_date date [not null]
+  end_date date [not null]
+
+}
+Ref: festivals.organizer_id - organizers.organizer_id

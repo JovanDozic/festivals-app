@@ -1,0 +1,105 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="C37E1E08-A717-8F02-175F-2CD9CF1B5AD8" name="TicketType">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>4B893D57-0963-C32E-78BF-4D25694989A2</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="TTY_ID" id="BCC4689F-9E8B-7760-8F9A-0904F75B0041">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>2F84A659-7FBE-AD01-4CC9-941A0913C6A2</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="TTY_TYPE" id="1B248255-1DC7-776F-46CC-6974C0F83709">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>FF9D7EE4-BBCB-19E0-8F58-577BE4A66F0D</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 CHAR</dataTypeSize>
+<ownDataTypeParameters>50 CHAR,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="TTY_QUANTITY" id="A3CFE1B9-9E5F-528A-C18C-EDA6F6415321">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>5FDC5F79-D11B-2E2D-B643-B659F8DBFA96</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Event_EVT_ID" id="90FAF829-8540-BCAC-0265-FD858657F859">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>AE91C7FC-BC7F-7ED4-714A-61BC214DA034</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="CA1ED72C-C2BD-54E2-47DA-B63FE04CCBFF" referredColumn="91337867-1723-CFAB-BE09-177D5BD8BC23"/>
+</associations>
+</Column>
+<Column name="TicketType_TYPE" id="C3FC5CC2-0C9A-7644-E889-DF0204294669">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<ownerDesignName>model</ownerDesignName>
+<constraintName>CH_INH_TicketType</constraintName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>12</dataTypeSize>
+<listOfValues>
+<valueDef value="GAPlusTicket" description="entity GAPlusTicket"/>
+<valueDef value="TicketType" description="entity TicketType"/>
+<valueDef value="VIPTicket" description="entity VIPTicket"/>
+</listOfValues>
+<ownDataTypeParameters>12,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<isDiscriminatorColumn>true</isDiscriminatorColumn>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="2ACF9243-20AC-2B79-1E3D-3199DFE80DE0" name="TicketType_PK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>616FA139-DBA2-76A5-DE30-32C38A3D08C8</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="BCC4689F-9E8B-7760-8F9A-0904F75B0041"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="F0E050B6-6D39-B2C5-AED8-6D2ACCBBF498" name="TicketType_Event_FK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 22:05:29 UTC</createdTime>
+<generatorID>A5C38A51-DDCA-F48F-BB48-4601CCBF7726</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="90FAF829-8540-BCAC-0265-FD858657F859"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

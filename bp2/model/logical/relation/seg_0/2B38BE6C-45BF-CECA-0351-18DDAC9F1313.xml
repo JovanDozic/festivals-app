@@ -1,0 +1,21 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="Is_Divided" directorySegmentName="seg_0" id="2B38BE6C-45BF-CECA-0351-18DDAC9F1313">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 21:16:51 UTC</createdTime>
+<ownerDesignName>model</ownerDesignName>
+<engineerTo>
+<item key="4350DEC5-D037-689E-A99A-9FB313A5C318" value="true"/>
+</engineerTo>
+<targetPk>1C785456-381D-2823-4AED-100F8F92D6BC</targetPk>
+<identifying>false</identifying>
+<nameOnSource>super_event</nameOnSource>
+<nameOnTarget>sub_event</nameOnTarget>
+<optionalSource>false</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>24959F66-BE1F-5561-1BEA-894890F6423E</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>24959F66-BE1F-5561-1BEA-894890F6423E</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

@@ -1,0 +1,56 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="Performs" directorySegmentName="seg_0" id="3843B105-554E-5487-F12E-7E39FADB2AF6">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 21:25:27 UTC</createdTime>
+<ownerDesignName>model</ownerDesignName>
+<engineerTo>
+<item key="0E7C31C1-5B86-FE85-58A6-BBDB9E86B03C" value="true"/>
+</engineerTo>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>false</optionalTarget>
+<sourceCardinality>*</sourceCardinality>
+<sourceEntity>E1C86B88-6FE3-F93A-11AF-2B8B6BAA4747</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>172A7D9E-F2D1-48E0-D96A-C71B0453F7D8</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<attribute name="PRF_DATE" id="8AFB7312-74BC-58FA-D8C1-62C2DA764CA7">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 21:27:32 UTC</createdTime>
+<ownerDesignName>model</ownerDesignName>
+<engineerTo>
+<item key="0E7C31C1-5B86-FE85-58A6-BBDB9E86B03C" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</attribute>
+<attribute name="PRF_START_TIME" id="70BC7FE6-3782-10E3-66BF-09BC6AA23469">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 21:27:48 UTC</createdTime>
+<ownerDesignName>model</ownerDesignName>
+<engineerTo>
+<item key="0E7C31C1-5B86-FE85-58A6-BBDB9E86B03C" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT014</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</attribute>
+<attribute name="PRF_END_TIME" id="4A812FAD-286E-E63F-6521-700A626417AF">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-15 21:28:05 UTC</createdTime>
+<ownerDesignName>model</ownerDesignName>
+<engineerTo>
+<item key="0E7C31C1-5B86-FE85-58A6-BBDB9E86B03C" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT014</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</attribute>
+</attributes>
+</Relation>

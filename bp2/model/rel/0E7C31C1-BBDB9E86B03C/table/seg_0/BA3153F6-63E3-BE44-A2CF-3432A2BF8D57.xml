@@ -1,0 +1,128 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="BA3153F6-63E3-BE44-A2CF-3432A2BF8D57" name="Purchase">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>79CE5C65-769B-3BD0-26F2-CF9E4C6918BD</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PCH_ID" id="A3E4ADCC-EF7F-ECE1-2FF5-EE5A8F71E16E">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>2EB12F21-CB8D-BED9-AB2F-7B336DE799FC</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="PCH_DATE" id="CFE40A78-5086-89AC-BA4E-55C5DC8F0299">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>DB95278A-8522-D2B9-4ACD-C52AA799D1C6</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT008</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Ticket_TCK_ID" id="033623FE-136A-4561-B175-31542C9E1EBE">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>EB3851C6-D304-8CB4-4D82-5148831001DA</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="1BE19697-888B-4E35-19F1-CADB7C696B54" referredColumn="5E591F5B-E8F2-91C8-D750-8D7B41CAB99C"/>
+</associations>
+</Column>
+<Column name="Attendee_ATD_ID" id="4640B79C-BB87-A05B-754A-06270DA2D8FA">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>497C336C-CCA8-0DF6-2C13-F7E01C50A016</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="8BD561CE-F8C1-5987-4640-E38115054571" referredColumn="0AAF9F31-2A05-26A1-250D-16C4E62AD33D"/>
+</associations>
+</Column>
+<Column name="Event_EVT_ID" id="4827009F-1418-207F-BA0D-B7B214443AC0">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>3412CFC3-D8D5-A414-9C07-EDA5480C17C7</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="6C918D43-A9C9-9F61-E0EF-D359726188AF" referredColumn="25D22035-8946-EA2A-7E48-4B6140A6EC0A"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="C06DD4DE-8648-FBC9-DBEA-1EFF3A4A3AA0" name="Purchase_PK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>48506A73-C179-2B6F-357D-E4A2DABD397F</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A3E4ADCC-EF7F-ECE1-2FF5-EE5A8F71E16E"/>
+<colUsage columnID="033623FE-136A-4561-B175-31542C9E1EBE"/>
+<colUsage columnID="4640B79C-BB87-A05B-754A-06270DA2D8FA"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="CBECD8ED-F32A-0916-2028-1814E8970C41" name="Purchase_Event_FK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>8AEE1F5E-B67F-274A-67DE-451A68BEB276</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="4827009F-1418-207F-BA0D-B7B214443AC0"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="CF6EE338-FC5F-1B8A-26A2-6998A2DE64A7" name="Purchase_Ticket_FK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>13DD5EA5-C695-9443-880E-C17BBB8209E4</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="033623FE-136A-4561-B175-31542C9E1EBE"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="FDA98F8F-3ED3-CCB1-E7DD-41D24B7B0FF7" name="Purchase_Attendee_FK">
+<createdBy>jovan</createdBy>
+<createdTime>2024-01-16 10:12:43 UTC</createdTime>
+<generatorID>2CE7649B-679C-C424-C2EF-0C6172FEECCF</generatorID>
+<ownerDesignName>model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="4640B79C-BB87-A05B-754A-06270DA2D8FA"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>
