@@ -1,40 +1,153 @@
+ 
+Table images {
+  image_id uuid [primary key]
+  url string // Stored in S3
+}
+
+
 
 Table users {
   user_id uuid [primary key]
-  username varchar [not null]
+  username varchar
   role_id varchar
   created_at timestamp
 }
 
 Table user_profiles {
   user_profile_id uuid [primary key]
-  user_id uuid [unique]
-  first_name string [not null]
+  user_id uuid [ref: - users.user_id]
+  first_name string
   last_name string
-  email string [not null]
+  email string
   date_of_birth date
 }
-Ref: user_profiles.user_id - users.user_id
 
 Table admins {
   admin_id uuid [primary key]
-  user_id uuid
+  user_id uuid [ref: - users.user_id]
 }
-Ref: admins.user_id - users.user_id
+
+Table attendees {
+  attendee_id uuid [primary key]
+  user_id uuid [ref: - users.user_id]
+}
 
 Table organizers {
   organizer_id uuid [primary key]
-  user_id uuid
+  user_id uuid [ref: - users.user_id]
 }
-Ref: organizers.user_id - users.user_id
+
+Table employees {
+  employee_id uuid [primary key]
+  user_id uuid [ref: - users.user_id]
+}
+
+
 
 Table festivals {
   festival_id uuid [primary key]
-  organizer_id uuid
-  name string [not null]
+  organizer_id uuid [ref: - organizers.organizer_id]
+  name string
   description string
-  start_date date [not null]
-  end_date date [not null]
-
+  start_date date
+  end_date date
+  capacity int
+  status enum [note: 'public, private']
+  store_status enum [note: 'open, closed']
 }
-Ref: festivals.organizer_id - organizers.organizer_id
+
+Table festival_images {
+  festival_image_id uuid [primary key]
+  image_id uuid [ref: - images.image_id]
+  festival_id uuid [ref: > festivals.festival_id]
+}
+
+
+
+Table festival_ticket_types {
+  ticket_type_id uuid [primary key]
+  festival_id uuid [ref: > festivals.festival_id]
+  name string
+  description string
+  price decimal
+  available_number int // of tickets
+  remaining_number int
+}
+
+Table festival_addon {
+  addon_id uuid [primary key]
+  festival_id uuid [ref: > festivals.festival_id]
+  name string
+  description string
+  category ENUM [note: 'general, transport, camp']
+  price decimal
+  available_number int
+}
+
+Table camp_addon {
+  camp_id uuid [primary key]
+  addon_id uuid [ref: - festival_addon.addon_id]
+  camp_name string
+  location stirng
+  camp_image_id uuid [ref: - images.image_id]
+}
+
+Table camp_equipment {
+  // this is an overkill honestly, we could lose this and add a column `equipment_list` and be done with it
+  equipment_id uuid [primary key]
+  camp_addon_id uuid [ref: > camp_addon.addon_id]
+  name string
+}
+
+Table transport_addon {
+  transport_id uuid [primary key]
+  addon_id uuid [ref: - festival_addon.addon_id]
+  country_from string
+  city_from string
+  transport_type enum [note: 'plane, train, bus']
+  departure_time datetime
+  arrival_time datetime
+  return_departure_time datetime
+  return_arrival_time datetime
+}
+
+
+
+
+
+// THIS IS WHAT USER BUYS
+// AND BOTH OF THEM WILL HAVE THEIR TYPES DEFINED, DO USER CAN BUY THEM
+// but i dont know how will uset be able to customize package
+
+Table festival_ticket {
+  // user can buy this, so TODO
+  ticket_id uuid [primary key]
+  ticket_type_id uuid [ref: > festival_ticket_types.ticket_type_id]
+  attendee_id uuid [] // TODO: we left here..
+}
+
+Table festival_package {
+  package_id uuid [primary key]
+  festival_id uuid [ref: > festivals.festival_id]
+  name string
+  description string
+  total_price decimal
+  // so user can chose one ticket of one type in his package, and multiple addons (see below)
+  ticket_type_id uuid [ref: - festival_ticket_types.ticket_type_id]
+}
+
+Table package_addon {
+  package_id uuid [primary key, ref: > festival_package.package_id]
+  addon_id uuid [primary key, ref: < festival_addon.addon_id]
+}
+
+
+// Da li mozemo da imamo mozda purchase pa da se to deli na
+//    1) ticket_purchase
+//    2) package_purchase
+// Da li to ima smisla, nisam siguran, ali negde mora da se zapisuju
+//    purchase details i tako to, poput adrese, narukvice itd.
+
+// Dakle sutrasnji plan: ovo mora da se smisli, procitati dokumentaciju ponovo i utvrdi da li to ima smisla, potom predji na narukvice, posiljke itd, i onda dodaj logs.
+// Nakon toga crtamo ER model na osnovu ovoga i usput resavamo probleme.
+
