@@ -1,0 +1,310 @@
+Table "user" {
+  "user_id" INT [pk, not null]
+  "username" INT [not null]
+  "password" INT [not null]
+  "role" INT [not null]
+  "created_at" INT [not null]
+
+  Indexes {
+    username [unique]
+  }
+}
+
+Table "user_profile" {
+  "user_profile_id" uuid [not null]
+  "first_name" INT [not null]
+  "last_name" INT [not null]
+  "email" INT [not null]
+  "date_of_birth" INT [not null]
+  "phone_number" INT [not null]
+  "user_id" INT [pk, not null]
+}
+
+Table "attendee" {
+  "user_id" INT [pk, not null]
+}
+
+Table "employee" {
+  "user_id" INT [pk, not null]
+}
+
+Table "organizer" {
+  "user_id" INT [pk, not null]
+}
+
+Table "log" {
+  "log_id" INT [pk, not null]
+  "type" INT [not null]
+  "timestamp" INT [not null]
+  "description" INT
+  "data" INT
+  "user_id" INT
+}
+
+Table "country" {
+  "country_id" INT [pk, not null]
+  "name" INT [not null]
+  "iso_code_2" INT [not null]
+
+  Indexes {
+    iso_code_2 [unique]
+  }
+}
+
+Table "city" {
+  "city_id" INT [pk, not null]
+  "name" INT [not null]
+  "postal_code" INT [not null]
+  "country_id" INT [not null]
+}
+
+Table "address" {
+  "address_id" INT [pk, not null]
+  "street" INT [not null]
+  "number" INT [not null]
+  "apartment_suite" INT [not null]
+  "user_id" INT
+  "city_id" INT [not null]
+}
+
+Table "festival" {
+  "name" INT [not null]
+  "description" INT [not null]
+  "start_date" INT [not null]
+  "end_date" INT [not null]
+  "capacity" INT [not null]
+  "status" INT [not null]
+  "store_status" INT [not null]
+  "festival_id" INT [pk, not null]
+  "address_id" INT [not null]
+}
+
+Table "pricelist" {
+  "pricelist_id" INT [pk, not null]
+  "festival_id" INT [not null]
+}
+
+Table "item" {
+  "name" INT [not null]
+  "description" INT [not null]
+  "available_number" INT [not null]
+  "remaining_number" INT [not null]
+  "item_id" INT [pk, not null]
+  "type" INT [not null]
+  "festival_id" INT [not null]
+}
+
+Table "ticket_type" {
+  "item_id" INT [pk, not null]
+}
+
+Table "package_addon" {
+  "category" INT [not null]
+  "item_id" INT [pk, not null]
+}
+
+Table "camp_addon" {
+  "camp_name" INT [not null]
+  "item_id" INT [pk, not null]
+}
+
+Table "transport_addon" {
+  "transport_type" INT [not null]
+  "departure_time" INT [not null]
+  "arrival_time" INT [not null]
+  "return_departure_time" INT [not null]
+  "return_arrival_time" INT [not null]
+  "item_id" INT [pk, not null]
+  "city_id" INT [not null]
+  "departures_fromcity_id" INT [not null]
+}
+
+Table "camp_equipment" {
+  "camp_equipment_id" INT [pk, not null]
+  "name" INT [not null]
+  "item_id" INT [not null]
+}
+
+Table "festival_ticket" {
+  "festival_ticket_id" INT [pk, not null]
+  "item_id" INT [not null]
+}
+
+Table "bracelet" {
+  "bracelet_id" INT [pk, not null]
+  "pin" INT [not null]
+  "barcode_number" INT [not null]
+  "balance" INT [not null]
+  "festival_ticket_id" INT [not null]
+  "attendee_id" INT [not null]
+  "employee_id" INT
+}
+
+Table "activation_help_request" {
+  "activation_help_request_id" INT [pk, not null]
+  "user_entered_pin" INT [not null]
+  "issue_description" INT [not null]
+  "timestamp" INT [not null]
+  "status" INT [not null]
+  "bracelet_id" INT [not null]
+  "attendee_id" INT [not null]
+  "employee_id" INT
+}
+
+Table "works_at" {
+  "user_id" INT [not null]
+  "festival_id" INT [not null]
+
+  Indexes {
+    (user_id, festival_id) [pk]
+  }
+}
+
+Table "organizes" {
+  "user_id" INT [not null]
+  "festival_id" INT [not null]
+
+  Indexes {
+    (user_id, festival_id) [pk]
+  }
+}
+
+Table "image" {
+  "image_id" INT [pk, not null]
+  "url" INT [not null]
+  "user_id" INT
+  "activation_help_request_id" INT
+}
+
+Table "pricelist_item" {
+  "date_from" INT [not null]
+  "date_to" INT [not null]
+  "is_fixed" INT [not null]
+  "pricelist_item_id" INT [pk, not null]
+  "pricelist_id" INT [not null]
+  "item_id" INT [not null]
+}
+
+Table "order" {
+  "order_id" INT [pk, not null]
+  "timestamp" INT [not null]
+  "total_amount" INT [not null]
+  "user_id" INT [not null]
+  "festival_ticket_id" INT [not null]
+}
+
+Table "festival_package" {
+  "festival_package_id" INT [pk, not null]
+  "order_id" INT
+}
+
+Table "has_images" {
+  "festival_id" INT [not null]
+  "image_id" INT [not null]
+
+  Indexes {
+    (festival_id, image_id) [pk]
+  }
+}
+
+Table "illustrated_by" {
+  "item_id" INT [not null]
+  "image_id" INT [not null]
+
+  Indexes {
+    (item_id, image_id) [pk]
+  }
+}
+
+Table "bundles" {
+  "festival_package_id" INT [not null]
+  "item_id" INT [not null]
+
+  Indexes {
+    (festival_package_id, item_id) [pk]
+  }
+}
+
+Ref:"user"."user_id" < "user_profile"."user_id"
+
+Ref:"user"."user_id" < "attendee"."user_id"
+
+Ref:"user"."user_id" < "employee"."user_id"
+
+Ref:"user"."user_id" < "organizer"."user_id"
+
+Ref:"user"."user_id" < "log"."user_id"
+
+Ref:"country"."country_id" < "city"."country_id"
+
+Ref:"user_profile"."user_id" < "address"."user_id"
+
+Ref:"city"."city_id" < "address"."city_id"
+
+Ref:"address"."address_id" < "festival"."address_id"
+
+Ref:"festival"."festival_id" < "pricelist"."festival_id"
+
+Ref:"festival"."festival_id" < "item"."festival_id"
+
+Ref:"item"."item_id" < "ticket_type"."item_id"
+
+Ref:"item"."item_id" < "package_addon"."item_id"
+
+Ref:"package_addon"."item_id" < "camp_addon"."item_id"
+
+Ref:"package_addon"."item_id" < "transport_addon"."item_id"
+
+Ref:"city"."city_id" < "transport_addon"."city_id"
+
+Ref:"city"."city_id" < "transport_addon"."departures_fromcity_id"
+
+Ref:"camp_addon"."item_id" < "camp_equipment"."item_id"
+
+Ref:"ticket_type"."item_id" < "festival_ticket"."item_id"
+
+Ref:"festival_ticket"."festival_ticket_id" < "bracelet"."festival_ticket_id"
+
+Ref:"attendee"."user_id" < "bracelet"."attendee_id"
+
+Ref:"employee"."user_id" < "bracelet"."employee_id"
+
+Ref:"bracelet"."bracelet_id" < "activation_help_request"."bracelet_id"
+
+Ref:"attendee"."user_id" < "activation_help_request"."attendee_id"
+
+Ref:"employee"."user_id" < "activation_help_request"."employee_id"
+
+Ref:"employee"."user_id" < "works_at"."user_id"
+
+Ref:"festival"."festival_id" < "works_at"."festival_id"
+
+Ref:"organizer"."user_id" < "organizes"."user_id"
+
+Ref:"festival"."festival_id" < "organizes"."festival_id"
+
+Ref:"user_profile"."user_id" < "image"."user_id"
+
+Ref:"activation_help_request"."activation_help_request_id" < "image"."activation_help_request_id"
+
+Ref:"pricelist"."pricelist_id" < "pricelist_item"."pricelist_id"
+
+Ref:"item"."item_id" < "pricelist_item"."item_id"
+
+Ref:"attendee"."user_id" < "order"."user_id"
+
+Ref:"festival_ticket"."festival_ticket_id" < "order"."festival_ticket_id"
+
+Ref:"order"."order_id" < "festival_package"."order_id"
+
+Ref:"festival"."festival_id" < "has_images"."festival_id"
+
+Ref:"image"."image_id" < "has_images"."image_id"
+
+Ref:"package_addon"."item_id" < "illustrated_by"."item_id"
+
+Ref:"image"."image_id" < "illustrated_by"."image_id"
+
+Ref:"festival_package"."festival_package_id" < "bundles"."festival_package_id"
+
+Ref:"package_addon"."item_id" < "bundles"."item_id"
