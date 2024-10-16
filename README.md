@@ -8,8 +8,6 @@ Google Drive Shared Folder: [drive.google.com](https://drive.google.com/drive/u/
 
 ER Diagram: [app.creately.com](https://app.creately.com/d/gpf2DoDJV4p)
 
-Use `sql2dbml filename.sql --mysql -o filename.dbml` to convert SQL to DBML.
-
 ### ER Conversion to Relational
 
 ER Diagram: [erdplus.com](https://erdplus.com/edit-diagram/67bfccc8-3719-4a07-a489-56410ca721d9)
