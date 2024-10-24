@@ -8,11 +8,11 @@
       "mode": "auto",
       "program": "${workspaceFolder}\\cmd\\main.go",
       "env": {
-        "AUTH_SER_API_API_VERSION": "v1",
-        "AUTH_SER_API_NAME": "auth_service",
-        "AUTH_SER_API_PORT": "4000",
-        "AUTH_SER_API_ENV": "dev",
-        "AUTH_SER_API_BASE_URL": "",
+        "AUTH_SER_APP_API_VERSION": "v1",
+        "AUTH_SER_APP_NAME": "auth_service",
+        "AUTH_SER_APP_PORT": "4000",
+        "AUTH_SER_APP_ENV": "dev",
+        "AUTH_SER_APP_BASE_URL": "",
         "AUTH_SER_DB_CONNECTION_STRING": "postgres://postgres:super@localhost/diplomski-rad-2024?sslmode=disable",
         "AUTH_SER_JWT_SECRET": "moja_najjaca_tajna_koja_je_ikad_postojala",
       }

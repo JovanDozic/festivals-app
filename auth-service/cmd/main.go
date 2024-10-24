@@ -3,7 +3,9 @@ package main
 import (
 	"auth-serivce/internal/config"
 	"auth-serivce/internal/db"
+	"auth-serivce/internal/router"
 	"log"
+	"net/http"
 )
 
 func main() {
@@ -25,6 +27,13 @@ func main() {
 	log.Println(db)
 
 	// todo: router
+	r := router.Init(db, &config)
+	log.Println("router initialized successfully")
 
 	// todo: start server
+	log.Println("starting server on port:", config.App.Port, "with base URL:", config.App.BaseURL)
+	if err := http.ListenAndServe(":"+config.App.Port, r); err != nil {
+		log.Println("error starting server:", err)
+		panic(err)
+	}
 }

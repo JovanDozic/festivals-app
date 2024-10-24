@@ -27,19 +27,19 @@ func (c *Config) Load() {
 	servicePrefix := "AUTH_SER_"
 
 	flag.StringVar(&c.App.APIVersion, "apiVersion",
-		os.Getenv(servicePrefix+"API_API_VERSION"),
+		os.Getenv(servicePrefix+"APP_API_VERSION"),
 		"API version")
 	flag.StringVar(&c.App.Name, "name",
-		os.Getenv(servicePrefix+"API_NAME"),
+		os.Getenv(servicePrefix+"APP_NAME"),
 		"API server name")
 	flag.StringVar(&c.App.Port, "port",
-		os.Getenv(servicePrefix+"API_PORT"),
+		os.Getenv(servicePrefix+"APP_PORT"),
 		"API server port")
 	flag.StringVar(&c.App.Env, "env",
-		os.Getenv(servicePrefix+"API_ENV"),
+		os.Getenv(servicePrefix+"APP_ENV"),
 		"Environment (dev|stage|prod)")
 	flag.StringVar(&c.App.BaseURL, "baseURL",
-		os.Getenv(servicePrefix+"API_BASE_URL"),
+		os.Getenv(servicePrefix+"APP_BASE_URL"),
 		"Base URL")
 	flag.StringVar(&c.DB.ConnectionString, "dsn",
 		os.Getenv(servicePrefix+"DB_CONNECTION_STRING"),

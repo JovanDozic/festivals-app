@@ -2,7 +2,10 @@ module auth-serivce
 
 go 1.23.2
 
-require gorm.io/gorm v1.25.12
+require (
+	github.com/gorilla/mux v1.8.1
+	gorm.io/gorm v1.25.12
+)
 
 require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
