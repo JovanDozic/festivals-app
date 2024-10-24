@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"auth-service/internal/config"
-	"auth-service/internal/dto"
-	"auth-service/internal/utils"
+	"festival-service/internal/config"
+	"festival-service/internal/dto"
+	"festival-service/internal/utils"
 	"log"
 	"net/http"
 )

@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"auth-service/internal/config"
-	"auth-service/internal/dto"
-	"auth-service/internal/utils"
 	"log"
 	"net/http"
+	"order-service/internal/config"
+	"order-service/internal/dto"
+	"order-service/internal/utils"
 )
 
 type CommonHandler interface {

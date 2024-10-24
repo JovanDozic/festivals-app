@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"auth-service/internal/config"
-	"auth-service/internal/dto"
-	"auth-service/internal/utils"
+	"common-core-service/internal/config"
+	"common-core-service/internal/dto"
+	"common-core-service/internal/utils"
 	"log"
 	"net/http"
 )

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"auth-serivce/internal/config"
-	"auth-serivce/internal/db"
-	"auth-serivce/internal/router"
+	"auth-service/internal/config"
+	"auth-service/internal/db"
+	"auth-service/internal/router"
 	"log"
 	"net/http"
 )

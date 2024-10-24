@@ -1,8 +1,8 @@
 package router
 
 import (
-	"auth-serivce/internal/config"
-	"auth-serivce/internal/handlers"
+	"auth-service/internal/config"
+	"auth-service/internal/handlers"
 	"net/http"
 
 	"github.com/gorilla/mux"
