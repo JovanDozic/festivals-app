@@ -7,3 +7,10 @@ type CreateUserRequest struct {
 	Role     string `json:"role"`
 	// todo: will we add user_profile info here too?
 }
+
+type RegisterAttendeeRequest struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	// todo: add other user_profile info here
+}
