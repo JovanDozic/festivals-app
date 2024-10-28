@@ -3,6 +3,8 @@ package router
 import (
 	"auth-service/internal/config"
 	"auth-service/internal/handlers"
+	"auth-service/internal/repos"
+	"auth-service/internal/services"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -12,13 +14,16 @@ import (
 func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// Init repositories
+	userRepo := repos.NewUserRepo(db)
 	// ...
 
 	// Init services
+	userService := services.NewUserService(userRepo, config)
 	// ...
 
 	// Init handlers
 	commonHandler := handlers.NewCommonHandler(config)
+	userHandler := handlers.NewUserHandler(userService)
 	// ...
 
 	r := mux.NewRouter()
@@ -27,6 +32,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// Unauthenticated routes
 	r.HandleFunc(config.App.BaseURL+"/health", commonHandler.HealthCheck).Methods(http.MethodGet)
+	r.HandleFunc(config.App.BaseURL+"/register", userHandler.Create).Methods(http.MethodPost)
 	// ...
 
 	// Authenticated routes
