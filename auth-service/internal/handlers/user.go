@@ -11,6 +11,7 @@ import (
 
 type UserHandler interface {
 	Create(w http.ResponseWriter, r *http.Request)
+	RegisterAttendee(w http.ResponseWriter, r *http.Request)
 }
 
 type userHandler struct {

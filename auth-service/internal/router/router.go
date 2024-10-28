@@ -32,7 +32,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// Unauthenticated routes
 	r.HandleFunc(config.App.BaseURL+"/health", commonHandler.HealthCheck).Methods(http.MethodGet)
-	r.HandleFunc(config.App.BaseURL+"/register-attendee", userHandler.Create).Methods(http.MethodPost)
+	r.HandleFunc(config.App.BaseURL+"/register-attendee", userHandler.RegisterAttendee).Methods(http.MethodPost)
 	// ...
 
 	// Authenticated routes
