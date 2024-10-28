@@ -14,3 +14,8 @@ type RegisterAttendeeRequest struct {
 	Password string `json:"password"`
 	// todo: add other user_profile info here
 }
+
+type LoginRequest struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}

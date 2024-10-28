@@ -8,6 +8,7 @@ var (
 	ErrRoleIDEmpty       = errors.New("role ID cannot be empty")
 	ErrNameEmpty         = errors.New("name cannot be empty")
 	ErrDuplicateUsername = errors.New("username already exists")
+	ErrDuplicateUser     = errors.New("user already exists")
 	ErrRoleNotFound      = errors.New("role does not exist")
 	ErrInvalidPassword   = errors.New("invalid password")
 	ErrEmptyUsername     = errors.New("username cannot be empty")

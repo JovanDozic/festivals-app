@@ -10,6 +10,7 @@ import (
 
 type UserService interface {
 	Create(user *models.User) error
+	Login(username string, password string) (string, error)
 	// todo: other methods
 }
 
@@ -37,7 +38,7 @@ func (s *userService) Create(user *models.User) error {
 	if err := s.repo.Create(user); err != nil {
 		switch {
 		case strings.Contains(err.Error(), "duplicate key value"):
-			return models.ErrDuplicateUsername
+			return models.ErrDuplicateUser
 		case strings.Contains(err.Error(), "foreign key constraint"):
 			return models.ErrRoleNotFound
 		default:
@@ -46,4 +47,24 @@ func (s *userService) Create(user *models.User) error {
 	}
 
 	return nil
+}
+
+func (s *userService) Login(username string, password string) (string, error) {
+
+	user, err := s.repo.GetByUsername(username)
+	if err != nil {
+		return "", models.ErrNotFound
+	}
+
+	if !utils.VerifyPassword(user.Password, password) {
+		return "", models.ErrInvalidPassword
+	}
+
+	jwt := utils.NewJWTUtil(s.config.JWT.Secret)
+	token, err := jwt.GenerateToken(user.Username, user.Role)
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
 }

@@ -7,3 +7,7 @@ type HealthCheckResponse struct {
 	API         string `json:"API"`
 	Secure      bool   `json:"secure"`
 }
+
+type LoginResponse struct {
+	Token string `json:"token"`
+}

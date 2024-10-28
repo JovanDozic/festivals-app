@@ -3,8 +3,10 @@ package router
 import (
 	"auth-service/internal/config"
 	"auth-service/internal/handlers"
+	"auth-service/internal/middlewares"
 	"auth-service/internal/repos"
 	"auth-service/internal/services"
+	"auth-service/internal/utils"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -33,9 +35,17 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// Unauthenticated routes
 	r.HandleFunc(config.App.BaseURL+"/health", commonHandler.HealthCheck).Methods(http.MethodGet)
 	r.HandleFunc(config.App.BaseURL+"/register-attendee", userHandler.RegisterAttendee).Methods(http.MethodPost)
+	r.HandleFunc(config.App.BaseURL+"/login", userHandler.Login).Methods(http.MethodPost)
 	// ...
 
+	protectedRouter := mux.NewRouter()
+	protectedRouter = protectedRouter.SkipClean(true)
+	protectedRouter.MethodNotAllowedHandler = http.HandlerFunc(handlers.MethodNotAllowedHandler)
+	protectedRouter.Use(middlewares.Auth(utils.NewJWTUtil(config.JWT.Secret)))
+
 	// Authenticated routes
+	protectedRouter.HandleFunc(config.App.BaseURL+"/secure-health", commonHandler.HealthCheck).Methods(http.MethodGet)
+	r.PathPrefix(config.App.BaseURL).Handler(protectedRouter)
 	// ...
 
 	return r
