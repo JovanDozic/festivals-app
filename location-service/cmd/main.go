@@ -4,6 +4,8 @@ import (
 	"location-service/internal/config"
 	"location-service/internal/db"
 	"location-service/internal/proto"
+	"location-service/internal/repos"
+	"location-service/internal/services"
 	"log"
 	"net"
 
@@ -27,16 +29,21 @@ func main() {
 	}
 	log.Println("database initialized successfully")
 
-	// todo: remove this line
-	log.Println(db)
-
 	lis, err := net.Listen("tcp", ":"+config.App.Port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
+	addressRepo := repos.NewAddressRepo(db)
+	cityRepo := repos.NewCityRepo(db)
+	countryRepo := repos.NewCountryRepo(db)
+
+	locationService := services.NewLocationService(addressRepo, cityRepo, countryRepo)
+
 	s := grpc.NewServer()
-	pb.RegisterLocationServiceServer(s, &proto.Server{})
+	pb.RegisterLocationServiceServer(s, &proto.Server{
+		Service: locationService,
+	})
 
 	log.Println("starting server on port:", config.App.Port)
 	if err := s.Serve(lis); err != nil {

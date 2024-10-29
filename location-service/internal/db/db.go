@@ -1,6 +1,8 @@
 package db
 
 import (
+	"location-service/internal/models"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -12,7 +14,9 @@ func Init(dbConfig struct{ ConnectionString string }) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	// auto migrations go here
+	db.AutoMigrate(&models.Country{})
+	db.AutoMigrate(&models.City{})
+	db.AutoMigrate(&models.Address{})
 
 	return db, nil
 }

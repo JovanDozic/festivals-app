@@ -87,7 +87,7 @@ func (s *userService) Login(username string, password string) (string, error) {
 }
 
 func (s *userService) SaveAddress(street, number, apartmentSuite, city, postalCode, country string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2) // todo: add 5 seconds instead of minutes
 	defer cancel()
 
 	req := &pb.SaveAddressRequest{
