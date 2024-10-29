@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"auth-service/internal/dto"
-	"auth-service/internal/models"
-	"auth-service/internal/services"
-	"auth-service/internal/utils"
+	"user-service/internal/dto"
+	"user-service/internal/models"
+	"user-service/internal/services"
+	"user-service/internal/utils"
 	"log"
 	"net/http"
 )

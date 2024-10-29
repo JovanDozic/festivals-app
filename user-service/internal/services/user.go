@@ -1,10 +1,10 @@
 package services
 
 import (
-	"auth-service/internal/config"
-	"auth-service/internal/models"
-	"auth-service/internal/repos"
-	"auth-service/internal/utils"
+	"user-service/internal/config"
+	"user-service/internal/models"
+	"user-service/internal/repos"
+	"user-service/internal/utils"
 	"strings"
 )
 

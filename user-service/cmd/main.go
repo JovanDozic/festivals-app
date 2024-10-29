@@ -1,11 +1,11 @@
 package main
 
 import (
-	"log"
-	"net/http"
 	"user-service/internal/config"
 	"user-service/internal/db"
 	"user-service/internal/router"
+	"log"
+	"net/http"
 )
 
 func main() {

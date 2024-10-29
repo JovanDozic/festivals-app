@@ -1,6 +1,6 @@
 package dto
 
-import "auth-service/internal/models"
+import "user-service/internal/models"
 
 func (r *LoginRequest) Validate() error {
 	if r.Username == "" {

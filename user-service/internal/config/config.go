@@ -24,7 +24,7 @@ type Config struct {
 
 func (c *Config) Load() {
 
-	servicePrefix := "USER_SER_"
+	servicePrefix := "AUTH_SER_"
 
 	flag.StringVar(&c.App.APIVersion, "apiVersion",
 		os.Getenv(servicePrefix+"APP_API_VERSION"),
