@@ -1,11 +1,15 @@
 package main
 
 import (
-	"log"
-	"net/http"
 	"location-service/internal/config"
 	"location-service/internal/db"
-	"location-service/internal/router"
+	"location-service/internal/proto"
+	"log"
+	"net"
+
+	pb "location-service/internal/proto/location"
+
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -26,14 +30,27 @@ func main() {
 	// todo: remove this line
 	log.Println(db)
 
-	// todo: router
-	r := router.Init(db, &config)
-	log.Println("router initialized successfully")
-
-	// todo: start server
-	log.Println("starting server on port:", config.App.Port, "with base URL:", config.App.BaseURL)
-	if err := http.ListenAndServe(":"+config.App.Port, r); err != nil {
-		log.Println("error starting server:", err)
-		panic(err)
+	lis, err := net.Listen("tcp", ":"+config.App.Port)
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
 	}
+
+	s := grpc.NewServer()
+	pb.RegisterLocationServiceServer(s, &proto.Server{})
+
+	log.Println("starting server on port:", config.App.Port)
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
+
+	// // todo: router
+	// r := router.Init(db, &config)
+	// log.Println("router initialized successfully")
+
+	// // todo: start server
+	// log.Println("starting server on port:", config.App.Port, "with base URL:", config.App.BaseURL)
+	// if err := http.ListenAndServe(":"+config.App.Port, r); err != nil {
+	// 	log.Println("error starting server:", err)
+	// 	panic(err)
+	// }
 }

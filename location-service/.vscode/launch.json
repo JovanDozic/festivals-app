@@ -10,7 +10,7 @@
       "env": {
         "ORDER_SER_APP_API_VERSION": "v1",
         "ORDER_SER_APP_NAME": "location-service",
-        "ORDER_SER_APP_PORT": "4003",
+        "ORDER_SER_APP_PORT": "50051",
         "ORDER_SER_APP_ENV": "dev",
         "ORDER_SER_APP_BASE_URL": "/location",
         "ORDER_SER_DB_CONNECTION_STRING": "postgres://postgres:super@localhost/diplomski-rad-2024?sslmode=disable",

@@ -1,17 +1,18 @@
 package handlers
 
 import (
+	"log"
+	"net/http"
 	"user-service/internal/dto"
 	"user-service/internal/models"
 	"user-service/internal/services"
 	"user-service/internal/utils"
-	"log"
-	"net/http"
 )
 
 type UserHandler interface {
 	RegisterAttendee(w http.ResponseWriter, r *http.Request)
 	Login(w http.ResponseWriter, r *http.Request)
+	TryAddress(w http.ResponseWriter, r *http.Request)
 }
 
 type userHandler struct {
@@ -86,6 +87,38 @@ func (h *userHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := utils.WriteJSON(w, http.StatusOK, utils.Envelope{"token": token}, nil); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *userHandler) TryAddress(w http.ResponseWriter, r *http.Request) {
+
+	log.Println("try address")
+
+	input := struct {
+		Street         string `json:"street"`
+		Number         string `json:"number"`
+		ApartmentSuite string `json:"apartment_suite"`
+		City           string `json:"city"`
+		PostalCode     string `json:"postal_code"`
+		Country        string `json:"country"`
+	}{}
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	err := h.service.SaveAddress(input.Street, input.Number, input.ApartmentSuite, input.City, input.PostalCode, input.Country)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	if err := utils.WriteJSON(w, http.StatusOK, utils.Envelope{"address": "okok"}, nil); err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return

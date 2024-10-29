@@ -1,13 +1,13 @@
 package router
 
 import (
+	"net/http"
 	"user-service/internal/config"
 	"user-service/internal/handlers"
 	"user-service/internal/middlewares"
 	"user-service/internal/repos"
 	"user-service/internal/services"
 	"user-service/internal/utils"
-	"net/http"
 
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
@@ -36,6 +36,8 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	r.HandleFunc(config.App.BaseURL+"/health", commonHandler.HealthCheck).Methods(http.MethodGet)
 	r.HandleFunc(config.App.BaseURL+"/register-attendee", userHandler.RegisterAttendee).Methods(http.MethodPost)
 	r.HandleFunc(config.App.BaseURL+"/login", userHandler.Login).Methods(http.MethodPost)
+	// todo: temp:
+	r.HandleFunc(config.App.BaseURL+"/try-address", userHandler.TryAddress).Methods(http.MethodPost)
 	// ...
 
 	protectedRouter := mux.NewRouter()
