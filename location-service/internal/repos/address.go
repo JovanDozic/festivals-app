@@ -29,13 +29,13 @@ func (r *addressRepo) Create(address *models.Address) error {
 
 func (r *addressRepo) Get(addressID uuid.UUID) (*models.Address, error) {
 	var address models.Address
-	err := r.db.Preload("Role").Where("id = ?", addressID).First(&address).Error
+	err := r.db.Preload("City").Where("id = ?", addressID).First(&address).Error
 	return &address, err
 }
 
 func (r *addressRepo) GetByID(addressID uuid.UUID) (*models.Address, error) {
 	var address models.Address
-	err := r.db.Preload("Role").Where("id = ?", addressID).First(&address).Error
+	err := r.db.Preload("City").Where("id = ?", addressID).First(&address).Error
 	return &address, err
 }
 

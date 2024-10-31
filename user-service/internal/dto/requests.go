@@ -19,3 +19,12 @@ type LoginRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
+
+type SaveAddressRequest struct {
+	Street         string `json:"street"`
+	Number         string `json:"number"`
+	ApartmentSuite string `json:"apartment_suite"`
+	City           string `json:"city"`
+	PostalCode     string `json:"postal_code"`
+	CountryISO3    string `json:"country_iso_3"`
+}

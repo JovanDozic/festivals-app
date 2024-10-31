@@ -6,9 +6,13 @@ import (
 )
 
 type Country struct {
-	CountryID uuid.UUID `json:"country_id" gorm:"column:country_id;primaryKey"`
+	CountryID uuid.UUID `json:"countryId" gorm:"column:country_id;primaryKey"`
 	Name      string    `json:"name" gorm:"column:name;not null;unique"`
-	ISOCode3  string    `json:"iso_code_3" gorm:"column:iso_code_3;not null;unique"`
+	NiceName  string    `json:"niceName" gorm:"column:nice_name;not null;unique"`
+	ISO       string    `json:"iso" gorm:"column:iso;unique"`
+	ISO3      string    `json:"iso3" gorm:"column:iso3;unique"`
+	NumCode   int       `json:"numCode" gorm:"column:num_code"`
+	PhoneCode int       `json:"phoneCode" gorm:"column:phone_code"`
 }
 
 func (country *Country) BeforeCreate(scope *gorm.DB) error {

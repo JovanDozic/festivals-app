@@ -11,6 +11,7 @@ type CityRepo interface {
 	Create(city *models.City) error
 	Get(name string) (*models.City, error)
 	GetByID(cityID uuid.UUID) (*models.City, error)
+	GetByCountryAndPostalCode(countryID uuid.UUID, postalCode string) (*models.City, error)
 	GetAll() ([]models.City, error)
 	Update(city *models.City) error
 }
@@ -29,13 +30,19 @@ func (r *cityRepo) Create(city *models.City) error {
 
 func (r *cityRepo) Get(name string) (*models.City, error) {
 	var city models.City
-	err := r.db.Preload("Role").Where("name = ?", name).First(&city).Error
+	err := r.db.Preload("Country").Where("name = ?", name).First(&city).Error
 	return &city, err
 }
 
 func (r *cityRepo) GetByID(cityID uuid.UUID) (*models.City, error) {
 	var city models.City
-	err := r.db.Preload("Role").Where("id = ?", cityID).First(&city).Error
+	err := r.db.Preload("Country").Where("id = ?", cityID).First(&city).Error
+	return &city, err
+}
+
+func (r *cityRepo) GetByCountryAndPostalCode(countryID uuid.UUID, postalCode string) (*models.City, error) {
+	var city models.City
+	err := r.db.Preload("Country").Where("country_id = ? AND postal_code = ?", countryID, postalCode).First(&city).Error
 	return &city, err
 }
 

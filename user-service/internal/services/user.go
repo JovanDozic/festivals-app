@@ -10,6 +10,7 @@ import (
 	"user-service/internal/repos"
 	"user-service/internal/utils"
 
+	"github.com/google/uuid"
 	"google.golang.org/grpc"
 
 	pb "user-service/internal/proto/location"
@@ -19,7 +20,7 @@ type UserService interface {
 	Create(user *models.User) error
 	Login(username string, password string) (string, error)
 	// todo: other methods
-	SaveAddress(street, number, apartmentSuite, city, zipCode, country string) error
+	SaveAddress(street, number, apartmentSuite, city, postalCode, countryISO3 string) (uuid.UUID, error)
 }
 
 type userService struct {
@@ -86,7 +87,7 @@ func (s *userService) Login(username string, password string) (string, error) {
 	return token, nil
 }
 
-func (s *userService) SaveAddress(street, number, apartmentSuite, city, postalCode, country string) error {
+func (s *userService) SaveAddress(street, number, apartmentSuite, city, postalCode, countryISO3 string) (uuid.UUID, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2) // todo: add 5 seconds instead of minutes
 	defer cancel()
 
@@ -96,15 +97,15 @@ func (s *userService) SaveAddress(street, number, apartmentSuite, city, postalCo
 		ApartmentSuite: apartmentSuite,
 		City:           city,
 		PostalCode:     postalCode,
-		Country:        country,
+		CountryISO3:    countryISO3,
 	}
 
 	resp, err := s.grpcLocationClient.SaveAddress(ctx, req)
 	if err != nil {
 		log.Println("error calling SaveAddress:", err)
-		return err
+		return uuid.Nil, err
 	}
 
 	log.Println("response from SaveAddress:", resp)
-	return nil
+	return uuid.MustParse(resp.Id), nil
 }

@@ -8,11 +8,12 @@ import (
 )
 
 type CountryRepo interface {
-	Create(user *models.Country) error
-	Get(username string) (*models.Country, error)
-	GetByID(id uuid.UUID) (*models.Country, error)
+	Create(country *models.Country) error
+	Get(name string) (*models.Country, error)
+	GetByID(countryID uuid.UUID) (*models.Country, error)
+	GetByISO3(iso3 string) (*models.Country, error)
 	GetAll() ([]models.Country, error)
-	Update(user *models.Country) error
+	Update(country *models.Country) error
 }
 
 type countryRepo struct {
@@ -29,13 +30,19 @@ func (r *countryRepo) Create(country *models.Country) error {
 
 func (r *countryRepo) Get(name string) (*models.Country, error) {
 	var country models.Country
-	err := r.db.Preload("Role").Where("username = ?", name).First(&country).Error
+	err := r.db.Where("username = ?", name).First(&country).Error
 	return &country, err
 }
 
 func (r *countryRepo) GetByID(countryID uuid.UUID) (*models.Country, error) {
 	var country models.Country
-	err := r.db.Preload("Role").Where("id = ?", countryID).First(&country).Error
+	err := r.db.Where("id = ?", countryID).First(&country).Error
+	return &country, err
+}
+
+func (r *countryRepo) GetByISO3(iso3 string) (*models.Country, error) {
+	var country models.Country
+	err := r.db.Where("iso3 = ?", iso3).First(&country).Error
 	return &country, err
 }
 

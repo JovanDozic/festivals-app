@@ -11,10 +11,10 @@ service LocationService {
 message SaveAddressRequest {
     string street = 1;
     string number = 2;
-    string apartment_suite = 3;
+    string apartmentSuite = 3;
     string city = 4;
-    string postal_code = 5;
-    string country = 6;
+    string postalCode = 5;
+    string countryISO3 = 6;
 }
 
 message SaveAddressResponse {

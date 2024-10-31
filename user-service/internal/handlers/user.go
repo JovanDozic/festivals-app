@@ -97,28 +97,22 @@ func (h *userHandler) TryAddress(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("try address")
 
-	input := struct {
-		Street         string `json:"street"`
-		Number         string `json:"number"`
-		ApartmentSuite string `json:"apartment_suite"`
-		City           string `json:"city"`
-		PostalCode     string `json:"postal_code"`
-		Country        string `json:"country"`
-	}{}
+	var input dto.SaveAddressRequest
 	if err := utils.ReadJSON(w, r, &input); err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 
-	err := h.service.SaveAddress(input.Street, input.Number, input.ApartmentSuite, input.City, input.PostalCode, input.Country)
+	addressId, err := h.service.SaveAddress(input.Street, input.Number, input.ApartmentSuite, input.City, input.PostalCode, input.CountryISO3)
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
+	log.Println("address saved:", addressId)
 
-	if err := utils.WriteJSON(w, http.StatusOK, utils.Envelope{"address": "okok"}, nil); err != nil {
+	if err := utils.WriteJSON(w, http.StatusOK, utils.Envelope{"address_id": addressId}, nil); err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
