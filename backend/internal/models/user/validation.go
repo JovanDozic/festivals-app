@@ -14,3 +14,13 @@ func (u *User) Validate() error {
 	// todo: implement validation
 	return nil
 }
+
+func (u *UserProfile) BeforeCreate(scope *gorm.DB) error {
+	u.UserProfileID = uuid.New()
+	return nil
+}
+
+func (u *UserProfile) Validate() error {
+	// todo: implement validation
+	return nil
+}

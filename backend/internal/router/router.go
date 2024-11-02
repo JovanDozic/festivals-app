@@ -5,7 +5,7 @@ import (
 	handlers "backend/internal/handlers/common"
 	userHandler "backend/internal/handlers/user"
 	"backend/internal/middlewares"
-	userRepo "backend/internal/repositories/user"
+	userRepositories "backend/internal/repositories/user"
 	userServices "backend/internal/services/user"
 	"backend/internal/utils"
 	"net/http"
@@ -17,11 +17,12 @@ import (
 func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// Init repositories
-	userRepo := userRepo.NewUserRepo(db)
+	userRepo := userRepositories.NewUserRepo(db)
+	userProfileRepo := userRepositories.NewUserProfileRepo(db)
 	// ...
 
 	// Init services
-	userService := userServices.NewUserService(userRepo, config)
+	userService := userServices.NewUserService(config, userRepo, userProfileRepo)
 	// ...
 
 	// Init handlers
@@ -47,6 +48,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// Authenticated routes
 	protectedRouter.HandleFunc("/secure-health", commonHandler.HealthCheck).Methods(http.MethodGet)
 	r.PathPrefix("").Handler(protectedRouter)
+	protectedRouter.HandleFunc("/user/profile", userHandler.CreateUserProfile).Methods(http.MethodPost)
 	// ...
 
 	return r

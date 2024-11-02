@@ -86,7 +86,21 @@ func AuthAdmin(c context.Context) bool {
 	return claims.Role == "ADMIN"
 }
 
-// todo: add other roles
+func AuthOrganizer(c context.Context) bool {
+	claims, ok := c.Value(UserKey).(*Claims)
+	if !ok {
+		return false
+	}
+	return claims.Role == "ORGANIZER"
+}
+
+func AuthAttendee(c context.Context) bool {
+	claims, ok := c.Value(UserKey).(*Claims)
+	if !ok {
+		return false
+	}
+	return claims.Role == "ATTENDEE"
+}
 
 func AuthEmployee(c context.Context) bool {
 	claims, ok := c.Value(UserKey).(*Claims)
@@ -94,4 +108,12 @@ func AuthEmployee(c context.Context) bool {
 		return false
 	}
 	return claims.Role == "EMPLOYEE"
+}
+
+func GetUsername(c context.Context) string {
+	claims, ok := c.Value(UserKey).(*Claims)
+	if !ok {
+		return ""
+	}
+	return claims.Username
 }

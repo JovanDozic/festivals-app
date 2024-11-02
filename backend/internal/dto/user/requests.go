@@ -12,10 +12,9 @@ type LoginRequest struct {
 }
 
 type CreateUserProfileRequest struct {
-	Username    string `json:"username"`
 	FirstName   string `json:"firstName"`
 	LastName    string `json:"lastName"`
-	DateOfBirth string `json:"dateOfBirth"`
+	DateOfBirth string `json:"dateOfBirth"` // yyyy-mm-dd
 	PhoneNumber string `json:"phoneNumber"`
 }
 

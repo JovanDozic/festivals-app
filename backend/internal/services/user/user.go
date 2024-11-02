@@ -12,16 +12,17 @@ import (
 type UserService interface {
 	Create(user *models.User) error
 	Login(username string, password string) (string, error)
-	// todo: other methods
+	CreateUserProfile(username string, userProfile *models.UserProfile) error
 }
 
 type userService struct {
-	repo   repositories.UserRepo
-	config *config.Config
+	userRepo    repositories.UserRepo
+	profileRepo repositories.UserProfileRepo
+	config      *config.Config
 }
 
-func NewUserService(r repositories.UserRepo, c *config.Config) UserService {
-	return &userService{repo: r, config: c}
+func NewUserService(c *config.Config, r repositories.UserRepo, p repositories.UserProfileRepo) UserService {
+	return &userService{userRepo: r, config: c, profileRepo: p}
 }
 
 func (s *userService) Create(user *models.User) error {
@@ -36,7 +37,7 @@ func (s *userService) Create(user *models.User) error {
 	}
 	user.Password = passwordHash
 
-	if err := s.repo.Create(user); err != nil {
+	if err := s.userRepo.Create(user); err != nil {
 		switch {
 		case strings.Contains(err.Error(), "duplicate key value"):
 			return errorModels.ErrDuplicateUser
@@ -52,7 +53,7 @@ func (s *userService) Create(user *models.User) error {
 
 func (s *userService) Login(username string, password string) (string, error) {
 
-	user, err := s.repo.GetByUsername(username)
+	user, err := s.userRepo.GetByUsername(username)
 	if err != nil {
 		return "", errorModels.ErrNotFound
 	}
@@ -68,4 +69,33 @@ func (s *userService) Login(username string, password string) (string, error) {
 	}
 
 	return token, nil
+}
+
+func (s *userService) CreateUserProfile(username string, userProfile *models.UserProfile) error {
+
+	if err := userProfile.Validate(); err != nil {
+		return err
+	}
+
+	user, err := s.userRepo.GetByUsername(username)
+	if err != nil {
+		return errorModels.ErrNotFound
+	}
+
+	userProfile.UserID = user.UserID
+
+	// ? We don't need to check if user already has a profile because we are using a unique constraint on the user_id column
+
+	if err := s.profileRepo.Create(userProfile); err != nil {
+		switch {
+		case strings.Contains(err.Error(), "duplicate key value"):
+			return errorModels.ErrUserHasProfile
+		case strings.Contains(err.Error(), "foreign key constraint"):
+			return errorModels.ErrUserHasProfile
+		default:
+			return err
+		}
+	}
+
+	return nil
 }
