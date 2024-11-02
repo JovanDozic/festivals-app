@@ -3,7 +3,10 @@ package router
 import (
 	"backend/internal/config"
 	handlers "backend/internal/handlers/common"
+	userHandler "backend/internal/handlers/user"
 	"backend/internal/middlewares"
+	userRepo "backend/internal/repositories/user"
+	userServices "backend/internal/services/user"
 	"backend/internal/utils"
 	"net/http"
 
@@ -14,16 +17,16 @@ import (
 func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// Init repositories
-	// userRepo := repos.NewUserRepo(db)
+	userRepo := userRepo.NewUserRepo(db)
 	// ...
 
 	// Init services
-	// userService := services.NewUserService(userRepo, config)
+	userService := userServices.NewUserService(userRepo, config)
 	// ...
 
 	// Init handlers
 	commonHandler := handlers.NewHealthHandler(config)
-	// userHandler := handlers.NewUserHandler(userService)
+	userHandler := userHandler.NewUserHandler(userService)
 	// ...
 
 	r := mux.NewRouter()
@@ -32,6 +35,8 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// Unauthenticated routes
 	r.HandleFunc("/health", commonHandler.HealthCheck).Methods(http.MethodGet)
+	r.HandleFunc("/user/login", userHandler.Login).Methods(http.MethodPost)
+	r.HandleFunc("/user/register-attendee", userHandler.RegisterAttendee).Methods(http.MethodPost)
 	// ...
 
 	protectedRouter := mux.NewRouter()
