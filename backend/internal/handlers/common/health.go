@@ -1,28 +1,28 @@
 package handlers
 
 import (
-	"backend/internal/common/dto"
 	"backend/internal/config"
+	dto "backend/internal/dto/common"
 	"backend/pkg/utils"
 	"log"
 	"net/http"
 )
 
-type CommonHandler interface {
+type HealthHandler interface {
 	HealthCheck(w http.ResponseWriter, r *http.Request)
 }
 
-type commonHandler struct {
+type healthHandler struct {
 	config *config.Config
 }
 
-func NewCommonHandler(config *config.Config) CommonHandler {
-	return &commonHandler{
+func NewHealthHandler(config *config.Config) HealthHandler {
+	return &healthHandler{
 		config: config,
 	}
 }
 
-func (ch *commonHandler) HealthCheck(w http.ResponseWriter, r *http.Request) {
+func (ch *healthHandler) HealthCheck(w http.ResponseWriter, r *http.Request) {
 	data := dto.HealthCheckResponse{
 		ServiceName: ch.config.App.Name,
 		Status:      "ok",

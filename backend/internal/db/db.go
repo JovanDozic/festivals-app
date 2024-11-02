@@ -1,8 +1,8 @@
 package db
 
 import (
-	common "backend/internal/common/models"
-	user "backend/internal/user/models"
+	commonModels "backend/internal/models/common"
+	userModels "backend/internal/models/user"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -26,17 +26,17 @@ func Init(dbConfig struct{ ConnectionString string }) (*gorm.DB, error) {
 }
 
 func migrateUserModels(db *gorm.DB) {
-	db.AutoMigrate(&user.User{})
-	db.AutoMigrate(&user.UserProfile{})
-	db.AutoMigrate(&user.Attendee{})
-	db.AutoMigrate(&user.Employee{})
-	db.AutoMigrate(&user.Organizer{})
+	db.AutoMigrate(&userModels.User{})
+	db.AutoMigrate(&userModels.UserProfile{})
+	db.AutoMigrate(&userModels.Attendee{})
+	db.AutoMigrate(&userModels.Employee{})
+	db.AutoMigrate(&userModels.Organizer{})
 }
 
 func migrateCommonModels(db *gorm.DB) {
-	db.AutoMigrate(&common.Country{})
-	db.AutoMigrate(&common.City{})
-	db.AutoMigrate(&common.Address{})
-	db.AutoMigrate(&common.Image{})
-	db.AutoMigrate(&common.Log{})
+	db.AutoMigrate(&commonModels.Country{})
+	db.AutoMigrate(&commonModels.City{})
+	db.AutoMigrate(&commonModels.Address{})
+	db.AutoMigrate(&commonModels.Image{})
+	db.AutoMigrate(&commonModels.Log{})
 }

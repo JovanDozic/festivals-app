@@ -1,8 +1,8 @@
 package router
 
 import (
-	"backend/internal/common/handlers"
 	"backend/internal/config"
+	handlers "backend/internal/handlers/common"
 	"backend/internal/middlewares"
 	"backend/internal/utils"
 	"net/http"
@@ -22,7 +22,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// ...
 
 	// Init handlers
-	commonHandler := handlers.NewCommonHandler(config)
+	commonHandler := handlers.NewHealthHandler(config)
 	// userHandler := handlers.NewUserHandler(userService)
 	// ...
 
