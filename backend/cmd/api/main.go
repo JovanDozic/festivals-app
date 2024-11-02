@@ -3,7 +3,9 @@ package main
 import (
 	"backend/internal/config"
 	"backend/internal/db"
+	"backend/internal/router"
 	"log"
+	"net/http"
 )
 
 func main() {
@@ -21,17 +23,12 @@ func main() {
 	}
 	log.Println("database initialized successfully")
 
-	// todo: remove this line
-	log.Println(db)
+	r := router.Init(db, &config)
+	log.Println("router initialized successfully")
 
-	// todo: router
-	// r := router.Init(db, &config)
-	// log.Println("router initialized successfully")
-
-	// todo: start server
-	// log.Println("starting server on port:", config.App.Port, "with base URL:", config.App.BaseURL)
-	// if err := http.ListenAndServe(":"+config.App.Port, r); err != nil {
-	// 	log.Println("error starting server:", err)
-	// 	panic(err)
-	// }
+	log.Println("starting server on port:", config.App.Port)
+	if err := http.ListenAndServe(":"+config.App.Port, r); err != nil {
+		log.Println("error starting server:", err)
+		panic(err)
+	}
 }

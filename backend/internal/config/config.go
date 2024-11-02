@@ -12,7 +12,6 @@ type Config struct {
 		Name       string
 		Port       string
 		Env        string
-		BaseURL    string
 	}
 	DB struct {
 		ConnectionString string
@@ -36,9 +35,6 @@ func (c *Config) Load() {
 	flag.StringVar(&c.App.Env, "env",
 		os.Getenv("APP_ENV"),
 		"Environment (dev|stage|prod)")
-	flag.StringVar(&c.App.BaseURL, "baseURL",
-		os.Getenv("APP_BASE_URL"),
-		"Base URL")
 	flag.StringVar(&c.DB.ConnectionString, "dsn",
 		os.Getenv("DB_CONNECTION_STRING"),
 		"PostgreSQL DSN")
