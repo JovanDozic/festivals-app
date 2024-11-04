@@ -24,10 +24,10 @@ type UserProfile struct {
 	PhoneNumber string
 	UserID      uint
 	User        User
-	AddressID   uint
-	Address     modelsCommon.Address
-	ImageID     uint
-	Image       modelsCommon.Image
+	AddressID   *uint
+	Address     *modelsCommon.Address
+	ImageID     *uint
+	Image       *modelsCommon.Image
 }
 
 type Attendee struct {

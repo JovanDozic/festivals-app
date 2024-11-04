@@ -19,9 +19,12 @@ func NewAddressRepo(db *gorm.DB) AddressRepo {
 }
 
 func (r *addressRepo) Create(address *modelsCommon.Address) error {
-	if err := r.db.FirstOrCreate(&address.City, modelsCommon.City{Name: address.City.Name, CountryID: address.City.CountryID}).Error; err != nil {
+	if err := r.db.Omit("Country").FirstOrCreate(&address.City, modelsCommon.City{
+		Name:      address.City.Name,
+		CountryID: address.City.CountryID,
+	}).Error; err != nil {
 		return err
 	}
 
-	return r.db.Create(address).Error
+	return r.db.Omit("City.Country").Create(address).Error
 }
