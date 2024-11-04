@@ -1,8 +1,8 @@
 package db
 
 import (
-	commonModels "backend/internal/models/common"
-	userModels "backend/internal/models/user"
+	modelsCommon "backend/internal/models/common"
+	modelsUser "backend/internal/models/user"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -19,24 +19,21 @@ func Init(dbConfig struct{ ConnectionString string }) (*gorm.DB, error) {
 	migrateCommonModels(db)
 	migrateUserModels(db)
 
-	// todo: refactor inserting default data
-	// db.Exec(`INSERT INTO users (user_id, username, password, email, role) VALUES ('566f1ad2-ec32-4ab2-8feb-0f74c484ed5d', 'jovan', 'jovan', 'jovandozic@gmail.com', 'ADMIN') ON CONFLICT (user_id) DO NOTHING`)
-
 	return db, nil
 }
 
 func migrateUserModels(db *gorm.DB) {
-	db.AutoMigrate(&userModels.User{})
-	db.AutoMigrate(&userModels.UserProfile{})
-	db.AutoMigrate(&userModels.Attendee{})
-	db.AutoMigrate(&userModels.Employee{})
-	db.AutoMigrate(&userModels.Organizer{})
+	db.AutoMigrate(&modelsUser.User{})
+	db.AutoMigrate(&modelsUser.UserProfile{})
+	db.AutoMigrate(&modelsUser.Attendee{})
+	db.AutoMigrate(&modelsUser.Employee{})
+	db.AutoMigrate(&modelsUser.Organizer{})
+	db.AutoMigrate(&modelsUser.Log{})
 }
 
 func migrateCommonModels(db *gorm.DB) {
-	db.AutoMigrate(&commonModels.Country{})
-	db.AutoMigrate(&commonModels.City{})
-	db.AutoMigrate(&commonModels.Address{})
-	db.AutoMigrate(&commonModels.Image{})
-	db.AutoMigrate(&commonModels.Log{})
+	db.AutoMigrate(&modelsCommon.Country{})
+	db.AutoMigrate(&modelsCommon.City{})
+	db.AutoMigrate(&modelsCommon.Address{})
+	db.AutoMigrate(&modelsCommon.Image{})
 }

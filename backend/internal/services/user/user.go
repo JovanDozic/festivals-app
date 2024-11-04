@@ -87,7 +87,7 @@ func (s *userService) CreateUserProfile(username string, userProfile *modelsUser
 		return modelsError.ErrNotFound
 	}
 
-	userProfile.UserID = user.UserID
+	userProfile.UserID = user.ID
 
 	// * We don't need to check if user already has a profile because we are using a unique constraint on the user_id column
 
@@ -113,6 +113,7 @@ func (s *userService) CreateUserAddress(username string, address *modelsCommon.A
 	}
 
 	// todo: do we need to check if address already exists?
+	// ! yes
 
 	if err := s.locationService.CreateAddress(address); err != nil {
 		log.Println("error creating address", err)
@@ -125,7 +126,7 @@ func (s *userService) CreateUserAddress(username string, address *modelsCommon.A
 		return modelsError.ErrNotFound
 	}
 
-	err = s.profileRepo.UpdateAddressId(user.UserID, address.ID)
+	err = s.profileRepo.UpdateAddressId(user.ID, address.ID)
 	if err != nil {
 		log.Println("error updating address id", err)
 		return err

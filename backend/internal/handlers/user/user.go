@@ -120,7 +120,7 @@ func (h *userHandler) CreateUserProfile(w http.ResponseWriter, r *http.Request) 
 		FirstName:   input.FirstName,
 		LastName:    input.LastName,
 		DateOfBirth: utils.ParseDate(input.DateOfBirth),
-		PhoneNumber: &input.PhoneNumber,
+		PhoneNumber: input.PhoneNumber,
 	}
 	username := utils.GetUsername(r.Context())
 

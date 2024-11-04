@@ -9,7 +9,6 @@ import (
 type UserRepo interface {
 	Create(user *models.User) error
 	GetByUsername(username string) (*models.User, error)
-	// todo: other methods
 }
 
 type userRepo struct {

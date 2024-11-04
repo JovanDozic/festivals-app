@@ -8,18 +8,7 @@ import (
 )
 
 type LocationService interface {
-	// Sta nam sve treba:
-	// Kreiranje nove
 	CreateAddress(address *modelsCommon.Address) error
-	// Update neke adrese
-	// Brisanje adrese
-	// Dohvatanje svih drzava
-	// Dohvatanje gradova u drzavi
-	// Dohvatanje svih gradova
-	GetCities() ([]modelsCommon.City, error)
-	// Dohvatanje adresa u gradu
-	// Dohvatanje adrese po id-u
-
 }
 
 type locationService struct {
@@ -54,8 +43,4 @@ func (s *locationService) CreateAddress(address *modelsCommon.Address) error {
 
 	log.Println("address created successfully:", address.ID)
 	return nil
-}
-
-func (s *locationService) GetCities() ([]modelsCommon.City, error) {
-	return s.cityRepo.GetAll()
 }

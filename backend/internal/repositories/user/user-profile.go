@@ -3,7 +3,6 @@ package repositories
 import (
 	models "backend/internal/models/user"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -11,7 +10,7 @@ type UserProfileRepo interface {
 	Create(userProfile *models.UserProfile) error
 	GetByUserID(userID uint) (*models.UserProfile, error)
 	GetByUsername(username string) (*models.UserProfile, error)
-	UpdateAddressId(userID uuid.UUID, addressID uint) error
+	UpdateAddressId(userID uint, addressID uint) error
 }
 
 type userProfileRepo struct {
@@ -44,6 +43,6 @@ func (r *userProfileRepo) GetByUsername(username string) (*models.UserProfile, e
 	return &userProfile, nil
 }
 
-func (r *userProfileRepo) UpdateAddressId(userID uuid.UUID, addressID uint) error {
+func (r *userProfileRepo) UpdateAddressId(userID uint, addressID uint) error {
 	return r.db.Model(&models.UserProfile{}).Where("user_id = ?", userID).Update("address_id", addressID).Error
 }
