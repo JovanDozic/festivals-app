@@ -36,7 +36,10 @@ func (r *userProfileRepo) GetByUserID(userID uint) (*models.UserProfile, error) 
 
 func (r *userProfileRepo) GetByUsername(username string) (*models.UserProfile, error) {
 	var userProfile models.UserProfile
-	err := r.db.Joins("JOIN users ON user_profiles.user_id = users.user_id").Where("users.username = ?", username).First(&userProfile).Error
+	err := r.db.Joins("JOIN users ON user_profiles.user_id = users.id").
+		Joins("JOIN addresses ON user_profiles.address_id = addresses.id").
+		Where("users.username = ?", username).
+		First(&userProfile).Error
 	if err != nil {
 		return nil, err
 	}

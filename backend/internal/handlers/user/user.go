@@ -184,6 +184,8 @@ func (h *userHandler) CreateUserAddress(w http.ResponseWriter, r *http.Request) 
 			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 		case models.ErrCountryNotFound:
 			http.Error(w, err.Error(), http.StatusNotFound)
+		case models.ErrUserHasAddress:
+			http.Error(w, err.Error(), http.StatusConflict)
 		default:
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}

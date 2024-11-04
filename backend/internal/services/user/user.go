@@ -112,21 +112,23 @@ func (s *userService) CreateUserAddress(username string, address *modelsCommon.A
 		return err
 	}
 
-	// todo: do we need to check if address already exists?
-	// ! yes
+	userProfile, err := s.profileRepo.GetByUsername(username)
+	if err != nil {
+		log.Println("error getting user profile", err)
+		return modelsError.ErrNotFound
+	}
+
+	if userProfile.AddressID != nil || *userProfile.AddressID != 0 {
+		log.Println("user already has an address")
+		return modelsError.ErrUserHasAddress
+	}
 
 	if err := s.locationService.CreateAddress(address); err != nil {
 		log.Println("error creating address", err)
 		return err
 	}
 
-	user, err := s.userRepo.GetByUsername(username)
-	if err != nil {
-		log.Println("error getting user", err)
-		return modelsError.ErrNotFound
-	}
-
-	err = s.profileRepo.UpdateAddressId(user.ID, address.ID)
+	err = s.profileRepo.UpdateAddressId(userProfile.UserID, address.ID)
 	if err != nil {
 		log.Println("error updating address id", err)
 		return err
