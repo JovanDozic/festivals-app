@@ -38,33 +38,13 @@ func NewLocationService(addressRepo repositoriesCommon.AddressRepo, cityRepo rep
 
 func (s *locationService) CreateAddress(address *modelsCommon.Address) error {
 
-	// Check if country exists
 	dbCountry, err := s.countryRepo.GetByISO3(address.City.Country.ISO3)
 	if err != nil || dbCountry == nil {
 		log.Println("country'", address.City.Country.ISO3, "'does not exist")
 		return modelsError.ErrCountryNotFound
 	}
 
-	// Check if city exists
-	// We need to try to find a city in the found country with the given name or postal code,
-	// If it's not found, then we create it
-	dbCity, err := s.cityRepo.GetByCountryAndPostalCode(dbCountry.CountryID, address.City.PostalCode)
-	if err != nil || dbCity == nil {
-		log.Println("city does not exist, creating new city")
-		city := modelsCommon.City{
-			Name:       address.City.Name,
-			CountryID:  dbCountry.CountryID,
-			PostalCode: address.City.PostalCode,
-		}
-		if err := s.cityRepo.Create(&city); err != nil {
-			log.Println("error creating city:", err)
-			return err
-		}
-		dbCity = &city
-	}
-
-	address.CityID = dbCity.CityID
-	address.City = modelsCommon.City{CityID: dbCity.CityID, Country: modelsCommon.Country{CountryID: dbCountry.CountryID}}
+	address.City.CountryID = dbCountry.ID
 
 	err = s.addressRepo.Create(address)
 	if err != nil {
@@ -72,7 +52,7 @@ func (s *locationService) CreateAddress(address *modelsCommon.Address) error {
 		return err
 	}
 
-	log.Println("address created successfully:", address.AddressID)
+	log.Println("address created successfully:", address.ID)
 	return nil
 }
 

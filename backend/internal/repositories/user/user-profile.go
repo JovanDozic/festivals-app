@@ -9,9 +9,9 @@ import (
 
 type UserProfileRepo interface {
 	Create(userProfile *models.UserProfile) error
-	GetByUserID(userID uuid.UUID) (*models.UserProfile, error)
+	GetByUserID(userID uint) (*models.UserProfile, error)
 	GetByUsername(username string) (*models.UserProfile, error)
-	UpdateAddressId(userID uuid.UUID, addressID uuid.UUID) error
+	UpdateAddressId(userID uuid.UUID, addressID uint) error
 }
 
 type userProfileRepo struct {
@@ -26,7 +26,7 @@ func (r *userProfileRepo) Create(userProfile *models.UserProfile) error {
 	return r.db.Create(userProfile).Error
 }
 
-func (r *userProfileRepo) GetByUserID(userID uuid.UUID) (*models.UserProfile, error) {
+func (r *userProfileRepo) GetByUserID(userID uint) (*models.UserProfile, error) {
 	var userProfile models.UserProfile
 	err := r.db.Where("user_id = ?", userID).First(&userProfile).Error
 	if err != nil {
@@ -44,6 +44,6 @@ func (r *userProfileRepo) GetByUsername(username string) (*models.UserProfile, e
 	return &userProfile, nil
 }
 
-func (r *userProfileRepo) UpdateAddressId(userID uuid.UUID, addressID uuid.UUID) error {
+func (r *userProfileRepo) UpdateAddressId(userID uuid.UUID, addressID uint) error {
 	return r.db.Model(&models.UserProfile{}).Where("user_id = ?", userID).Update("address_id", addressID).Error
 }

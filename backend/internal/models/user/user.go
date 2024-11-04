@@ -27,9 +27,9 @@ type UserProfile struct {
 	LastName      string     `json:"lastName" gorm:"column:last_name;size:255;not null"`
 	DateOfBirth   time.Time  `json:"dateOfBirth" gorm:"column:date_of_birth;not null"`
 	PhoneNumber   *string    `json:"phoneNumber" gorm:"column:phone_number;unique;size:20"`
-	UserID        uuid.UUID  `json:"userId" gorm:"column:user_id;unique;type:uuid;not null"`
-	AddressID     *uuid.UUID `json:"addressId" gorm:"column:address_id;type:uuid"`
-	ImageID       *uuid.UUID `json:"imageId" gorm:"column:image_id;type:uuid"`
+	UserID        uuid.UUID  `json:"userId" gorm:"column:user_id;unique;type:uuid;not null"` // todo: add foreign key
+	AddressID     *uuid.UUID `json:"addressId" gorm:"column:address_id;type:uuid"`           // todo: add foreign key
+	ImageID       *uuid.UUID `json:"imageId" gorm:"column:image_id;type:uuid"`               // todo: add foreign key
 }
 
 func (u *User) BeforeCreate(scope *gorm.DB) error {

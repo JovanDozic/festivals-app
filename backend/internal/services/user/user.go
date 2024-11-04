@@ -125,7 +125,7 @@ func (s *userService) CreateUserAddress(username string, address *modelsCommon.A
 		return modelsError.ErrNotFound
 	}
 
-	err = s.profileRepo.UpdateAddressId(user.UserID, address.AddressID)
+	err = s.profileRepo.UpdateAddressId(user.UserID, address.ID)
 	if err != nil {
 		log.Println("error updating address id", err)
 		return err

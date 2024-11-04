@@ -3,14 +3,13 @@ package repositories
 import (
 	modelsCommon "backend/internal/models/common"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type CountryRepo interface {
 	Create(country *modelsCommon.Country) error
 	Get(name string) (*modelsCommon.Country, error)
-	GetByID(countryID uuid.UUID) (*modelsCommon.Country, error)
+	GetByID(countryID uint) (*modelsCommon.Country, error)
 	GetByISO3(iso3 string) (*modelsCommon.Country, error)
 	GetAll() ([]modelsCommon.Country, error)
 	Update(country *modelsCommon.Country) error
@@ -34,7 +33,7 @@ func (r *countryRepo) Get(name string) (*modelsCommon.Country, error) {
 	return &country, err
 }
 
-func (r *countryRepo) GetByID(countryID uuid.UUID) (*modelsCommon.Country, error) {
+func (r *countryRepo) GetByID(countryID uint) (*modelsCommon.Country, error) {
 	var country modelsCommon.Country
 	err := r.db.Where("country_id = ?", countryID).First(&country).Error
 	return &country, err

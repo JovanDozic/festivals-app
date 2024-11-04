@@ -3,15 +3,14 @@ package repositories
 import (
 	modelsCommon "backend/internal/models/common"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type CityRepo interface {
 	Create(city *modelsCommon.City) error
 	Get(name string) (*modelsCommon.City, error)
-	GetByID(cityID uuid.UUID) (*modelsCommon.City, error)
-	GetByCountryAndPostalCode(countryID uuid.UUID, postalCode string) (*modelsCommon.City, error)
+	GetByID(cityID uint) (*modelsCommon.City, error)
+	GetByCountryAndPostalCode(countryID uint, postalCode string) (*modelsCommon.City, error)
 	GetAll() ([]modelsCommon.City, error)
 	Update(city *modelsCommon.City) error
 }
@@ -34,13 +33,13 @@ func (r *cityRepo) Get(name string) (*modelsCommon.City, error) {
 	return &city, err
 }
 
-func (r *cityRepo) GetByID(cityID uuid.UUID) (*modelsCommon.City, error) {
+func (r *cityRepo) GetByID(cityID uint) (*modelsCommon.City, error) {
 	var city modelsCommon.City
 	err := r.db.Preload("Country").Where("city_id = ?", cityID).First(&city).Error
 	return &city, err
 }
 
-func (r *cityRepo) GetByCountryAndPostalCode(countryID uuid.UUID, postalCode string) (*modelsCommon.City, error) {
+func (r *cityRepo) GetByCountryAndPostalCode(countryID uint, postalCode string) (*modelsCommon.City, error) {
 	var city modelsCommon.City
 	err := r.db.Preload("Country").Where("country_id = ? AND postal_code = ?", countryID, postalCode).First(&city).Error
 	return &city, err
