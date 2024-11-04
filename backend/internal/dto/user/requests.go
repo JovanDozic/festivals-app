@@ -18,12 +18,11 @@ type CreateUserProfileRequest struct {
 	PhoneNumber string `json:"phoneNumber"`
 }
 
-type CreateAddressRequest struct {
-	Username       string `json:"username"`
+type CreateUserAddressRequest struct {
 	Street         string `json:"street"`
 	Number         string `json:"number"`
 	ApartmentSuite string `json:"apartmentSuite"`
 	City           string `json:"city"`
 	PostalCode     string `json:"postalCode"`
-	Country        string `json:"country"`
+	CountryISO3    string `json:"countryISO3"`
 }

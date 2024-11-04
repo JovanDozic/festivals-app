@@ -2,11 +2,13 @@ package router
 
 import (
 	"backend/internal/config"
-	handlers "backend/internal/handlers/common"
-	userHandler "backend/internal/handlers/user"
+	handlersCommon "backend/internal/handlers/common"
+	handlersUser "backend/internal/handlers/user"
 	"backend/internal/middlewares"
-	userRepositories "backend/internal/repositories/user"
-	userServices "backend/internal/services/user"
+	reposCommon "backend/internal/repositories/common"
+	reposUser "backend/internal/repositories/user"
+	servicesCommon "backend/internal/services/common"
+	servicesUser "backend/internal/services/user"
 	"backend/internal/utils"
 	"net/http"
 
@@ -17,17 +19,21 @@ import (
 func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// Init repositories
-	userRepo := userRepositories.NewUserRepo(db)
-	userProfileRepo := userRepositories.NewUserProfileRepo(db)
+	userRepo := reposUser.NewUserRepo(db)
+	userProfileRepo := reposUser.NewUserProfileRepo(db)
+	addressRepo := reposCommon.NewAddressRepo(db)
+	cityRepo := reposCommon.NewCityRepo(db)
+	countryRepo := reposCommon.NewCountryRepo(db)
 	// ...
 
 	// Init services
-	userService := userServices.NewUserService(config, userRepo, userProfileRepo)
+	locationService := servicesCommon.NewLocationService(addressRepo, cityRepo, countryRepo)
+	userService := servicesUser.NewUserService(config, userRepo, userProfileRepo, locationService)
 	// ...
 
 	// Init handlers
-	commonHandler := handlers.NewHealthHandler(config)
-	userHandler := userHandler.NewUserHandler(userService)
+	commonHandler := handlersCommon.NewHealthHandler(config)
+	userHandler := handlersUser.NewUserHandler(userService)
 	// ...
 
 	r := mux.NewRouter()
@@ -49,6 +55,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	protectedRouter.HandleFunc("/secure-health", commonHandler.HealthCheck).Methods(http.MethodGet)
 	r.PathPrefix("").Handler(protectedRouter)
 	protectedRouter.HandleFunc("/user/profile", userHandler.CreateUserProfile).Methods(http.MethodPost)
+	protectedRouter.HandleFunc("/user/profile/address", userHandler.CreateUserAddress).Methods(http.MethodPost)
 	// ...
 
 	return r

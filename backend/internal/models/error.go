@@ -25,4 +25,6 @@ var (
 	ErrEmptyEmail         = errors.New("invalid email")
 	ErrInvalidEmailFormat = errors.New("invalid email format")
 	ErrUserHasProfile     = errors.New("user already has a profile")
+	ErrUserNotFound       = errors.New("user not found")
+	ErrCountryNotFound    = errors.New("country not found")
 )

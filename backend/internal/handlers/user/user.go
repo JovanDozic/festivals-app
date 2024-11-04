@@ -3,6 +3,7 @@ package handlers
 import (
 	dtoUser "backend/internal/dto/user"
 	"backend/internal/models"
+	modelsCommon "backend/internal/models/common"
 	modelsUser "backend/internal/models/user"
 	servicesUser "backend/internal/services/user"
 	"backend/internal/utils"
@@ -14,6 +15,7 @@ type UserHandler interface {
 	RegisterAttendee(w http.ResponseWriter, r *http.Request)
 	Login(w http.ResponseWriter, r *http.Request)
 	CreateUserProfile(w http.ResponseWriter, r *http.Request)
+	CreateUserAddress(w http.ResponseWriter, r *http.Request)
 }
 
 type userHandler struct {
@@ -96,7 +98,7 @@ func (h *userHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 func (h *userHandler) CreateUserProfile(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthAttendee(r.Context()) {
+	if !utils.AuthAttendeeRole(r.Context()) {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
@@ -138,4 +140,57 @@ func (h *userHandler) CreateUserProfile(w http.ResponseWriter, r *http.Request) 
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("profile created successfully"))
 	log.Println("profile created successfully for user:", username)
+}
+
+func (h *userHandler) CreateUserAddress(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthAttendeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	var input dtoUser.CreateUserAddressRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	address := modelsCommon.Address{
+		Street:         input.Street,
+		Number:         input.Number,
+		ApartmentSuite: &input.ApartmentSuite,
+		City: modelsCommon.City{
+			Name:       input.City,
+			PostalCode: input.PostalCode,
+			Country: modelsCommon.Country{
+				ISO3: input.CountryISO3,
+			},
+		},
+	}
+
+	username := utils.GetUsername(r.Context())
+
+	if err := h.userService.CreateUserAddress(username, &address); err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrNotFound:
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		case models.ErrCountryNotFound:
+			http.Error(w, err.Error(), http.StatusNotFound)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write([]byte("address created successfully"))
+	log.Println("address created successfully for user:", username)
 }

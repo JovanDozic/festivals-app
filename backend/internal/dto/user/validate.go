@@ -64,3 +64,22 @@ func isValidEmailFormat(email string) bool {
 	}
 	return matched
 }
+
+func (r *CreateUserAddressRequest) Validate() error {
+	if r.Street == "" {
+		return models.ErrMissingFields
+	}
+	if r.Number == "" {
+		return models.ErrMissingFields
+	}
+	if r.City == "" {
+		return models.ErrMissingFields
+	}
+	if r.PostalCode == "" {
+		return models.ErrMissingFields
+	}
+	if r.CountryISO3 == "" {
+		return models.ErrMissingFields
+	}
+	return nil
+}

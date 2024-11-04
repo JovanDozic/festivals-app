@@ -2,30 +2,35 @@ package services
 
 import (
 	"backend/internal/config"
-	errorModels "backend/internal/models"
-	models "backend/internal/models/user"
-	repositories "backend/internal/repositories/user"
+	modelsError "backend/internal/models"
+	modelsCommon "backend/internal/models/common"
+	modelsUser "backend/internal/models/user"
+	reposUser "backend/internal/repositories/user"
+	servicesCommon "backend/internal/services/common"
 	"backend/internal/utils"
+	"log"
 	"strings"
 )
 
 type UserService interface {
-	Create(user *models.User) error
+	Create(user *modelsUser.User) error
 	Login(username string, password string) (string, error)
-	CreateUserProfile(username string, userProfile *models.UserProfile) error
+	CreateUserProfile(username string, userProfile *modelsUser.UserProfile) error
+	CreateUserAddress(username string, address *modelsCommon.Address) error
 }
 
 type userService struct {
-	userRepo    repositories.UserRepo
-	profileRepo repositories.UserProfileRepo
-	config      *config.Config
+	config          *config.Config
+	userRepo        reposUser.UserRepo
+	profileRepo     reposUser.UserProfileRepo
+	locationService servicesCommon.LocationService
 }
 
-func NewUserService(c *config.Config, r repositories.UserRepo, p repositories.UserProfileRepo) UserService {
-	return &userService{userRepo: r, config: c, profileRepo: p}
+func NewUserService(c *config.Config, r reposUser.UserRepo, p reposUser.UserProfileRepo, l servicesCommon.LocationService) UserService {
+	return &userService{userRepo: r, config: c, profileRepo: p, locationService: l}
 }
 
-func (s *userService) Create(user *models.User) error {
+func (s *userService) Create(user *modelsUser.User) error {
 
 	if err := user.Validate(); err != nil {
 		return err
@@ -40,9 +45,9 @@ func (s *userService) Create(user *models.User) error {
 	if err := s.userRepo.Create(user); err != nil {
 		switch {
 		case strings.Contains(err.Error(), "duplicate key value"):
-			return errorModels.ErrDuplicateUser
+			return modelsError.ErrDuplicateUser
 		case strings.Contains(err.Error(), "foreign key constraint"):
-			return errorModels.ErrRoleNotFound
+			return modelsError.ErrRoleNotFound
 		default:
 			return err
 		}
@@ -55,11 +60,11 @@ func (s *userService) Login(username string, password string) (string, error) {
 
 	user, err := s.userRepo.GetByUsername(username)
 	if err != nil {
-		return "", errorModels.ErrNotFound
+		return "", modelsError.ErrNotFound
 	}
 
 	if !utils.VerifyPassword(user.Password, password) {
-		return "", errorModels.ErrInvalidPassword
+		return "", modelsError.ErrInvalidPassword
 	}
 
 	jwt := utils.NewJWTUtil(s.config.JWT.Secret)
@@ -71,7 +76,7 @@ func (s *userService) Login(username string, password string) (string, error) {
 	return token, nil
 }
 
-func (s *userService) CreateUserProfile(username string, userProfile *models.UserProfile) error {
+func (s *userService) CreateUserProfile(username string, userProfile *modelsUser.UserProfile) error {
 
 	if err := userProfile.Validate(); err != nil {
 		return err
@@ -79,23 +84,53 @@ func (s *userService) CreateUserProfile(username string, userProfile *models.Use
 
 	user, err := s.userRepo.GetByUsername(username)
 	if err != nil {
-		return errorModels.ErrNotFound
+		return modelsError.ErrNotFound
 	}
 
 	userProfile.UserID = user.UserID
 
-	// ? We don't need to check if user already has a profile because we are using a unique constraint on the user_id column
+	// * We don't need to check if user already has a profile because we are using a unique constraint on the user_id column
 
 	if err := s.profileRepo.Create(userProfile); err != nil {
 		switch {
 		case strings.Contains(err.Error(), "duplicate key value"):
-			return errorModels.ErrUserHasProfile
+			return modelsError.ErrUserHasProfile
 		case strings.Contains(err.Error(), "foreign key constraint"):
-			return errorModels.ErrUserHasProfile
+			return modelsError.ErrUserHasProfile
 		default:
 			return err
 		}
 	}
 
+	return nil
+}
+
+func (s *userService) CreateUserAddress(username string, address *modelsCommon.Address) error {
+
+	if err := address.Validate(); err != nil {
+		log.Println("error validating address", err)
+		return err
+	}
+
+	// todo: do we need to check if address already exists?
+
+	if err := s.locationService.CreateAddress(address); err != nil {
+		log.Println("error creating address", err)
+		return err
+	}
+
+	user, err := s.userRepo.GetByUsername(username)
+	if err != nil {
+		log.Println("error getting user", err)
+		return modelsError.ErrNotFound
+	}
+
+	err = s.profileRepo.UpdateAddressId(user.UserID, address.AddressID)
+	if err != nil {
+		log.Println("error updating address id", err)
+		return err
+	}
+
+	log.Println("user's address created successfully")
 	return nil
 }

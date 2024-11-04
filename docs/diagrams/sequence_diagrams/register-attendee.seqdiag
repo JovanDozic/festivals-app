@@ -11,6 +11,10 @@ front -> back: firstname, lastname, birthday, phone
 back -> back: save that
 back -> front: 200 ok
 
-front -> back: address info (ooptional)
+front -> back: address (full), city (& zip), country (ISO3)
+back -> back: check if country exists
+
+back -> back: check if city exists (only if it isn't attendees address, if it's festival address - do it)
+
 back -> back: save that
 back -> front: 200 ok

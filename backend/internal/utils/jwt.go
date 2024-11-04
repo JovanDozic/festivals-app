@@ -94,7 +94,7 @@ func AuthOrganizer(c context.Context) bool {
 	return claims.Role == "ORGANIZER"
 }
 
-func AuthAttendee(c context.Context) bool {
+func AuthAttendeeRole(c context.Context) bool {
 	claims, ok := c.Value(UserKey).(*Claims)
 	if !ok {
 		return false
