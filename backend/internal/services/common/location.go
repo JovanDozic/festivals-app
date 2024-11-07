@@ -9,6 +9,7 @@ import (
 
 type LocationService interface {
 	CreateAddress(address *modelsCommon.Address) error
+	GetAddressByID(id uint) (*modelsCommon.Address, error)
 }
 
 type locationService struct {
@@ -43,4 +44,14 @@ func (s *locationService) CreateAddress(address *modelsCommon.Address) error {
 
 	log.Println("address created successfully:", address.ID)
 	return nil
+}
+
+func (s *locationService) GetAddressByID(id uint) (*modelsCommon.Address, error) {
+	address, err := s.addressRepo.Get(id)
+	if err != nil {
+		log.Println("error getting address by id:", err)
+		return nil, err
+	}
+
+	return address, nil
 }

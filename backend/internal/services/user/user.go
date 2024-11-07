@@ -2,6 +2,7 @@ package services
 
 import (
 	"backend/internal/config"
+	dto "backend/internal/dto/user"
 	modelsError "backend/internal/models"
 	modelsCommon "backend/internal/models/common"
 	modelsUser "backend/internal/models/user"
@@ -15,6 +16,7 @@ import (
 type UserService interface {
 	Create(user *modelsUser.User) error
 	Login(username string, password string) (string, error)
+	GetUserProfile(username string) (*dto.GetUserProfileResponse, error)
 	CreateUserProfile(username string, userProfile *modelsUser.UserProfile) error
 	CreateUserAddress(username string, address *modelsCommon.Address) error
 }
@@ -76,6 +78,43 @@ func (s *userService) Login(username string, password string) (string, error) {
 	return token, nil
 }
 
+func (s *userService) GetUserProfile(username string) (*dto.GetUserProfileResponse, error) {
+
+	user, err := s.userRepo.GetByUsername(username)
+	if err != nil {
+		return nil, modelsError.ErrNotFound
+	}
+
+	userProfile, err := s.profileRepo.GetFullByUsername(username)
+	if err != nil {
+		return nil, modelsError.ErrNotFound
+	}
+
+	response := dto.GetUserProfileResponse{
+		Username:    user.Username,
+		Email:       user.Email,
+		Role:        user.Role,
+		FirstName:   userProfile.FirstName,
+		LastName:    userProfile.LastName,
+		DateOfBirth: userProfile.DateOfBirth.Format("2006-01-02"),
+		PhoneNumber: userProfile.PhoneNumber,
+		Address:     nil,
+	}
+
+	if userProfile.Address != nil {
+		response.Address = &dto.GetAddressResponse{
+			Street:         userProfile.Address.Street,
+			Number:         userProfile.Address.Number,
+			ApartmentSuite: *userProfile.Address.ApartmentSuite,
+			City:           userProfile.Address.City.Name,
+			PostalCode:     userProfile.Address.City.PostalCode,
+			Country:        userProfile.Address.City.Country.NiceName,
+		}
+	}
+
+	return &response, nil
+}
+
 func (s *userService) CreateUserProfile(username string, userProfile *modelsUser.UserProfile) error {
 
 	if err := userProfile.Validate(); err != nil {
@@ -112,13 +151,13 @@ func (s *userService) CreateUserAddress(username string, address *modelsCommon.A
 		return err
 	}
 
-	userProfile, err := s.profileRepo.GetByUsername(username)
+	userProfile, err := s.profileRepo.GetFullByUsername(username)
 	if err != nil {
 		log.Println("error getting user profile", err)
 		return modelsError.ErrNotFound
 	}
 
-	if userProfile.AddressID != nil || *userProfile.AddressID != 0 {
+	if userProfile.AddressID != nil {
 		log.Println("user already has an address")
 		return modelsError.ErrUserHasAddress
 	}

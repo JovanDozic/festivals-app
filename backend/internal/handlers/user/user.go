@@ -14,6 +14,7 @@ import (
 type UserHandler interface {
 	RegisterAttendee(w http.ResponseWriter, r *http.Request)
 	Login(w http.ResponseWriter, r *http.Request)
+	GetUserProfile(w http.ResponseWriter, r *http.Request)
 	CreateUserProfile(w http.ResponseWriter, r *http.Request)
 	CreateUserAddress(w http.ResponseWriter, r *http.Request)
 }
@@ -94,6 +95,35 @@ func (h *userHandler) Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
+}
+
+func (h *userHandler) GetUserProfile(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	username := utils.GetUsername(r.Context())
+
+	data, err := h.userService.GetUserProfile(username)
+	if err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrNotFound:
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	if err := utils.WriteJSON(w, http.StatusOK, utils.Envelope{"userProfile": data}, nil); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
 }
 
 func (h *userHandler) CreateUserProfile(w http.ResponseWriter, r *http.Request) {

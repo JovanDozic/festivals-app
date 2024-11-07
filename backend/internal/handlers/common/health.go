@@ -3,7 +3,7 @@ package handlers
 import (
 	"backend/internal/config"
 	dto "backend/internal/dto/common"
-	"backend/pkg/utils"
+	"backend/internal/utils"
 	"log"
 	"net/http"
 )

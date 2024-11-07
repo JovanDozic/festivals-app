@@ -8,6 +8,7 @@ import (
 
 type AddressRepo interface {
 	Create(address *modelsCommon.Address) error
+	Get(id uint) (*modelsCommon.Address, error)
 }
 
 type addressRepo struct {
@@ -27,4 +28,13 @@ func (r *addressRepo) Create(address *modelsCommon.Address) error {
 	}
 
 	return r.db.Omit("City.Country").Create(address).Error
+}
+
+func (r *addressRepo) Get(id uint) (*modelsCommon.Address, error) {
+	var address modelsCommon.Address
+	if err := r.db.Preload("City.Country").First(&address, id).Error; err != nil {
+		return nil, err
+	}
+
+	return &address, nil
 }

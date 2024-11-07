@@ -117,3 +117,8 @@ func GetUsername(c context.Context) string {
 	}
 	return claims.Username
 }
+
+func Auth(c context.Context) bool {
+	_, ok := c.Value(UserKey).(*Claims)
+	return ok
+}

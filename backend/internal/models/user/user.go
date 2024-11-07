@@ -22,7 +22,7 @@ type UserProfile struct {
 	LastName    string
 	DateOfBirth time.Time
 	PhoneNumber string
-	UserID      uint
+	UserID      uint `gorm:"unique"`
 	User        User
 	AddressID   *uint
 	Address     *modelsCommon.Address
