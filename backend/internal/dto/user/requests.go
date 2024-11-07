@@ -26,3 +26,8 @@ type CreateUserAddressRequest struct {
 	PostalCode     string `json:"postalCode"`
 	CountryISO3    string `json:"countryISO3"`
 }
+
+type ChangePasswordRequest struct {
+	OldPassword string `json:"oldPassword"`
+	NewPassword string `json:"newPassword"`
+}

@@ -19,6 +19,7 @@ type UserService interface {
 	GetUserProfile(username string) (*dto.GetUserProfileResponse, error)
 	CreateUserProfile(username string, userProfile *modelsUser.UserProfile) error
 	CreateUserAddress(username string, address *modelsCommon.Address) error
+	ChangePassword(username, oldPassword, newPassword string) error
 }
 
 type userService struct {
@@ -139,6 +140,30 @@ func (s *userService) CreateUserProfile(username string, userProfile *modelsUser
 		default:
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (s *userService) ChangePassword(username, oldPassword, newPassword string) error {
+
+	user, err := s.userRepo.GetByUsername(username)
+	if err != nil {
+		return modelsError.ErrNotFound
+	}
+
+	if !utils.VerifyPassword(user.Password, oldPassword) {
+		return modelsError.ErrInvalidPassword
+	}
+
+	passwordHash, err := utils.HashPassword(newPassword)
+	if err != nil {
+		return err
+	}
+
+	err = s.userRepo.UpdatePassword(username, passwordHash)
+	if err != nil {
+		return err
 	}
 
 	return nil

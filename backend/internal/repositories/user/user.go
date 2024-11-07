@@ -9,6 +9,7 @@ import (
 type UserRepo interface {
 	Create(user *models.User) error
 	GetByUsername(username string) (*models.User, error)
+	UpdatePassword(username, password string) error
 }
 
 type userRepo struct {
@@ -30,4 +31,8 @@ func (r *userRepo) GetByUsername(username string) (*models.User, error) {
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (r *userRepo) UpdatePassword(username, password string) error {
+	return r.db.Model(&models.User{}).Where("username = ?", username).Update("password", password).Error
 }

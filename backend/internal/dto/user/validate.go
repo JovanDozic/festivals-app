@@ -83,3 +83,13 @@ func (r *CreateUserAddressRequest) Validate() error {
 	}
 	return nil
 }
+
+func (r *ChangePasswordRequest) Validate() error {
+	if r.OldPassword == "" {
+		return models.ErrMissingFields
+	}
+	if r.NewPassword == "" {
+		return models.ErrMissingFields
+	}
+	return nil
+}

@@ -17,6 +17,7 @@ type UserHandler interface {
 	GetUserProfile(w http.ResponseWriter, r *http.Request)
 	CreateUserProfile(w http.ResponseWriter, r *http.Request)
 	CreateUserAddress(w http.ResponseWriter, r *http.Request)
+	ChangePassword(w http.ResponseWriter, r *http.Request)
 }
 
 type userHandler struct {
@@ -98,7 +99,6 @@ func (h *userHandler) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *userHandler) GetUserProfile(w http.ResponseWriter, r *http.Request) {
-
 	if !utils.Auth(r.Context()) {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
@@ -123,7 +123,6 @@ func (h *userHandler) GetUserProfile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
-
 }
 
 func (h *userHandler) CreateUserProfile(w http.ResponseWriter, r *http.Request) {
@@ -170,6 +169,46 @@ func (h *userHandler) CreateUserProfile(w http.ResponseWriter, r *http.Request) 
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("profile created successfully"))
 	log.Println("profile created successfully for user:", username)
+}
+
+func (h *userHandler) ChangePassword(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	var input dtoUser.ChangePasswordRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	username := utils.GetUsername(r.Context())
+
+	if err := h.userService.ChangePassword(username, input.OldPassword, input.NewPassword); err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrNotFound:
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		case models.ErrInvalidPassword:
+			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("password changed successfully"))
+	log.Println("password changed successfully for user:", username)
 }
 
 func (h *userHandler) CreateUserAddress(w http.ResponseWriter, r *http.Request) {
