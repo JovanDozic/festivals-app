@@ -308,6 +308,8 @@ func (h *userHandler) UpdateUserEmail(w http.ResponseWriter, r *http.Request) {
 	log.Println("email updated successfully for user:", username)
 }
 
+// This method only allows user that is logged in to change their profile
+// TODO: Create method that allows Organizers to change Employee profiles, as well as Administrators to all other profiles
 func (h *userHandler) UpdateUserProfile(w http.ResponseWriter, r *http.Request) {
 
 	if !utils.Auth(r.Context()) {
