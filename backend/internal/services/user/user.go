@@ -21,6 +21,7 @@ type UserService interface {
 	CreateUserAddress(username string, address *modelsCommon.Address) error
 	ChangePassword(username, oldPassword, newPassword string) error
 	UpdateUserProfile(username string, updatedProfile *modelsUser.UserProfile) error
+	UpdateUserEmail(username string, email string) error
 }
 
 type userService struct {
@@ -200,6 +201,27 @@ func (s *userService) CreateUserAddress(username string, address *modelsCommon.A
 	}
 
 	log.Println("user's address created successfully")
+	return nil
+}
+
+func (s *userService) UpdateUserEmail(username string, email string) error {
+
+	user, err := s.userRepo.GetByUsername(username)
+	if err != nil {
+		return modelsError.ErrNotFound
+	}
+
+	user.Email = email
+
+	if err := s.userRepo.Update(user); err != nil {
+		switch {
+		case strings.Contains(err.Error(), "duplicate key value"):
+			return modelsError.ErrDuplicateEmail
+		default:
+			return err
+		}
+	}
+
 	return nil
 }
 

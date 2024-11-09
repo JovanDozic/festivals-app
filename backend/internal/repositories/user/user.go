@@ -10,6 +10,7 @@ type UserRepo interface {
 	Create(user *models.User) error
 	GetByUsername(username string) (*models.User, error)
 	UpdatePassword(username, password string) error
+	Update(user *models.User) error
 }
 
 type userRepo struct {
@@ -35,4 +36,8 @@ func (r *userRepo) GetByUsername(username string) (*models.User, error) {
 
 func (r *userRepo) UpdatePassword(username, password string) error {
 	return r.db.Model(&models.User{}).Where("username = ?", username).Update("password", password).Error
+}
+
+func (r *userRepo) Update(user *models.User) error {
+	return r.db.Save(user).Error
 }

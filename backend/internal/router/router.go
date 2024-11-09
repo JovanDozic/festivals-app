@@ -59,6 +59,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	protectedRouter.HandleFunc("/user/profile", userHandler.GetUserProfile).Methods(http.MethodGet)
 	protectedRouter.HandleFunc("/user/change-password", userHandler.ChangePassword).Methods(http.MethodPut)
 	protectedRouter.HandleFunc("/user/profile", userHandler.UpdateUserProfile).Methods(http.MethodPut)
+	protectedRouter.HandleFunc("/user/email", userHandler.UpdateUserEmail).Methods(http.MethodPut)
 	// ...
 
 	return r

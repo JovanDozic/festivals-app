@@ -14,9 +14,3 @@ func ParseDate(input string) time.Time {
 	}
 	return date
 }
-
-// Returns true if the input string is a valid date string (yyyy-mm-dd)
-func ValidateDate(input string) bool {
-	_, err := time.Parse("2006-01-02", input)
-	return err == nil
-}

@@ -3,8 +3,6 @@ package dto
 import (
 	"backend/internal/models"
 	"backend/internal/utils"
-	"regexp"
-	"time"
 )
 
 func (r *LoginRequest) Validate() error {
@@ -27,7 +25,7 @@ func (r *RegisterAttendeeRequest) Validate() error {
 	if r.Email == "" {
 		return models.ErrMissingFields
 	}
-	if !isValidEmailFormat(r.Email) {
+	if !utils.IsEmailValid(r.Email) {
 		return models.ErrInvalidEmailFormat
 	}
 	return nil
@@ -46,24 +44,10 @@ func (r *CreateUserProfileRequest) Validate() error {
 	if r.PhoneNumber == "" {
 		return models.ErrMissingFields
 	}
-	if !isValidDateFormat(r.DateOfBirth) {
+	if !utils.IsDateValid(r.DateOfBirth) {
 		return models.ErrInvalidDateFormat
 	}
 	return nil
-}
-
-func isValidDateFormat(date string) bool {
-	_, err := time.Parse("2006-01-02", date)
-	return err == nil
-}
-
-func isValidEmailFormat(email string) bool {
-	pattern := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
-	matched, err := regexp.MatchString(pattern, email)
-	if err != nil {
-		return false
-	}
-	return matched
 }
 
 func (r *CreateUserAddressRequest) Validate() error {
@@ -108,8 +92,18 @@ func (u *UpdateUserProfileRequest) Validate() error {
 	if u.PhoneNumber == "" {
 		return models.ErrMissingFields
 	}
-	if !utils.ValidateDate(u.DateOfBirth) {
+	if !utils.IsDateValid(u.DateOfBirth) {
 		return models.ErrInvalidDateFormat
+	}
+	return nil
+}
+
+func (u *UpdateUserEmailRequest) Validate() error {
+	if u.Email == "" {
+		return models.ErrMissingFields
+	}
+	if !utils.IsEmailValid(u.Email) {
+		return models.ErrInvalidEmailFormat
 	}
 	return nil
 }

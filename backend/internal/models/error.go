@@ -28,4 +28,5 @@ var (
 	ErrUserNotFound       = errors.New("user not found")
 	ErrCountryNotFound    = errors.New("country not found")
 	ErrUserHasAddress     = errors.New("user already has an address")
+	ErrDuplicateEmail     = errors.New("email already exists")
 )
