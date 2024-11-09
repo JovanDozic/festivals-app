@@ -48,7 +48,7 @@ func (h *userHandler) RegisterAttendee(w http.ResponseWriter, r *http.Request) {
 		Role:     "ATTENDEE",
 	}
 
-	err := h.userService.Create(&user)
+	err := h.userService.CreateAttendee(&user)
 	if err != nil {
 		log.Println("error:", err)
 		switch err {

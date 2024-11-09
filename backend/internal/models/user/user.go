@@ -8,6 +8,15 @@ import (
 	modelsCommon "backend/internal/models/common"
 )
 
+type UserRoles string
+
+const (
+	RoleAttendee  UserRoles = "ATTENDEE"
+	RoleEmployee  UserRoles = "EMPLOYEE"
+	RoleOrganizer UserRoles = "ORGANIZER"
+	RoleAdmin     UserRoles = "ADMINISTRATOR"
+)
+
 type User struct {
 	gorm.Model
 	Username string
@@ -41,6 +50,11 @@ type Employee struct {
 }
 
 type Organizer struct {
+	UserID uint
+	User   User
+}
+
+type Administrator struct {
 	UserID uint
 	User   User
 }

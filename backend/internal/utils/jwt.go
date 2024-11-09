@@ -6,6 +6,8 @@ import (
 	"log"
 	"time"
 
+	modelsUser "backend/internal/models/user"
+
 	"github.com/golang-jwt/jwt"
 )
 
@@ -83,7 +85,7 @@ func AuthAdmin(c context.Context) bool {
 	if !ok {
 		return false
 	}
-	return claims.Role == "ADMIN"
+	return claims.Role == string(modelsUser.RoleAdmin)
 }
 
 func AuthOrganizer(c context.Context) bool {
@@ -91,7 +93,7 @@ func AuthOrganizer(c context.Context) bool {
 	if !ok {
 		return false
 	}
-	return claims.Role == "ORGANIZER"
+	return claims.Role == string(modelsUser.RoleOrganizer)
 }
 
 func AuthAttendeeRole(c context.Context) bool {
@@ -99,7 +101,7 @@ func AuthAttendeeRole(c context.Context) bool {
 	if !ok {
 		return false
 	}
-	return claims.Role == "ATTENDEE"
+	return claims.Role == string(modelsUser.RoleAttendee)
 }
 
 func AuthEmployee(c context.Context) bool {
@@ -107,7 +109,7 @@ func AuthEmployee(c context.Context) bool {
 	if !ok {
 		return false
 	}
-	return claims.Role == "EMPLOYEE"
+	return claims.Role == string(modelsUser.RoleEmployee)
 }
 
 func GetUsername(c context.Context) string {

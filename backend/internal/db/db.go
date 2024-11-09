@@ -28,6 +28,7 @@ func migrateUserModels(db *gorm.DB) {
 	db.AutoMigrate(&modelsUser.Attendee{})
 	db.AutoMigrate(&modelsUser.Employee{})
 	db.AutoMigrate(&modelsUser.Organizer{})
+	db.AutoMigrate(&modelsUser.Administrator{})
 	db.AutoMigrate(&modelsUser.Log{})
 }
 

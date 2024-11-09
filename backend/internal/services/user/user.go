@@ -15,6 +15,7 @@ import (
 
 type UserService interface {
 	Create(user *modelsUser.User) error
+	CreateAttendee(user *modelsUser.User) error
 	Login(username string, password string) (string, error)
 	GetUserProfile(username string) (*dto.GetUserProfileResponse, error)
 	CreateUserProfile(username string, userProfile *modelsUser.UserProfile) error
@@ -48,6 +49,32 @@ func (s *userService) Create(user *modelsUser.User) error {
 	user.Password = passwordHash
 
 	if err := s.userRepo.Create(user); err != nil {
+		switch {
+		case strings.Contains(err.Error(), "duplicate key value"):
+			return modelsError.ErrDuplicateUser
+		case strings.Contains(err.Error(), "foreign key constraint"):
+			return modelsError.ErrRoleNotFound
+		default:
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (s *userService) CreateAttendee(user *modelsUser.User) error {
+
+	if err := user.Validate(); err != nil {
+		return err
+	}
+
+	passwordHash, err := utils.HashPassword(user.Password)
+	if err != nil {
+		return err
+	}
+	user.Password = passwordHash
+
+	if err := s.userRepo.CreateAttendee(user); err != nil {
 		switch {
 		case strings.Contains(err.Error(), "duplicate key value"):
 			return modelsError.ErrDuplicateUser
