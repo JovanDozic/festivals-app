@@ -2,6 +2,7 @@ package dto
 
 import (
 	"backend/internal/models"
+	"backend/internal/utils"
 	"regexp"
 	"time"
 )
@@ -90,6 +91,25 @@ func (r *ChangePasswordRequest) Validate() error {
 	}
 	if r.NewPassword == "" {
 		return models.ErrMissingFields
+	}
+	return nil
+}
+
+func (u *UpdateUserProfileRequest) Validate() error {
+	if u.FirstName == "" {
+		return models.ErrMissingFields
+	}
+	if u.LastName == "" {
+		return models.ErrMissingFields
+	}
+	if u.DateOfBirth == "" {
+		return models.ErrMissingFields
+	}
+	if u.PhoneNumber == "" {
+		return models.ErrMissingFields
+	}
+	if !utils.ValidateDate(u.DateOfBirth) {
+		return models.ErrInvalidDateFormat
 	}
 	return nil
 }

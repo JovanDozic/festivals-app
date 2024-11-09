@@ -20,6 +20,7 @@ type UserService interface {
 	CreateUserProfile(username string, userProfile *modelsUser.UserProfile) error
 	CreateUserAddress(username string, address *modelsCommon.Address) error
 	ChangePassword(username, oldPassword, newPassword string) error
+	UpdateUserProfile(username string, updatedProfile *modelsUser.UserProfile) error
 }
 
 type userService struct {
@@ -199,5 +200,28 @@ func (s *userService) CreateUserAddress(username string, address *modelsCommon.A
 	}
 
 	log.Println("user's address created successfully")
+	return nil
+}
+
+func (s *userService) UpdateUserProfile(username string, updatedProfile *modelsUser.UserProfile) error {
+
+	if err := updatedProfile.Validate(); err != nil {
+		return err
+	}
+
+	profile, err := s.profileRepo.GetFullByUsername(username)
+	if err != nil {
+		return modelsError.ErrNotFound
+	}
+
+	profile.FirstName = updatedProfile.FirstName
+	profile.LastName = updatedProfile.LastName
+	profile.DateOfBirth = updatedProfile.DateOfBirth
+	profile.PhoneNumber = updatedProfile.PhoneNumber
+
+	if err := s.profileRepo.Update(profile); err != nil {
+		return err
+	}
+
 	return nil
 }

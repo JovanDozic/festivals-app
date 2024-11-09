@@ -18,6 +18,7 @@ type UserHandler interface {
 	CreateUserProfile(w http.ResponseWriter, r *http.Request)
 	CreateUserAddress(w http.ResponseWriter, r *http.Request)
 	ChangePassword(w http.ResponseWriter, r *http.Request)
+	UpdateUserProfile(w http.ResponseWriter, r *http.Request)
 }
 
 type userHandler struct {
@@ -264,4 +265,49 @@ func (h *userHandler) CreateUserAddress(w http.ResponseWriter, r *http.Request) 
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("address created successfully"))
 	log.Println("address created successfully for user:", username)
+}
+
+func (h *userHandler) UpdateUserProfile(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	var input dtoUser.UpdateUserProfileRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	username := utils.GetUsername(r.Context())
+
+	updatedProfile := modelsUser.UserProfile{
+		FirstName:   input.FirstName,
+		LastName:    input.LastName,
+		DateOfBirth: utils.ParseDate(input.DateOfBirth),
+		PhoneNumber: input.PhoneNumber,
+	}
+
+	if err := h.userService.UpdateUserProfile(username, &updatedProfile); err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrNotFound:
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("profile updated successfully"))
+	log.Println("profile updated successfully for user:", username)
 }
