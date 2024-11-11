@@ -1,1 +1,15 @@
-<router-outlet />
+<mat-toolbar color="primary">
+    <mat-icon>home</mat-icon>
+    <span style="flex: 1 1 auto;"></span>
+    <nav>
+        <button mat-button>Material</button>
+        <button mat-button>Components</button>
+        <button mat-button>CDK</button>
+        <button mat-button>Guides</button>
+    </nav>
+</mat-toolbar>
+
+
+<div class="content">
+    <router-outlet></router-outlet>
+</div>
