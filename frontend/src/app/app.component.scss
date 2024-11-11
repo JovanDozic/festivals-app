@@ -1,17 +1,26 @@
 mat-toolbar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #e3f2fd; /* Customize background color */
+  background-color: #e3f2fd;
 }
 
 nav button {
   font-size: 16px;
   font-weight: 500;
-  color: #1976d2; /* Customize text color */
+  color: #1976d2;
 }
 
 mat-icon {
   font-size: 24px;
-  color: #1976d2; /* Customize icon color */
+  color: #1976d2;
+}
+
+.content {
+  padding: 10px;
 }

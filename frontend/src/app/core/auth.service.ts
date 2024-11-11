@@ -32,9 +32,10 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(credentials: {
-    email: string;
+    username: string;
     password: string;
   }): Observable<AuthResponse> {
+    console.log('trying login with ', credentials);
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/user/login`, credentials)
       .pipe(
