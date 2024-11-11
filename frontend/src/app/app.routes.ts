@@ -23,23 +23,11 @@ export const routes: Routes = [
     title: 'Address',
   },
   {
-    path: 'table',
+    path: 'login',
     loadComponent: () =>
-      import('./table/table.component').then((c) => c.TableComponent),
-    title: 'Table',
-  },
-  {
-    path: 'tree',
-    loadComponent: () =>
-      import('./tree/tree.component').then((c) => c.TreeComponent),
-    title: 'Tree',
-  },
-  {
-    path: 'drag-drop',
-    loadComponent: () =>
-      import('./drag-drop/drag-drop.component').then(
-        (c) => c.DragDropComponent
+      import('./features/auth/login/login.component').then(
+        (c) => c.LoginComponent
       ),
-    title: 'Drag-Drop',
+    title: 'Login',
   },
 ];
