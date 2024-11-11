@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 export interface AuthResponse {
   token: string;
@@ -27,6 +28,16 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('authToken');
+  }
+
+  getUserRole(): string | null {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      console.log('decodedToken', decodedToken);
+      return decodedToken.role;
+    }
+    return null;
   }
 
   constructor(private http: HttpClient) {}
