@@ -53,14 +53,14 @@ $dark-theme: m3-theme.$dark-theme;
   // Add backwards compatibility styles for color variants
   @include mat.color-variants-backwards-compatibility($theme);
 
-  @media (prefers-color-scheme: dark) {
-    @include mat.all-component-colors($dark-theme);
+  // @media (prefers-color-scheme: dark) {
+  //   @include mat.all-component-colors($dark-theme);
 
-    // Components themes
-    @include layout-component.theme($dark-theme);
+  //   // Components themes
+  //   @include layout-component.theme($dark-theme);
 
-    @include mat.color-variants-backwards-compatibility($dark-theme);
-  }
+  //   @include mat.color-variants-backwards-compatibility($dark-theme);
+  // }
 }
 
 html,

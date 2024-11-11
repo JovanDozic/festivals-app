@@ -6,6 +6,8 @@ import (
 	"backend/internal/router"
 	"log"
 	"net/http"
+
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -26,8 +28,26 @@ func main() {
 	r := router.Init(db, &config)
 	log.Println("router initialized successfully")
 
+	corsOptions := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"}, // Allow all origins, or specify your allowed origins
+		AllowedMethods: []string{
+			http.MethodGet,
+			http.MethodPost,
+			http.MethodPut,
+			http.MethodDelete,
+			http.MethodOptions,
+		},
+		AllowedHeaders: []string{
+			"Content-Type",
+			"Authorization",
+			// Add other headers if needed
+		},
+	})
+
+	handler := corsOptions.Handler(r)
+
 	log.Println("starting server on port:", config.App.Port)
-	if err := http.ListenAndServe(":"+config.App.Port, r); err != nil {
+	if err := http.ListenAndServe(":"+config.App.Port, handler); err != nil {
 		log.Println("error starting server:", err)
 		panic(err)
 	}
