@@ -2,6 +2,7 @@ package db
 
 import (
 	modelsCommon "backend/internal/models/common"
+	modelsFestival "backend/internal/models/festival"
 	modelsUser "backend/internal/models/user"
 
 	"gorm.io/driver/postgres"
@@ -15,9 +16,9 @@ func Init(dbConfig struct{ ConnectionString string }) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	// auto migrations go here
 	migrateCommonModels(db)
 	migrateUserModels(db)
+	migrateFestivalModels(db)
 
 	return db, nil
 }
@@ -37,4 +38,16 @@ func migrateCommonModels(db *gorm.DB) {
 	db.AutoMigrate(&modelsCommon.City{})
 	db.AutoMigrate(&modelsCommon.Address{})
 	db.AutoMigrate(&modelsCommon.Image{})
+}
+
+func migrateFestivalModels(db *gorm.DB) {
+	db.AutoMigrate(&modelsFestival.Festival{})
+
+	db.AutoMigrate(&modelsFestival.FestivalOrganizer{})
+	db.AutoMigrate(&modelsFestival.FestivalEmployee{})
+	db.AutoMigrate(&modelsFestival.FestivalImage{})
+
+	db.AutoMigrate(&modelsFestival.PriceList{})
+	db.AutoMigrate(&modelsFestival.Item{})
+	db.AutoMigrate(&modelsFestival.PriceListItem{})
 }

@@ -152,7 +152,7 @@ Table transport_addon {
 
 Table festival_ticket {
   festival_ticket_id uuid [pk, not null]
-  item_id uuid [not null, ref: > item.item_id]
+  item_id uuid [not null, ref: > ticket_type.item_id]
 }
 
 Table bracelet {
