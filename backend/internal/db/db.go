@@ -50,4 +50,11 @@ func migrateFestivalModels(db *gorm.DB) {
 	db.AutoMigrate(&modelsFestival.PriceList{})
 	db.AutoMigrate(&modelsFestival.Item{})
 	db.AutoMigrate(&modelsFestival.PriceListItem{})
+
+	db.AutoMigrate(&modelsFestival.TicketType{})
+	db.AutoMigrate(&modelsFestival.PackageAddon{})
+	db.AutoMigrate(&modelsFestival.PackageAddonImage{})
+	db.AutoMigrate(&modelsFestival.CampAddon{})
+	db.AutoMigrate(&modelsFestival.CampEquipment{})
+
 }

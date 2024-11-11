@@ -42,32 +42,3 @@ type FestivalImage struct {
 	ImageID    uint
 	Image      modelsCommon.Image
 }
-
-type PriceList struct {
-	gorm.Model
-	FestivalID uint
-	Festival   Festival
-}
-
-type Item struct {
-	gorm.Model
-	FestivalID      uint
-	Festival        Festival
-	Name            string
-	Type            string // Type: TICKET_TYPE, PACKAGE_ADDON
-	Description     string
-	AvailableNumber int
-	RemainingNumber int
-}
-
-type PriceListItem struct {
-	gorm.Model
-	PriceListID uint
-	PriceList   PriceList
-	ItemID      uint
-	Item        Item
-	DateFrom    time.Time
-	DateTo      time.Time
-	IsFixed     bool
-	Price       float64
-}
