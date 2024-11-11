@@ -1,11 +1,19 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
+import { AuthGuard } from './core/auth.guard';
+import { UnauthorizedComponent } from './shared/unauthorized/unauthorized.component';
+import { AuthRedirectGuard } from './core/auth-redirect.guard';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     redirectTo: 'home',
+  },
+  {
+    path: 'unauthorized',
+    component: UnauthorizedComponent,
+    title: 'Unauthorized',
   },
   {
     path: 'home',
@@ -20,6 +28,8 @@ export const routes: Routes = [
         (c) => c.DashboardComponent
       ),
     title: 'Dashboard',
+    canActivate: [AuthGuard],
+    data: { expectedRoles: ['ATTENDEE'] },
   },
   {
     path: 'address',
@@ -28,6 +38,8 @@ export const routes: Routes = [
         (c) => c.AddressFormComponent
       ),
     title: 'Address',
+    canActivate: [AuthGuard],
+    data: { expectedRoles: ['ORGANIZER'] },
   },
   {
     path: 'login',
@@ -36,5 +48,6 @@ export const routes: Routes = [
         (c) => c.LoginComponent
       ),
     title: 'Login',
+    canActivate: [AuthRedirectGuard],
   },
 ];

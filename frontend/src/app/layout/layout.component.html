@@ -11,17 +11,46 @@
       <mat-icon aria-label="Side nav toggle icon">rocket</mat-icon>
     </mat-toolbar>
     <mat-nav-list>
-      @for (item of rootRoutes; track $index) {
       <a
         mat-list-item
-        [routerLink]="item.path"
+        routerLink="/home"
+        #link="routerLinkActive"
+        routerLinkActive
+        [routerLinkActiveOptions]="{ exact: true }"
+        [activated]="link.isActive"
+      >
+        Home
+      </a>
+      <a
+        mat-list-item
+        routerLink="dashboard"
+        *ngIf="visibleForRole('ATTENDEE')"
         #link="routerLinkActive"
         routerLinkActive
         [activated]="link.isActive"
       >
-        {{ item.title }}
+        Dashboard
       </a>
-      }
+      <a
+        mat-list-item
+        routerLink="dashboard"
+        *ngIf="visibleForRole('ORGANIZER')"
+        #link="routerLinkActive"
+        routerLinkActive
+        [activated]="link.isActive"
+      >
+        Address
+      </a>
+      <a
+        mat-list-item
+        routerLink="dashboard"
+        *ngIf="!isLoggedIn()"
+        #link="routerLinkActive"
+        routerLinkActive
+        [activated]="link.isActive"
+      >
+        Login
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
