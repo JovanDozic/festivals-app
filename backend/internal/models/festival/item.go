@@ -66,3 +66,24 @@ type CampEquipment struct {
 	Item   CampAddon
 	Name   string
 }
+
+type TransportAddon struct {
+	ItemID        uint `gorm:"primaryKey"`
+	Item          PackageAddon
+	TransportType string // TransportType: BUS, TRAIN, PLANE
+
+	DepartureTime       time.Time
+	ArrivalTime         time.Time
+	ReturnDepartureTime time.Time
+	ReturnArrivalTime   time.Time
+
+	DepartureCityID uint
+	DepartureCity   modelsCommon.City `gorm:"foreignKey:DepartureCityID"`
+	ArrivalCityID   uint
+	ArrivalCity     modelsCommon.City `gorm:"foreignKey:ArrivalCityID"`
+}
+
+type CustomAddon struct {
+	ItemID uint `gorm:"primaryKey"`
+	Item   PackageAddon
+}

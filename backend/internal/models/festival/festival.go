@@ -23,17 +23,17 @@ type Festival struct {
 }
 
 type FestivalOrganizer struct {
-	FestivalID  uint
-	Festival    Festival
-	OrganizerID uint
-	Organizer   modelsUser.User
+	FestivalID uint
+	Festival   Festival
+	UserID     uint
+	User       modelsUser.Organizer
 }
 
 type FestivalEmployee struct {
 	FestivalID uint
 	Festival   Festival
-	EmployeeID uint
-	Employee   modelsUser.User
+	UserID     uint
+	User       modelsUser.Employee
 }
 
 type FestivalImage struct {

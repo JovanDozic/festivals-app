@@ -40,21 +40,21 @@ type UserProfile struct {
 }
 
 type Attendee struct {
-	UserID uint
+	UserID uint `gorm:"primaryKey"`
 	User   User
 }
 
 type Employee struct {
-	UserID uint
+	UserID uint `gorm:"primaryKey"`
 	User   User
 }
 
 type Organizer struct {
-	UserID uint
+	UserID uint `gorm:"primaryKey"`
 	User   User
 }
 
 type Administrator struct {
-	UserID uint
+	UserID uint `gorm:"primaryKey"`
 	User   User
 }
