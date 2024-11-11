@@ -68,4 +68,6 @@ func migrateFestivalModels(db *gorm.DB) {
 	db.AutoMigrate(&modelsFestival.FestivalPackageAddon{})
 	db.AutoMigrate(&modelsFestival.Order{})
 
+	db.AutoMigrate(&modelsFestival.Bracelet{})
+	db.AutoMigrate(&modelsFestival.ActivationHelpRequest{})
 }
