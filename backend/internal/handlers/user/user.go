@@ -208,8 +208,8 @@ func (h *userHandler) ChangePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("password changed successfully"))
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "password changed successfully"}, nil)
+
 	log.Println("password changed successfully for user:", username)
 }
 

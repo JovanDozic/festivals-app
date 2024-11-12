@@ -1,15 +1,20 @@
 <div class="profile-container mat-elevation-z4" *ngIf="userProfile">
   <div class="profile-header">
     <h1>Hello, {{ userProfile.firstName }} {{ userProfile.lastName }}</h1>
-    <button
-      mat-raised-button
-      (click)="logout()"
-      color="primary"
-      aria-label="Logout"
-    >
-      <mat-icon>logout</mat-icon>
-      Logout
-    </button>
+    <div>
+      <button
+        mat-raised-button
+        (click)="logout()"
+        color="primary"
+        aria-label="Logout"
+      >
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+      <button mat-button color="primary" (click)="changePassword()">
+        Change Password
+      </button>
+    </div>
   </div>
 
   <div class="profile-content">

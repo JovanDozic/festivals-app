@@ -51,4 +51,17 @@ export class AuthService {
         })
       );
   }
+
+  changePassword(oldPassword: string, newPassword: string): Observable<void> {
+    return this.http
+      .put<void>(`${this.apiUrl}/user/change-password`, {
+        oldPassword,
+        newPassword,
+      })
+      .pipe(
+        tap(() => {
+          alert('Password changed successfully!');
+        })
+      );
+  }
 }

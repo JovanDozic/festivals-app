@@ -12,6 +12,7 @@ import {
   ConfirmationDialog,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
+import { ChangePasswordDialog } from '../change-password-dialog/change-password-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -53,6 +54,16 @@ export class ProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirm) {
         this.authService.logout();
+      }
+    });
+  }
+
+  changePassword() {
+    const dialogRef = this.dialog.open(ChangePasswordDialog);
+
+    dialogRef.afterClosed().subscribe((success) => {
+      if (success) {
+        console.log('Password changed successfully');
       }
     });
   }
