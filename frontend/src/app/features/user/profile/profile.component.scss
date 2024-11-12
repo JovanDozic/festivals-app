@@ -6,9 +6,15 @@
 
 .profile-header {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.profile-header .button-container {
+  display: flex;
+  gap: 10px;
 }
 
 .profile-content {

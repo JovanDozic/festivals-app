@@ -13,6 +13,7 @@ import {
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { ChangePasswordDialog } from '../change-password-dialog/change-password-dialog.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-profile',
@@ -22,6 +23,7 @@ import { ChangePasswordDialog } from '../change-password-dialog/change-password-
   imports: [
     CommonModule,
     MatButtonModule,
+    MatTooltipModule,
     MatIconModule,
     MatDialogModule,
     MatDividerModule,
