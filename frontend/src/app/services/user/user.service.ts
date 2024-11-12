@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UserProfileResponse } from '../../models/user/user-profile-response.model';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -12,14 +12,14 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getUserProfile(): Observable<UserProfileResponse> {
-    console.log('getUserProfile');
-
     return this.http
-      .get<UserProfileResponse>(`${this.apiUrl}/user/profile`)
+      .get<{ userProfile: UserProfileResponse }>(`${this.apiUrl}/user/profile`)
       .pipe(
         tap((response) => {
           console.log('getUserProfile response', response);
-        })
+        }),
+        // Map the response to only extract the userProfile property
+        map((response) => response.userProfile)
       );
   }
 }
