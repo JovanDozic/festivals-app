@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
-
-export interface AuthResponse {
-  token: string;
-}
+import { LoginResponse } from '../models/auth/login-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -46,10 +43,10 @@ export class AuthService {
   login(credentials: {
     username: string;
     password: string;
-  }): Observable<AuthResponse> {
+  }): Observable<LoginResponse> {
     console.log('trying login with ', credentials);
     return this.http
-      .post<AuthResponse>(`${this.apiUrl}/user/login`, credentials)
+      .post<LoginResponse>(`${this.apiUrl}/user/login`, credentials)
       .pipe(
         tap((response) => {
           this.setToken(response.token);

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/auth.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +11,7 @@ import {
   MatDialogTitle,
   MatDialogModule,
 } from '@angular/material/dialog';
+import { UserService } from '../../../services/user/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,9 +20,17 @@ import {
   standalone: true,
   imports: [MatButtonModule, MatIconModule, MatDialogModule],
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
   private authService = inject(AuthService);
+  private userService = inject(UserService);
   readonly dialog = inject(MatDialog);
+
+  ngOnInit() {
+    console.log('ProfileComponent');
+    this.userService.getUserProfile().subscribe((response) => {
+      console.log('getUserProfile response', response);
+    });
+  }
 
   logout() {
     let dialogRef = this.dialog.open(LogoutDialog, {
