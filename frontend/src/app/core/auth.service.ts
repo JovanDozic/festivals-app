@@ -31,7 +31,6 @@ export class AuthService {
     const token = this.getToken();
     if (token) {
       const decodedToken: any = jwtDecode(token);
-      console.log('decodedToken', decodedToken);
       return decodedToken.role;
     }
     return null;
@@ -43,7 +42,6 @@ export class AuthService {
     username: string;
     password: string;
   }): Observable<LoginResponse> {
-    console.log('trying login with ', credentials);
     return this.http
       .post<LoginResponse>(`${this.apiUrl}/user/login`, credentials)
       .pipe(

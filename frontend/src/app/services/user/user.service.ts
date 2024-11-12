@@ -14,12 +14,6 @@ export class UserService {
   getUserProfile(): Observable<UserProfileResponse> {
     return this.http
       .get<{ userProfile: UserProfileResponse }>(`${this.apiUrl}/user/profile`)
-      .pipe(
-        tap((response) => {
-          console.log('getUserProfile response', response);
-        }),
-        // Map the response to only extract the userProfile property
-        map((response) => response.userProfile)
-      );
+      .pipe(map((response) => response.userProfile));
   }
 }

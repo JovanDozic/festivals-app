@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './features/home/home.component';
 import { AuthGuard } from './core/auth.guard';
 import { UnauthorizedComponent } from './shared/unauthorized/unauthorized.component';
 import { AuthRedirectGuard } from './core/auth-redirect.guard';
