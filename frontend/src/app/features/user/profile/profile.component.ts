@@ -12,23 +12,36 @@ import {
   MatDialogModule,
 } from '@angular/material/dialog';
 import { UserService } from '../../../services/user/user.service';
+import { UserProfileResponse } from '../../../models/user/user-profile-response.model';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss',
+  styleUrls: ['./profile.component.scss'],
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatDialogModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatCardModule,
+  ],
 })
 export class ProfileComponent implements OnInit {
   private authService = inject(AuthService);
   private userService = inject(UserService);
   readonly dialog = inject(MatDialog);
 
+  userProfile: UserProfileResponse | null = null;
+
   ngOnInit() {
-    console.log('ProfileComponent');
     this.userService.getUserProfile().subscribe((response) => {
-      console.log('getUserProfile response', response);
+      this.userProfile = response;
+      console.log('profile:', this.userProfile);
     });
   }
 

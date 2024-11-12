@@ -1,5 +1,44 @@
-<p>profile works!</p>
+<div class="profile-container mat-elevation-z4">
+  <div class="profile-header">
+    <h2>{{ userProfile?.username }}</h2>
+    <button
+      mat-icon-button
+      (click)="logout()"
+      color="primary"
+      aria-label="Logout"
+    >
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
 
-<button mat-fab (click)="logout()" color="primary" class="fab-button">
-  <mat-icon>logout</mat-icon>
-</button>
+  <div class="profile-content">
+    <mat-card class="profile-card">
+      <mat-card-title>Personal Information</mat-card-title>
+      <mat-card-content>
+        <p><strong>Email:</strong> {{ userProfile?.email }}</p>
+        <p><strong>Role:</strong> {{ userProfile?.role }}</p>
+        <p><strong>First Name:</strong> {{ userProfile?.firstName }}</p>
+        <p><strong>Last Name:</strong> {{ userProfile?.lastName }}</p>
+        <p><strong>Date of Birth:</strong> {{ userProfile?.dateOfBirth }}</p>
+        <p><strong>Phone Number:</strong> {{ userProfile?.phoneNumber }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="profile-card" *ngIf="userProfile?.address">
+      <mat-card-title>Address Information</mat-card-title>
+      <mat-card-content>
+        <p><strong>Street:</strong> {{ userProfile?.address?.street }}</p>
+        <p><strong>Number:</strong> {{ userProfile?.address?.number }}</p>
+        <p>
+          <strong>Apartment/Suite:</strong>
+          {{ userProfile?.address?.apartmentSuite }}
+        </p>
+        <p><strong>City:</strong> {{ userProfile?.address?.city }}</p>
+        <p>
+          <strong>Postal Code:</strong> {{ userProfile?.address?.postalCode }}
+        </p>
+        <p><strong>Country:</strong> {{ userProfile?.address?.country }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
