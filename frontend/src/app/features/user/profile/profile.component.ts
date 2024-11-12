@@ -56,11 +56,7 @@ export class LogoutDialog {
   readonly dialogRef = inject(MatDialogRef<LogoutDialog>);
   readonly data = inject<DialogData>(MAT_DIALOG_DATA);
 
-  onNoClick(): void {
-    this.dialogRef.close({ confirm: false });
-  }
-
-  onYesClick(): void {
-    this.dialogRef.close({ confirm: true });
+  closeDialog(confirm: boolean) {
+    this.dialogRef.close({ confirm });
   }
 }
