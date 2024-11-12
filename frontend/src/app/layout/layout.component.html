@@ -23,7 +23,7 @@
       </a>
       <a
         mat-list-item
-        routerLink="dashboard"
+        routerLink="/dashboard"
         *ngIf="visibleForRole('ATTENDEE')"
         #link="routerLinkActive"
         routerLinkActive
@@ -33,7 +33,7 @@
       </a>
       <a
         mat-list-item
-        routerLink="dashboard"
+        routerLink="/address"
         *ngIf="visibleForRole('ORGANIZER')"
         #link="routerLinkActive"
         routerLinkActive
@@ -43,13 +43,24 @@
       </a>
       <a
         mat-list-item
-        routerLink="dashboard"
+        routerLink="/login"
         *ngIf="!isLoggedIn()"
         #link="routerLinkActive"
         routerLinkActive
         [activated]="link.isActive"
       >
         Login
+      </a>
+
+      <a
+        mat-list-item
+        routerLink="/profile"
+        *ngIf="isLoggedIn()"
+        #link="routerLinkActive"
+        routerLinkActive
+        [activated]="link.isActive"
+      >
+        Profile
       </a>
     </mat-nav-list>
   </mat-sidenav>

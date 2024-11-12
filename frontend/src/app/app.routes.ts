@@ -50,4 +50,14 @@ export const routes: Routes = [
     title: 'Login',
     canActivate: [AuthRedirectGuard],
   },
+  {
+    path: 'profile',
+    loadComponent: () =>
+      import('./features/user/profile/profile.component').then(
+        (c) => c.ProfileComponent
+      ),
+    title: 'Profile',
+    canActivate: [AuthGuard],
+    data: { expectedRoles: null },
+  },
 ];
