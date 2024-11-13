@@ -1,7 +1,7 @@
 .profile-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0px 20px;
 }
 
 .profile-header {
@@ -9,7 +9,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .profile-header .button-container {
@@ -19,16 +19,25 @@
 
 .profile-content {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 40px;
+  padding: 0px 0px;
 }
 
 .profile-card {
   padding: 16px;
+  width: 100%;
 }
 
 h1,
-strong,
-mat-card-title {
+strong {
   font-weight: 500;
+}
+
+mat-card-title {
+  margin-left: 5px;
+}
+
+mat-card-content {
+  margin-left: 5px;
 }
