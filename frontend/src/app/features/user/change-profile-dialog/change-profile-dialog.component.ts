@@ -73,7 +73,7 @@ export class ChangeProfileDialogComponent implements OnInit {
         .updateUserProfile(this.changeProfileForm.value)
         .subscribe({
           next: () => {
-            this.dialogRef.close();
+            this.dialogRef.close(true);
           },
           error: (error) => {
             console.error(error);
@@ -83,6 +83,6 @@ export class ChangeProfileDialogComponent implements OnInit {
   }
 
   closeDialog() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 }

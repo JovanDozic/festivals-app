@@ -39,6 +39,10 @@ export class ProfileComponent implements OnInit {
   userProfile: UserProfileResponse | null = null;
 
   ngOnInit() {
+    this.getUserProfile();
+  }
+
+  getUserProfile() {
     this.userService.getUserProfile().subscribe((response) => {
       this.userProfile = response;
     });
@@ -83,6 +87,7 @@ export class ProfileComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((success) => {
       if (success) {
+        this.getUserProfile();
         console.log('Profile changed successfully');
       }
     });
