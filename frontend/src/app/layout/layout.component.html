@@ -21,6 +21,7 @@
       >
         Home
       </a>
+
       <a
         mat-list-item
         routerLink="/dashboard"
@@ -31,6 +32,7 @@
       >
         Dashboard
       </a>
+
       <a
         mat-list-item
         routerLink="/address"
@@ -41,6 +43,7 @@
       >
         Address
       </a>
+
       <a
         mat-list-item
         routerLink="/login"
@@ -50,6 +53,17 @@
         [activated]="link.isActive"
       >
         Login
+      </a>
+
+      <a
+        mat-list-item
+        routerLink="/register"
+        *ngIf="!isLoggedIn()"
+        #link="routerLinkActive"
+        routerLinkActive
+        [activated]="link.isActive"
+      >
+        Register
       </a>
 
       <a

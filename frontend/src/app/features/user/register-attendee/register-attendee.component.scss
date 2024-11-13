@@ -1,0 +1,41 @@
+.mat-stepper-horizontal {
+  margin-top: 8px;
+}
+
+.mat-form-field {
+  margin-top: 16px;
+  display: block;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login-card {
+  width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-header {
+  margin-bottom: 20px;
+}
+
+mat-form-field {
+  margin-bottom: 20px;
+}
+
+.error-message {
+  margin-top: 5px;
+  text-align: center;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+mat-card-actions {
+  margin-top: 5px;
+}

@@ -50,6 +50,15 @@ export const routes: Routes = [
     canActivate: [AuthRedirectGuard],
   },
   {
+    path: 'register',
+    loadComponent: () =>
+      import(
+        './features/user/register-attendee/register-attendee.component'
+      ).then((c) => c.RegisterAttendeeComponent),
+    title: 'Register',
+    canActivate: [AuthRedirectGuard],
+  },
+  {
     path: 'profile',
     loadComponent: () =>
       import('./features/user/profile/profile.component').then(
