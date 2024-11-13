@@ -58,10 +58,6 @@ export class AuthService {
         oldPassword,
         newPassword,
       })
-      .pipe(
-        tap(() => {
-          alert('Password changed successfully!');
-        })
-      );
+      .pipe(tap(() => {}));
   }
 }

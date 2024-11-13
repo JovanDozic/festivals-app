@@ -19,7 +19,6 @@ export class UserService {
   }
 
   updateUserProfile(updatedProfile: UpdateUserProfileRequest) {
-    console.log('Updating profile', updatedProfile);
     return this.http
       .put<void>(`${this.apiUrl}/user/profile`, {
         firstName: updatedProfile.firstName,
@@ -27,11 +26,7 @@ export class UserService {
         dateOfBirth: formatDate(updatedProfile.dateOfBirth),
         phoneNumber: updatedProfile.phoneNumber,
       })
-      .pipe(
-        tap(() => {
-          console.log('Profile updated');
-        })
-      );
+      .pipe(tap(() => {}));
   }
 }
 

@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../core/auth.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-layout',
@@ -26,6 +27,7 @@ import { AuthService } from '../core/auth.service';
     AsyncPipe,
     RouterLink,
     RouterLinkActive,
+    MatSnackBarModule,
   ],
 })
 export class LayoutComponent {

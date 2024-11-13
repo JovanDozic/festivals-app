@@ -21,6 +21,7 @@ import {
   MAT_DATE_FORMATS,
   provideNativeDateAdapter,
 } from '@angular/material/core';
+import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-change-profile-dialog',
@@ -46,6 +47,7 @@ export class ChangeProfileDialogComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<ChangeProfileDialogComponent>);
   readonly formBuilder = inject(FormBuilder);
   readonly data = inject<any>(MAT_DIALOG_DATA);
+  private snackbarService = inject(SnackbarService);
 
   changeProfileForm: FormGroup = this.formBuilder.group({
     firstName: ['', Validators.required],
@@ -55,7 +57,6 @@ export class ChangeProfileDialogComponent implements OnInit {
   });
 
   ngOnInit() {
-    console.log(this.data);
     if (this.data) {
       const { firstName, lastName, dateOfBirth, phoneNumber } = this.data;
       this.changeProfileForm.patchValue({
@@ -74,9 +75,11 @@ export class ChangeProfileDialogComponent implements OnInit {
         .subscribe({
           next: () => {
             this.dialogRef.close(true);
+            this.snackbarService.show('Profile updated successfully');
           },
           error: (error) => {
             console.error(error);
+            this.snackbarService.show('Error updating profile');
           },
         });
     }

@@ -15,6 +15,7 @@ import {
 import { AuthService } from '../../../core/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
+import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 
 @Component({
   selector: 'change-password-dialog',
@@ -35,6 +36,7 @@ export class ChangePasswordDialogComponent {
   private authService = inject(AuthService);
   readonly dialogRef = inject(MatDialogRef<ChangePasswordDialogComponent>);
   readonly formBuilder = inject(FormBuilder);
+  readonly snackbarService = inject(SnackbarService);
 
   changePasswordForm: FormGroup = this.formBuilder.group({
     oldPassword: ['', Validators.required],
@@ -63,9 +65,15 @@ export class ChangePasswordDialogComponent {
       this.authService.changePassword(oldPassword, newPassword).subscribe({
         next: () => {
           this.dialogRef.close(true);
+          this.snackbarService.show('Password changed successfully');
         },
         error: (error) => {
           console.error('Error changing password:', error);
+          if (error.status === 401) {
+            this.snackbarService.show('Old password is not correct');
+          } else {
+            this.snackbarService.show('Error changing password');
+          }
         },
       });
     }
