@@ -12,8 +12,9 @@ import {
   ConfirmationDialog,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { ChangePasswordDialog } from '../change-password-dialog/change-password-dialog.component';
+import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ChangeProfileDialogComponent } from '../change-profile-dialog/change-profile-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -61,11 +62,28 @@ export class ProfileComponent implements OnInit {
   }
 
   changePassword() {
-    const dialogRef = this.dialog.open(ChangePasswordDialog);
+    const dialogRef = this.dialog.open(ChangePasswordDialogComponent);
 
     dialogRef.afterClosed().subscribe((success) => {
       if (success) {
         console.log('Password changed successfully');
+      }
+    });
+  }
+
+  changeProfile() {
+    const dialogRef = this.dialog.open(ChangeProfileDialogComponent, {
+      data: {
+        firstName: this.userProfile?.firstName,
+        lastName: this.userProfile?.lastName,
+        dateOfBirth: this.userProfile?.dateOfBirth,
+        phoneNumber: this.userProfile?.phoneNumber,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((success) => {
+      if (success) {
+        console.log('Profile changed successfully');
       }
     });
   }

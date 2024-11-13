@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>Change Profile Information</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="changeProfileForm">
+    <mat-form-field class="full-width">
+      <mat-label>First Name</mat-label>
+      <input
+        matInput
+        placeholder="Enter your first name"
+        type="text"
+        formControlName="firstName"
+      />
+      <mat-error *ngIf="changeProfileForm.get('firstName')?.invalid">
+        First name is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Last Name</mat-label>
+      <input
+        matInput
+        placeholder="Enter your last name"
+        type="text"
+        formControlName="lastName"
+      />
+      <mat-error *ngIf="changeProfileForm.get('lastName')?.invalid">
+        Last name is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Date of Birth</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="dateOfBirth"
+        placeholder="21.01.2002"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="changeProfileForm.get('dateOfBirth')?.invalid">
+        Date of birth is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Phone Number</mat-label>
+      <input
+        matInput
+        placeholder="Enter your phone number"
+        type="text"
+        formControlName="phoneNumber"
+      />
+      <mat-error *ngIf="changeProfileForm.get('phoneNumber')?.invalid">
+        Phone number is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="changeProfile()">
+    Save
+  </button>
+</mat-dialog-actions>

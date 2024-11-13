@@ -350,7 +350,7 @@ func (h *userHandler) UpdateUserProfile(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("profile updated successfully"))
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "profile updated successfully"}, nil)
+
 	log.Println("profile updated successfully for user:", username)
 }

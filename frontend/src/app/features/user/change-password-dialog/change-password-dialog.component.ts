@@ -31,9 +31,9 @@ import { MatInputModule } from '@angular/material/input';
     MatInputModule,
   ],
 })
-export class ChangePasswordDialog {
+export class ChangePasswordDialogComponent {
   private authService = inject(AuthService);
-  readonly dialogRef = inject(MatDialogRef<ChangePasswordDialog>);
+  readonly dialogRef = inject(MatDialogRef<ChangePasswordDialogComponent>);
   readonly formBuilder = inject(FormBuilder);
 
   changePasswordForm: FormGroup = this.formBuilder.group({
