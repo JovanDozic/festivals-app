@@ -1,13 +1,16 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../../core/auth.service';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { UserService } from '../../../services/user/user.service';
+import { CreateUpdateUserProfileRequest } from '../../../models/user/user-profile-request.model';
+import { CreateAddressRequest } from '../../../models/user/create-address-request.model';
 
 @Component({
   selector: 'app-register-attendee',
@@ -26,7 +29,10 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 export class RegisterAttendeeComponent {
   private fb = inject(FormBuilder);
   readonly authService = inject(AuthService);
+  readonly userService = inject(UserService);
   readonly snackbarService = inject(SnackbarService);
+
+  @ViewChild('stepper') private stepper: MatStepper | undefined;
 
   isLinear = true;
   accountFormGroup = this.fb.group({
@@ -41,10 +47,12 @@ export class RegisterAttendeeComponent {
     phoneCtrl: ['', Validators.required],
   });
   addressFormGroup = this.fb.group({
-    addressCtrl: ['', Validators.required],
+    streetCtrl: ['', Validators.required],
+    numberCtrl: ['', Validators.required],
+    apartmentSuiteCtrl: [''],
     cityCtrl: ['', Validators.required],
-    zipCodeCtrl: ['', Validators.required],
-    countryCtrl: ['', Validators.required],
+    postalCodeCtrl: ['', Validators.required],
+    countryISO3Ctrl: ['', Validators.required],
   });
 
   constructor(private http: HttpClient) {}
@@ -52,7 +60,6 @@ export class RegisterAttendeeComponent {
   ngOnInit() {}
 
   createAccount() {
-    console.log('Creating account');
     if (this.accountFormGroup.valid) {
       const accountData = {
         username: this.accountFormGroup.get('usernameCtrl')?.value ?? '',
@@ -62,70 +69,90 @@ export class RegisterAttendeeComponent {
       console.log('Account data:', accountData);
       this.authService.registerAttendee(accountData).subscribe({
         next: () => {
-          this.snackbarService.show('Account created successfully');
+          this.snackbarService.show(
+            'Account created successfully, logging in...'
+          );
+
+          // Automatically log in the user
+          this.authService
+            .login(
+              {
+                username: accountData.username,
+                password: accountData.password,
+              },
+              false
+            )
+            .subscribe({
+              next: () => {
+                setTimeout(() => {
+                  this.snackbarService.show('Logged in successfully');
+                  this.stepper?.next();
+                }, 1000);
+              },
+              error: (error) => {
+                console.error('Error logging in:', error);
+                this.snackbarService.show('Error logging in');
+              },
+            });
         },
         error: (error) => {
           console.error('Error creating an account:', error);
-          this.snackbarService.show('Error creating an account');
+          if (error.status === 409) {
+            this.snackbarService.show('Username or email already in use');
+          } else {
+            this.snackbarService.show('Error creating an account');
+          }
+        },
+      });
+    }
+  } //dateOfBirth ? new Date(dateOfBirth) : null,
+
+  createUserProfile() {
+    if (this.personalFormGroup.valid) {
+      const personalData: CreateUpdateUserProfileRequest = {
+        firstName: this.personalFormGroup.get('firstNameCtrl')?.value ?? '',
+        lastName: this.personalFormGroup.get('lastNameCtrl')?.value ?? '',
+        dateOfBirth: new Date(
+          this.personalFormGroup.get('birthdayCtrl')?.value ?? ''
+        ),
+        phoneNumber: this.personalFormGroup.get('phoneCtrl')?.value ?? '',
+      };
+      this.userService.createUserProfile(personalData).subscribe({
+        next: () => {
+          this.snackbarService.show('Personal information saved successfully');
+          this.stepper?.next();
+        },
+        error: (error) => {
+          console.error('Error saving personal information:', error);
+          this.snackbarService.show('Error saving personal information');
         },
       });
     }
   }
 
-  login(username: string, password: string) {
-    const loginData = { username, password };
-    this.http.post('/api/login', loginData).subscribe(
-      (response: any) => {
-        // Store the authentication token if necessary
-        localStorage.setItem('authToken', response.token);
-      },
-      (error) => {
-        // Handle error
-        console.error('Login failed', error);
-      }
-    );
-  }
-
-  savePersonalInfo() {
-    if (this.personalFormGroup.valid) {
-      const personalData = {
-        firstName: this.personalFormGroup.get('firstNameCtrl')?.value,
-        lastName: this.personalFormGroup.get('lastNameCtrl')?.value,
-        birthday: this.personalFormGroup.get('birthdayCtrl')?.value,
-        phone: this.personalFormGroup.get('phoneCtrl')?.value,
-      };
-      // Call backend to save personal information
-      this.http.post('/api/personal-info', personalData).subscribe(
-        () => {
-          // Personal info saved successfully
-        },
-        (error) => {
-          // Handle error
-          console.error('Saving personal info failed', error);
-        }
-      );
-    }
-  }
-
-  submitRegistration() {
+  createAddress() {
     if (this.addressFormGroup.valid) {
-      const addressData = {
-        address: this.addressFormGroup.get('addressCtrl')?.value,
-        city: this.addressFormGroup.get('cityCtrl')?.value,
-        zipCode: this.addressFormGroup.get('zipCodeCtrl')?.value,
-        country: this.addressFormGroup.get('countryCtrl')?.value,
+      const addressData: CreateAddressRequest = {
+        street: this.addressFormGroup.get('streetCtrl')?.value ?? '',
+        number: this.addressFormGroup.get('numberCtrl')?.value ?? '',
+        apartmentSuite: this.addressFormGroup.get('apartmentSuiteCtrl')?.value,
+        city: this.addressFormGroup.get('cityCtrl')?.value ?? '',
+        postalCode: this.addressFormGroup.get('postalCodeCtrl')?.value ?? '',
+        countryISO3: this.addressFormGroup.get('countryISO3Ctrl')?.value ?? '',
       };
-      // Call backend to save address information
-      this.http.post('/api/address-info', addressData).subscribe(
-        () => {
-          // Registration complete
-          alert('Registration successful!');
+      this.userService.createAddress(addressData).subscribe({
+        next: () => {
+          this.snackbarService.show('Account created successfully');
+          this.stepper?.next();
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         },
-        (error) => {
-          // Handle error
-          console.error('Saving address info failed', error);
-        }
-      );
+        error: (error) => {
+          console.error('Error saving address:', error);
+          this.snackbarService.show('Error saving address');
+        },
+      });
     }
   }
 }

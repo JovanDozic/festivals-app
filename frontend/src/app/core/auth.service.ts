@@ -38,16 +38,19 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(credentials: {
-    username: string;
-    password: string;
-  }): Observable<LoginResponse> {
+  login(
+    credentials: {
+      username: string;
+      password: string;
+    },
+    reload: boolean = true
+  ): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(`${this.apiUrl}/user/login`, credentials)
       .pipe(
         tap((response) => {
           this.setToken(response.token);
-          window.location.reload();
+          if (reload) window.location.reload();
         })
       );
   }

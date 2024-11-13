@@ -1,6 +1,6 @@
 <mat-stepper [linear]="isLinear" #stepper>
   <!-- Step 1: Account Creation -->
-  <mat-step [stepControl]="accountFormGroup">
+  <mat-step [stepControl]="accountFormGroup" [editable]="false">
     <form [formGroup]="accountFormGroup">
       <ng-template matStepLabel>Account Creation</ng-template>
 
@@ -25,15 +25,13 @@
       </mat-form-field>
 
       <div>
-        <button mat-raised-button matStepperNext (click)="createAccount()">
-          Next
-        </button>
+        <button mat-raised-button (click)="createAccount()">Next</button>
       </div>
     </form>
   </mat-step>
 
   <!-- Step 2: Personal Information -->
-  <mat-step [stepControl]="personalFormGroup">
+  <mat-step [stepControl]="personalFormGroup" [editable]="false">
     <form [formGroup]="personalFormGroup">
       <ng-template matStepLabel>Personal Information</ng-template>
 
@@ -58,22 +56,29 @@
       </mat-form-field>
 
       <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-raised-button matStepperNext (click)="savePersonalInfo()">
-          Next
-        </button>
+        <button mat-raised-button (click)="createUserProfile()">Next</button>
       </div>
     </form>
   </mat-step>
 
   <!-- Step 3: Address Information -->
-  <mat-step [stepControl]="addressFormGroup">
+  <mat-step [stepControl]="addressFormGroup" [editable]="false">
     <form [formGroup]="addressFormGroup">
       <ng-template matStepLabel>Address Information</ng-template>
 
       <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input matInput formControlName="addressCtrl" required />
+        <mat-label>Street</mat-label>
+        <input matInput formControlName="streetCtrl" required />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Number</mat-label>
+        <input matInput formControlName="numberCtrl" required />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Apartment / Suite</mat-label>
+        <input matInput formControlName="apartmentSuiteCtrl" required />
       </mat-form-field>
 
       <mat-form-field>
@@ -82,18 +87,18 @@
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Zip Code</mat-label>
-        <input matInput formControlName="zipCodeCtrl" required />
+        <mat-label>Postal Code</mat-label>
+        <input matInput formControlName="postalCodeCtrl" required />
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Country (ISO3)</mat-label>
-        <input matInput formControlName="countryCtrl" required />
+        <input matInput formControlName="countryISO3Ctrl" required />
       </mat-form-field>
 
       <div>
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="submitRegistration()">Submit</button>
+        <button mat-button (click)="createAddress()">Submit</button>
       </div>
     </form>
   </mat-step>

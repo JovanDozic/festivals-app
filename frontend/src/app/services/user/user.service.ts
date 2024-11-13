@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { UserProfileResponse } from '../../models/user/user-profile-response.model';
 import { map, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { UpdateUserProfileRequest } from '../../models/user/update-user-profile-request.model';
+import { CreateUpdateUserProfileRequest } from '../../models/user/user-profile-request.model';
+import { CreateAddressRequest } from '../../models/user/create-address-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,7 @@ export class UserService {
       .pipe(map((response) => response.userProfile));
   }
 
-  updateUserProfile(updatedProfile: UpdateUserProfileRequest) {
+  updateUserProfile(updatedProfile: CreateUpdateUserProfileRequest) {
     return this.http
       .put<void>(`${this.apiUrl}/user/profile`, {
         firstName: updatedProfile.firstName,
@@ -26,6 +27,23 @@ export class UserService {
         dateOfBirth: formatDate(updatedProfile.dateOfBirth),
         phoneNumber: updatedProfile.phoneNumber,
       })
+      .pipe(tap(() => {}));
+  }
+
+  createUserProfile(profile: CreateUpdateUserProfileRequest) {
+    return this.http
+      .post<void>(`${this.apiUrl}/user/profile`, {
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        dateOfBirth: formatDate(profile.dateOfBirth),
+        phoneNumber: profile.phoneNumber,
+      })
+      .pipe(tap(() => {}));
+  }
+
+  createAddress(address: CreateAddressRequest) {
+    return this.http
+      .post<void>(`${this.apiUrl}/user/profile/address`, address)
       .pipe(tap(() => {}));
   }
 }

@@ -168,8 +168,8 @@ func (h *userHandler) CreateUserProfile(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("profile created successfully"))
+	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "profile created successfully"}, nil)
+
 	log.Println("profile created successfully for user:", username)
 }
 
@@ -263,8 +263,7 @@ func (h *userHandler) CreateUserAddress(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("address created successfully"))
+	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "address created successfully"}, nil)
 	log.Println("address created successfully for user:", username)
 }
 
