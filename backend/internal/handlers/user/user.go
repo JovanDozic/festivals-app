@@ -60,8 +60,8 @@ func (h *userHandler) RegisterAttendee(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("Attendee registered successfully"))
+	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "attendee registered successfully"}, nil)
+
 	log.Println("attendee registered:", input.Username)
 }
 

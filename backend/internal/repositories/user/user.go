@@ -45,12 +45,17 @@ func (r *userRepo) Update(user *models.User) error {
 
 func (r *userRepo) CreateAttendee(user *models.User) error {
 
-	attendee := &models.Attendee{
-		UserID: user.ID,
-		User:   *user,
+	err := r.db.Create(user).Error
+	if err != nil {
+		return err
 	}
 
-	err := r.db.Create(attendee).Error
+	attendee := &models.Attendee{
+		UserID: user.ID,
+		User:   *user, // ? is this needed?
+	}
+
+	err = r.db.Create(attendee).Error
 	if err != nil {
 		return err
 	}

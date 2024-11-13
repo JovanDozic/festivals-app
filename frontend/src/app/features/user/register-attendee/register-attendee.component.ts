@@ -6,6 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../../core/auth.service';
+import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-register-attendee',
@@ -23,6 +25,8 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class RegisterAttendeeComponent {
   private fb = inject(FormBuilder);
+  readonly authService = inject(AuthService);
+  readonly snackbarService = inject(SnackbarService);
 
   isLinear = true;
   accountFormGroup = this.fb.group({
@@ -48,25 +52,23 @@ export class RegisterAttendeeComponent {
   ngOnInit() {}
 
   createAccount() {
+    console.log('Creating account');
     if (this.accountFormGroup.valid) {
       const accountData = {
-        username: this.accountFormGroup.get('usernameCtrl')?.value,
-        email: this.accountFormGroup.get('emailCtrl')?.value,
-        password: this.accountFormGroup.get('passwordCtrl')?.value,
+        username: this.accountFormGroup.get('usernameCtrl')?.value ?? '',
+        email: this.accountFormGroup.get('emailCtrl')?.value ?? '',
+        password: this.accountFormGroup.get('passwordCtrl')?.value ?? '',
       };
-      // Call backend to create user
-      this.http.post('/api/register', accountData).subscribe(
-        () => {
-          // On success, automatically log in
-          if (accountData.username && accountData.password) {
-            this.login(accountData.username, accountData.password);
-          }
+      console.log('Account data:', accountData);
+      this.authService.registerAttendee(accountData).subscribe({
+        next: () => {
+          this.snackbarService.show('Account created successfully');
         },
-        (error) => {
-          // Handle error (e.g., display error message)
-          console.error('Account creation failed', error);
-        }
-      );
+        error: (error) => {
+          console.error('Error creating an account:', error);
+          this.snackbarService.show('Error creating an account');
+        },
+      });
     }
   }
 

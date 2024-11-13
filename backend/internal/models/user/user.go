@@ -19,7 +19,7 @@ const (
 
 type User struct {
 	gorm.Model
-	Username string
+	Username string `gorm:"unique"`
 	Email    string `gorm:"unique"`
 	Password string
 	Role     string

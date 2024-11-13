@@ -60,4 +60,15 @@ export class AuthService {
       })
       .pipe(tap(() => {}));
   }
+
+  registerAttendee(credentials: {
+    username: string;
+    email: string;
+    password: string;
+  }): Observable<void> {
+    return this.http.post<void>(
+      `${this.apiUrl}/user/register-attendee`,
+      credentials
+    );
+  }
 }
