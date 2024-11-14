@@ -68,6 +68,8 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	protectedRouter.HandleFunc("/user/email", userHandler.UpdateUserEmail).Methods(http.MethodPut)
 	// ...
 	protectedRouter.HandleFunc("/festival", festivalHandler.Create).Methods(http.MethodPost)
+	// ... ORGANIZER ONLY
+	protectedRouter.HandleFunc("/organizer/festival", festivalHandler.GetByOrganizer).Methods(http.MethodGet)
 
 	return r
 }

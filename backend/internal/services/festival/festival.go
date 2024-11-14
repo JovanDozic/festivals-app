@@ -13,6 +13,7 @@ import (
 
 type FestivalService interface {
 	Create(festival *modelsFestival.Festival, username string, address *modelsCommon.Address) error
+	GetByOrganizer(username string) ([]modelsFestival.Festival, error)
 }
 
 type festivalService struct {
@@ -73,4 +74,19 @@ func (s *festivalService) Create(festival *modelsFestival.Festival, username str
 	}
 
 	return nil
+}
+
+func (s *festivalService) GetByOrganizer(username string) ([]modelsFestival.Festival, error) {
+
+	user, err := s.userRepo.GetByUsername(username)
+	if err != nil {
+		return nil, err
+	}
+
+	festivals, err := s.festivalRepo.GetByOrganizer(user.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return festivals, nil
 }

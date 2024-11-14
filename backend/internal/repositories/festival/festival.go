@@ -8,6 +8,7 @@ import (
 
 type FestivalRepo interface {
 	Create(festival *models.Festival, organizerId uint) error
+	GetByOrganizer(organizerId uint) ([]models.Festival, error)
 }
 
 type festivalRepo struct {
@@ -36,4 +37,19 @@ func (r *festivalRepo) Create(festival *models.Festival, organizerId uint) error
 	}
 
 	return nil
+}
+
+func (r *festivalRepo) GetByOrganizer(organizerId uint) ([]models.Festival, error) {
+
+	var festivals []models.Festival
+	err := r.db.Table("festivals").
+		Joins("JOIN festival_organizers ON festivals.id = festival_organizers.festival_id").
+		Where("festival_organizers.user_id = ?", organizerId).
+		Find(&festivals).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return festivals, nil
+
 }
