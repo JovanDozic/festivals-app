@@ -16,7 +16,7 @@ type Festival struct {
 	StartDate   time.Time
 	EndDate     time.Time
 	Capacity    int
-	Status      string // Status: ACTIVE, PRIVATE, CANCELLED, COMPLETED
+	Status      string // Status: PRIVATE, PUBLIC, CANCELLED, COMPLETED
 	StoreStatus string // StoreStatus: OPEN, CLOSED
 	AddressID   uint
 	Address     *modelsCommon.Address
