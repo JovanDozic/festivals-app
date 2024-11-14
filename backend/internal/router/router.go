@@ -3,11 +3,14 @@ package router
 import (
 	"backend/internal/config"
 	handlersCommon "backend/internal/handlers/common"
+	handlers "backend/internal/handlers/festival"
 	handlersUser "backend/internal/handlers/user"
 	"backend/internal/middlewares"
 	reposCommon "backend/internal/repositories/common"
+	reposFestival "backend/internal/repositories/festival"
 	reposUser "backend/internal/repositories/user"
 	servicesCommon "backend/internal/services/common"
+	services "backend/internal/services/festival"
 	servicesUser "backend/internal/services/user"
 	"backend/internal/utils"
 	"net/http"
@@ -24,16 +27,19 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	addressRepo := reposCommon.NewAddressRepo(db)
 	cityRepo := reposCommon.NewCityRepo(db)
 	countryRepo := reposCommon.NewCountryRepo(db)
+	festivalRepo := reposFestival.NewFestivalRepo(db)
 	// ...
 
 	// Init services
 	locationService := servicesCommon.NewLocationService(addressRepo, cityRepo, countryRepo)
 	userService := servicesUser.NewUserService(config, userRepo, userProfileRepo, locationService)
+	festivalService := services.NewFestivalService(config, festivalRepo, userRepo, locationService)
 	// ...
 
 	// Init handlers
 	commonHandler := handlersCommon.NewHealthHandler(config)
 	userHandler := handlersUser.NewUserHandler(userService)
+	festivalHandler := handlers.NewFestivalHandler(festivalService)
 	// ...
 
 	r := mux.NewRouter()
@@ -61,6 +67,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	protectedRouter.HandleFunc("/user/profile", userHandler.UpdateUserProfile).Methods(http.MethodPut)
 	protectedRouter.HandleFunc("/user/email", userHandler.UpdateUserEmail).Methods(http.MethodPut)
 	// ...
+	protectedRouter.HandleFunc("/festival", festivalHandler.Create).Methods(http.MethodPost)
 
 	return r
 }

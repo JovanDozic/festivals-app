@@ -18,15 +18,6 @@ type CreateUserProfileRequest struct {
 	PhoneNumber string `json:"phoneNumber"`
 }
 
-type CreateUserAddressRequest struct {
-	Street         string `json:"street"`
-	Number         string `json:"number"`
-	ApartmentSuite string `json:"apartmentSuite"`
-	City           string `json:"city"`
-	PostalCode     string `json:"postalCode"`
-	CountryISO3    string `json:"countryISO3"`
-}
-
 type ChangePasswordRequest struct {
 	OldPassword string `json:"oldPassword"`
 	NewPassword string `json:"newPassword"`

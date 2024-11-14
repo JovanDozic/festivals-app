@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	dtoCommon "backend/internal/dto/common"
 	dtoUser "backend/internal/dto/user"
 	"backend/internal/models"
 	modelsCommon "backend/internal/models/common"
@@ -220,7 +221,7 @@ func (h *userHandler) CreateUserAddress(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	var input dtoUser.CreateUserAddressRequest
+	var input dtoCommon.CreateAddressRequest
 	if err := utils.ReadJSON(w, r, &input); err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
