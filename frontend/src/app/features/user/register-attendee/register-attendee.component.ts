@@ -11,6 +11,7 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 import { UserService } from '../../../services/user/user.service';
 import { CreateUpdateUserProfileRequest } from '../../../models/user/user-profile-request.model';
 import { CreateAddressRequest } from '../../../models/user/create-address-request.model';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-register-attendee',
@@ -22,9 +23,13 @@ import { CreateAddressRequest } from '../../../models/user/create-address-reques
     MatStepperModule,
     MatFormFieldModule,
     MatButtonModule,
+    MatCardModule,
   ],
   templateUrl: './register-attendee.component.html',
-  styleUrl: './register-attendee.component.scss',
+  styleUrls: [
+    './register-attendee.component.scss',
+    '../../../app.component.scss',
+  ],
 })
 export class RegisterAttendeeComponent {
   private fb = inject(FormBuilder);

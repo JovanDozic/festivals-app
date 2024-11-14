@@ -5,19 +5,16 @@
     </mat-card-header>
     <mat-card-content>
       <mat-form-field class="full-width">
-        <input matInput placeholder="Username" formControlName="username" />
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" />
         <mat-error *ngIf="loginForm.controls['username'].hasError('required')">
           Username is <strong>required</strong>
         </mat-error>
       </mat-form-field>
 
       <mat-form-field class="full-width">
-        <input
-          matInput
-          type="password"
-          placeholder="Password"
-          formControlName="password"
-        />
+        <input matInput type="password" formControlName="password" />
+        <mat-label>Password</mat-label>
         <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
           Password is <strong>required</strong>
         </mat-error>

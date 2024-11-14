@@ -1,4 +1,4 @@
-<div class="profile-container mat-elevation-z4" *ngIf="userProfile">
+<div class="container mat-elevation-z4" *ngIf="userProfile">
   <div class="profile-header">
     <h1>Hello, {{ userProfile.firstName }} {{ userProfile.lastName }}</h1>
     <div class="button-container">
@@ -66,6 +66,7 @@
 </div>
 
 <button
+  *ngIf="!userProfile"
   mat-icon-button
   (click)="logout()"
   matTooltip="Logout"
