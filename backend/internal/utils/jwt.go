@@ -80,7 +80,7 @@ func (j *JWTUtil) ValidateToken(tokenString string) (*Claims, error) {
 	return claims, nil
 }
 
-func AuthAdmin(c context.Context) bool {
+func AuthAdminRole(c context.Context) bool {
 	claims, ok := c.Value(UserKey).(*Claims)
 	if !ok {
 		return false
@@ -88,7 +88,7 @@ func AuthAdmin(c context.Context) bool {
 	return claims.Role == string(modelsUser.RoleAdmin)
 }
 
-func AuthOrganizer(c context.Context) bool {
+func AuthOrganizerRole(c context.Context) bool {
 	claims, ok := c.Value(UserKey).(*Claims)
 	if !ok {
 		return false
@@ -104,7 +104,7 @@ func AuthAttendeeRole(c context.Context) bool {
 	return claims.Role == string(modelsUser.RoleAttendee)
 }
 
-func AuthEmployee(c context.Context) bool {
+func AuthEmployeeRole(c context.Context) bool {
 	claims, ok := c.Value(UserKey).(*Claims)
 	if !ok {
 		return false

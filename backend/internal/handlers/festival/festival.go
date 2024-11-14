@@ -14,6 +14,7 @@ import (
 type FestivalHandler interface {
 	Create(w http.ResponseWriter, r *http.Request)
 	GetByOrganizer(w http.ResponseWriter, r *http.Request)
+	GetAll(w http.ResponseWriter, r *http.Request)
 }
 
 type festivalHandler struct {
@@ -28,7 +29,7 @@ func NewFestivalHandler(festivalService servicesFestival.FestivalService) Festiv
 
 func (h *festivalHandler) Create(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthOrganizer(r.Context()) {
+	if !utils.AuthOrganizerRole(r.Context()) {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
@@ -88,7 +89,7 @@ func (h *festivalHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) GetByOrganizer(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthOrganizer(r.Context()) {
+	if !utils.AuthOrganizerRole(r.Context()) {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
@@ -102,4 +103,22 @@ func (h *festivalHandler) GetByOrganizer(w http.ResponseWriter, r *http.Request)
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivals}, nil)
 	log.Println("festivals retrieved successfully for", utils.GetUsername(r.Context()))
+}
+
+func (h *festivalHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthAttendeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	festivals, err := h.festivalService.GetAll()
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivals}, nil)
+	log.Println("all festivals retrieved successfully")
 }

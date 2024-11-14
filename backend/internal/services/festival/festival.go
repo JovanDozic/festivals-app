@@ -14,6 +14,7 @@ import (
 type FestivalService interface {
 	Create(festival *modelsFestival.Festival, username string, address *modelsCommon.Address) error
 	GetByOrganizer(username string) ([]modelsFestival.Festival, error)
+	GetAll() ([]modelsFestival.Festival, error)
 }
 
 type festivalService struct {
@@ -84,6 +85,16 @@ func (s *festivalService) GetByOrganizer(username string) ([]modelsFestival.Fest
 	}
 
 	festivals, err := s.festivalRepo.GetByOrganizer(user.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return festivals, nil
+}
+
+func (s *festivalService) GetAll() ([]modelsFestival.Festival, error) {
+
+	festivals, err := s.festivalRepo.GetAll()
 	if err != nil {
 		return nil, err
 	}

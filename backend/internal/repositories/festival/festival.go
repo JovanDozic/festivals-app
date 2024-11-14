@@ -9,6 +9,7 @@ import (
 type FestivalRepo interface {
 	Create(festival *models.Festival, organizerId uint) error
 	GetByOrganizer(organizerId uint) ([]models.Festival, error)
+	GetAll() ([]models.Festival, error)
 }
 
 type festivalRepo struct {
@@ -51,5 +52,15 @@ func (r *festivalRepo) GetByOrganizer(organizerId uint) ([]models.Festival, erro
 	}
 
 	return festivals, nil
+}
 
+func (r *festivalRepo) GetAll() ([]models.Festival, error) {
+
+	var festivals []models.Festival
+	err := r.db.Find(&festivals).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return festivals, nil
 }

@@ -67,8 +67,10 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	protectedRouter.HandleFunc("/user/profile", userHandler.UpdateUserProfile).Methods(http.MethodPut)
 	protectedRouter.HandleFunc("/user/email", userHandler.UpdateUserEmail).Methods(http.MethodPut)
 	// ...
-	protectedRouter.HandleFunc("/festival", festivalHandler.Create).Methods(http.MethodPost)
+	// todo: should this be like get all future ones, or ones in the attendee's city?
+	protectedRouter.HandleFunc("/festival", festivalHandler.GetAll).Methods(http.MethodGet)
 	// ... ORGANIZER ONLY
+	protectedRouter.HandleFunc("/festival", festivalHandler.Create).Methods(http.MethodPost)
 	protectedRouter.HandleFunc("/organizer/festival", festivalHandler.GetByOrganizer).Methods(http.MethodGet)
 
 	return r
