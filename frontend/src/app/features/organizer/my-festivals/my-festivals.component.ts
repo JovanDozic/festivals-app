@@ -32,10 +32,9 @@ export class MyFestivalsComponent implements OnInit {
   loadFestivals(): void {
     this.festivalService.getMyFestivals().subscribe({
       next: (response) => {
+        console.log('Festivals:', response);
         this.festivals = response;
-        console.log('Response: ', response);
-        console.log('Festivals: ', response);
-        console.log('My Festivals: ', this.festivals);
+        console.log('Festivals:', this.festivals);
       },
       error: (error) => {
         console.error('Error fetching festivals:', error);

@@ -2,12 +2,12 @@
   <mat-card class="festival-card" *ngFor="let festival of festivals">
     <img
       mat-card-image
-      src="assets/placeholder.jpg"
-      alt="{{ festival.Name }}"
+      src="https://uploads.tomorrowland.com/containers/assets/welcome/memory-lane/2023-1.jpg/a9f7c4eed642a86d325ba57d93eadec9/2023-1.jpg"
+      alt="{{ festival.name }}"
     />
     <mat-card-header>
-      <mat-card-title>{{ festival.Name }}</mat-card-title>
-      <mat-card-subtitle>{{ festival.Description }}</mat-card-subtitle>
+      <mat-card-title>{{ festival.name }}</mat-card-title>
+      <mat-card-subtitle>{{ festival.description }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-actions>
       <button mat-button color="primary">See Festival</button>

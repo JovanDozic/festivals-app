@@ -7,3 +7,16 @@ type HealthCheckResponse struct {
 	API         string `json:"API"`
 	Secure      bool   `json:"secure"`
 }
+
+type GetAddressResponse struct {
+	Street         string  `json:"street"`
+	Number         string  `json:"number"`
+	ApartmentSuite *string `json:"apartmentSuite"`
+	City           string  `json:"city"`
+	PostalCode     string  `json:"postalCode"`
+	Country        string  `json:"country"`
+}
+
+type GetImageResponse struct {
+	Url string `json:"url"`
+}

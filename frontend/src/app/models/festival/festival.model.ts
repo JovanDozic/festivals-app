@@ -1,18 +1,23 @@
 import { AddressResponse } from '../common/address-response.model';
 
 export interface Festival {
-  ID: number;
-  Name: string;
-  Description: string;
-  StartDate: string;
-  EndDate: string;
-  Capacity: number;
-  Status: string;
-  StoreStatus: string;
-  AddressID: number;
-  Address?: AddressResponse | null;
+  id: number;
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  capacity: number;
+  status: string;
+  storeStatus: string;
+  addressID: number;
+  address?: AddressResponse | null;
+  images: ImageResponse[];
 }
 
 export interface FestivalsResponse {
-  Festivals: Festival[];
+  festivals: Festival[];
+}
+
+export interface ImageResponse {
+  url: string;
 }

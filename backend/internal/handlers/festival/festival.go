@@ -114,7 +114,20 @@ func (h *festivalHandler) GetByOrganizer(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivals}, nil)
+	festivalsResponse := dtoFestival.FestivalsResponse{
+		Festivals: make([]dtoFestival.FestivalResponse, len(festivals)),
+	}
+
+	for i, festival := range festivals {
+		images, err := h.festivalService.GetImages(festival.ID)
+		if err != nil {
+			log.Println("error:", err)
+			continue
+		}
+		festivalsResponse.Festivals[i] = mapFestivalToResponse(festival, images)
+	}
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivalsResponse.Festivals}, nil)
 	log.Println("festivals retrieved successfully for", utils.GetUsername(r.Context()))
 }
 

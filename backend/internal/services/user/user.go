@@ -2,6 +2,7 @@ package services
 
 import (
 	"backend/internal/config"
+	dtoCommon "backend/internal/dto/common"
 	dto "backend/internal/dto/user"
 	modelsError "backend/internal/models"
 	modelsCommon "backend/internal/models/common"
@@ -132,10 +133,10 @@ func (s *userService) GetUserProfile(username string) (*dto.GetUserProfileRespon
 	}
 
 	if userProfile.Address != nil {
-		response.Address = &dto.GetAddressResponse{
+		response.Address = &dtoCommon.GetAddressResponse{
 			Street:         userProfile.Address.Street,
 			Number:         userProfile.Address.Number,
-			ApartmentSuite: *userProfile.Address.ApartmentSuite,
+			ApartmentSuite: userProfile.Address.ApartmentSuite,
 			City:           userProfile.Address.City.Name,
 			PostalCode:     userProfile.Address.City.PostalCode,
 			Country:        userProfile.Address.City.Country.NiceName,
