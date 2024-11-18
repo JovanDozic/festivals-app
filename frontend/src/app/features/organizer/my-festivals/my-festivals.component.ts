@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { Festival } from '../../../models/festival/festival.model';
 import { FestivalService } from '../../../services/festival/festival.service';
+import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-my-festivals',
@@ -24,6 +25,7 @@ export class MyFestivalsComponent implements OnInit {
   festivals: Festival[] = [];
 
   private festivalService = inject(FestivalService);
+  private snackbarService = inject(SnackbarService);
 
   ngOnInit(): void {
     this.loadFestivals();
@@ -32,12 +34,11 @@ export class MyFestivalsComponent implements OnInit {
   loadFestivals(): void {
     this.festivalService.getMyFestivals().subscribe({
       next: (response) => {
-        console.log('Festivals:', response);
         this.festivals = response;
-        console.log('Festivals:', this.festivals);
       },
       error: (error) => {
         console.error('Error fetching festivals:', error);
+        this.snackbarService.show('Failed to fetch festivals');
       },
     });
   }
