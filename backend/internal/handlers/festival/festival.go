@@ -170,29 +170,8 @@ func (h *festivalHandler) GetById(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) Update(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthOrganizerRole(r.Context()) {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	}
-
-	vars := mux.Vars(r)
-	festivalIdString := vars["festivalId"]
-
-	if festivalIdString == "" {
-		log.Println("error:", models.ErrBadRequest)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	festivalId := utils.ToUint(festivalIdString)
-
-	if isOrganizer, err := h.festivalService.IsOrganizer(utils.GetUsername(r.Context()), festivalId); err != nil {
-		log.Println("error:", err)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	} else if !isOrganizer {
-		log.Printf("error: organizer %s is not authorized to update festival with ID: %s", utils.GetUsername(r.Context()), festivalIdString)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
 		return
 	}
 
@@ -236,31 +215,8 @@ func (h *festivalHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) Delete(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthOrganizerRole(r.Context()) {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	}
-
-	vars := mux.Vars(r)
-	festivalIdString := vars["festivalId"]
-
-	if festivalIdString == "" {
-		log.Println("error:", models.ErrBadRequest)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	festivalId := utils.ToUint(festivalIdString)
-
-	// ? We did not check if festival even exists here, it just returns 404 here
-
-	if isOrganizer, err := h.festivalService.IsOrganizer(utils.GetUsername(r.Context()), festivalId); err != nil {
-		log.Println("error:", err)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	} else if !isOrganizer {
-		log.Printf("error: organizer %s is not authorized to delete festival with ID: %s", utils.GetUsername(r.Context()), festivalIdString)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
 		return
 	}
 
@@ -275,30 +231,8 @@ func (h *festivalHandler) Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *festivalHandler) PublishFestival(w http.ResponseWriter, r *http.Request) {
-
-	if !utils.AuthOrganizerRole(r.Context()) {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	}
-
-	vars := mux.Vars(r)
-	festivalIdString := vars["festivalId"]
-
-	if festivalIdString == "" {
-		log.Println("error:", models.ErrBadRequest)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	festivalId := utils.ToUint(festivalIdString)
-
-	if isOrganizer, err := h.festivalService.IsOrganizer(utils.GetUsername(r.Context()), festivalId); err != nil {
-		log.Println("error:", err)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	} else if !isOrganizer {
-		log.Printf("error: organizer %s is not authorized to publish festival with ID: %s", utils.GetUsername(r.Context()), festivalIdString)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
 		return
 	}
 
@@ -314,29 +248,8 @@ func (h *festivalHandler) PublishFestival(w http.ResponseWriter, r *http.Request
 
 func (h *festivalHandler) CancelFestival(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthOrganizerRole(r.Context()) {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	}
-
-	vars := mux.Vars(r)
-	festivalIdString := vars["festivalId"]
-
-	if festivalIdString == "" {
-		log.Println("error:", models.ErrBadRequest)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	festivalId := utils.ToUint(festivalIdString)
-
-	if isOrganizer, err := h.festivalService.IsOrganizer(utils.GetUsername(r.Context()), festivalId); err != nil {
-		log.Println("error:", err)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	} else if !isOrganizer {
-		log.Printf("error: organizer %s is not authorized to cancel festival with ID: %s", utils.GetUsername(r.Context()), festivalIdString)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
 		return
 	}
 
@@ -352,29 +265,8 @@ func (h *festivalHandler) CancelFestival(w http.ResponseWriter, r *http.Request)
 
 func (h *festivalHandler) CompleteFestival(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthOrganizerRole(r.Context()) {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	}
-
-	vars := mux.Vars(r)
-	festivalIdString := vars["festivalId"]
-
-	if festivalIdString == "" {
-		log.Println("error:", models.ErrBadRequest)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	festivalId := utils.ToUint(festivalIdString)
-
-	if isOrganizer, err := h.festivalService.IsOrganizer(utils.GetUsername(r.Context()), festivalId); err != nil {
-		log.Println("error:", err)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	} else if !isOrganizer {
-		log.Printf("error: organizer %s is not authorized to complete festival with ID: %s", utils.GetUsername(r.Context()), festivalIdString)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
 		return
 	}
 
@@ -390,29 +282,8 @@ func (h *festivalHandler) CompleteFestival(w http.ResponseWriter, r *http.Reques
 
 func (h *festivalHandler) OpenStore(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthOrganizerRole(r.Context()) {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	}
-
-	vars := mux.Vars(r)
-	festivalIdString := vars["festivalId"]
-
-	if festivalIdString == "" {
-		log.Println("error:", models.ErrBadRequest)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	festivalId := utils.ToUint(festivalIdString)
-
-	if isOrganizer, err := h.festivalService.IsOrganizer(utils.GetUsername(r.Context()), festivalId); err != nil {
-		log.Println("error:", err)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	} else if !isOrganizer {
-		log.Printf("error: organizer %s is not authorized to open store for festival with ID: %s", utils.GetUsername(r.Context()), festivalIdString)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
 		return
 	}
 
@@ -428,29 +299,8 @@ func (h *festivalHandler) OpenStore(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) CloseStore(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthOrganizerRole(r.Context()) {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	}
-
-	vars := mux.Vars(r)
-	festivalIdString := vars["festivalId"]
-
-	if festivalIdString == "" {
-		log.Println("error:", models.ErrBadRequest)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	festivalId := utils.ToUint(festivalIdString)
-
-	if isOrganizer, err := h.festivalService.IsOrganizer(utils.GetUsername(r.Context()), festivalId); err != nil {
-		log.Println("error:", err)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	} else if !isOrganizer {
-		log.Printf("error: organizer %s is not authorized to close store for festival with ID: %s", utils.GetUsername(r.Context()), festivalIdString)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
 		return
 	}
 
@@ -466,29 +316,8 @@ func (h *festivalHandler) CloseStore(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) AddImage(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthOrganizerRole(r.Context()) {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	}
-
-	vars := mux.Vars(r)
-	festivalIdString := vars["festivalId"]
-
-	if festivalIdString == "" {
-		log.Println("error:", models.ErrBadRequest)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	festivalId := utils.ToUint(festivalIdString)
-
-	if isOrganizer, err := h.festivalService.IsOrganizer(utils.GetUsername(r.Context()), festivalId); err != nil {
-		log.Println("error:", err)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-		return
-	} else if !isOrganizer {
-		log.Printf("error: organizer %s is not authorized to add image for festival with ID: %s", utils.GetUsername(r.Context()), festivalIdString)
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
 		return
 	}
 
@@ -499,11 +328,9 @@ func (h *festivalHandler) AddImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	image := modelsCommon.Image{
+	if err := h.festivalService.AddImage(festivalId, &modelsCommon.Image{
 		URL: input.ImageUrl,
-	}
-
-	if err := h.festivalService.AddImage(festivalId, &image); err != nil {
+	}); err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
@@ -514,6 +341,12 @@ func (h *festivalHandler) AddImage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *festivalHandler) RemoveImage(w http.ResponseWriter, r *http.Request) {
+
+	_, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
 	panic("not implemented yet")
 }
 
