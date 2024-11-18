@@ -1,0 +1,20 @@
+.festival-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.festival-card {
+  width: 300px;
+  margin: 20px;
+}
+
+.mat-card-actions {
+  display: flex;
+  align-items: center;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

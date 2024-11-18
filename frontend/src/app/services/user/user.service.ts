@@ -20,31 +20,25 @@ export class UserService {
   }
 
   updateUserProfile(updatedProfile: CreateUpdateUserProfileRequest) {
-    return this.http
-      .put<void>(`${this.apiUrl}/user/profile`, {
-        firstName: updatedProfile.firstName,
-        lastName: updatedProfile.lastName,
-        dateOfBirth: formatDate(updatedProfile.dateOfBirth),
-        phoneNumber: updatedProfile.phoneNumber,
-      })
-      .pipe(tap(() => {}));
+    return this.http.put<void>(`${this.apiUrl}/user/profile`, {
+      firstName: updatedProfile.firstName,
+      lastName: updatedProfile.lastName,
+      dateOfBirth: formatDate(updatedProfile.dateOfBirth),
+      phoneNumber: updatedProfile.phoneNumber,
+    });
   }
 
   createUserProfile(profile: CreateUpdateUserProfileRequest) {
-    return this.http
-      .post<void>(`${this.apiUrl}/user/profile`, {
-        firstName: profile.firstName,
-        lastName: profile.lastName,
-        dateOfBirth: formatDate(profile.dateOfBirth),
-        phoneNumber: profile.phoneNumber,
-      })
-      .pipe(tap(() => {}));
+    return this.http.post<void>(`${this.apiUrl}/user/profile`, {
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      dateOfBirth: formatDate(profile.dateOfBirth),
+      phoneNumber: profile.phoneNumber,
+    });
   }
 
   createAddress(address: CreateAddressRequest) {
-    return this.http
-      .post<void>(`${this.apiUrl}/user/profile/address`, address)
-      .pipe(tap(() => {}));
+    return this.http.post<void>(`${this.apiUrl}/user/profile/address`, address);
   }
 }
 
