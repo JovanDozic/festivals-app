@@ -7,6 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Festival } from '../../../models/festival/festival.model';
 import { FestivalService } from '../../../services/festival/festival.service';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-my-festivals',
@@ -19,13 +20,14 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    NgxSkeletonLoaderModule,
   ],
 })
 export class MyFestivalsComponent implements OnInit {
   festivals: Festival[] = [];
+  isLoading: boolean = true; // Loading state
 
   private festivalService = inject(FestivalService);
-  private snackbarService = inject(SnackbarService);
 
   ngOnInit(): void {
     this.loadFestivals();
@@ -34,11 +36,13 @@ export class MyFestivalsComponent implements OnInit {
   loadFestivals(): void {
     this.festivalService.getMyFestivals().subscribe({
       next: (response) => {
+        console.log('Festivals:', response);
         this.festivals = response;
+        this.isLoading = false; // Data loaded
       },
       error: (error) => {
         console.error('Error fetching festivals:', error);
-        this.snackbarService.show('Failed to fetch festivals');
+        this.isLoading = false; // Even on error, stop loading
       },
     });
   }
