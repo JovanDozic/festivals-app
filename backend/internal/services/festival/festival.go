@@ -15,6 +15,15 @@ type FestivalService interface {
 	Create(festival *modelsFestival.Festival, username string, address *modelsCommon.Address) error
 	GetByOrganizer(username string) ([]modelsFestival.Festival, error)
 	GetAll() ([]modelsFestival.Festival, error)
+	GetById(festivalId uint) (*modelsFestival.Festival, error)
+	Update(festivalId uint, updatedFestival *modelsFestival.Festival) error
+	Delete(festivalId uint) error
+	PublishFestival(festivalId uint) error
+	CancelFestival(festivalId uint) error
+	CompleteFestival(festivalId uint) error
+	OpenStore(festivalId uint) error
+	CloseStore(festivalId uint) error
+	IsOrganizer(username string, festivalId uint) (bool, error)
 }
 
 type festivalService struct {
@@ -100,4 +109,145 @@ func (s *festivalService) GetAll() ([]modelsFestival.Festival, error) {
 	}
 
 	return festivals, nil
+}
+
+func (s *festivalService) GetById(festivalId uint) (*modelsFestival.Festival, error) {
+
+	festival, err := s.festivalRepo.GetById(festivalId)
+	if err != nil {
+		if strings.Contains(err.Error(), "record not found") {
+			return nil, modelsError.ErrNotFound
+		}
+		return nil, err
+	}
+
+	return festival, nil
+}
+
+func (s *festivalService) Update(festivalId uint, updatedFestival *modelsFestival.Festival) error {
+
+	if err := updatedFestival.Validate(); err != nil {
+		return err
+	}
+
+	festival, err := s.festivalRepo.GetById(festivalId)
+	if err != nil {
+		return err
+	}
+
+	festival.Name = updatedFestival.Name
+	festival.Description = updatedFestival.Description
+	festival.StartDate = updatedFestival.StartDate
+	festival.EndDate = updatedFestival.EndDate
+	festival.Capacity = updatedFestival.Capacity
+
+	if err := s.festivalRepo.Update(festival); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *festivalService) Delete(festivalId uint) error {
+
+	if err := s.festivalRepo.Delete(festivalId); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *festivalService) PublishFestival(festivalId uint) error {
+
+	festival, err := s.festivalRepo.GetById(festivalId)
+	if err != nil {
+		return err
+	}
+
+	festival.Status = "PUBLIC"
+
+	if err := s.festivalRepo.Update(festival); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *festivalService) CancelFestival(festivalId uint) error {
+
+	festival, err := s.festivalRepo.GetById(festivalId)
+	if err != nil {
+		return err
+	}
+
+	festival.Status = "CANCELLED"
+
+	if err := s.festivalRepo.Update(festival); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *festivalService) CompleteFestival(festivalId uint) error {
+
+	festival, err := s.festivalRepo.GetById(festivalId)
+	if err != nil {
+		return err
+	}
+
+	festival.Status = "COMPLETED"
+
+	if err := s.festivalRepo.Update(festival); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *festivalService) OpenStore(festivalId uint) error {
+
+	festival, err := s.festivalRepo.GetById(festivalId)
+	if err != nil {
+		return err
+	}
+
+	festival.StoreStatus = "OPEN"
+
+	if err := s.festivalRepo.Update(festival); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *festivalService) CloseStore(festivalId uint) error {
+
+	festival, err := s.festivalRepo.GetById(festivalId)
+	if err != nil {
+		return err
+	}
+
+	festival.StoreStatus = "CLOSED"
+
+	if err := s.festivalRepo.Update(festival); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *festivalService) IsOrganizer(username string, festivalId uint) (bool, error) {
+
+	user, err := s.userRepo.GetByUsername(username)
+	if err != nil {
+		return false, err
+	}
+
+	isOrganizer, err := s.festivalRepo.IsOrganizer(festivalId, user.ID)
+	if err != nil {
+		return false, err
+	}
+
+	return isOrganizer, nil
 }

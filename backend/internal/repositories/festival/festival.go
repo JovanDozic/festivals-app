@@ -10,6 +10,10 @@ type FestivalRepo interface {
 	Create(festival *models.Festival, organizerId uint) error
 	GetByOrganizer(organizerId uint) ([]models.Festival, error)
 	GetAll() ([]models.Festival, error)
+	GetById(festivalId uint) (*models.Festival, error)
+	Update(festival *models.Festival) error
+	Delete(festivalId uint) error
+	IsOrganizer(festivalId uint, organizerId uint) (bool, error)
 }
 
 type festivalRepo struct {
@@ -63,4 +67,48 @@ func (r *festivalRepo) GetAll() ([]models.Festival, error) {
 	}
 
 	return festivals, nil
+}
+
+func (r *festivalRepo) GetById(festivalId uint) (*models.Festival, error) {
+
+	var festival models.Festival
+	err := r.db.First(&festival, festivalId).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &festival, nil
+}
+
+func (r *festivalRepo) Update(festival *models.Festival) error {
+
+	err := r.db.Save(festival).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *festivalRepo) Delete(festivalId uint) error {
+
+	err := r.db.Delete(&models.Festival{}, festivalId).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *festivalRepo) IsOrganizer(festivalId uint, organizerId uint) (bool, error) {
+
+	var count int64
+	err := r.db.Table("festival_organizers").
+		Where("festival_id = ? AND user_id = ?", festivalId, organizerId).
+		Count(&count).Error
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
 }

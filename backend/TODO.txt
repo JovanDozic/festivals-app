@@ -1,19 +1,22 @@
 
-[] get festival info and stats: GET organizer/festival/{festivalId}
+[x] get festival info and stats: GET organizer/festival/{festivalId}
 
-[] update festival info: PUT organizer/festival/{festivalId}
+[x] update festival info: PUT organizer/festival/{festivalId}
 
-
-
-[] publish festival to public: PUT organizer/festival/{festivalId}/publish
-
-[] cancel festival: PUT organizer/festival/{festivalId}/cancel
-
-[] complete festival: PUT organizer/festival/{festivalId}/complete
+[x] delete festival: DELETE organizer/festival/{festivalId}
 
 
 
-[] open store: PUT organizer/festival/{festivalId}/store/open
+[x] publish festival to public: PUT organizer/festival/{festivalId}/publish
 
-[] close store: PUT organizer/festival/{festivalId}/store/close
+[x] cancel festival: PUT organizer/festival/{festivalId}/cancel
+
+[x] complete festival: PUT organizer/festival/{festivalId}/complete
+
+
+
+
+[x] open store: PUT organizer/festival/{festivalId}/store/open
+
+[x] close store: PUT organizer/festival/{festivalId}/store/close
 

@@ -20,3 +20,8 @@ func (f *CreateFestivalRequest) Validate() error {
 	}
 	return nil
 }
+
+func (f *UpdateFestivalRequest) Validate() error {
+	// TODO: implement validation
+	return nil
+}
