@@ -23,3 +23,7 @@ type UpdateFestivalRequest struct {
 	Capacity    int                            `json:"capacity"`
 	Address     dtoCommon.CreateAddressRequest `json:"address"`
 }
+
+type AddImageRequest struct {
+	ImageUrl string `json:"imageUrl"`
+}

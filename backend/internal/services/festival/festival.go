@@ -5,6 +5,7 @@ import (
 	modelsError "backend/internal/models"
 	modelsCommon "backend/internal/models/common"
 	modelsFestival "backend/internal/models/festival"
+	reposCommon "backend/internal/repositories/common"
 	reposFestival "backend/internal/repositories/festival"
 	reposUser "backend/internal/repositories/user"
 	servicesCommon "backend/internal/services/common"
@@ -24,6 +25,8 @@ type FestivalService interface {
 	OpenStore(festivalId uint) error
 	CloseStore(festivalId uint) error
 	IsOrganizer(username string, festivalId uint) (bool, error)
+	GetImages(festivalId uint) ([]modelsCommon.Image, error)
+	AddImage(festivalId uint, image *modelsCommon.Image) error
 }
 
 type festivalService struct {
@@ -31,6 +34,7 @@ type festivalService struct {
 	festivalRepo    reposFestival.FestivalRepo
 	userRepo        reposUser.UserRepo
 	locationService servicesCommon.LocationService
+	imageRepo       reposCommon.ImageRepo
 }
 
 func NewFestivalService(
@@ -38,12 +42,14 @@ func NewFestivalService(
 	festivalRepo reposFestival.FestivalRepo,
 	userRepo reposUser.UserRepo,
 	locationService servicesCommon.LocationService,
+	imageRepo reposCommon.ImageRepo,
 ) FestivalService {
 	return &festivalService{
 		config:          config,
 		festivalRepo:    festivalRepo,
 		userRepo:        userRepo,
 		locationService: locationService,
+		imageRepo:       imageRepo,
 	}
 }
 
@@ -250,4 +256,31 @@ func (s *festivalService) IsOrganizer(username string, festivalId uint) (bool, e
 	}
 
 	return isOrganizer, nil
+}
+
+func (s *festivalService) GetImages(festivalId uint) ([]modelsCommon.Image, error) {
+
+	images, err := s.imageRepo.GetByFestival(festivalId)
+	if err != nil {
+		return nil, err
+	}
+
+	return images, nil
+}
+
+func (s *festivalService) AddImage(festivalId uint, image *modelsCommon.Image) error {
+
+	if err := image.Validate(); err != nil {
+		return err
+	}
+
+	if err := s.imageRepo.Create(image); err != nil {
+		return err
+	}
+
+	if err := s.festivalRepo.AddImage(festivalId, image.ID); err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -25,6 +25,9 @@ type FestivalHandler interface {
 	CompleteFestival(w http.ResponseWriter, r *http.Request)
 	OpenStore(w http.ResponseWriter, r *http.Request)
 	CloseStore(w http.ResponseWriter, r *http.Request)
+	AddImage(w http.ResponseWriter, r *http.Request)
+	RemoveImage(w http.ResponseWriter, r *http.Request)
+	GetImages(w http.ResponseWriter, r *http.Request)
 }
 
 type festivalHandler struct {
@@ -459,4 +462,86 @@ func (h *festivalHandler) CloseStore(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "store closed successfully"}, nil)
 	log.Println("store closed successfully for festival:", festivalId)
+}
+
+func (h *festivalHandler) AddImage(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthOrganizerRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	vars := mux.Vars(r)
+	festivalIdString := vars["festivalId"]
+
+	if festivalIdString == "" {
+		log.Println("error:", models.ErrBadRequest)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	festivalId := utils.ToUint(festivalIdString)
+
+	if isOrganizer, err := h.festivalService.IsOrganizer(utils.GetUsername(r.Context()), festivalId); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	} else if !isOrganizer {
+		log.Printf("error: organizer %s is not authorized to add image for festival with ID: %s", utils.GetUsername(r.Context()), festivalIdString)
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	var input dtoFestival.AddImageRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	image := modelsCommon.Image{
+		URL: input.ImageUrl,
+	}
+
+	if err := h.festivalService.AddImage(festivalId, &image); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "image added successfully"}, nil)
+	log.Println("image added successfully for festival:", festivalId)
+}
+
+func (h *festivalHandler) RemoveImage(w http.ResponseWriter, r *http.Request) {
+	panic("not implemented yet")
+}
+
+func (h *festivalHandler) GetImages(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	vars := mux.Vars(r)
+	festivalIdString := vars["festivalId"]
+
+	if festivalIdString == "" {
+		log.Println("error:", models.ErrBadRequest)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	festivalId := utils.ToUint(festivalIdString)
+
+	images, err := h.festivalService.GetImages(festivalId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"images": images}, nil)
+	log.Println("images retrieved successfully for festival:", festivalId)
 }

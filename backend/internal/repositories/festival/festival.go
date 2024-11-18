@@ -14,6 +14,7 @@ type FestivalRepo interface {
 	Update(festival *models.Festival) error
 	Delete(festivalId uint) error
 	IsOrganizer(festivalId uint, organizerId uint) (bool, error)
+	AddImage(festivalId uint, imageId uint) error
 }
 
 type festivalRepo struct {
@@ -111,4 +112,19 @@ func (r *festivalRepo) IsOrganizer(festivalId uint, organizerId uint) (bool, err
 	}
 
 	return count > 0, nil
+}
+
+func (r *festivalRepo) AddImage(festivalId uint, imageId uint) error {
+
+	festivalImage := &models.FestivalImage{
+		FestivalID: festivalId,
+		ImageID:    imageId,
+	}
+
+	err := r.db.Create(festivalImage).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

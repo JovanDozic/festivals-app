@@ -28,12 +28,13 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	cityRepo := reposCommon.NewCityRepo(db)
 	countryRepo := reposCommon.NewCountryRepo(db)
 	festivalRepo := reposFestival.NewFestivalRepo(db)
+	imageRepo := reposCommon.NewImageRepo(db)
 	// ...
 
 	// Init services
 	locationService := servicesCommon.NewLocationService(addressRepo, cityRepo, countryRepo)
 	userService := servicesUser.NewUserService(config, userRepo, userProfileRepo, locationService)
-	festivalService := services.NewFestivalService(config, festivalRepo, userRepo, locationService)
+	festivalService := services.NewFestivalService(config, festivalRepo, userRepo, locationService, imageRepo)
 	// ...
 
 	// Init handlers
@@ -75,12 +76,18 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	protectedRouter.HandleFunc("/festival/{festivalId}", festivalHandler.GetById).Methods(http.MethodGet)
 	protectedRouter.HandleFunc("/festival/{festivalId}", festivalHandler.Update).Methods(http.MethodPut)
 	protectedRouter.HandleFunc("/festival/{festivalId}", festivalHandler.Delete).Methods(http.MethodDelete)
+
 	protectedRouter.HandleFunc("/festival/{festivalId}/publish", festivalHandler.PublishFestival).Methods(http.MethodPut)
 	protectedRouter.HandleFunc("/festival/{festivalId}/cancel", festivalHandler.CancelFestival).Methods(http.MethodPut)
 	protectedRouter.HandleFunc("/festival/{festivalId}/complete", festivalHandler.CompleteFestival).Methods(http.MethodPut)
 	protectedRouter.HandleFunc("/festival/{festivalId}/store/open", festivalHandler.OpenStore).Methods(http.MethodPut)
 	protectedRouter.HandleFunc("/festival/{festivalId}/store/close", festivalHandler.CloseStore).Methods(http.MethodPut)
-	// ...`
+
+	protectedRouter.HandleFunc("/festival/{festivalId}/image", festivalHandler.GetImages).Methods(http.MethodGet)
+	// ? Should we return list of images in get festival by id?
+	protectedRouter.HandleFunc("/festival/{festivalId}/image", festivalHandler.AddImage).Methods(http.MethodPost)
+
+	// ...
 
 	return r
 }
