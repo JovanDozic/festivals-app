@@ -3,42 +3,17 @@ import { AuthGuard } from './core/auth.guard';
 import { UnauthorizedComponent } from './shared/unauthorized/unauthorized.component';
 import { AuthRedirectGuard } from './core/auth-redirect.guard';
 
-export const routes: Routes = [
+const publicRoutes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     redirectTo: 'home',
   },
   {
-    path: 'unauthorized',
-    component: UnauthorizedComponent,
-    title: 'Unauthorized',
-  },
-  {
     path: 'home',
     loadComponent: () =>
       import('./features/home/home.component').then((c) => c.HomeComponent),
     title: 'Home',
-  },
-  {
-    path: 'dashboard',
-    loadComponent: () =>
-      import('./dashboard/dashboard.component').then(
-        (c) => c.DashboardComponent
-      ),
-    title: 'Dashboard',
-    canActivate: [AuthGuard],
-    data: { expectedRoles: ['ATTENDEE'] },
-  },
-  {
-    path: 'address',
-    loadComponent: () =>
-      import('./address-form/address-form.component').then(
-        (c) => c.AddressFormComponent
-      ),
-    title: 'Address',
-    canActivate: [AuthGuard],
-    data: { expectedRoles: ['ORGANIZER'] },
   },
   {
     path: 'login',
@@ -59,13 +34,80 @@ export const routes: Routes = [
     canActivate: [AuthRedirectGuard],
   },
   {
-    path: 'profile',
-    loadComponent: () =>
-      import('./features/user/profile/profile.component').then(
-        (c) => c.ProfileComponent
-      ),
-    title: 'Profile',
-    canActivate: [AuthGuard],
-    data: { expectedRoles: null },
+    path: 'unauthorized',
+    component: UnauthorizedComponent,
+    title: 'Unauthorized',
   },
+  // ...
+];
+
+const authRoutes: Routes = [
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./features/user/profile/profile.component').then(
+            (c) => c.ProfileComponent
+          ),
+        title: 'Profile',
+      },
+      // ...
+    ],
+  },
+];
+
+const attendeeRoutes: Routes = [
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    data: { expectedRoles: ['ATTENDEE'] },
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./dashboard/dashboard.component').then(
+            (c) => c.DashboardComponent
+          ),
+        title: 'Dashboard',
+      },
+      // ...
+    ],
+  },
+];
+
+const organizerRoutes: Routes = [
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    data: { expectedRoles: ['ORGANIZER'] },
+    children: [
+      {
+        path: 'address',
+        loadComponent: () =>
+          import('./address-form/address-form.component').then(
+            (c) => c.AddressFormComponent
+          ),
+        title: 'Address',
+      },
+      {
+        path: 'organizer/my-festivals',
+        loadComponent: () =>
+          import(
+            './features/organizer/my-festivals/my-festivals.component'
+          ).then((c) => c.MyFestivalsComponent),
+        title: 'My Festivals',
+      },
+      // ...
+    ],
+  },
+];
+
+export const routes: Routes = [
+  ...publicRoutes,
+  ...authRoutes,
+  ...attendeeRoutes,
+  ...organizerRoutes,
 ];

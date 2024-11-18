@@ -76,6 +76,17 @@
       >
         Profile
       </a>
+
+      <a
+        mat-list-item
+        routerLink="/organizer/my-festivals"
+        *ngIf="visibleForRole('ORGANIZER')"
+        #link="routerLinkActive"
+        routerLinkActive
+        [activated]="link.isActive"
+      >
+        My Festivals
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -90,7 +101,9 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       }
-      <span>Festivals</span>
+      <span>{{
+        userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()
+      }}</span>
     </mat-toolbar>
     <div class="sidenav-scroll-wrapper">
       <div class="sidenav-content">
