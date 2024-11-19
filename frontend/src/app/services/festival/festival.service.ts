@@ -23,4 +23,39 @@ export class FestivalService {
   deleteFestival(festivalId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/festival/${festivalId}`);
   }
+
+  publishFestival(festivalId: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/festival/${festivalId}/publish`,
+      {}
+    );
+  }
+
+  cancelFestival(festivalId: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/festival/${festivalId}/cancel`,
+      {}
+    );
+  }
+
+  completeFestival(festivalId: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/festival/${festivalId}/complete`,
+      {}
+    );
+  }
+
+  openFestivalStore(festivalId: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/festival/${festivalId}/store/open`,
+      {}
+    );
+  }
+
+  closeFestivalStore(festivalId: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/festival/${festivalId}/store/close`,
+      {}
+    );
+  }
 }

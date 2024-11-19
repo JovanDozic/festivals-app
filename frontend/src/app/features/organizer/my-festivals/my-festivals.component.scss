@@ -21,6 +21,12 @@
   justify-content: space-between;
 }
 
+.festival-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
 mat-card-title {
   font-family: "Funnel Display", sans-serif;
   font-weight: bold;
@@ -41,4 +47,19 @@ mat-card-subtitle {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.festival-property {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.festival-property mat-icon {
+  color: #6750a4;
+}
+
+mat-card-actions {
+  margin-top: 5px;
 }

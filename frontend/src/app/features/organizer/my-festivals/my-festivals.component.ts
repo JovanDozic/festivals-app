@@ -83,4 +83,157 @@ export class MyFestivalsComponent implements OnInit {
       }
     });
   }
+
+  onEditClick(festival: Festival): void {
+    console.log('Edit clicked for:', festival.name);
+  }
+
+  onViewClick(festival: Festival): void {
+    console.log('View clicked for:', festival.name);
+  }
+
+  onPublishClick(festival: Festival): void {
+    console.log('Publish clicked for:', festival.name);
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      data: {
+        title: 'Publish Festival',
+        message: `Are you sure you want to publish ${festival.name}?`,
+        confirmButtonText: 'Publish',
+        cancelButtonText: 'Cancel',
+      } as ConfirmationDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirm) {
+        console.log('Publishing festival:', festival.name);
+        this.festivalService.publishFestival(festival.id).subscribe({
+          next: () => {
+            console.log('Festival published:', festival.name);
+            this.snackbarService.show('Festival published');
+            this.loadFestivals();
+          },
+          error: (error) => {
+            console.error('Error published festival:', error);
+            this.snackbarService.show('Error publish festival');
+          },
+        });
+      }
+    });
+  }
+
+  onCancelClick(festival: Festival): void {
+    console.log('Cancel clicked for:', festival.name);
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      data: {
+        title: 'Cancel Festival',
+        message: `Are you sure you want to cancel ${festival.name}?`,
+        confirmButtonText: 'Cancel',
+        cancelButtonText: 'Cancel',
+      } as ConfirmationDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirm) {
+        console.log('Cancelling festival:', festival.name);
+        this.festivalService.cancelFestival(festival.id).subscribe({
+          next: () => {
+            console.log('Festival cancelled:', festival.name);
+            this.snackbarService.show('Festival cancelled');
+            this.loadFestivals();
+          },
+          error: (error) => {
+            console.error('Error cancelling festival:', error);
+            this.snackbarService.show('Error cancelling festival');
+          },
+        });
+      }
+    });
+  }
+
+  onCompleteClick(festival: Festival): void {
+    console.log('Complete clicked for:', festival.name);
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      data: {
+        title: 'Complete Festival',
+        message: `Are you sure you want to complete ${festival.name}?`,
+        confirmButtonText: 'Complete',
+        cancelButtonText: 'Cancel',
+      } as ConfirmationDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirm) {
+        console.log('Completing festival:', festival.name);
+        this.festivalService.completeFestival(festival.id).subscribe({
+          next: () => {
+            console.log('Festival completed:', festival.name);
+            this.snackbarService.show('Festival completed');
+            this.loadFestivals();
+          },
+          error: (error) => {
+            console.error('Error completing festival:', error);
+            this.snackbarService.show('Error completing festival');
+          },
+        });
+      }
+    });
+  }
+
+  onStoreOpenClick(festival: Festival): void {
+    console.log('Store open clicked for:', festival.name);
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      data: {
+        title: 'Open Store',
+        message: `Are you sure you want to open store for ${festival.name}?`,
+        confirmButtonText: 'Open',
+        cancelButtonText: 'Cancel',
+      } as ConfirmationDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirm) {
+        console.log('Opening store for festival:', festival.name);
+        this.festivalService.openFestivalStore(festival.id).subscribe({
+          next: () => {
+            console.log('Store opened for festival:', festival.name);
+            this.snackbarService.show('Store opened');
+            this.loadFestivals();
+          },
+          error: (error) => {
+            console.error('Error opening store:', error);
+            this.snackbarService.show('Error opening store');
+          },
+        });
+      }
+    });
+  }
+
+  onStoreCloseClick(festival: Festival): void {
+    console.log('Store close clicked for:', festival.name);
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      data: {
+        title: 'Close Store',
+        message: `Are you sure you want to close store for ${festival.name}?`,
+        confirmButtonText: 'Close',
+        cancelButtonText: 'Cancel',
+      } as ConfirmationDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirm) {
+        console.log('Closing store for festival:', festival.name);
+        this.festivalService.closeFestivalStore(festival.id).subscribe({
+          next: () => {
+            console.log('Store closed for festival:', festival.name);
+            this.snackbarService.show('Store closed');
+            this.loadFestivals();
+          },
+          error: (error) => {
+            console.error('Error closing store:', error);
+            this.snackbarService.show('Error closing store');
+          },
+        });
+      }
+    });
+  }
 }

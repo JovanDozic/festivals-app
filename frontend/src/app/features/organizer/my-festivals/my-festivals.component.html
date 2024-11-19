@@ -19,7 +19,8 @@
     <mat-card class="festival-card" *ngFor="let festival of festivals">
       <img
         mat-card-image
-        src="https://uploads.tomorrowland.com/containers/assets/welcome/memory-lane/2023-1.jpg/a9f7c4eed642a86d325ba57d93eadec9/2023-1.jpg"
+        class="festival-image"
+        src="{{ festival.images[0].url }}"
         alt="{{ festival.name }}"
       />
       <div class="card-content">
@@ -27,6 +28,55 @@
           <mat-card-title>{{ festival.name }}</mat-card-title>
           <mat-card-subtitle>{{ festival.description }}</mat-card-subtitle>
         </mat-card-header>
+        <mat-card-content>
+          <span class="festival-property">
+            <mat-icon class="material-symbols-outlined">
+              calendar_month</mat-icon
+            >
+            {{ festival.startDate | date : "d MMM" }} -
+            {{ festival.endDate | date : "d MMM" }}
+          </span>
+          <span class="festival-property" *ngIf="festival.status == 'PRIVATE'">
+            <mat-icon class="material-symbols-outlined">
+              visibility_off</mat-icon
+            >
+            Private
+          </span>
+          <span class="festival-property" *ngIf="festival.status == 'PUBLIC'">
+            <mat-icon class="material-symbols-outlined">visibility</mat-icon>
+            Public
+          </span>
+          <span
+            class="festival-property"
+            *ngIf="festival.status == 'CANCELLED'"
+          >
+            <mat-icon class="material-symbols-outlined">cancel</mat-icon>
+            Cancelled
+          </span>
+          <span
+            class="festival-property"
+            *ngIf="festival.status == 'COMPLETED'"
+          >
+            <mat-icon class="material-symbols-outlined">done_all</mat-icon>
+            Completed
+          </span>
+          <span
+            class="festival-property"
+            *ngIf="festival.storeStatus == 'OPEN'"
+          >
+            <mat-icon class="material-symbols-outlined">shopping_cart</mat-icon>
+            Store Open
+          </span>
+          <span
+            class="festival-property"
+            *ngIf="festival.storeStatus == 'CLOSED'"
+          >
+            <mat-icon class="material-symbols-outlined"
+              >shopping_cart_off</mat-icon
+            >
+            Store Closed
+          </span>
+        </mat-card-content>
         <mat-card-actions>
           <button mat-button color="primary">View</button>
           <span class="spacer"></span>
@@ -41,16 +91,39 @@
           </button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item>
-              <mat-icon>edit</mat-icon>
+              <mat-icon class="material-symbols-outlined">edit</mat-icon>
               <span>Edit</span>
             </button>
             <button mat-menu-item (click)="onDeleteClick(festival)">
-              <mat-icon>delete</mat-icon>
+              <mat-icon class="material-symbols-outlined">delete</mat-icon>
               <span>Delete</span>
             </button>
-            <button mat-menu-item>
-              <mat-icon>share</mat-icon>
-              <span>Share</span>
+            <button mat-menu-item (click)="onPublishClick(festival)">
+              <mat-icon class="material-symbols-outlined">publish</mat-icon>
+              <span>Publish</span>
+            </button>
+            <button mat-menu-item (click)="onCancelClick(festival)">
+              <mat-icon class="material-symbols-outlined">cancel</mat-icon>
+              <span>Cancel</span>
+            </button>
+
+            <button mat-menu-item (click)="onCompleteClick(festival)">
+              <mat-icon class="material-symbols-outlined">done_all</mat-icon>
+              <span>Complete</span>
+            </button>
+
+            <button mat-menu-item (click)="onStoreOpenClick(festival)">
+              <mat-icon class="material-symbols-outlined"
+                >shopping_cart</mat-icon
+              >
+              <span>Open Store</span>
+            </button>
+
+            <button mat-menu-item (click)="onStoreCloseClick(festival)">
+              <mat-icon class="material-symbols-outlined"
+                >shopping_cart_off</mat-icon
+              >
+              <span>Close Store</span>
             </button>
           </mat-menu>
         </mat-card-actions>
