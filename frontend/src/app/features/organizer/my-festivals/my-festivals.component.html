@@ -1,62 +1,60 @@
 <div class="festival-container">
-  <div *ngIf="isLoading">
+  <div *ngIf="isLoading" class="skeleton-container">
     <ngx-skeleton-loader
-      count="4"
+      count="6"
+      class="skeleton-container"
       appearance="circle"
       [theme]="{
         width: '300px',
-        height: '300px',
+        height: '350px',
         margin: '16px',
-        'border-radius': '8px',
+        'border-radius': '16px'
       }"
     >
-      <mat-card class="festival-card">
-        <div class="skeleton-image"></div>
-        <mat-card-header>
-          <div class="skeleton-title"></div>
-          <div class="skeleton-subtitle"></div>
-        </mat-card-header>
-        <mat-card-actions>
-          <div class="skeleton-button"></div>
-          <div class="skeleton-button"></div>
-        </mat-card-actions>
-      </mat-card>
     </ngx-skeleton-loader>
   </div>
 
   <!-- Festival Cards Section -->
-  <ng-container *ngIf="!isLoading">
+  <ng-container *ngIf="!isLoading" class="festival-container">
     <mat-card class="festival-card" *ngFor="let festival of festivals">
       <img
         mat-card-image
         src="https://uploads.tomorrowland.com/containers/assets/welcome/memory-lane/2023-1.jpg/a9f7c4eed642a86d325ba57d93eadec9/2023-1.jpg"
         alt="{{ festival.name }}"
       />
-      <mat-card-header>
-        <mat-card-title>{{ festival.name }}</mat-card-title>
-        <mat-card-subtitle>{{ festival.description }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-actions>
-        <button mat-button color="primary">See Festival</button>
-        <span class="spacer"></span>
-        <button mat-button [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item>
-            <mat-icon>edit</mat-icon>
-            <span>Edit</span>
+      <div class="card-content">
+        <mat-card-header>
+          <mat-card-title>{{ festival.name }}</mat-card-title>
+          <mat-card-subtitle>{{ festival.description }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions>
+          <button mat-button color="primary">See Festival</button>
+          <span class="spacer"></span>
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            matTooltip="Change profile information"
+            aria-label="Button that opens a dialog to change profile information"
+            color="primary"
+          >
+            <mat-icon>more_vert</mat-icon>
           </button>
-          <button mat-menu-item>
-            <mat-icon>delete</mat-icon>
-            <span>Delete</span>
-          </button>
-          <button mat-menu-item>
-            <mat-icon>share</mat-icon>
-            <span>Share</span>
-          </button>
-        </mat-menu>
-      </mat-card-actions>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>delete</mat-icon>
+              <span>Delete</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>share</mat-icon>
+              <span>Share</span>
+            </button>
+          </mat-menu>
+        </mat-card-actions>
+      </div>
     </mat-card>
   </ng-container>
 </div>

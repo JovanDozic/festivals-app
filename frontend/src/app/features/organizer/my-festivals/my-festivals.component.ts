@@ -28,6 +28,7 @@ export class MyFestivalsComponent implements OnInit {
   isLoading: boolean = true; // Loading state
 
   private festivalService = inject(FestivalService);
+  private snackbarService = inject(SnackbarService);
 
   ngOnInit(): void {
     this.loadFestivals();
@@ -36,13 +37,16 @@ export class MyFestivalsComponent implements OnInit {
   loadFestivals(): void {
     this.festivalService.getMyFestivals().subscribe({
       next: (response) => {
-        console.log('Festivals:', response);
-        this.festivals = response;
-        this.isLoading = false; // Data loaded
+        setTimeout(() => {
+          console.log('Festivals:', response);
+          this.festivals = response;
+          this.isLoading = false;
+        }, 2000);
       },
       error: (error) => {
         console.error('Error fetching festivals:', error);
-        this.isLoading = false; // Even on error, stop loading
+        this.snackbarService.show('Error fetching festivals');
+        // this.isLoading = false;
       },
     });
   }

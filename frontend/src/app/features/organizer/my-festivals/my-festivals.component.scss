@@ -1,9 +1,17 @@
 .festival-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
   justify-content: center;
+  flex-wrap: wrap;
+  gap: 32px;
   padding: 16px;
+  margin-top: 16px;
+}
+
+.skeleton-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
 }
 
 .festival-card {
@@ -13,37 +21,24 @@
   justify-content: space-between;
 }
 
-.skeleton-image {
-  width: 100%;
-  height: 150px;
-  background-color: #e0e0e0;
-  border-radius: 4px 4px 0 0;
+mat-card-title {
+  font-family: "Funnel Display", sans-serif;
+  // margin-top: 5px;
 }
 
-.skeleton-title {
-  width: 70%;
-  height: 20px;
-  background-color: #e0e0e0;
-  margin-top: 16px;
-  border-radius: 4px;
-}
-
-.skeleton-subtitle {
-  width: 50%;
-  height: 15px;
-  background-color: #e0e0e0;
-  margin-top: 8px;
-  border-radius: 4px;
-}
-
-.skeleton-button {
-  width: 80px;
-  height: 36px;
-  background-color: #e0e0e0;
-  border-radius: 4px;
-  margin: 8px 0;
+mat-card-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-top: 10px;
 }
 
 .spacer {
   flex: 1 1 auto;
+}
+
+.card-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
