@@ -19,4 +19,8 @@ export class FestivalService {
       .get<{ festivals: Festival[] }>(`${this.apiUrl}/organizer/festival`)
       .pipe(map((response) => response.festivals));
   }
+
+  deleteFestival(festivalId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/festival/${festivalId}`);
+  }
 }

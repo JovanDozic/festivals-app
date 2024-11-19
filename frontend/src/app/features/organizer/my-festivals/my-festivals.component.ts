@@ -8,6 +8,11 @@ import { Festival } from '../../../models/festival/festival.model';
 import { FestivalService } from '../../../services/festival/festival.service';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  ConfirmationDialog,
+  ConfirmationDialogData,
+} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-my-festivals',
@@ -29,6 +34,7 @@ export class MyFestivalsComponent implements OnInit {
 
   private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
+  private dialog = inject(MatDialog);
 
   ngOnInit(): void {
     this.loadFestivals();
@@ -37,17 +43,44 @@ export class MyFestivalsComponent implements OnInit {
   loadFestivals(): void {
     this.festivalService.getMyFestivals().subscribe({
       next: (response) => {
-        setTimeout(() => {
-          console.log('Festivals:', response);
-          this.festivals = response;
-          this.isLoading = false;
-        }, 2000);
+        console.log('Festivals:', response);
+        this.festivals = response;
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error fetching festivals:', error);
         this.snackbarService.show('Error fetching festivals');
         // this.isLoading = false;
       },
+    });
+  }
+
+  onDeleteClick(festival: Festival): void {
+    console.log('Delete clicked for:', festival.name);
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      data: {
+        title: 'Delete Festival',
+        message: `Are you sure you want to delete ${festival.name}?`,
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
+      } as ConfirmationDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirm) {
+        console.log('Deleting festival:', festival.name);
+        this.festivalService.deleteFestival(festival.id).subscribe({
+          next: () => {
+            console.log('Festival deleted:', festival.name);
+            this.snackbarService.show('Festival deleted');
+            this.loadFestivals();
+          },
+          error: (error) => {
+            console.error('Error deleting festival:', error);
+            this.snackbarService.show('Error deleting festival');
+          },
+        });
+      }
     });
   }
 }
