@@ -101,9 +101,11 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       }
-      <span>{{
-        userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()
-      }}</span>
+      <span class="user-role-title"
+        >{{
+          userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()
+        }}: {{ username }}</span
+      >
     </mat-toolbar>
     <div class="sidenav-scroll-wrapper">
       <div class="sidenav-content">

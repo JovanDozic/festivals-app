@@ -29,6 +29,9 @@ import {
   ],
 })
 export class MyFestivalsComponent implements OnInit {
+  onUnpublishClick(_t13: Festival) {
+    throw new Error('Method not implemented.');
+  }
   festivals: Festival[] = [];
   isLoading: boolean = true; // Loading state
 

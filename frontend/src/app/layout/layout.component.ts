@@ -35,9 +35,11 @@ export class LayoutComponent {
   private authService = inject(AuthService);
 
   userRole: string = '';
+  username: string = '';
 
   constructor() {
     this.userRole = this.authService.getUserRole() ?? '';
+    this.username = this.authService.getUsername() ?? '';
   }
 
   visibleForRole(role: string): boolean {

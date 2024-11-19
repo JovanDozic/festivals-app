@@ -21,10 +21,10 @@
   justify-content: space-between;
 }
 
-.festival-image {
-  height: 200px;
-  background-size: cover;
-  background-position: center;
+img[mat-card-image] {
+  max-height: 200px !important;
+  object-fit: fill;
+  width: 100%;
 }
 
 mat-card-title {

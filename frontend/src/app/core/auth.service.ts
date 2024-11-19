@@ -36,6 +36,15 @@ export class AuthService {
     return null;
   }
 
+  getUsername(): string | null {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      return decodedToken.username;
+    }
+    return null;
+  }
+
   constructor(private http: HttpClient) {}
 
   login(

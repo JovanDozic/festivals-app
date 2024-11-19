@@ -19,64 +19,74 @@
     <mat-card class="festival-card" *ngFor="let festival of festivals">
       <img
         mat-card-image
-        class="festival-image"
         src="{{ festival.images[0].url }}"
         alt="{{ festival.name }}"
       />
       <div class="card-content">
-        <mat-card-header>
-          <mat-card-title>{{ festival.name }}</mat-card-title>
-          <mat-card-subtitle>{{ festival.description }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <span class="festival-property">
-            <mat-icon class="material-symbols-outlined">
-              calendar_month</mat-icon
+        <div>
+          <mat-card-header>
+            <mat-card-title>{{ festival.name }}</mat-card-title>
+            <mat-card-subtitle>{{ festival.description }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <span class="festival-property">
+              <mat-icon class="material-symbols-outlined">
+                calendar_month</mat-icon
+              >
+              {{ festival.startDate | date : "d MMM" }} -
+              {{ festival.endDate | date : "d MMM" }}
+            </span>
+            <span
+              class="festival-property"
+              *ngIf="festival.status == 'PRIVATE'"
             >
-            {{ festival.startDate | date : "d MMM" }} -
-            {{ festival.endDate | date : "d MMM" }}
-          </span>
-          <span class="festival-property" *ngIf="festival.status == 'PRIVATE'">
-            <mat-icon class="material-symbols-outlined">
-              visibility_off</mat-icon
+              <mat-icon class="material-symbols-outlined">
+                visibility_off</mat-icon
+              >
+              Private
+            </span>
+            <span class="festival-property" *ngIf="festival.status == 'PUBLIC'">
+              <mat-icon class="material-symbols-outlined">visibility</mat-icon>
+              Public
+            </span>
+            <span
+              class="festival-property"
+              *ngIf="festival.status == 'CANCELLED'"
             >
-            Private
-          </span>
-          <span class="festival-property" *ngIf="festival.status == 'PUBLIC'">
-            <mat-icon class="material-symbols-outlined">visibility</mat-icon>
-            Public
-          </span>
-          <span
-            class="festival-property"
-            *ngIf="festival.status == 'CANCELLED'"
-          >
-            <mat-icon class="material-symbols-outlined">cancel</mat-icon>
-            Cancelled
-          </span>
-          <span
-            class="festival-property"
-            *ngIf="festival.status == 'COMPLETED'"
-          >
-            <mat-icon class="material-symbols-outlined">done_all</mat-icon>
-            Completed
-          </span>
-          <span
-            class="festival-property"
-            *ngIf="festival.storeStatus == 'OPEN'"
-          >
-            <mat-icon class="material-symbols-outlined">shopping_cart</mat-icon>
-            Store Open
-          </span>
-          <span
-            class="festival-property"
-            *ngIf="festival.storeStatus == 'CLOSED'"
-          >
-            <mat-icon class="material-symbols-outlined"
-              >shopping_cart_off</mat-icon
+              <mat-icon class="material-symbols-outlined">cancel</mat-icon>
+              Cancelled
+            </span>
+            <span
+              class="festival-property"
+              *ngIf="festival.status == 'COMPLETED'"
             >
-            Store Closed
-          </span>
-        </mat-card-content>
+              <mat-icon class="material-symbols-outlined">done_all</mat-icon>
+              Completed
+            </span>
+            <span
+              class="festival-property"
+              *ngIf="
+                festival.storeStatus == 'OPEN' && festival.status == 'PUBLIC'
+              "
+            >
+              <mat-icon class="material-symbols-outlined"
+                >shopping_cart</mat-icon
+              >
+              Store Open
+            </span>
+            <span
+              class="festival-property"
+              *ngIf="
+                festival.storeStatus == 'CLOSED' && festival.status == 'PUBLIC'
+              "
+            >
+              <mat-icon class="material-symbols-outlined"
+                >shopping_cart_off</mat-icon
+              >
+              Store Closed
+            </span>
+          </mat-card-content>
+        </div>
         <mat-card-actions>
           <button mat-button color="primary">View</button>
           <span class="spacer"></span>
@@ -98,28 +108,54 @@
               <mat-icon class="material-symbols-outlined">delete</mat-icon>
               <span>Delete</span>
             </button>
-            <button mat-menu-item (click)="onPublishClick(festival)">
-              <mat-icon class="material-symbols-outlined">publish</mat-icon>
+            <button
+              mat-menu-item
+              (click)="onPublishClick(festival)"
+              *ngIf="festival.status == 'PRIVATE'"
+            >
+              <mat-icon class="material-symbols-outlined">published</mat-icon>
               <span>Publish</span>
             </button>
-            <button mat-menu-item (click)="onCancelClick(festival)">
+            <button
+              mat-menu-item
+              (click)="onCancelClick(festival)"
+              *ngIf="
+                festival.status != 'CANCELLED' && festival.status != 'COMPLETED'
+              "
+            >
               <mat-icon class="material-symbols-outlined">cancel</mat-icon>
               <span>Cancel</span>
             </button>
 
-            <button mat-menu-item (click)="onCompleteClick(festival)">
+            <button
+              mat-menu-item
+              (click)="onCompleteClick(festival)"
+              *ngIf="festival.status == 'PUBLIC'"
+            >
               <mat-icon class="material-symbols-outlined">done_all</mat-icon>
               <span>Complete</span>
             </button>
 
-            <button mat-menu-item (click)="onStoreOpenClick(festival)">
+            <button
+              mat-menu-item
+              (click)="onStoreOpenClick(festival)"
+              *ngIf="
+                festival.status == 'PUBLIC' && festival.storeStatus == 'CLOSED'
+              "
+            >
               <mat-icon class="material-symbols-outlined"
                 >shopping_cart</mat-icon
               >
               <span>Open Store</span>
             </button>
 
-            <button mat-menu-item (click)="onStoreCloseClick(festival)">
+            <button
+              mat-menu-item
+              (click)="onStoreCloseClick(festival)"
+              *ngIf="
+                festival.status == 'PUBLIC' && festival.storeStatus == 'OPEN'
+              "
+            >
               <mat-icon class="material-symbols-outlined"
                 >shopping_cart_off</mat-icon
               >
