@@ -57,11 +57,9 @@ export class CreateFestivalComponent {
 
   isLinear = true;
   festivalId: string | null = null;
+  // todo: remove default images
   images: string[] = [
     'https://prismic-assets-cdn.tomorrowland.com/ZqJkiB5LeNNTxfzO_1721400232662_dbb1c34f-229a-46b2-81f3-f498bccf476c.jpg_0_10322487413277135069.jpg',
-    'https://venga-store.com/cdn/shop/articles/Tomorrowland-festival-outfits.jpg?v=1721132564&width=1920',
-    'https://prismic-assets-cdn.tomorrowland.com/ZwqbE4F3NbkBXXNu_1728686140913_7ef44b3b-297c-4a1c-9d05-a7b04824fc23.jpg_0_12063235528760173649.jpg?crop=3000%2C1600%2C0%2C200&width=600&height=320',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpolaAYzCeS-n-9KirQxBhe4Co9illDu3ffIlISCpVOIkHkiAiYwYWNQVGZWhvkSZlzzs&usqp=CAU',
   ];
 
   basicInfoFormGroup = this.fb.group({
@@ -72,6 +70,7 @@ export class CreateFestivalComponent {
     capacityCtrl: ['', [Validators.required, Validators.min(1)]],
   });
 
+  // todo: remove default address
   addressFormGroup = this.fb.group({
     streetCtrl: ['Unknown', Validators.required],
     numberCtrl: ['1', Validators.required],
