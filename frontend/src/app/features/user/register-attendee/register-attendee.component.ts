@@ -10,8 +10,10 @@ import { AuthService } from '../../../core/auth.service';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 import { UserService } from '../../../services/user/user.service';
 import { CreateUpdateUserProfileRequest } from '../../../models/user/user-profile-request.model';
-import { CreateAddressRequest } from '../../../models/user/create-address-request.model';
+import { CreateAddressRequest } from '../../../models/common/create-address-request.model';
 import { MatCardModule } from '@angular/material/card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-register-attendee',
@@ -24,12 +26,14 @@ import { MatCardModule } from '@angular/material/card';
     MatFormFieldModule,
     MatButtonModule,
     MatCardModule,
+    MatDatepickerModule,
   ],
   templateUrl: './register-attendee.component.html',
   styleUrls: [
     './register-attendee.component.scss',
     '../../../app.component.scss',
   ],
+  providers: [provideNativeDateAdapter()],
 })
 export class RegisterAttendeeComponent {
   private fb = inject(FormBuilder);

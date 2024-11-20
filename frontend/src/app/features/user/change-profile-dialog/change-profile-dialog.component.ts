@@ -17,10 +17,7 @@ import { AuthService } from '../../../core/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { UserService } from '../../../services/user/user.service';
-import {
-  MAT_DATE_FORMATS,
-  provideNativeDateAdapter,
-} from '@angular/material/core';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 
 @Component({

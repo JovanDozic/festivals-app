@@ -1,0 +1,52 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0px 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+form {
+  margin-top: 20px;
+}
+
+.form-fields {
+  display: flex;
+  justify-content: left;
+  gap: 10px;
+}
+
+mat-stepper {
+  background-color: transparent;
+}
+
+mat-card-header {
+  margin-bottom: 20px;
+}
+
+mat-form-field {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.error-message {
+  margin-top: 5px;
+  text-align: center;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+mat-card-actions {
+  margin-top: 5px;
+}
+
+h1,
+strong {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif;
+}

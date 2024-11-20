@@ -96,7 +96,7 @@ func (h *festivalHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "festival created successfully"}, nil)
+	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "festival created successfully", "id": festival.ID}, nil)
 	log.Println("festival created successfully:", festival.Name, "by", utils.GetUsername(r.Context()))
 }
 

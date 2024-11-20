@@ -3,7 +3,7 @@ import { UserProfileResponse } from '../../models/user/user-profile-response.mod
 import { map, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CreateUpdateUserProfileRequest } from '../../models/user/user-profile-request.model';
-import { CreateAddressRequest } from '../../models/user/create-address-request.model';
+import { CreateAddressRequest } from '../../models/common/create-address-request.model';
 
 @Injectable({
   providedIn: 'root',

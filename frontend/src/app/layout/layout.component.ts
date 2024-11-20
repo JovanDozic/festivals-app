@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -37,9 +37,15 @@ export class LayoutComponent {
   userRole: string = '';
   username: string = '';
 
-  constructor() {
+  constructor(private cdr: ChangeDetectorRef) {
     this.userRole = this.authService.getUserRole() ?? '';
     this.username = this.authService.getUsername() ?? '';
+  }
+
+  ngAfterViewInit() {
+    this.isHandset$.subscribe(() => {
+      this.cdr.detectChanges();
+    });
   }
 
   visibleForRole(role: string): boolean {

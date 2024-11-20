@@ -1,4 +1,5 @@
 import { AddressResponse } from '../common/address-response.model';
+import { CreateAddressRequest } from '../common/create-address-request.model';
 
 export interface Festival {
   id: number;
@@ -10,7 +11,7 @@ export interface Festival {
   status: string;
   storeStatus: string;
   addressID: number;
-  address?: AddressResponse | null;
+  address: AddressResponse | null;
   images: ImageResponse[];
 }
 
@@ -20,4 +21,12 @@ export interface FestivalsResponse {
 
 export interface ImageResponse {
   url: string;
+}
+export interface CreateFestivalRequest {
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  capacity: number;
+  address: CreateAddressRequest;
 }

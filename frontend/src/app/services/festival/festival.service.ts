@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import {
+  CreateFestivalRequest,
   Festival,
   FestivalsResponse,
 } from '../../models/festival/festival.model';
@@ -18,6 +19,11 @@ export class FestivalService {
     return this.http
       .get<{ festivals: Festival[] }>(`${this.apiUrl}/organizer/festival`)
       .pipe(map((response) => response.festivals));
+  }
+
+  createFestival(festival: CreateFestivalRequest): Observable<any> {
+    console.log('Creating a festival', festival);
+    return this.http.post<any>(`${this.apiUrl}/festival`, festival);
   }
 
   deleteFestival(festivalId: number): Observable<void> {
