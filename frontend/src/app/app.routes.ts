@@ -100,6 +100,14 @@ const organizerRoutes: Routes = [
           ).then((c) => c.MyFestivalsComponent),
         title: 'My Festivals',
       },
+      {
+        path: 'organizer/my-festivals/create',
+        loadComponent: () =>
+          import(
+            './features/organizer/create-festival/create-festival.component'
+          ).then((c) => c.CreateFestivalComponent),
+        title: 'Create Festival',
+      },
       // ...
     ],
   },

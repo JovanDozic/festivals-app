@@ -1,3 +1,5 @@
+@use "@angular/material" as mat;
+
 .festival-container {
   display: flex;
   justify-content: center;
@@ -62,4 +64,12 @@ mat-card-subtitle {
 
 mat-card-actions {
   margin-top: 5px;
+}
+
+.main-action {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1000;
+  margin: 16px;
 }

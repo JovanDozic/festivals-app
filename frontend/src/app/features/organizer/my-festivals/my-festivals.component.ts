@@ -13,6 +13,7 @@ import {
   ConfirmationDialog,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
+import { RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-my-festivals',
@@ -21,6 +22,7 @@ import {
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -29,6 +31,9 @@ import {
   ],
 })
 export class MyFestivalsComponent implements OnInit {
+  openCreateFestival() {
+    throw new Error('Method not implemented.');
+  }
   onUnpublishClick(_t13: Festival) {
     throw new Error('Method not implemented.');
   }
