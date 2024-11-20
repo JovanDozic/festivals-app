@@ -85,32 +85,34 @@
               <div class="form-fields">
                 <mat-form-field>
                   <mat-label>Street</mat-label>
-                  <input matInput formControlName="streetCtrl" required />
+                  <input matInput formControlName="streetCtrl" />
                 </mat-form-field>
 
                 <mat-form-field>
                   <mat-label>Number</mat-label>
-                  <input matInput formControlName="numberCtrl" required />
+                  <input matInput formControlName="numberCtrl" />
                 </mat-form-field>
 
                 <mat-form-field>
                   <mat-label>Apartment / Suite</mat-label>
                   <input matInput formControlName="apartmentSuiteCtrl" />
                 </mat-form-field>
+              </div>
 
+              <div class="form-fields">
                 <mat-form-field>
                   <mat-label>City</mat-label>
-                  <input matInput formControlName="cityCtrl" required />
+                  <input matInput formControlName="cityCtrl" />
                 </mat-form-field>
 
                 <mat-form-field>
                   <mat-label>Postal Code</mat-label>
-                  <input matInput formControlName="postalCodeCtrl" required />
+                  <input matInput formControlName="postalCodeCtrl" />
                 </mat-form-field>
 
                 <mat-form-field>
                   <mat-label>Country (ISO3)</mat-label>
-                  <input matInput formControlName="countryISO3Ctrl" required />
+                  <input matInput formControlName="countryISO3Ctrl" />
                 </mat-form-field>
               </div>
 
@@ -122,18 +124,24 @@
 
           <!-- Step 3: Images -->
           <mat-step [stepControl]="imagesFormGroup" [editable]="false">
-            <form [formGroup]="imagesFormGroup">
-              <ng-template matStepLabel>Images</ng-template>
-              <div class="form-fields">
-                <mat-form-field>
-                  <mat-label>Image URL</mat-label>
-                  <input matInput formControlName="imageUrlCtrl" required />
-                </mat-form-field>
+            <ng-template matStepLabel>Images</ng-template>
+            <div class="form-fields">
+              <div
+                class="file-drop-zone"
+                (dragover)="onDragOver($event)"
+                (drop)="onDrop($event)"
+              >
+                <p>Drag and drop an image here, or click to select a file.</p>
+                <input type="file" (change)="onFileSelected($event)" required />
               </div>
-              <button mat-raised-button (click)="uploadFestivalImage()">
-                Submit
-              </button>
-            </form>
+            </div>
+            <button
+              mat-raised-button
+              (click)="uploadFestivalImage()"
+              [disabled]="!selectedFile"
+            >
+              Submit
+            </button>
           </mat-step>
         </mat-stepper>
       </mat-card-content>

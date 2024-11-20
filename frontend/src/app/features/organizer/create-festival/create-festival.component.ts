@@ -43,6 +43,7 @@ export class CreateFestivalComponent {
 
   isLinear = true;
   festivalId: string | null = null;
+  selectedFile: File | null = null;
 
   basicInfoFormGroup = this.fb.group({
     nameCtrl: ['', Validators.required],
@@ -53,17 +54,15 @@ export class CreateFestivalComponent {
   });
 
   addressFormGroup = this.fb.group({
-    streetCtrl: ['', Validators.required],
-    numberCtrl: ['', Validators.required],
+    streetCtrl: ['Unknown', Validators.required],
+    numberCtrl: ['1', Validators.required],
     apartmentSuiteCtrl: [''],
-    cityCtrl: ['', Validators.required],
-    postalCodeCtrl: ['', Validators.required],
-    countryISO3Ctrl: ['', Validators.required],
+    cityCtrl: ['Koralovo', Validators.required],
+    postalCodeCtrl: ['99999', Validators.required],
+    countryISO3Ctrl: ['SRB', Validators.required],
   });
 
-  imagesFormGroup = this.fb.group({
-    imageUrlCtrl: ['', [Validators.required]],
-  });
+  imagesFormGroup = this.fb.group({});
 
   createFestivalBasicInfo() {
     if (this.basicInfoFormGroup.valid) {
@@ -82,14 +81,16 @@ export class CreateFestivalComponent {
         capacity:
           Number(this.basicInfoFormGroup.get('capacityCtrl')?.value) ?? 0,
         address: {
-          street: this.addressFormGroup.get('streetCtrl')?.value ?? '',
-          number: this.addressFormGroup.get('numberCtrl')?.value ?? '',
+          street:
+            this.addressFormGroup.get('streetCtrl')?.value ?? 'Temp Street',
+          number: this.addressFormGroup.get('numberCtrl')?.value ?? '1',
           apartmentSuite:
             this.addressFormGroup.get('apartmentSuiteCtrl')?.value ?? '',
-          city: this.addressFormGroup.get('cityCtrl')?.value ?? '',
-          postalCode: this.addressFormGroup.get('postalCodeCtrl')?.value ?? '',
+          city: this.addressFormGroup.get('cityCtrl')?.value ?? 'Koralovo',
+          postalCode:
+            this.addressFormGroup.get('postalCodeCtrl')?.value ?? '99999',
           countryISO3:
-            this.addressFormGroup.get('countryISO3Ctrl')?.value ?? '',
+            this.addressFormGroup.get('countryISO3Ctrl')?.value ?? 'SRB',
         },
       };
 
@@ -112,14 +113,37 @@ export class CreateFestivalComponent {
     }
   }
 
+  onFileSelected(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      this.selectedFile = target.files[0];
+    }
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      this.selectedFile = event.dataTransfer.files[0];
+    }
+  }
+
   uploadFestivalImage() {
-    if (this.imagesFormGroup.valid && this.festivalId) {
-      const imageUrl = this.imagesFormGroup.get('imageUrlCtrl')?.value ?? '';
+    if (this.selectedFile && this.festivalId) {
+      const formData = new FormData();
+      formData.append('image', this.selectedFile);
 
       this.http
-        .post(`http://localhost:4000/festival/${this.festivalId}/image`, {
-          imageUrl,
-        })
+        .post(
+          `http://localhost:4000/festival/${this.festivalId}/image`,
+          formData
+        )
         .subscribe({
           next: () => {
             this.snackbar.open('Image uploaded successfully!', 'Close', {

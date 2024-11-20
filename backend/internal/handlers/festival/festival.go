@@ -7,8 +7,13 @@ import (
 	modelsFestival "backend/internal/models/festival"
 	servicesFestival "backend/internal/services/festival"
 	"backend/internal/utils"
+	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -328,24 +333,69 @@ func (h *festivalHandler) CloseStore(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *festivalHandler) AddImage(w http.ResponseWriter, r *http.Request) {
-
 	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
 	if !ok {
 		return
 	}
 
-	var input dtoFestival.AddImageRequest
-	if err := utils.ReadJSON(w, r, &input); err != nil {
-		log.Println("error:", err)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	// Parse the multipart form
+	err := r.ParseMultipartForm(10 << 20) // Limit your max input length!
+	if err != nil {
+		log.Println("error parsing multipart form:", err)
+		http.Error(w, "Cannot parse form", http.StatusBadRequest)
 		return
 	}
 
-	if err := h.festivalService.AddImage(festivalId, &modelsCommon.Image{
-		URL: input.ImageUrl,
-	}); err != nil {
-		log.Println("error:", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	// Retrieve the file from form data
+	file, handler, err := r.FormFile("image")
+	if err != nil {
+		log.Println("error retrieving the file:", err)
+		http.Error(w, "Cannot retrieve file", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	// Optional: Validate file type and size here
+
+	// Generate a unique file name to avoid collisions
+	fileName := fmt.Sprintf("%d_%s", time.Now().UnixNano(), handler.Filename)
+
+	// Define the path where the file will be stored
+	filePath := filepath.Join("uploads", fileName)
+
+	// Create the uploads folder if it doesn't exist
+	if err := os.MkdirAll("uploads", os.ModePerm); err != nil {
+		log.Println("error creating uploads directory:", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	// Create a new file in the uploads directory
+	dst, err := os.Create(filePath)
+	if err != nil {
+		log.Println("error creating file:", err)
+		http.Error(w, "Cannot save file", http.StatusInternalServerError)
+		return
+	}
+	defer dst.Close()
+
+	// Copy the uploaded file data to the new file
+	if _, err := io.Copy(dst, file); err != nil {
+		log.Println("error saving file:", err)
+		http.Error(w, "Cannot save file", http.StatusInternalServerError)
+		return
+	}
+
+	// Construct the URL or path to be stored in the database
+	imageURL := "/" + filePath // Adjust this based on how your server serves static files
+
+	// Now call your service to save the image info
+	image := &modelsCommon.Image{
+		URL: imageURL,
+	}
+	if err := h.festivalService.AddImage(festivalId, image); err != nil {
+		log.Println("error adding image:", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 
