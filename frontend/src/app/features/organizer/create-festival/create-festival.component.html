@@ -124,23 +124,41 @@
 
           <!-- Step 3: Images -->
           <mat-step [stepControl]="imagesFormGroup" [editable]="false">
-            <ng-template matStepLabel>Images</ng-template>
-            <div class="form-fields">
-              <div
-                class="file-drop-zone"
-                (dragover)="onDragOver($event)"
-                (drop)="onDrop($event)"
-              >
-                <p>Drag and drop an image here, or click to select a file.</p>
-                <input type="file" (change)="onFileSelected($event)" required />
+            <form [formGroup]="imagesFormGroup">
+              <ng-template matStepLabel>Images</ng-template>
+              <div class="form-fields-image">
+                <mat-form-field>
+                  <mat-label>Image URL</mat-label>
+                  <input matInput formControlName="imageUrlCtrl" required />
+                </mat-form-field>
+                <button mat-stroked-button (click)="addImage()" type="button">
+                  <mat-icon>add</mat-icon>
+                  Add Image
+                </button>
               </div>
+            </form>
+
+            <!-- Image Preview Grid -->
+            <div class="image-grid" *ngIf="images.length > 0">
+              <h2>Images Preview</h2>
+              <p>Click on any image to remove it.</p>
+              <mat-grid-list cols="3" rowHeight="200px">
+                <mat-grid-tile *ngFor="let image of images">
+                  <img
+                    [src]="image"
+                    alt="Image Preview"
+                    (click)="removeImage(image)"
+                  />
+                </mat-grid-tile>
+              </mat-grid-list>
             </div>
+
             <button
               mat-raised-button
-              (click)="uploadFestivalImage()"
-              [disabled]="!selectedFile"
+              (click)="uploadFestivalImages()"
+              [disabled]="images.length === 0"
             >
-              Submit
+              Done
             </button>
           </mat-step>
         </mat-stepper>

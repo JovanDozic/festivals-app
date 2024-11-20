@@ -19,7 +19,11 @@
     <mat-card class="festival-card" *ngFor="let festival of festivals">
       <img
         mat-card-image
-        src="{{ festival.images[0].url }}"
+        src="{{
+          festival.images && festival.images.length > 0
+            ? festival.images[0].url
+            : ''
+        }}"
         alt="{{ festival.name }}"
       />
       <div class="card-content">
