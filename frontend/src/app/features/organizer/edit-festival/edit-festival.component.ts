@@ -20,7 +20,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 
 @Component({
-  selector: 'app-change-profile-dialog',
+  selector: 'app-edit-festival',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -31,50 +31,37 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
     MatInputModule,
     MatDatepickerModule,
   ],
-  templateUrl: './change-profile-dialog.component.html',
-  styleUrl: './change-profile-dialog.component.scss',
+  templateUrl: './edit-festival.component.html',
+  // todo: remove app styles maybe idk what are they doing
+  styleUrls: ['./edit-festival.component.scss', '../../../app.component.scss'],
   providers: [provideNativeDateAdapter()],
 })
-export class ChangeProfileDialogComponent implements OnInit {
-  private userService = inject(UserService);
-  readonly dialogRef = inject(MatDialogRef<ChangeProfileDialogComponent>);
+export class EditFestivalComponent implements OnInit {
+  readonly dialogRef = inject(MatDialogRef<EditFestivalComponent>);
   readonly formBuilder = inject(FormBuilder);
   readonly data = inject<any>(MAT_DIALOG_DATA);
   private snackbarService = inject(SnackbarService);
 
-  changeProfileForm: FormGroup = this.formBuilder.group({
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    dateOfBirth: [null, Validators.required],
-    phoneNumber: [''],
+  editFestivalForm: FormGroup = this.formBuilder.group({
+    name: ['', Validators.required],
   });
 
   ngOnInit() {
     if (this.data) {
-      const { firstName, lastName, dateOfBirth, phoneNumber } = this.data;
-      this.changeProfileForm.patchValue({
-        firstName,
-        lastName,
-        dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
-        phoneNumber,
+      const { name } = this.data;
+      this.editFestivalForm.patchValue({
+        name,
+        // dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+        // phoneNumber,
       });
     }
   }
 
-  changeProfile() {
-    if (this.changeProfileForm.valid) {
-      this.userService
-        .updateUserProfile(this.changeProfileForm.value)
-        .subscribe({
-          next: () => {
-            this.dialogRef.close(true);
-            this.snackbarService.show('Profile updated successfully');
-          },
-          error: (error) => {
-            console.error(error);
-            this.snackbarService.show('Error updating profile');
-          },
-        });
+  editFestival() {
+    if (this.editFestivalForm.valid) {
+      // todo: call service
+      this.dialogRef.close(true);
+      this.snackbarService.show('Festival updated successfully');
     }
   }
 

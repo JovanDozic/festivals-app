@@ -14,6 +14,7 @@ import {
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { RouterModule, RouterOutlet } from '@angular/router';
+import { EditFestivalComponent } from '../edit-festival/edit-festival.component';
 
 @Component({
   selector: 'app-my-festivals',
@@ -94,6 +95,20 @@ export class MyFestivalsComponent implements OnInit {
 
   onEditClick(festival: Festival): void {
     console.log('Edit clicked for:', festival.name);
+    const dialogRef = this.dialog.open(EditFestivalComponent, {
+      data: {
+        name: festival.name,
+        // dateOfBirth: festival.dateOfBirth,
+        // phoneNumber: festival.phoneNumber,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((success) => {
+      if (success) {
+        console.log('Festival updated successfully');
+        this.loadFestivals();
+      }
+    });
   }
 
   onViewClick(festival: Festival): void {
