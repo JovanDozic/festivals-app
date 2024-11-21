@@ -67,7 +67,8 @@ func mapFestivalToResponse(festival modelsFestival.Festival, images []modelsComm
 			ApartmentSuite: festival.Address.ApartmentSuite,
 			City:           festival.Address.City.Name,
 			PostalCode:     festival.Address.City.PostalCode,
-			Country:        festival.Address.City.Country.Name,
+			Country:        festival.Address.City.Country.NiceName,
+			CountryISO3:    festival.Address.City.Country.ISO3,
 		}
 	} else {
 		address = nil

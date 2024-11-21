@@ -5,4 +5,5 @@ export interface AddressResponse {
   city: string;
   postalCode: string;
   country: string;
+  countryISO3: string;
 }

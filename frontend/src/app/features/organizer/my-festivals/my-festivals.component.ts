@@ -98,8 +98,11 @@ export class MyFestivalsComponent implements OnInit {
     const dialogRef = this.dialog.open(EditFestivalComponent, {
       data: {
         name: festival.name,
-        // dateOfBirth: festival.dateOfBirth,
-        // phoneNumber: festival.phoneNumber,
+        description: festival.description,
+        startDate: festival.startDate,
+        endDate: festival.endDate,
+        capacity: festival.capacity,
+        address: festival.address,
       },
     });
 

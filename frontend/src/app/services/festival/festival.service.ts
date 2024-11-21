@@ -5,6 +5,7 @@ import {
   CreateFestivalRequest,
   Festival,
   FestivalsResponse,
+  UpdateFestivalRequest,
 } from '../../models/festival/festival.model';
 
 @Injectable({
@@ -62,6 +63,13 @@ export class FestivalService {
     return this.http.put<void>(
       `${this.apiUrl}/festival/${festivalId}/store/close`,
       {}
+    );
+  }
+
+  updateFestival(festival: UpdateFestivalRequest): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/festival/${festival.id}`,
+      festival
     );
   }
 }

@@ -46,9 +46,11 @@ func (r *festivalRepo) Create(festival *models.Festival, organizerId uint) error
 }
 
 func (r *festivalRepo) GetByOrganizer(organizerId uint) ([]models.Festival, error) {
-
 	var festivals []models.Festival
-	err := r.db.Table("festivals").
+	err := r.db.
+		Preload("Address").
+		Preload("Address.City").
+		Preload("Address.City.Country").
 		Joins("JOIN festival_organizers ON festivals.id = festival_organizers.festival_id").
 		Where("festival_organizers.user_id = ?", organizerId).
 		Find(&festivals).Error

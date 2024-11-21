@@ -15,6 +15,7 @@ type GetAddressResponse struct {
 	City           string  `json:"city"`
 	PostalCode     string  `json:"postalCode"`
 	Country        string  `json:"country"`
+	CountryISO3    string  `json:"countryISO3"`
 }
 
 type GetImageResponse struct {
