@@ -16,12 +16,13 @@ type CreateFestivalRequest struct {
 }
 
 type UpdateFestivalRequest struct {
+	Id          uint                           `json:"id"`
 	Name        string                         `json:"name"`
 	Description string                         `json:"description"`
 	StartDate   string                         `json:"startDate"`
 	EndDate     string                         `json:"endDate"`
 	Capacity    int                            `json:"capacity"`
-	Address     dtoCommon.CreateAddressRequest `json:"address"`
+	Address     dtoCommon.UpdateAddressRequest `json:"address"`
 }
 
 type AddImageRequest struct {

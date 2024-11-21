@@ -27,6 +27,7 @@ type FestivalService interface {
 	IsOrganizer(username string, festivalId uint) (bool, error)
 	GetImages(festivalId uint) ([]modelsCommon.Image, error)
 	AddImage(festivalId uint, image *modelsCommon.Image) error
+	GetAddressID(festivalId uint) (uint, error)
 }
 
 type festivalService struct {
@@ -283,4 +284,19 @@ func (s *festivalService) AddImage(festivalId uint, image *modelsCommon.Image) e
 	}
 
 	return nil
+}
+
+func (s *festivalService) GetAddressID(festivalId uint) (uint, error) {
+
+	festival, err := s.festivalRepo.GetById(festivalId)
+	if err != nil {
+		return 0, err
+	}
+
+	address, err := s.locationService.GetAddressByID(festival.AddressID)
+	if err != nil {
+		return 0, err
+	}
+
+	return address.ID, nil
 }

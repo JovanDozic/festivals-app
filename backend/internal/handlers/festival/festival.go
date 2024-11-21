@@ -5,6 +5,7 @@ import (
 	"backend/internal/models"
 	modelsCommon "backend/internal/models/common"
 	modelsFestival "backend/internal/models/festival"
+	servicesCommon "backend/internal/services/common"
 	servicesFestival "backend/internal/services/festival"
 	"backend/internal/utils"
 	"log"
@@ -32,11 +33,13 @@ type FestivalHandler interface {
 
 type festivalHandler struct {
 	festivalService servicesFestival.FestivalService
+	locationService servicesCommon.LocationService
 }
 
-func NewFestivalHandler(festivalService servicesFestival.FestivalService) FestivalHandler {
+func NewFestivalHandler(festivalService servicesFestival.FestivalService, locationService servicesCommon.LocationService) FestivalHandler {
 	return &festivalHandler{
 		festivalService: festivalService,
+		locationService: locationService,
 	}
 }
 
@@ -210,6 +213,39 @@ func (h *festivalHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.festivalService.Update(festivalId, &festival); err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrNotFound:
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		case models.ErrCountryNotFound:
+			http.Error(w, err.Error(), http.StatusNotFound)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	addressId, err := h.festivalService.GetAddressID(festivalId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	address := modelsCommon.Address{
+		Street:         input.Address.Street,
+		Number:         input.Address.Number,
+		ApartmentSuite: &input.Address.ApartmentSuite,
+		City: modelsCommon.City{
+			Name:       input.Address.City,
+			PostalCode: input.Address.PostalCode,
+			Country: modelsCommon.Country{
+				ISO3: input.Address.CountryISO3,
+			},
+		},
+	}
+
+	if err := h.locationService.UpdateAddress(addressId, &address); err != nil {
 		log.Println("error:", err)
 		switch err {
 		case models.ErrNotFound:

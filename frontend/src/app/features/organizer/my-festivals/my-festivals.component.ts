@@ -97,6 +97,7 @@ export class MyFestivalsComponent implements OnInit {
     console.log('Edit clicked for:', festival.name);
     const dialogRef = this.dialog.open(EditFestivalComponent, {
       data: {
+        id: festival.id,
         name: festival.name,
         description: festival.description,
         startDate: festival.startDate,
@@ -104,6 +105,8 @@ export class MyFestivalsComponent implements OnInit {
         capacity: festival.capacity,
         address: festival.address,
       },
+      width: '800px',
+      height: '500px',
     });
 
     dialogRef.afterClosed().subscribe((success) => {

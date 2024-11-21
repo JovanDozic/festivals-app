@@ -40,7 +40,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// Init handlers
 	commonHandler := handlersCommon.NewHealthHandler(config)
 	userHandler := handlersUser.NewUserHandler(userService)
-	festivalHandler := handlers.NewFestivalHandler(festivalService)
+	festivalHandler := handlers.NewFestivalHandler(festivalService, locationService)
 	// ...
 
 	r := mux.NewRouter()

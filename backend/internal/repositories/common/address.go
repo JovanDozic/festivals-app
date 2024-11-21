@@ -9,6 +9,7 @@ import (
 type AddressRepo interface {
 	Create(address *modelsCommon.Address) error
 	Get(id uint) (*modelsCommon.Address, error)
+	Update(address *modelsCommon.Address) error
 }
 
 type addressRepo struct {
@@ -37,4 +38,8 @@ func (r *addressRepo) Get(id uint) (*modelsCommon.Address, error) {
 	}
 
 	return &address, nil
+}
+
+func (r *addressRepo) Update(address *modelsCommon.Address) error {
+	return r.db.Save(address).Error
 }
