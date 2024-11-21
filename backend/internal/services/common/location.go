@@ -59,86 +59,43 @@ func (s *locationService) GetAddressByID(id uint) (*modelsCommon.Address, error)
 }
 
 func (s *locationService) UpdateAddress(addressId uint, updatedAddress *modelsCommon.Address) error {
-
 	address, err := s.addressRepo.Get(addressId)
 	if err != nil {
 		log.Println("error getting address from the database:", err)
 		return err
 	}
 
-	if address.Street != updatedAddress.Street || address.Number != updatedAddress.Number || *address.ApartmentSuite != *updatedAddress.ApartmentSuite {
-		address.Street = updatedAddress.Street
-		address.Number = updatedAddress.Number
-		address.ApartmentSuite = updatedAddress.ApartmentSuite
+	// Update basic address fields
+	address.Street = updatedAddress.Street
+	address.Number = updatedAddress.Number
+	address.ApartmentSuite = updatedAddress.ApartmentSuite
 
-		err = s.addressRepo.Update(address)
-		if err != nil {
-			log.Println("error updating address:", err)
-			return err
-		}
+	// Ensure the city is correct
+	city, err := s.cityRepo.GetByPostalCode(updatedAddress.City.PostalCode)
+	if err != nil && !strings.Contains(err.Error(), "record not found") {
+		log.Println("error getting city from the database:", err)
+		return err
 	}
 
-	if address.City.PostalCode != updatedAddress.City.PostalCode {
-		city, err := s.cityRepo.GetByPostalCode(updatedAddress.City.PostalCode)
-		if err != nil && !strings.Contains(err.Error(), "record not found") {
-			log.Println("error getting city from the database:", err)
-			return err
-		}
-
-		// If the city does not exist, create one
-		if city == nil || city.ID == 0 {
-			city = &modelsCommon.City{
-				PostalCode: updatedAddress.City.PostalCode,
-				Name:       updatedAddress.City.Name,
-			}
-
-			err = s.cityRepo.Create(city)
-			if err != nil {
-				log.Println("error creating city:", err)
-				return err
-			}
-		}
-
-		// Update the address with the new city
-		address.CityID = city.ID
-		address.City = *city
-
-		err = s.addressRepo.Update(address)
-		if err != nil {
-			log.Println("error updating address:", err)
-			return err
-		}
-	}
-
-	// Check if country changed
-	if address.City.Country.ISO3 != updatedAddress.City.Country.ISO3 {
-		// Get the country from the database
+	if city == nil || city.ID == 0 || city.Name != updatedAddress.City.Name || city.Country.ID != updatedAddress.City.Country.ID {
+		// Validate the country
 		country, err := s.countryRepo.GetByISO3(updatedAddress.City.Country.ISO3)
 		if err != nil {
 			log.Println("error getting country from the database:", err)
 			return err
 		}
 
-		// If the country does not exist, return an error
 		if country == nil {
-			log.Println("country '", updatedAddress.City.Country.ISO3, "' does not exist")
+			log.Println("country not found:", updatedAddress.City.Country.ISO3)
 			return modelsError.ErrCountryNotFound
 		}
 
-		// Check if the postal code exists in the country
-		city, err := s.cityRepo.GetByCountryPostalCode(country.ISO, updatedAddress.City.PostalCode)
-		if err != nil && !strings.Contains(err.Error(), "record not found") {
-			log.Println("error getting city from the database:", err)
-			return err
-		}
-
-		// If the city does not exist, create one
+		// Create or update the city
 		if city == nil || city.ID == 0 {
 			city = &modelsCommon.City{
-				PostalCode: updatedAddress.City.PostalCode,
 				Name:       updatedAddress.City.Name,
+				PostalCode: updatedAddress.City.PostalCode,
 				CountryID:  country.ID,
-				Country:    *country,
 			}
 
 			err = s.cityRepo.Create(city)
@@ -146,17 +103,27 @@ func (s *locationService) UpdateAddress(addressId uint, updatedAddress *modelsCo
 				log.Println("error creating city:", err)
 				return err
 			}
+		} else {
+			city.Name = updatedAddress.City.Name
+			city.CountryID = country.ID
+			city.Country = *country
+			err = s.cityRepo.Update(city)
+			if err != nil {
+				log.Println("error updating city:", err)
+				return err
+			}
 		}
+	}
 
-		// Update the address with the new city
-		address.CityID = city.ID
-		address.City = *city
+	// Update address with new city
+	address.CityID = city.ID
+	address.City = *city
 
-		err = s.addressRepo.Update(address)
-		if err != nil {
-			log.Println("error updating address:", err)
-			return err
-		}
+	// Persist updated address
+	err = s.addressRepo.Update(address)
+	if err != nil {
+		log.Println("error updating address:", err)
+		return err
 	}
 
 	log.Println("address updated successfully:", address.ID)

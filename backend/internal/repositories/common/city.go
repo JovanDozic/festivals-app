@@ -11,7 +11,8 @@ type CityRepo interface {
 	GetByPostalCode(postalCode string) (*modelsCommon.City, error)
 	GetAll() ([]modelsCommon.City, error)
 	Create(city *modelsCommon.City) error
-	GetByCountryPostalCode(countryISO3, postalCode string) (*modelsCommon.City, error)
+	GetByCountryPostalCode(countryId uint, postalCode string) (*modelsCommon.City, error)
+	Update(city *modelsCommon.City) error
 }
 
 type cityRepo struct {
@@ -44,8 +45,12 @@ func (r *cityRepo) Create(city *modelsCommon.City) error {
 	return r.db.Create(city).Error
 }
 
-func (r *cityRepo) GetByCountryPostalCode(countryISO3, postalCode string) (*modelsCommon.City, error) {
+func (r *cityRepo) GetByCountryPostalCode(countryId uint, postalCode string) (*modelsCommon.City, error) {
 	var city modelsCommon.City
-	err := r.db.Preload("Country").Joins("JOIN countries ON cities.country_id = countries.id").Where("countries.iso3 = ? AND cities.postal_code = ?", countryISO3, postalCode).First(&city).Error
+	err := r.db.Preload("Country").Joins("JOIN countries ON cities.country_id = countries.id").Where("countries.id = ? AND cities.postal_code = ?", countryId, postalCode).First(&city).Error
 	return &city, err
+}
+
+func (r *cityRepo) Update(city *modelsCommon.City) error {
+	return r.db.Save(city).Error
 }
