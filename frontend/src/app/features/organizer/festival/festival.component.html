@@ -146,7 +146,7 @@
       <img
         mat-card-image
         [src]="festival.images[currentImageIndex].url"
-        alt=""
+        [@fadeAnimation]="currentImageIndex"
       />
       <button
         class="prev-button"

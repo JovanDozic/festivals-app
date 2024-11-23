@@ -16,6 +16,7 @@ import {
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { EditFestivalComponent } from '../edit-festival/edit-festival.component';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-festival',
@@ -31,11 +32,24 @@ import { EditFestivalComponent } from '../edit-festival/edit-festival.component'
   ],
   templateUrl: './festival.component.html',
   styleUrls: ['./festival.component.scss', '../../../app.component.scss'],
+  animations: [
+    trigger('fadeAnimation', [
+      transition(':increment', [
+        style({ opacity: 0 }),
+        animate('500ms ease-in', style({ opacity: 1 })),
+      ]),
+      transition(':decrement', [
+        style({ opacity: 0 }),
+        animate('500ms ease-in', style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
 export class FestivalComponent implements OnInit {
   festival: Festival | null = null;
   isLoading: boolean = true;
   currentImageIndex: number = 0;
+  previousImageIndex: number = 0;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -60,6 +74,7 @@ export class FestivalComponent implements OnInit {
           this.festival = festival;
           this.isLoading = false;
           this.currentImageIndex = 0;
+          this.previousImageIndex = 0;
         },
         error: (error) => {
           console.log('Error fetching festival information: ', error);
@@ -73,6 +88,7 @@ export class FestivalComponent implements OnInit {
 
   nextImage() {
     if (this.festival && this.festival.images) {
+      this.previousImageIndex = this.currentImageIndex;
       this.currentImageIndex =
         (this.currentImageIndex + 1) % this.festival.images.length;
     }
@@ -80,6 +96,7 @@ export class FestivalComponent implements OnInit {
 
   previousImage() {
     if (this.festival && this.festival.images) {
+      this.previousImageIndex = this.currentImageIndex;
       this.currentImageIndex =
         (this.currentImageIndex - 1 + this.festival.images.length) %
         this.festival.images.length;
