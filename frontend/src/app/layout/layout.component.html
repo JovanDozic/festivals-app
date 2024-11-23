@@ -101,11 +101,13 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       }
-      <span class="user-role-title"
-        >{{
-          userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase()
-        }}: {{ username }}</span
-      >
+      <span class="user-role-title" *ngIf="isLoggedIn()">{{
+        userRole.charAt(0).toUpperCase() +
+          userRole.slice(1).toLowerCase() +
+          ": " +
+          username
+      }}</span>
+      <span class="user-role-title" *ngIf="!isLoggedIn()"> Festivals App </span>
     </mat-toolbar>
     <div class="sidenav-scroll-wrapper">
       <div class="sidenav-content">
