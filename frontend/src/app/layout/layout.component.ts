@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -11,6 +11,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../core/auth.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ThemeService } from '../services/theme/theme.service';
 
 @Component({
   selector: 'app-layout',
@@ -33,6 +34,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 export class LayoutComponent {
   private breakpointObserver = inject(BreakpointObserver);
   private authService = inject(AuthService);
+  private themeService = inject(ThemeService);
 
   userRole: string = '';
   username: string = '';
@@ -40,6 +42,7 @@ export class LayoutComponent {
   constructor(private cdr: ChangeDetectorRef) {
     this.userRole = this.authService.getUserRole() ?? '';
     this.username = this.authService.getUsername() ?? '';
+    this.themeService.initTheme();
   }
 
   ngAfterViewInit() {
@@ -54,6 +57,10 @@ export class LayoutComponent {
 
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
   }
 
   isHandset$: Observable<boolean> = this.breakpointObserver

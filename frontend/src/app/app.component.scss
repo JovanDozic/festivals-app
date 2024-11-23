@@ -14,13 +14,6 @@ strong {
 
 mat-chip {
   padding-top: 2px;
-
-  background-color: red !important;
-
-  @media (prefers-color-scheme: dark) {
-    background-color: purple !important;
-    color: white;
-  }
 }
 
 mat-chip mat-icon {
