@@ -57,7 +57,7 @@ export class MyFestivalsComponent implements OnInit {
         setTimeout(() => {
           this.festivals = response;
           this.isLoading = false;
-        }, 1000);
+        }, 500);
       },
       error: (error) => {
         console.error('Error fetching festivals:', error);
