@@ -11,9 +11,19 @@ strong {
 
 mat-chip {
   padding-top: 2px;
+  background-color: hsla(0, 0%, 100%, 0.5) !important;
 }
 
 mat-chip mat-icon {
   font-size: 20px;
   vertical-align: middle;
+}
+
+.number-mono {
+  font-family: "Fira Code";
+}
+
+.fi {
+  width: 1.5em;
+  height: 1em;
 }

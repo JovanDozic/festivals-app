@@ -73,7 +73,55 @@
 
   <div class="profile-content">
     <mat-card class="image-card">
+      <!-- TODO: multiple images carousel -->
       <img mat-card-image src="{{ festival.images[0].url }}" alt="" />
+    </mat-card>
+  </div>
+
+  <div class="profile-content">
+    <mat-card class="profile-card">
+      <mat-card-title>Description</mat-card-title>
+      <mat-card-content>{{ festival.description }}</mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="profile-content">
+    <mat-card class="profile-card">
+      <mat-card-title>Information</mat-card-title>
+      <mat-card-content>
+        <span class="festival-property">
+          <mat-icon class="material-symbols-outlined">
+            calendar_month
+          </mat-icon>
+          {{ festival.startDate | date : "d MMM" }} -
+          {{ festival.endDate | date : "d MMM yyyy" }}
+        </span>
+        <span class="festival-property">
+          <mat-icon class="material-symbols-outlined"> crowdsource </mat-icon>
+          <span class="number-mono">{{ festival.capacity }}</span> people
+        </span>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="profile-card">
+      <mat-card-title>Address</mat-card-title>
+      <mat-card-content *ngIf="festival.address">
+        <span class="festival-property">
+          <mat-icon class="material-symbols-outlined"> map </mat-icon>
+          {{ festival.address.street }} {{ festival.address.number }}
+        </span>
+        <span class="festival-property">
+          <mat-icon class="material-symbols-outlined"> location_on </mat-icon>
+          {{ festival.address.city }} {{ festival.address.postalCode }}
+        </span>
+        <span class="festival-property">
+          <!-- <mat-icon class="material-symbols-outlined"> flag </mat-icon> -->
+          <span
+            [ngClass]="'fi fi-' + festival.address.countryISO2.toLowerCase()"
+          >
+          </span>
+          {{ festival.address.country }}
+        </span>
+      </mat-card-content>
     </mat-card>
   </div>
 </div>
