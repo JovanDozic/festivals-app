@@ -19,7 +19,7 @@ import { EditFestivalComponent } from '../edit-festival/edit-festival.component'
 @Component({
   selector: 'app-my-festivals',
   templateUrl: './my-festivals.component.html',
-  styleUrls: ['./my-festivals.component.scss'],
+  styleUrls: ['./my-festivals.component.scss', '../../../app.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -48,8 +48,10 @@ export class MyFestivalsComponent implements OnInit {
     this.festivalService.getMyFestivals().subscribe({
       next: (response) => {
         console.log('Festivals:', response);
-        this.festivals = response;
-        this.isLoading = false;
+        setTimeout(() => {
+          this.festivals = response;
+          this.isLoading = true;
+        }, 1000);
       },
       error: (error) => {
         console.error('Error fetching festivals:', error);

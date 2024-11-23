@@ -1,13 +1,35 @@
-@use "@angular/material" as mat;
-
-.festival-container {
+.profile-header {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif;
+}
+
+mat-card-title {
+  font-family: "Funnel Display", sans-serif;
+  margin-left: 5px;
+}
+
+.profile-content {
+  display: flex;
   flex-wrap: wrap;
-  gap: 32px;
-  padding: 16px;
-  margin-top: 16px;
-  margin-bottom: 64px;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.festival-card {
+  flex: 1 1 calc(50% - 20px);
+  max-width: calc(50% - 20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
 }
 
 .skeleton-container {
@@ -17,11 +39,11 @@
   gap: 32px;
 }
 
-.festival-card {
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+@media (max-width: 768px) {
+  .festival-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
 }
 
 img[mat-card-image] {
@@ -57,10 +79,6 @@ mat-card-subtitle {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.festival-property mat-icon {
-  color: #6750a4;
 }
 
 mat-card-actions {

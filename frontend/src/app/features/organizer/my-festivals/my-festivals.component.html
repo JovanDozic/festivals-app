@@ -1,21 +1,76 @@
-<div class="festival-container">
-  <div *ngIf="isLoading" class="skeleton-container">
-    <ngx-skeleton-loader
-      count="6"
-      class="skeleton-container"
-      appearance="circle"
-      [theme]="{
-        width: '300px',
-        height: '350px',
-        margin: '16px',
-        'border-radius': '16px'
-      }"
-    >
-    </ngx-skeleton-loader>
+<div class="container mat-elevation-z4">
+  <div class="profile-header">
+    <h1>My Festivals</h1>
+  </div>
+  <div *ngIf="isLoading" class="profile-content">
+    <mat-card class="festival-card" *ngFor="let _ of [1, 2, 3, 4, 5, 6]">
+      <ngx-skeleton-loader
+        appearance="circle"
+        [theme]="{
+          width: '100%',
+          height: '200px',
+          margin: '0 0 16px 0',
+          'border-radius': '8px'
+        }"
+        class="skeleton-image"
+      ></ngx-skeleton-loader>
+      <div class="card-content">
+        <ngx-skeleton-loader
+          appearance="line"
+          [theme]="{
+            width: '60%',
+            height: '20px',
+            margin: '8px 0',
+            'border-radius': '4px'
+          }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          appearance="line"
+          [theme]="{
+            width: '80%',
+            height: '16px',
+            margin: '8px 0',
+            'border-radius': '4px'
+          }"
+        ></ngx-skeleton-loader>
+        <div class="skeleton-properties">
+          <ngx-skeleton-loader
+            *ngFor="let _ of [1, 2, 3]"
+            appearance="line"
+            [theme]="{
+              width: '40%',
+              height: '16px',
+              margin: '8px 0',
+              'border-radius': '4px'
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+        <div class="skeleton-actions">
+          <ngx-skeleton-loader
+            appearance="circle"
+            [theme]="{
+              width: '80px',
+              height: '32px',
+              margin: '8px 8px 8px 0',
+              'border-radius': '4px'
+            }"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            appearance="circle"
+            [theme]="{
+              width: '32px',
+              height: '32px',
+              margin: '8px',
+              'border-radius': '50%'
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+      </div>
+    </mat-card>
   </div>
 
-  <!-- Festival Cards Section -->
-  <ng-container *ngIf="!isLoading" class="festival-container">
+  <div class="profile-content" *ngIf="!isLoading">
+    <!-- Festival Cards Section -->
     <mat-card class="festival-card" *ngFor="let festival of festivals">
       <img
         mat-card-image
@@ -34,7 +89,7 @@
           </mat-card-header>
           <mat-card-content>
             <span class="festival-property">
-              <mat-icon class="material-symbols-outlined">
+              <mat-icon class="material-symbols-outlined" color="primary">
                 calendar_month
               </mat-icon>
               {{ festival.startDate | date : "d MMM" }} -
@@ -44,27 +99,33 @@
               class="festival-property"
               *ngIf="festival.status == 'PRIVATE'"
             >
-              <mat-icon class="material-symbols-outlined">
+              <mat-icon class="material-symbols-outlined" color="primary">
                 visibility_off</mat-icon
               >
               Private
             </span>
             <span class="festival-property" *ngIf="festival.status == 'PUBLIC'">
-              <mat-icon class="material-symbols-outlined">visibility</mat-icon>
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >visibility</mat-icon
+              >
               Public
             </span>
             <span
               class="festival-property"
               *ngIf="festival.status == 'CANCELLED'"
             >
-              <mat-icon class="material-symbols-outlined">cancel</mat-icon>
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >cancel</mat-icon
+              >
               Cancelled
             </span>
             <span
               class="festival-property"
               *ngIf="festival.status == 'COMPLETED'"
             >
-              <mat-icon class="material-symbols-outlined">done_all</mat-icon>
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >done_all</mat-icon
+              >
               Completed
             </span>
             <span
@@ -73,7 +134,7 @@
                 festival.storeStatus == 'OPEN' && festival.status == 'PUBLIC'
               "
             >
-              <mat-icon class="material-symbols-outlined"
+              <mat-icon class="material-symbols-outlined" color="primary"
                 >shopping_cart</mat-icon
               >
               Store Opened
@@ -84,7 +145,7 @@
                 festival.storeStatus == 'CLOSED' && festival.status == 'PUBLIC'
               "
             >
-              <mat-icon class="material-symbols-outlined"
+              <mat-icon class="material-symbols-outlined" color="primary"
                 >shopping_cart_off</mat-icon
               >
               Store Closed
@@ -107,11 +168,15 @@
           </button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="onEditClick(festival)">
-              <mat-icon class="material-symbols-outlined">edit</mat-icon>
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >edit</mat-icon
+              >
               <span>Edit</span>
             </button>
             <button mat-menu-item (click)="onDeleteClick(festival)">
-              <mat-icon class="material-symbols-outlined">delete</mat-icon>
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >delete</mat-icon
+              >
               <span>Delete</span>
             </button>
             <button
@@ -119,7 +184,9 @@
               (click)="onPublishClick(festival)"
               *ngIf="festival.status == 'PRIVATE'"
             >
-              <mat-icon class="material-symbols-outlined">published</mat-icon>
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >published</mat-icon
+              >
               <span>Publish</span>
             </button>
             <button
@@ -129,7 +196,9 @@
                 festival.status != 'CANCELLED' && festival.status != 'COMPLETED'
               "
             >
-              <mat-icon class="material-symbols-outlined">cancel</mat-icon>
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >cancel</mat-icon
+              >
               <span>Cancel</span>
             </button>
 
@@ -138,7 +207,9 @@
               (click)="onCompleteClick(festival)"
               *ngIf="festival.status == 'PUBLIC'"
             >
-              <mat-icon class="material-symbols-outlined">done_all</mat-icon>
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >done_all</mat-icon
+              >
               <span>Complete</span>
             </button>
 
@@ -149,7 +220,7 @@
                 festival.status == 'PUBLIC' && festival.storeStatus == 'CLOSED'
               "
             >
-              <mat-icon class="material-symbols-outlined"
+              <mat-icon class="material-symbols-outlined" color="primary"
                 >shopping_cart</mat-icon
               >
               <span>Open Store</span>
@@ -162,7 +233,7 @@
                 festival.status == 'PUBLIC' && festival.storeStatus == 'OPEN'
               "
             >
-              <mat-icon class="material-symbols-outlined"
+              <mat-icon class="material-symbols-outlined" color="primary"
                 >shopping_cart_off</mat-icon
               >
               <span>Close Store</span>
@@ -171,16 +242,16 @@
         </mat-card-actions>
       </div>
     </mat-card>
-  </ng-container>
-</div>
+  </div>
 
-<button
-  mat-fab
-  extended
-  class="main-action"
-  color="primary"
-  routerLink="create"
->
-  <mat-icon>add</mat-icon>
-  Create Festival
-</button>
+  <button
+    mat-fab
+    extended
+    class="main-action"
+    color="primary"
+    routerLink="create"
+  >
+    <mat-icon>add</mat-icon>
+    Create Festival
+  </button>
+</div>
