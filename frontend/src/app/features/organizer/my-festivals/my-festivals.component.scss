@@ -19,7 +19,7 @@ mat-card-title {
 .profile-content {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 40px;
   justify-content: space-between;
 }
 
@@ -76,13 +76,6 @@ mat-card-subtitle {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-.festival-property {
-  margin-top: 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 mat-card-actions {

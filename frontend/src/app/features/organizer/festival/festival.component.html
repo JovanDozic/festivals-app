@@ -179,14 +179,14 @@
     <mat-card class="profile-card">
       <mat-card-title>Information</mat-card-title>
       <mat-card-content>
-        <span class="festival-property">
+        <span class="icon-property">
           <mat-icon class="material-symbols-outlined" color="primary">
             calendar_month
           </mat-icon>
           {{ festival.startDate | date : "d MMM" }} -
           {{ festival.endDate | date : "d MMM yyyy" }}
         </span>
-        <span class="festival-property">
+        <span class="icon-property">
           <mat-icon class="material-symbols-outlined" color="primary">
             crowdsource
           </mat-icon>
@@ -197,19 +197,19 @@
     <mat-card class="profile-card">
       <mat-card-title>Address</mat-card-title>
       <mat-card-content *ngIf="festival.address">
-        <span class="festival-property">
+        <span class="icon-property">
           <mat-icon class="material-symbols-outlined" color="primary">
             map
           </mat-icon>
           {{ festival.address.street }} {{ festival.address.number }}
         </span>
-        <span class="festival-property">
+        <span class="icon-property">
           <mat-icon class="material-symbols-outlined" color="primary">
             location_on
           </mat-icon>
           {{ festival.address.city }} {{ festival.address.postalCode }}
         </span>
-        <span class="festival-property">
+        <span class="icon-property">
           <!-- <mat-icon class="material-symbols-outlined" color="primary"> flag </mat-icon> -->
           <span
             [ngClass]="'fi fi-' + festival.address.countryISO2.toLowerCase()"

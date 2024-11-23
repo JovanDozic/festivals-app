@@ -140,6 +140,8 @@ func (s *userService) GetUserProfile(username string) (*dto.GetUserProfileRespon
 			City:           userProfile.Address.City.Name,
 			PostalCode:     userProfile.Address.City.PostalCode,
 			Country:        userProfile.Address.City.Country.NiceName,
+			CountryISO3:    userProfile.Address.City.Country.ISO3,
+			CountryISO2:    userProfile.Address.City.Country.ISO,
 		}
 	}
 

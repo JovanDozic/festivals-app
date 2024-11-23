@@ -3,7 +3,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
 }
 
 .profile-header .button-container {
@@ -14,7 +13,8 @@
 .profile-content {
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 40px;
+  justify-content: space-between;
 }
 
 .profile-card {
@@ -27,11 +27,7 @@ h1 {
   font-family: "Funnel Display", sans-serif;
 }
 
-mat-card-title {
-  font-family: "Funnel Display", sans-serif;
-  margin-left: 5px;
-}
-
-mat-card-content {
-  margin-left: 5px;
+p {
+  margin-top: 0;
+  margin-bottom: 15px;
 }

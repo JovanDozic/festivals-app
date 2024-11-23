@@ -29,3 +29,20 @@ mat-chip mat-icon {
   width: 1.5em;
   height: 1em;
 }
+
+.icon-property {
+  display: flex;
+  margin-bottom: 15px;
+  align-items: center;
+  gap: 8px;
+}
+
+mat-card-title {
+  font-family: "Funnel Display", sans-serif;
+  margin-left: 5px;
+  margin-bottom: 15px;
+}
+
+mat-card-content {
+  margin-left: 5px;
+}

@@ -33,29 +33,82 @@
     <mat-card class="profile-card">
       <mat-card-title>Personal Information</mat-card-title>
       <mat-card-content>
-        <p><strong>Username:</strong> {{ userProfile.username }}</p>
-        <p><strong>Email:</strong> {{ userProfile.email }}</p>
-        <p><strong>First Name:</strong> {{ userProfile.firstName }}</p>
-        <p><strong>Last Name:</strong> {{ userProfile.lastName }}</p>
-        <p><strong>Date of Birth:</strong> {{ userProfile.dateOfBirth }}</p>
-        <p><strong>Phone Number:</strong> {{ userProfile.phoneNumber }}</p>
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            horizontal_rule
+          </mat-icon>
+          <strong>Username:</strong>
+          <span class="number-mono">{{ userProfile.username }}</span>
+        </span>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            horizontal_rule
+          </mat-icon>
+          <strong>Email:</strong>
+          <span class="number-mono">{{ userProfile.email }}</span>
+        </span>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            horizontal_rule
+          </mat-icon>
+          <strong>Full Name:</strong> {{ userProfile.firstName }}
+          {{ userProfile.lastName }}
+        </span>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            horizontal_rule
+          </mat-icon>
+          <strong>Date of Birth:</strong>
+          <span class="number-mono">{{ userProfile.dateOfBirth }}</span>
+        </span>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            horizontal_rule
+          </mat-icon>
+          <strong>Phone Number:</strong>
+          <span class="number-mono">{{ userProfile.phoneNumber }}</span>
+        </span>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="profile-card" *ngIf="userProfile.address">
       <mat-card-title>Address</mat-card-title>
-      <mat-card-content>
-        <p><strong>Street:</strong> {{ userProfile.address.street }}</p>
-        <p><strong>Number:</strong> {{ userProfile.address.number }}</p>
-        <p>
-          <strong>Apartment/Suite:</strong>
-          {{ userProfile.address.apartmentSuite }}
-        </p>
-        <p><strong>City:</strong> {{ userProfile.address.city }}</p>
-        <p>
-          <strong>Postal Code:</strong> {{ userProfile.address.postalCode }}
-        </p>
-        <p><strong>Country:</strong> {{ userProfile.address.country }}</p>
+      <mat-card-content *ngIf="userProfile.address">
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            map
+          </mat-icon>
+          {{ userProfile.address.street }} {{ userProfile.address.number }}
+        </span>
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            apartment
+          </mat-icon>
+          Apartment/Suite:
+          {{
+            userProfile.address.apartmentSuite == ""
+              ? "N/A"
+              : userProfile.address.apartmentSuite
+          }}
+        </span>
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            location_on
+          </mat-icon>
+          {{ userProfile.address.city
+          }}{{ ", " + userProfile.address.postalCode }}
+        </span>
+        <span class="icon-property">
+          <span
+            [ngClass]="'fi fi-' + userProfile.address.countryISO2.toLowerCase()"
+          >
+          </span>
+          {{ userProfile.address.country }}
+        </span>
       </mat-card-content>
     </mat-card>
   </div>
