@@ -47,6 +47,7 @@
 .image-card img {
   height: 400px;
   object-fit: cover;
+  border-radius: 8px;
 }
 
 h1 {
@@ -69,4 +70,27 @@ mat-card-title {
 
 .festival-property mat-icon {
   color: #6750a4;
+}
+
+.prev-button,
+.next-button {
+  z-index: 999;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.284);
+  border-radius: 16px;
+}
+
+.prev-button {
+  left: 10px;
+}
+
+.next-button {
+  right: 10px;
+}
+
+.prev-button mat-icon,
+.next-button mat-icon {
+  font-size: 24px;
 }

@@ -35,6 +35,7 @@ import { EditFestivalComponent } from '../edit-festival/edit-festival.component'
 export class FestivalComponent implements OnInit {
   festival: Festival | null = null;
   isLoading: boolean = true;
+  currentImageIndex: number = 0;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -58,6 +59,7 @@ export class FestivalComponent implements OnInit {
           console.log('Festival: ', festival);
           this.festival = festival;
           this.isLoading = false;
+          this.currentImageIndex = 0;
         },
         error: (error) => {
           console.log('Error fetching festival information: ', error);
@@ -66,6 +68,21 @@ export class FestivalComponent implements OnInit {
           this.isLoading = true;
         },
       });
+    }
+  }
+
+  nextImage() {
+    if (this.festival && this.festival.images) {
+      this.currentImageIndex =
+        (this.currentImageIndex + 1) % this.festival.images.length;
+    }
+  }
+
+  previousImage() {
+    if (this.festival && this.festival.images) {
+      this.currentImageIndex =
+        (this.currentImageIndex - 1 + this.festival.images.length) %
+        this.festival.images.length;
     }
   }
 

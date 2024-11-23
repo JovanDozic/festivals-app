@@ -143,8 +143,28 @@
 
   <div class="profile-content">
     <mat-card class="image-card">
-      <!-- TODO: multiple images carousel -->
-      <img mat-card-image src="{{ festival.images[0].url }}" alt="" />
+      <img
+        mat-card-image
+        [src]="festival.images[currentImageIndex].url"
+        alt=""
+      />
+      <button
+        class="prev-button"
+        mat-icon-button
+        (click)="previousImage()"
+        *ngIf="festival.images.length > 1"
+      >
+        <mat-icon style="color: #fff !important">chevron_left</mat-icon>
+      </button>
+
+      <button
+        class="next-button"
+        mat-icon-button
+        (click)="nextImage()"
+        *ngIf="festival.images.length > 1"
+      >
+        <mat-icon style="color: #fff !important">chevron_right</mat-icon>
+      </button>
     </mat-card>
   </div>
 
