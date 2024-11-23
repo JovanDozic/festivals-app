@@ -32,14 +32,14 @@ $angular-material-3-dark-theme: mat.define-theme(
 
 // Light theme
 // Un comment below to use theme created by ng add @angular-material
-// $theme: $angular-material-3-light-theme;
+$theme: $angular-material-3-light-theme;
 
 // Light Theme created by ng generate @angular-material:m3-theme
 $theme: m3-theme.$light-theme;
 
 // Dark theme
 // Un-comment below to use dark theme using @angular/material
-// $dark-theme: $angular-material-3-dark-theme;
+$dark-theme: $angular-material-3-dark-theme;
 
 // Dark Theme created by ng generate @angular-material:m3-theme
 $dark-theme: m3-theme.$dark-theme;
@@ -53,14 +53,14 @@ $dark-theme: m3-theme.$dark-theme;
   // Add backwards compatibility styles for color variants
   @include mat.color-variants-backwards-compatibility($theme);
 
-  // @media (prefers-color-scheme: dark) {
-  //   @include mat.all-component-colors($dark-theme);
+  @media (prefers-color-scheme: dark) {
+    @include mat.all-component-colors($dark-theme);
 
-  //   // Components themes
-  //   @include layout-component.theme($dark-theme);
+    // Components themes
+    @include layout-component.theme($dark-theme);
 
-  //   @include mat.color-variants-backwards-compatibility($dark-theme);
-  // }
+    @include mat.color-variants-backwards-compatibility($dark-theme);
+  }
 }
 
 html,

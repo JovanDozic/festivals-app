@@ -1,3 +1,6 @@
+@use "@angular/material" as mat;
+@use "../../m3-theme.scss" as m3-theme;
+
 h1,
 strong {
   font-weight: 500;
@@ -11,7 +14,13 @@ strong {
 
 mat-chip {
   padding-top: 2px;
-  background-color: hsla(0, 0%, 100%, 0.5) !important;
+
+  background-color: red !important;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: purple !important;
+    color: white;
+  }
 }
 
 mat-chip mat-icon {
