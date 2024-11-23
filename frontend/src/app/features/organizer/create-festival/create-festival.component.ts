@@ -176,7 +176,7 @@ export class CreateFestivalComponent {
         next: () => {
           this.snackbar.open('Festival created successfully!');
           this.stepper?.next();
-          this.router.navigate(['organizer/my-festivals']);
+          this.router.navigate(['organizer/my-festivals/' + this.festivalId]);
         },
         error: (error) => {
           console.error('Error uploading images:', error);
