@@ -1,6 +1,80 @@
 <div class="container mat-elevation-z4" *ngIf="festival">
   <div class="profile-header">
-    <h1>{{ festival.name }}</h1>
+    <div class="title-container">
+      <button
+        mat-icon-button
+        matTooltip="Go Back"
+        color="primary"
+        (click)="goBack()"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>{{ festival.name }}</h1>
+    </div>
+    <div class="button-container">
+      <button mat-icon-button matTooltip="tooltip" color="primary">
+        <mat-icon>home</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="chip-container">
+    <mat-chip-set>
+      <mat-chip
+        selected="true"
+        *ngIf="festival.status == 'PUBLIC'"
+        matTooltip="Festival is visible to public"
+      >
+        <mat-icon color="primary">visibility</mat-icon>
+        Public
+      </mat-chip>
+      <mat-chip
+        selected="true"
+        *ngIf="festival.status == 'PRIVATE'"
+        matTooltip="Only organizers of this festival can access this festival"
+      >
+        <mat-icon color="primary">visibility_off</mat-icon>
+        Private
+      </mat-chip>
+      <mat-chip
+        selected="true"
+        *ngIf="festival.status == 'CANCELLED'"
+        matTooltip="Festival is cancelled"
+      >
+        <mat-icon color="primary">cancel</mat-icon>
+        Cancelled
+      </mat-chip>
+      <mat-chip
+        selected="true"
+        *ngIf="festival.status == 'COMPLETED'"
+        matTooltip="Festival is completed"
+      >
+        <mat-icon color="primary">done_all</mat-icon>
+        Completed
+      </mat-chip>
+      <mat-chip
+        color="primary"
+        *ngIf="festival.storeStatus == 'OPEN' && festival.status == 'PUBLIC'"
+        matTooltip="Attendees can purchase tickets and packages for this festival"
+      >
+        <mat-icon color="primary">shopping_cart</mat-icon>
+        Store Opened
+      </mat-chip>
+      <mat-chip
+        color="primary"
+        *ngIf="festival.storeStatus == 'CLOSED' && festival.status == 'PUBLIC'"
+        matTooltip="Attendees cannot purchase tickets and packages for this festival"
+      >
+        <mat-icon color="primary">shopping_cart_off</mat-icon>
+        Store Closed
+      </mat-chip>
+    </mat-chip-set>
+  </div>
+
+  <div class="profile-content">
+    <mat-card class="image-card">
+      <img mat-card-image src="{{ festival.images[0].url }}" alt="" />
+    </mat-card>
   </div>
 </div>
 

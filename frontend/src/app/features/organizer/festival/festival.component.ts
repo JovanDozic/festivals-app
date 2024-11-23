@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-festival',
@@ -21,20 +22,26 @@ import { MatCardModule } from '@angular/material/card';
     MatDialogModule,
     MatDividerModule,
     MatCardModule,
+    MatChipsModule,
   ],
   templateUrl: './festival.component.html',
-  styleUrl: './festival.component.scss',
+  styleUrls: ['./festival.component.scss', '../../../app.component.scss'],
 })
 export class FestivalComponent implements OnInit {
   festival: Festival | null = null;
   isLoading: boolean = true;
 
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
 
   ngOnInit() {
     this.getFestival();
+  }
+
+  goBack() {
+    this.router.navigate(['organizer/my-festivals']);
   }
 
   getFestival() {
@@ -44,7 +51,6 @@ export class FestivalComponent implements OnInit {
         next: (festival) => {
           console.log('Festival: ', festival);
           this.festival = festival;
-          console.log('this.festival.name', this.festival.name);
           this.isLoading = false;
         },
         error: (error) => {

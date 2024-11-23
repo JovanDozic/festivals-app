@@ -9,12 +9,21 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
 }
 
 .profile-header .button-container {
   display: flex;
   gap: 10px;
+}
+
+.profile-header .title-container {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.chip-container {
+  margin-bottom: 20px;
 }
 
 .profile-content {
@@ -27,6 +36,17 @@
 .profile-card {
   padding: 16px;
   width: 100%;
+}
+
+.image-card {
+  padding: 0px;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(61, 61, 61, 0.418);
+}
+
+.image-card img {
+  height: 400px;
+  object-fit: cover;
 }
 
 h1 {

@@ -8,3 +8,12 @@ strong {
   margin: 0 auto;
   padding: 0px 20px;
 }
+
+mat-chip {
+  padding-top: 2px;
+}
+
+mat-chip mat-icon {
+  font-size: 20px;
+  vertical-align: middle;
+}
