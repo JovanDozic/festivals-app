@@ -87,9 +87,15 @@
       >
         My Festivals
       </a>
-      <button mat-list-item (click)="toggleTheme()">Theme</button>
     </mat-nav-list>
+    <div class="theme-button">
+      <button mat-mini-fab color="primary" (click)="toggleTheme()">
+        <mat-icon *ngIf="isTheme('light')">light_mode</mat-icon>
+        <mat-icon *ngIf="isTheme('dark')">dark_mode</mat-icon>
+      </button>
+    </div>
   </mat-sidenav>
+
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       @if (isHandset$ | async) {

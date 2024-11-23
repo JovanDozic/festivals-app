@@ -63,6 +63,10 @@ export class LayoutComponent {
     this.themeService.toggleTheme();
   }
 
+  isTheme(theme: 'light' | 'dark'): boolean {
+    return this.themeService.getTheme() === theme;
+  }
+
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
