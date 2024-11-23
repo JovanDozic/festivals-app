@@ -92,7 +92,9 @@
           </mat-card-content>
         </div>
         <mat-card-actions>
-          <button mat-button color="primary">View</button>
+          <button mat-button color="primary" (click)="onViewClick(festival)">
+            View
+          </button>
           <span class="spacer"></span>
           <button
             mat-icon-button

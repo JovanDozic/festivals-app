@@ -13,7 +13,7 @@ import {
   ConfirmationDialog,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { EditFestivalComponent } from '../edit-festival/edit-festival.component';
 
 @Component({
@@ -32,18 +32,13 @@ import { EditFestivalComponent } from '../edit-festival/edit-festival.component'
   ],
 })
 export class MyFestivalsComponent implements OnInit {
-  openCreateFestival() {
-    throw new Error('Method not implemented.');
-  }
-  onUnpublishClick(_t13: Festival) {
-    throw new Error('Method not implemented.');
-  }
   festivals: Festival[] = [];
-  isLoading: boolean = true; // Loading state
+  isLoading: boolean = true;
 
   private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
   private dialog = inject(MatDialog);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loadFestivals();
@@ -119,6 +114,7 @@ export class MyFestivalsComponent implements OnInit {
 
   onViewClick(festival: Festival): void {
     console.log('View clicked for:', festival.name);
+    this.router.navigate(['organizer/my-festivals', festival.id]);
   }
 
   onPublishClick(festival: Festival): void {

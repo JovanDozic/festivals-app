@@ -148,6 +148,7 @@ func (h *festivalHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO: wrong DTO
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivals}, nil)
 	log.Println("all festivals retrieved successfully")
 }
@@ -180,7 +181,15 @@ func (h *festivalHandler) GetById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festival": festival}, nil)
+	images, err := h.festivalService.GetImages(festival.ID)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	festivalResponse := mapFestivalToResponse(*festival, images)
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festival": festivalResponse}, nil)
 	log.Println("festival retrieved successfully:", festival.Name)
 }
 

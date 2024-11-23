@@ -11,34 +11,34 @@ import (
 
 type Festival struct {
 	gorm.Model
-	Name        string
-	Description string
-	StartDate   time.Time
-	EndDate     time.Time
-	Capacity    int
-	Status      string // Status: PRIVATE (default one), PUBLIC, CANCELLED, COMPLETED
-	StoreStatus string // StoreStatus: OPEN, CLOSED
-	AddressID   uint
-	Address     *modelsCommon.Address
+	Name        string                `json:"name"`
+	Description string                `json:"description"`
+	StartDate   time.Time             `json:"start_date"`
+	EndDate     time.Time             `json:"end_date"`
+	Capacity    int                   `json:"capacity"`
+	Status      string                `json:"status"`      // Status: PRIVATE (default one), PUBLIC, CANCELLED, COMPLETED
+	StoreStatus string                `json:"storeStatus"` // StoreStatus: OPEN, CLOSED
+	AddressID   uint                  `json:"address_id"`
+	Address     *modelsCommon.Address `json:"address"`
 }
 
 type FestivalOrganizer struct {
-	FestivalID uint
-	Festival   Festival
-	UserID     uint
-	User       modelsUser.Organizer
+	FestivalID uint                 `json:"festivalId"`
+	Festival   Festival             `json:"festival"`
+	UserID     uint                 `json:"userId"`
+	User       modelsUser.Organizer `json:"user"`
 }
 
 type FestivalEmployee struct {
-	FestivalID uint
-	Festival   Festival
-	UserID     uint
-	User       modelsUser.Employee
+	FestivalID uint                `json:"festivalId"`
+	Festival   Festival            `json:"festival"`
+	UserID     uint                `json:"userId"`
+	User       modelsUser.Employee `json:"user"`
 }
 
 type FestivalImage struct {
-	FestivalID uint
-	Festival   Festival
-	ImageID    uint
-	Image      modelsCommon.Image
+	FestivalID uint               `json:"festivalId"`
+	Festival   Festival           `json:"festival"`
+	ImageID    uint               `json:"imageId"`
+	Image      modelsCommon.Image `json:"image"`
 }

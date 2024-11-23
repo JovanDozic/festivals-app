@@ -73,9 +73,11 @@ func (r *festivalRepo) GetAll() ([]models.Festival, error) {
 }
 
 func (r *festivalRepo) GetById(festivalId uint) (*models.Festival, error) {
-
 	var festival models.Festival
-	err := r.db.First(&festival, festivalId).Error
+	err := r.db.Preload("Address").
+		Preload("Address.City").
+		Preload("Address.City.Country").
+		First(&festival, festivalId).Error
 	if err != nil {
 		return nil, err
 	}

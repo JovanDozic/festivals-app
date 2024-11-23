@@ -1,1 +1,9 @@
-<p>festival works!</p>
+<div class="container mat-elevation-z4" *ngIf="festival">
+  <div class="profile-header">
+    <h1>{{ festival.name }}</h1>
+  </div>
+</div>
+
+<div class="container mat-elevation-z4" *ngIf="!festival">
+  <p>loading...</p>
+</div>

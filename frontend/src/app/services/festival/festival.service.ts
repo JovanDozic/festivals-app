@@ -4,7 +4,6 @@ import { map, Observable } from 'rxjs';
 import {
   CreateFestivalRequest,
   Festival,
-  FestivalsResponse,
   UpdateFestivalRequest,
 } from '../../models/festival/festival.model';
 
@@ -71,5 +70,11 @@ export class FestivalService {
       `${this.apiUrl}/festival/${festival.id}`,
       festival
     );
+  }
+
+  getFestival(festivalId: number): Observable<Festival> {
+    return this.http
+      .get<{ festival: Festival }>(`${this.apiUrl}/festival/${festivalId}`)
+      .pipe(map((response) => response.festival));
   }
 }

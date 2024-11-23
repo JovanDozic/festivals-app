@@ -1,0 +1,44 @@
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0px 20px;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.profile-header .button-container {
+  display: flex;
+  gap: 10px;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  padding: 0px 0px;
+}
+
+.profile-card {
+  padding: 16px;
+  width: 100%;
+}
+
+h1 {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif;
+}
+
+mat-card-title {
+  font-family: "Funnel Display", sans-serif;
+  margin-left: 5px;
+}
+
+mat-card-content {
+  margin-left: 5px;
+}

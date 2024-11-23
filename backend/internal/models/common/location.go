@@ -6,27 +6,27 @@ import (
 
 type Country struct {
 	gorm.Model
-	Name      string
-	NiceName  string
-	ISO       string
-	ISO3      string
-	NumCode   int
-	PhoneCode int
+	Name      string `json:"name"`
+	NiceName  string `json:"niceName"`
+	ISO       string `json:"iso"`
+	ISO3      string `json:"iso3"`
+	NumCode   int    `json:"numCode"`
+	PhoneCode int    `json:"phoneCode"`
 }
 
 type City struct {
 	gorm.Model
-	Name       string
-	PostalCode string
-	CountryID  uint
-	Country    Country
+	Name       string  `json:"name"`
+	PostalCode string  `json:"postalCode"`
+	CountryID  uint    `json:"countryId"`
+	Country    Country `json:"country"`
 }
 
 type Address struct {
 	gorm.Model
-	Street         string
-	Number         string
-	ApartmentSuite *string
-	CityID         uint
-	City           City
+	Street         string  `json:"street"`
+	Number         string  `json:"number"`
+	ApartmentSuite *string `json:"apartmentSuite"`
+	CityID         uint    `json:"cityId"`
+	City           City    `json:"city"`
 }
