@@ -47,7 +47,7 @@ export class MyFestivalsComponent implements OnInit {
   getSkeletonBgColor(): string {
     const isDarkTheme =
       document.documentElement.getAttribute('data-theme') === 'dark';
-    return isDarkTheme ? '#4f378a' : '#e9ddff';
+    return isDarkTheme ? '#3338d8' : '#e0e0ff';
   }
 
   loadFestivals(): void {
