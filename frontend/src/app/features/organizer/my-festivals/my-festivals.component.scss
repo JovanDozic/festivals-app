@@ -32,6 +32,10 @@ mat-card-title {
   box-sizing: border-box;
 }
 
+.festival-card-skeleton .card-content {
+  padding-left: 20px;
+}
+
 .skeleton-container {
   display: flex;
   flex-wrap: wrap;

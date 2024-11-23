@@ -44,19 +44,25 @@ export class MyFestivalsComponent implements OnInit {
     this.loadFestivals();
   }
 
+  getSkeletonBgColor(): string {
+    const isDarkTheme =
+      document.documentElement.getAttribute('data-theme') === 'dark';
+    return isDarkTheme ? '#4f378a' : '#e9ddff';
+  }
+
   loadFestivals(): void {
     this.festivalService.getMyFestivals().subscribe({
       next: (response) => {
         console.log('Festivals:', response);
         setTimeout(() => {
           this.festivals = response;
-          this.isLoading = true;
+          this.isLoading = false;
         }, 1000);
       },
       error: (error) => {
         console.error('Error fetching festivals:', error);
         this.snackbarService.show('Error fetching festivals');
-        // this.isLoading = false;
+        this.isLoading = true;
       },
     });
   }

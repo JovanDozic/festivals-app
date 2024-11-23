@@ -3,10 +3,14 @@
     <h1>My Festivals</h1>
   </div>
   <div *ngIf="isLoading" class="profile-content">
-    <mat-card class="festival-card" *ngFor="let _ of [1, 2, 3, 4, 5, 6]">
+    <mat-card
+      class="festival-card festival-card-skeleton"
+      *ngFor="let _ of [1, 2, 3, 4, 5]"
+    >
       <ngx-skeleton-loader
         appearance="circle"
         [theme]="{
+          backgroundColor: getSkeletonBgColor(),
           width: '100%',
           height: '200px',
           margin: '0 0 16px 0',
@@ -18,6 +22,7 @@
         <ngx-skeleton-loader
           appearance="line"
           [theme]="{
+            backgroundColor: getSkeletonBgColor(),
             width: '60%',
             height: '20px',
             margin: '8px 0',
@@ -27,6 +32,7 @@
         <ngx-skeleton-loader
           appearance="line"
           [theme]="{
+            backgroundColor: getSkeletonBgColor(),
             width: '80%',
             height: '16px',
             margin: '8px 0',
@@ -38,9 +44,10 @@
             *ngFor="let _ of [1, 2, 3]"
             appearance="line"
             [theme]="{
+              backgroundColor: getSkeletonBgColor(),
               width: '40%',
               height: '16px',
-              margin: '8px 0',
+              margin: '8px 16px 8px 0',
               'border-radius': '4px'
             }"
           ></ngx-skeleton-loader>
@@ -49,19 +56,11 @@
           <ngx-skeleton-loader
             appearance="circle"
             [theme]="{
+              backgroundColor: getSkeletonBgColor(),
               width: '80px',
               height: '32px',
               margin: '8px 8px 8px 0',
               'border-radius': '4px'
-            }"
-          ></ngx-skeleton-loader>
-          <ngx-skeleton-loader
-            appearance="circle"
-            [theme]="{
-              width: '32px',
-              height: '32px',
-              margin: '8px',
-              'border-radius': '50%'
             }"
           ></ngx-skeleton-loader>
         </div>
