@@ -38,6 +38,20 @@ export class FestivalService {
       .pipe(map((response) => response.employees));
   }
 
+  employEmployee(festivalId: number, employeeId: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/organizer/festival/${festivalId}/employee/${employeeId}/employ`,
+      {}
+    );
+  }
+
+  fireEmployee(festivalId: number, employeeId: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/organizer/festival/${festivalId}/employee/${employeeId}/fire`,
+      {}
+    );
+  }
+
   createFestival(festival: CreateFestivalRequest): Observable<any> {
     console.log('Creating a festival', festival);
     return this.http.post<any>(`${this.apiUrl}/festival`, festival);

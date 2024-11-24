@@ -1,0 +1,179 @@
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FestivalService } from '../../../services/festival/festival.service';
+import {
+  CreateStaffRequest,
+  Festival,
+} from '../../../models/festival/festival.model';
+import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatTabsModule } from '@angular/material/tabs';
+import { UserService } from '../../../services/user/user.service';
+import {
+  CreateProfileRequest,
+  CreateUpdateUserProfileRequest,
+} from '../../../models/user/user-profile-request.model';
+
+@Component({
+  selector: 'app-register-employee',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDatepickerModule,
+    MatGridListModule,
+    MatIconModule,
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatTabsModule,
+  ],
+  templateUrl: './register-employee.component.html',
+  styleUrls: [
+    './register-employee.component.scss',
+    '../../../app.component.scss',
+  ],
+  providers: [provideNativeDateAdapter()],
+})
+export class RegisterEmployeeComponent {
+  private fb = inject(FormBuilder);
+  private festivalService = inject(FestivalService);
+  private snackbar = inject(MatSnackBar);
+  private dialogRef = inject(MatDialogRef<RegisterEmployeeComponent>);
+  private data: { festivalId: number } = inject(MAT_DIALOG_DATA);
+  private userService = inject(UserService);
+
+  infoFormGroup: FormGroup;
+
+  constructor() {
+    this.infoFormGroup = this.fb.group({
+      usernameCtrl: ['', Validators.required],
+      emailCtrl: ['', Validators.required],
+      passwordCtrl: ['', [Validators.required, Validators.minLength(5)]],
+      confirmPasswordCtrl: ['', Validators.required],
+      firstNameCtrl: ['', Validators.required],
+      lastNameCtrl: ['', Validators.required],
+      phoneNumberCtrl: ['', Validators.required],
+      dateOfBirthCtrl: ['', Validators.required],
+    });
+
+    this.infoFormGroup
+      .get('confirmPasswordCtrl')
+      ?.setValidators([
+        Validators.required,
+        this.passwordMatchValidator.bind(this),
+      ]);
+  }
+
+  passwordMatchValidator(control: any) {
+    return control.value === this.infoFormGroup.get('passwordCtrl')?.value
+      ? null
+      : { mismatch: true };
+  }
+
+  register() {
+    console.log(this.infoFormGroup.value);
+    if (this.infoFormGroup.valid) {
+      const profile: CreateProfileRequest = {
+        firstName: this.infoFormGroup.get('firstNameCtrl')?.value,
+        lastName: this.infoFormGroup.get('lastNameCtrl')?.value,
+        phoneNumber: this.infoFormGroup.get('phoneNumberCtrl')?.value,
+        dateOfBirth: this.formatDate(
+          this.infoFormGroup.get('dateOfBirthCtrl')?.value
+        ),
+      };
+      const request: CreateStaffRequest = {
+        username: this.infoFormGroup.get('usernameCtrl')?.value,
+        password: this.infoFormGroup.get('passwordCtrl')?.value,
+        email: this.infoFormGroup.get('emailCtrl')?.value,
+        userProfile: profile,
+      };
+
+      console.log('registering employee', request);
+      this.userService.registerEmployee(request).subscribe({
+        next: () => {
+          this.snackbar.open('Employee registered');
+          this.dialogRef.close(true);
+        },
+        error: (error) => {
+          console.error('Error registering employee:', error);
+          this.snackbar.open('Failed to register employee');
+        },
+      });
+    }
+  }
+
+  registerToFestival() {
+    if (this.infoFormGroup.valid) {
+      const profile: CreateProfileRequest = {
+        firstName: this.infoFormGroup.get('firstNameCtrl')?.value,
+        lastName: this.infoFormGroup.get('lastNameCtrl')?.value,
+        phoneNumber: this.infoFormGroup.get('phoneNumberCtrl')?.value,
+        dateOfBirth: this.formatDate(
+          this.infoFormGroup.get('dateOfBirthCtrl')?.value
+        ),
+      };
+      const request: CreateStaffRequest = {
+        username: this.infoFormGroup.get('usernameCtrl')?.value,
+        password: this.infoFormGroup.get('passwordCtrl')?.value,
+        email: this.infoFormGroup.get('emailCtrl')?.value,
+        userProfile: profile,
+      };
+
+      this.userService.registerEmployee(request).subscribe({
+        next: (employee) => {
+          console.log(
+            'employing employee',
+            employee,
+            'to festival',
+            this.data.festivalId
+          );
+          this.festivalService
+            .employEmployee(this.data.festivalId, employee.userId)
+            .subscribe(() => {
+              this.snackbar.open('Employee registered');
+              this.dialogRef.close(true);
+            });
+        },
+        error: (error) => {
+          console.error('Error registering employee:', error);
+          this.snackbar.open('Failed to register employee');
+        },
+      });
+    }
+  }
+
+  closeDialog() {
+    this.dialogRef.close(false);
+  }
+
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+}

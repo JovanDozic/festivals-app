@@ -114,7 +114,7 @@ export class RegisterAttendeeComponent {
         },
       });
     }
-  } //dateOfBirth ? new Date(dateOfBirth) : null,
+  }
 
   createUserProfile() {
     if (this.personalFormGroup.valid) {

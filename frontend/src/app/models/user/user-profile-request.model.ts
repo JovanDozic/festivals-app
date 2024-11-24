@@ -4,3 +4,10 @@ export interface CreateUpdateUserProfileRequest {
   dateOfBirth: Date;
   phoneNumber: string;
 }
+
+export interface CreateProfileRequest {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  phoneNumber: string;
+}

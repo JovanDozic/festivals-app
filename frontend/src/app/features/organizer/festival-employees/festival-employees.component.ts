@@ -19,6 +19,7 @@ import { EditFestivalComponent } from '../edit-festival/edit-festival.component'
 import { animate, style, transition, trigger } from '@angular/animations';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
+import { RegisterEmployeeComponent } from '../register-employee/register-employee.component';
 
 @Component({
   selector: 'app-festival-employees',
@@ -41,9 +42,6 @@ import { MatTableModule } from '@angular/material/table';
   ],
 })
 export class FestivalEmployeesComponent implements OnInit {
-  onRegisterEmployee() {
-    throw new Error('Method not implemented.');
-  }
   onAddEmployeeClick() {
     throw new Error('Method not implemented.');
   }
@@ -127,5 +125,23 @@ export class FestivalEmployeesComponent implements OnInit {
         },
       });
     }
+  }
+
+  onRegisterEmployee() {
+    const dialogRef = this.dialog.open(RegisterEmployeeComponent, {
+      data: {
+        festivalId: this.festival?.id,
+      },
+      width: '800px',
+      height: 'auto',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('Dialog closed with result: ', result);
+      if (result) {
+        this.loadEmployeeCount();
+        this.loadEmployees();
+      }
+    });
   }
 }

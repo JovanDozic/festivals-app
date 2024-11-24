@@ -1,151 +1,143 @@
 <h2 mat-dialog-title>Edit Festival</h2>
 
 <mat-dialog-content>
-  <form>
-    <mat-tab-group>
-      <mat-tab label="Basic Information">
-        <form [formGroup]="basicInfoFormGroup">
-          <ng-template matStepLabel>Basic Info</ng-template>
-          <div class="form-fields">
-            <mat-form-field appearance="outline">
-              <mat-label>Festival Name</mat-label>
-              <input matInput formControlName="nameCtrl" required />
-              <mat-error *ngIf="basicInfoFormGroup.get('nameCtrl')?.invalid">
-                Festival name is <strong>required</strong>.
-              </mat-error>
-            </mat-form-field>
+  <mat-tab-group>
+    <mat-tab label="Basic Information">
+      <form [formGroup]="basicInfoFormGroup">
+        <ng-template matStepLabel>Basic Info</ng-template>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Festival Name</mat-label>
+            <input matInput formControlName="nameCtrl" required />
+            <mat-error *ngIf="basicInfoFormGroup.get('nameCtrl')?.invalid">
+              Festival name is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
 
-            <mat-form-field appearance="outline">
-              <mat-label>Capacity</mat-label>
-              <input
-                matInput
-                type="number"
-                formControlName="capacityCtrl"
-                required
-              />
-              <mat-error
-                *ngIf="basicInfoFormGroup.get('capacityCtrl')?.invalid"
-              >
-                Capacity must be at least <strong>1</strong>.
-              </mat-error>
-            </mat-form-field>
-          </div>
+          <mat-form-field appearance="outline">
+            <mat-label>Capacity</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="capacityCtrl"
+              required
+            />
+            <mat-error *ngIf="basicInfoFormGroup.get('capacityCtrl')?.invalid">
+              Capacity must be at least <strong>1</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-          <div class="form-fields">
-            <mat-form-field appearance="outline">
-              <mat-label>Description</mat-label>
-              <input matInput formControlName="descriptionCtrl" required />
-              <mat-error
-                *ngIf="basicInfoFormGroup.get('descriptionCtrl')?.invalid"
-              >
-                Description is <strong>required</strong>.
-              </mat-error>
-            </mat-form-field>
-          </div>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="descriptionCtrl" required />
+            <mat-error
+              *ngIf="basicInfoFormGroup.get('descriptionCtrl')?.invalid"
+            >
+              Description is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-          <div class="form-fields">
-            <mat-form-field appearance="outline">
-              <mat-label>Start Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="pickerStart"
-                formControlName="startDateCtrl"
-                required
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="pickerStart"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #pickerStart></mat-datepicker>
-              <mat-error
-                *ngIf="basicInfoFormGroup.get('startDateCtrl')?.invalid"
-              >
-                Start date is <strong>required</strong>.
-              </mat-error>
-            </mat-form-field>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Start Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="pickerStart"
+              formControlName="startDateCtrl"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="pickerStart"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #pickerStart></mat-datepicker>
+            <mat-error *ngIf="basicInfoFormGroup.get('startDateCtrl')?.invalid">
+              Start date is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
 
-            <mat-form-field appearance="outline">
-              <mat-label>End Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="pickerEnd"
-                formControlName="endDateCtrl"
-                required
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="pickerEnd"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #pickerEnd></mat-datepicker>
-              <mat-error *ngIf="basicInfoFormGroup.get('endDateCtrl')?.invalid">
-                End date is <strong>required</strong>.
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </form>
-      </mat-tab>
+          <mat-form-field appearance="outline">
+            <mat-label>End Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="pickerEnd"
+              formControlName="endDateCtrl"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="pickerEnd"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #pickerEnd></mat-datepicker>
+            <mat-error *ngIf="basicInfoFormGroup.get('endDateCtrl')?.invalid">
+              End date is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-tab>
 
-      <mat-tab label="Address">
-        <form [formGroup]="addressFormGroup">
-          <ng-template matStepLabel>Address</ng-template>
-          <div class="form-fields">
-            <mat-form-field appearance="outline">
-              <mat-label>Street</mat-label>
-              <input matInput formControlName="streetCtrl" required />
-              <mat-error *ngIf="addressFormGroup.get('streetCtrl')?.invalid">
-                Street is <strong>required</strong>.
-              </mat-error>
-            </mat-form-field>
+    <mat-tab label="Address">
+      <form [formGroup]="addressFormGroup">
+        <ng-template matStepLabel>Address</ng-template>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Street</mat-label>
+            <input matInput formControlName="streetCtrl" required />
+            <mat-error *ngIf="addressFormGroup.get('streetCtrl')?.invalid">
+              Street is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
 
-            <mat-form-field appearance="outline">
-              <mat-label>Number</mat-label>
-              <input matInput formControlName="numberCtrl" required />
-              <mat-error *ngIf="addressFormGroup.get('numberCtrl')?.invalid">
-                Number is <strong>required</strong>.
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="form-fields">
-            <mat-form-field appearance="outline">
-              <mat-label>Apartment / Suite</mat-label>
-              <input matInput formControlName="apartmentSuiteCtrl" />
-            </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Number</mat-label>
+            <input matInput formControlName="numberCtrl" required />
+            <mat-error *ngIf="addressFormGroup.get('numberCtrl')?.invalid">
+              Number is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Apartment / Suite</mat-label>
+            <input matInput formControlName="apartmentSuiteCtrl" />
+          </mat-form-field>
 
-            <mat-form-field appearance="outline">
-              <mat-label>City</mat-label>
-              <input matInput formControlName="cityCtrl" required />
-              <mat-error *ngIf="addressFormGroup.get('cityCtrl')?.invalid">
-                City is <strong>required</strong>.
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="form-fields">
-            <mat-form-field appearance="outline">
-              <mat-label>Postal Code</mat-label>
-              <input matInput formControlName="postalCodeCtrl" required />
-              <mat-error
-                *ngIf="addressFormGroup.get('postalCodeCtrl')?.invalid"
-              >
-                Postal Code is <strong>required</strong>.
-              </mat-error>
-            </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="cityCtrl" required />
+            <mat-error *ngIf="addressFormGroup.get('cityCtrl')?.invalid">
+              City is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Postal Code</mat-label>
+            <input matInput formControlName="postalCodeCtrl" required />
+            <mat-error *ngIf="addressFormGroup.get('postalCodeCtrl')?.invalid">
+              Postal Code is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
 
-            <mat-form-field appearance="outline">
-              <mat-label>Country (ISO3)</mat-label>
-              <input matInput formControlName="countryISO3Ctrl" required />
-              <mat-error
-                *ngIf="addressFormGroup.get('countryISO3Ctrl')?.invalid"
-              >
-                Country is <strong>required</strong>.
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </form>
-      </mat-tab>
+          <mat-form-field appearance="outline">
+            <mat-label>Country (ISO3)</mat-label>
+            <input matInput formControlName="countryISO3Ctrl" required />
+            <mat-error *ngIf="addressFormGroup.get('countryISO3Ctrl')?.invalid">
+              Country is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-tab>
 
-      <mat-tab label="Images"> </mat-tab>
-    </mat-tab-group>
-  </form>
+    <mat-tab label="Images">
+      <!-- todo: implement editing images -->
+    </mat-tab>
+  </mat-tab-group>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

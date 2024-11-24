@@ -4,6 +4,11 @@ import { map, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CreateUpdateUserProfileRequest } from '../../models/user/user-profile-request.model';
 import { CreateAddressRequest } from '../../models/common/create-address-request.model';
+import { RegisterEmployeeComponent } from '../../features/organizer/register-employee/register-employee.component';
+import {
+  CreateStaffRequest,
+  CreateStaffResponse,
+} from '../../models/festival/festival.model';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +44,17 @@ export class UserService {
 
   createAddress(address: CreateAddressRequest) {
     return this.http.post<void>(`${this.apiUrl}/user/profile/address`, address);
+  }
+
+  registerEmployee(
+    employee: CreateStaffRequest
+  ): Observable<CreateStaffResponse> {
+    return this.http
+      .post<{ employee: CreateStaffResponse }>(
+        `${this.apiUrl}/organizer/employee`,
+        employee
+      )
+      .pipe(map((response) => response.employee));
   }
 }
 

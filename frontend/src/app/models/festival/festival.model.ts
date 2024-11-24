@@ -1,8 +1,13 @@
+import { ɵHttpInterceptingHandler } from '@angular/common/http';
 import { AddressResponse } from '../common/address-response.model';
 import {
   CreateAddressRequest,
   UpdateAddressRequest,
 } from '../common/create-address-request.model';
+import {
+  CreateProfileRequest,
+  CreateUpdateUserProfileRequest,
+} from '../user/user-profile-request.model';
 
 export interface Festival {
   id: number;
@@ -56,4 +61,16 @@ export interface Employee {
   lastName: string;
   dateOfBirth: string;
   phoneNumber: string;
+}
+
+export interface CreateStaffRequest {
+  username: string;
+  password: string;
+  email: string;
+  userProfile: CreateProfileRequest;
+}
+
+export interface CreateStaffResponse {
+  username: string;
+  userId: number;
 }
