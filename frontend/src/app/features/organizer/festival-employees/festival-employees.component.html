@@ -47,8 +47,8 @@
     <mat-card class="profile-card">
       <mat-card-content>
         <table mat-table [dataSource]="employees">
-          <ng-container matColumnDef="position">
-            <th mat-header-cell *matHeaderCellDef>No.</th>
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
             <td mat-cell *matCellDef="let element">{{ element.id }}</td>
           </ng-container>
           <ng-container matColumnDef="username">

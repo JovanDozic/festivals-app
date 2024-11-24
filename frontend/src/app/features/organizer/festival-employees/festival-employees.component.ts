@@ -51,7 +51,14 @@ export class FestivalEmployeesComponent implements OnInit {
   isLoading = false;
   employeeCount: number = 0;
   employees: Employee[] = [];
-  displayedColumns = ['username', 'email', 'name', 'phoneNumber', 'actions'];
+  displayedColumns = [
+    'id',
+    'username',
+    'email',
+    'name',
+    'phoneNumber',
+    'actions',
+  ];
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
