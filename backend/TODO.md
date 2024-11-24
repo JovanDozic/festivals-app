@@ -22,3 +22,5 @@ can i get a list of employees that work on any festival that i'm organizer of?
 [x] add employee to the festival: PUT organizer/festival/{festivalId}/employee/{employeeId}/employ
 
 [] remove employee from the festival: PUT organizer/festival/{festivalId}/employee/{employeeId}/fire
+
+[] number of employees in the festival: GET organizer/festival/{festivalId}/employee/count

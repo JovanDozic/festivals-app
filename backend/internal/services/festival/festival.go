@@ -29,6 +29,7 @@ type FestivalService interface {
 	AddImage(festivalId uint, image *modelsCommon.Image) error
 	GetAddressID(festivalId uint) (uint, error)
 	Employ(festivalId uint, employeeId uint) error
+	GetEmployeeCount(festivalId uint) (int, error)
 }
 
 type festivalService struct {
@@ -316,4 +317,14 @@ func (s *festivalService) Employ(festivalId uint, employeeId uint) error {
 	}
 
 	return nil
+}
+
+func (s *festivalService) GetEmployeeCount(festivalId uint) (int, error) {
+
+	count, err := s.festivalRepo.GetEmployeeCount(festivalId)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
 }

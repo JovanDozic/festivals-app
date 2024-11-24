@@ -21,3 +21,8 @@ type FestivalResponse struct {
 	Address     *dtoCommon.GetAddressResponse `json:"address"`
 	Images      []dtoCommon.GetImageResponse  `json:"images"`
 }
+
+type EmployeeCountResponse struct {
+	FestivalId uint `json:"festivalId"`
+	Count      int  `json:"count"`
+}
