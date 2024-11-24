@@ -42,3 +42,18 @@ export interface UpdateFestivalRequest {
   capacity: number;
   address: UpdateAddressRequest;
 }
+
+export interface EmployeesResponse {
+  festivalId: number;
+  employees: Employee[];
+}
+
+export interface Employee {
+  id: number;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  phoneNumber: string;
+}

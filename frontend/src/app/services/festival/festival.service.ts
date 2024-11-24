@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import {
   CreateFestivalRequest,
+  EmployeesResponse,
   Festival,
   UpdateFestivalRequest,
 } from '../../models/festival/festival.model';
@@ -27,6 +28,14 @@ export class FestivalService {
         `${this.apiUrl}/organizer/festival/${festivalId}/employee/count`
       )
       .pipe(map((response) => response.count));
+  }
+
+  getEmployees(festivalId: number): Observable<any> {
+    return this.http
+      .get<EmployeesResponse>(
+        `${this.apiUrl}/organizer/festival/${festivalId}/employee`
+      )
+      .pipe(map((response) => response.employees));
   }
 
   createFestival(festival: CreateFestivalRequest): Observable<any> {

@@ -116,6 +116,14 @@ const organizerRoutes: Routes = [
           ),
         title: 'Festival',
       },
+      {
+        path: 'organizer/my-festivals/:id/employees',
+        loadComponent: () =>
+          import(
+            './features/organizer/festival-employees/festival-employees.component'
+          ).then((c) => c.FestivalEmployeesComponent),
+        title: 'Festival Employees',
+      },
       // ...
     ],
   },

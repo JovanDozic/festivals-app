@@ -48,9 +48,6 @@ import { MatMenuModule } from '@angular/material/menu';
   ],
 })
 export class FestivalComponent implements OnInit {
-  onViewEmployeesClick(arg0: Festival) {
-    throw new Error('Method not implemented.');
-  }
   festival: Festival | null = null;
   isLoading: boolean = true;
   currentImageIndex: number = 0;
@@ -70,6 +67,12 @@ export class FestivalComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['organizer/my-festivals']);
+  }
+
+  onViewEmployeesClick() {
+    this.router.navigate([
+      `organizer/my-festivals/${this.festival?.id}/employees`,
+    ]);
   }
 
   loadFestival() {
