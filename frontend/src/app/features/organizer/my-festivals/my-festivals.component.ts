@@ -109,7 +109,7 @@ export class MyFestivalsComponent implements OnInit {
         address: festival.address,
       },
       width: '800px',
-      height: '500px',
+      height: '535px',
     });
 
     dialogRef.afterClosed().subscribe((success) => {

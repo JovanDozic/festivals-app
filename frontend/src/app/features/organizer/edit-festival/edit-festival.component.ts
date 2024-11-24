@@ -19,7 +19,6 @@ import {
   Festival,
   UpdateFestivalRequest,
 } from '../../../models/festival/festival.model';
-import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,14 +27,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialogModule } from '@angular/material/dialog';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-edit-festival',
   templateUrl: './edit-festival.component.html',
-  styleUrls: ['./edit-festival.component.scss'],
+  styleUrls: ['./edit-festival.component.scss', '../../../app.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -117,9 +115,7 @@ export class EditFestivalComponent implements OnInit {
 
   saveChanges() {
     if (this.basicInfoFormGroup.invalid || this.addressFormGroup.invalid) {
-      this.snackbar.open('Please complete all required fields.', 'Close', {
-        duration: 2000,
-      });
+      this.snackbar.open('Please complete all required fields.');
       return;
     }
 

@@ -18,7 +18,7 @@ const publicRoutes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('./features/auth/login/login.component').then(
+      import('./features/user/login/login.component').then(
         (c) => c.LoginComponent
       ),
     title: 'Login',

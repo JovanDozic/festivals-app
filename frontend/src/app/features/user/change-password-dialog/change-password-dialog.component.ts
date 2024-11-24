@@ -20,7 +20,10 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 @Component({
   selector: 'change-password-dialog',
   templateUrl: './change-password-dialog.component.html',
-  styleUrls: ['./change-password-dialog.component.scss'],
+  styleUrls: [
+    './change-password-dialog.component.scss',
+    '../../../app.component.scss',
+  ],
   standalone: true,
   imports: [
     CommonModule,

@@ -2,7 +2,7 @@
 
 <mat-dialog-content>
   <form [formGroup]="changeProfileForm">
-    <mat-form-field class="full-width">
+    <mat-form-field appearance="outline" class="full-width">
       <mat-label>First Name</mat-label>
       <input
         matInput
@@ -15,7 +15,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="full-width">
+    <mat-form-field appearance="outline" class="full-width">
       <mat-label>Last Name</mat-label>
       <input
         matInput
@@ -28,7 +28,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="full-width">
+    <mat-form-field appearance="outline" class="full-width">
       <mat-label>Date of Birth</mat-label>
       <input
         matInput
@@ -43,7 +43,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="full-width">
+    <mat-form-field appearance="outline" class="full-width">
       <mat-label>Phone Number</mat-label>
       <input
         matInput
@@ -60,7 +60,7 @@
 
 <mat-dialog-actions align="end">
   <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="changeProfile()">
+  <button mat-flat-button color="primary" (click)="changeProfile()">
     Save
   </button>
 </mat-dialog-actions>

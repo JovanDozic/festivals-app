@@ -58,6 +58,16 @@ $dark-theme: m3-theme.$dark-theme;
   @include mat.color-variants-backwards-compatibility($dark-theme);
 }
 
+// ::ng-deep   .mat-form-field-outline-start {
+//   border-radius: 0 !important;
+//   min-width: 30px !important;
+// }
+
+// ::ng-deep .mat-form-field-outline-end {
+//   border-radius: 0 !important;
+//   min-width: 30px !important;
+// }
+
 html,
 body {
   height: 100%;

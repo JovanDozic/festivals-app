@@ -32,7 +32,10 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
     MatDatepickerModule,
   ],
   templateUrl: './change-profile-dialog.component.html',
-  styleUrl: './change-profile-dialog.component.scss',
+  styleUrls: [
+    './change-profile-dialog.component.scss',
+    '../../../app.component.scss',
+  ],
   providers: [provideNativeDateAdapter()],
 })
 export class ChangeProfileDialogComponent implements OnInit {
