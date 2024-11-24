@@ -16,6 +16,14 @@ mat-chip {
   padding-top: 2px;
 }
 
+:host-context([data-theme="light"]) mat-chip {
+  background-color: #f5f2ff;
+}
+
+:host-context([data-theme="dark"]) mat-chip {
+  background-color: #1b1b24;
+}
+
 mat-chip mat-icon {
   font-size: 20px;
   vertical-align: middle;
