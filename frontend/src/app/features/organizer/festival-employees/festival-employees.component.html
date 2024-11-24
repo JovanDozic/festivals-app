@@ -14,6 +14,24 @@
         <mat-icon color="primary">arrow_forward_ios</mat-icon> Employees
       </h1>
     </div>
+    <div class="button-container">
+      <button
+        mat-icon-button
+        matTooltip="Add Employee to this Festival"
+        color="primary"
+        (click)="onAddEmployeeClick()"
+      >
+        <mat-icon class="material-symbols-outlined">add</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        matTooltip="Register Employee and add to this Festival"
+        color="primary"
+        (click)="onRegisterEmployee()"
+      >
+        <mat-icon class="material-symbols-outlined">person_add</mat-icon>
+      </button>
+    </div>
   </div>
 
   <div class="chip-container">
@@ -27,8 +45,63 @@
 
   <div class="profile-content">
     <mat-card class="profile-card">
-      <mat-card-title>List</mat-card-title>
-      <mat-card-content>content</mat-card-content>
+      <mat-card-content>
+        <table mat-table [dataSource]="employees">
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>No.</th>
+            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+          </ng-container>
+          <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef>Username</th>
+            <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+          </ng-container>
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.firstName + " " + element.lastName }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="phoneNumber">
+            <th mat-header-cell *matHeaderCellDef>Phone Number</th>
+            <td mat-cell *matCellDef="let element" class="number-mono">
+              {{ element.phoneNumber }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="dateOfBirth">
+            <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.dateOfBirth }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button matTooltip="Edit Employee">
+                <mat-icon class="material-symbols-outlined" color="primary">
+                  edit
+                </mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="Remove Employee from this Festival"
+              >
+                <mat-icon class="material-symbols-outlined" color="primary">
+                  delete
+                </mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </mat-card-content>
     </mat-card>
   </div>
 </div>

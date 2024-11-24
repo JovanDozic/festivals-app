@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Festival } from '../../../models/festival/festival.model';
+import { Employee, Festival } from '../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FestivalService } from '../../../services/festival/festival.service';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
@@ -18,6 +18,7 @@ import {
 import { EditFestivalComponent } from '../edit-festival/edit-festival.component';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-festival-employees',
@@ -31,6 +32,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatCardModule,
     MatChipsModule,
     MatMenuModule,
+    MatTableModule,
   ],
   templateUrl: './festival-employees.component.html',
   styleUrls: [
@@ -39,10 +41,17 @@ import { MatMenuModule } from '@angular/material/menu';
   ],
 })
 export class FestivalEmployeesComponent implements OnInit {
+  onRegisterEmployee() {
+    throw new Error('Method not implemented.');
+  }
+  onAddEmployeeClick() {
+    throw new Error('Method not implemented.');
+  }
   festival: Festival | null = null;
   isLoading = false;
   employeeCount: number = 0;
-  employees: any[] = [];
+  employees: Employee[] = [];
+  displayedColumns = ['username', 'email', 'name', 'phoneNumber', 'actions'];
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
