@@ -1,6 +1,6 @@
 package dto
 
-type RegisterAttendeeRequest struct {
+type RegisterUserRequest struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -32,4 +32,11 @@ type UpdateUserProfileRequest struct {
 
 type UpdateUserEmailRequest struct {
 	Email string `json:"email"`
+}
+
+type CreateStaffRequest struct {
+	Username    string                   `json:"username"`
+	Email       string                   `json:"email"`
+	Password    string                   `json:"password"`
+	UserProfile CreateUserProfileRequest `json:"userProfile"`
 }

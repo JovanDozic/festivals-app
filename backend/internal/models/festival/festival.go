@@ -30,10 +30,10 @@ type FestivalOrganizer struct {
 }
 
 type FestivalEmployee struct {
-	FestivalID uint                `json:"festivalId"`
-	Festival   Festival            `json:"festival"`
-	UserID     uint                `json:"userId"`
-	User       modelsUser.Employee `json:"user"`
+	FestivalID uint
+	Festival   Festival
+	UserID     uint
+	User       modelsUser.Employee
 }
 
 type FestivalImage struct {

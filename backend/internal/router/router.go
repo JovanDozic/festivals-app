@@ -84,8 +84,10 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	protectedRouter.HandleFunc("/festival/{festivalId}/store/close", festivalHandler.CloseStore).Methods(http.MethodPut)
 
 	protectedRouter.HandleFunc("/festival/{festivalId}/image", festivalHandler.GetImages).Methods(http.MethodGet)
-	// ? Should we return list of images in get festival by id?
 	protectedRouter.HandleFunc("/festival/{festivalId}/image", festivalHandler.AddImage).Methods(http.MethodPost)
+
+	protectedRouter.HandleFunc("/organizer/employee", userHandler.CreateEmployee).Methods(http.MethodPost)
+	protectedRouter.HandleFunc("/organizer/festival/{festivalId}/employee/{employeeId}/employ", festivalHandler.Employ).Methods(http.MethodPut)
 
 	// ...
 

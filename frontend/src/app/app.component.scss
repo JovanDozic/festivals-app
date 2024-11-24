@@ -54,3 +54,21 @@ mat-card-title {
 mat-card-content {
   margin-left: 5px;
 }
+
+.empty-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  font-size: medium;
+}
+
+:host-context([data-theme="light"]) .empty-list {
+  border: 3px dashed #3338d8;
+}
+
+:host-context([data-theme="dark"]) .empty-list {
+  border: 3px dashed #f5f2ff;
+}

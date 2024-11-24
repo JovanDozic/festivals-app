@@ -28,6 +28,7 @@ type FestivalService interface {
 	GetImages(festivalId uint) ([]modelsCommon.Image, error)
 	AddImage(festivalId uint, image *modelsCommon.Image) error
 	GetAddressID(festivalId uint) (uint, error)
+	Employ(festivalId uint, employeeId uint) error
 }
 
 type festivalService struct {
@@ -299,4 +300,20 @@ func (s *festivalService) GetAddressID(festivalId uint) (uint, error) {
 	}
 
 	return address.ID, nil
+}
+
+func (s *festivalService) Employ(festivalId uint, employeeId uint) error {
+
+	if err := s.festivalRepo.Employ(festivalId, employeeId); err != nil {
+		if strings.Contains(err.Error(), "duplicate key value") {
+			return modelsError.ErrEmployeeAlreadyEmployed
+		} else if strings.Contains(err.Error(), "foreign key constraint") {
+			return modelsError.ErrNotFound
+		} else if strings.Contains(err.Error(), "violates foreign key constraint") {
+			return modelsError.ErrRoleNotFound
+		}
+		return err
+	}
+
+	return nil
 }

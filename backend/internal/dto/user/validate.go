@@ -15,7 +15,7 @@ func (r *LoginRequest) Validate() error {
 	return nil
 }
 
-func (r *RegisterAttendeeRequest) Validate() error {
+func (r *RegisterUserRequest) Validate() error {
 	if r.Username == "" {
 		return models.ErrMissingFields
 	}
@@ -85,6 +85,25 @@ func (u *UpdateUserEmailRequest) Validate() error {
 	}
 	if !utils.IsEmailValid(u.Email) {
 		return models.ErrInvalidEmailFormat
+	}
+	return nil
+}
+
+func (r *CreateStaffRequest) Validate() error {
+	if r.Username == "" {
+		return models.ErrMissingFields
+	}
+	if r.Password == "" {
+		return models.ErrMissingFields
+	}
+	if r.Email == "" {
+		return models.ErrMissingFields
+	}
+	if !utils.IsEmailValid(r.Email) {
+		return models.ErrInvalidEmailFormat
+	}
+	if err := r.UserProfile.Validate(); err != nil {
+		return err
 	}
 	return nil
 }

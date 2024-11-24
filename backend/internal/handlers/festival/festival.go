@@ -29,6 +29,7 @@ type FestivalHandler interface {
 	AddImage(w http.ResponseWriter, r *http.Request)
 	RemoveImage(w http.ResponseWriter, r *http.Request)
 	GetImages(w http.ResponseWriter, r *http.Request)
+	Employ(w http.ResponseWriter, r *http.Request)
 }
 
 type festivalHandler struct {
@@ -435,4 +436,43 @@ func (h *festivalHandler) GetImages(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"images": images}, nil)
 	log.Println("images retrieved successfully for festival:", festivalId)
+}
+
+func (h *festivalHandler) Employ(w http.ResponseWriter, r *http.Request) {
+
+	_, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	vars := mux.Vars(r)
+	festivalId := vars["festivalId"]
+	if festivalId == "" {
+		log.Println("error:", models.ErrBadRequest)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	employeeId := vars["employeeId"]
+	if employeeId == "" {
+		log.Println("error:", models.ErrBadRequest)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := h.festivalService.Employ(utils.ToUint(festivalId), utils.ToUint(employeeId)); err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrNotFound:
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		case models.ErrEmployeeAlreadyEmployed:
+			http.Error(w, err.Error(), http.StatusConflict)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "employee employed successfully"}, nil)
+	log.Println("employee employed successfully for festival:", festivalId)
 }

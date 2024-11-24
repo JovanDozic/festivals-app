@@ -24,3 +24,8 @@ type GetUserProfileResponse struct {
 	PhoneNumber string                  `json:"phoneNumber"`
 	Address     *dto.GetAddressResponse `json:"address"`
 }
+
+type CreateStaffResponse struct {
+	Username string `json:"username"`
+	UserId   uint   `json:"userId"`
+}

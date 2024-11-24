@@ -16,7 +16,7 @@ import (
 
 type UserService interface {
 	Create(user *modelsUser.User) error
-	CreateAttendee(user *modelsUser.User) error
+	CreateUser(user *modelsUser.User) error
 	Login(username string, password string) (string, error)
 	GetUserProfile(username string) (*dto.GetUserProfileResponse, error)
 	CreateUserProfile(username string, userProfile *modelsUser.UserProfile) error
@@ -50,32 +50,6 @@ func (s *userService) Create(user *modelsUser.User) error {
 	user.Password = passwordHash
 
 	if err := s.userRepo.Create(user); err != nil {
-		switch {
-		case strings.Contains(err.Error(), "duplicate key value"):
-			return modelsError.ErrDuplicateUser
-		case strings.Contains(err.Error(), "foreign key constraint"):
-			return modelsError.ErrRoleNotFound
-		default:
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (s *userService) CreateAttendee(user *modelsUser.User) error {
-
-	if err := user.Validate(); err != nil {
-		return err
-	}
-
-	passwordHash, err := utils.HashPassword(user.Password)
-	if err != nil {
-		return err
-	}
-	user.Password = passwordHash
-
-	if err := s.userRepo.CreateAttendee(user); err != nil {
 		switch {
 		case strings.Contains(err.Error(), "duplicate key value"):
 			return modelsError.ErrDuplicateUser
@@ -273,6 +247,44 @@ func (s *userService) UpdateUserProfile(username string, updatedProfile *modelsU
 
 	if err := s.profileRepo.Update(profile); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (s *userService) CreateUser(user *modelsUser.User) error {
+
+	if err := user.Validate(); err != nil {
+		log.Println("error validating user", err)
+		return err
+	}
+
+	passwordHash, err := utils.HashPassword(user.Password)
+	if err != nil {
+		log.Println("error hashing password", err)
+		return err
+	}
+	user.Password = passwordHash
+
+	switch user.Role {
+	case string(modelsUser.RoleAttendee):
+		err = s.userRepo.CreateAttendee(user)
+	case string(modelsUser.RoleEmployee):
+		err = s.userRepo.CreateEmployee(user)
+	// todo: add other roles
+	default:
+		return modelsError.ErrRoleNotFound
+	}
+
+	if err != nil {
+		switch {
+		case strings.Contains(err.Error(), "duplicate key value"):
+			return modelsError.ErrDuplicateUser
+		case strings.Contains(err.Error(), "foreign key constraint"):
+			return modelsError.ErrRoleNotFound
+		default:
+			return err
+		}
 	}
 
 	return nil

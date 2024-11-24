@@ -12,6 +12,7 @@ type UserRepo interface {
 	GetByUsername(username string) (*models.User, error)
 	UpdatePassword(username, password string) error
 	Update(user *models.User) error
+	CreateEmployee(user *models.User) error
 }
 
 type userRepo struct {
@@ -52,10 +53,30 @@ func (r *userRepo) CreateAttendee(user *models.User) error {
 
 	attendee := &models.Attendee{
 		UserID: user.ID,
-		User:   *user, // ? is this needed?
+		User:   *user,
 	}
 
 	err = r.db.Create(attendee).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *userRepo) CreateEmployee(user *models.User) error {
+
+	err := r.db.Create(user).Error
+	if err != nil {
+		return err
+	}
+
+	employee := &models.Employee{
+		UserID: user.ID,
+		User:   *user,
+	}
+
+	err = r.db.Create(employee).Error
 	if err != nil {
 		return err
 	}
