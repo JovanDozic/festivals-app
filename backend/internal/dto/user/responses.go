@@ -29,3 +29,18 @@ type CreateStaffResponse struct {
 	Username string `json:"username"`
 	UserId   uint   `json:"userId"`
 }
+
+type GetEmployeesResponse struct {
+	FestivalId uint               `json:"festivalId"`
+	Employees  []EmployeeResponse `json:"employees"`
+}
+
+type EmployeeResponse struct {
+	ID          uint   `json:"id"`
+	Username    string `json:"username"`
+	Email       string `json:"email"`
+	FirstName   string `json:"firstName"`
+	LastName    string `json:"lastName"`
+	DateOfBirth string `json:"dateOfBirth"`
+	PhoneNumber string `json:"phoneNumber"`
+}

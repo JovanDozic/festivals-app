@@ -2,7 +2,7 @@ can i get a list of employees that work on any festival that i'm organizer of?
 
 --
 
-[] create employee: POST organizer/employee
+[x] create employee: POST organizer/employee
 
 - ovo ce da se kreira novi nalog i profil
 - onda ti treba i endpoint call da ga zaposlis
@@ -11,7 +11,7 @@ can i get a list of employees that work on any festival that i'm organizer of?
 
 - this will include festival IDs that they're working on so organizer can change it
 
-[] get employees on the festival: GET organizer/festival/{festivalId}/employee
+[x] get employees on the festival: GET organizer/festival/{festivalId}/employee
 
 [] get employee: GET organizer/employee/{employeeId}
 
@@ -19,6 +19,6 @@ can i get a list of employees that work on any festival that i'm organizer of?
 
 [] delete employee: DELETE organizer/{employeeId}
 
-[] add employee to the festival: PUT organizer/festival/{festivalId}/employee/{employeeId}/employ
+[x] add employee to the festival: PUT organizer/festival/{festivalId}/employee/{employeeId}/employ
 
 [] remove employee from the festival: PUT organizer/festival/{festivalId}/employee/{employeeId}/fire

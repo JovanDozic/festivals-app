@@ -10,6 +10,8 @@ import (
 	"backend/internal/utils"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 type UserHandler interface {
@@ -22,6 +24,7 @@ type UserHandler interface {
 	UpdateUserProfile(w http.ResponseWriter, r *http.Request)
 	UpdateUserEmail(w http.ResponseWriter, r *http.Request)
 	CreateEmployee(w http.ResponseWriter, r *http.Request)
+	GetFestivalEmployees(w http.ResponseWriter, r *http.Request)
 }
 
 type userHandler struct {
@@ -410,4 +413,47 @@ func (h *userHandler) CreateEmployee(w http.ResponseWriter, r *http.Request) {
 		UserId:   user.ID,
 	}}, nil)
 	log.Println("employee created:", input.Username)
+}
+
+func (h *userHandler) GetFestivalEmployees(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthOrganizerRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	vars := mux.Vars(r)
+	festivalId := vars["festivalId"]
+	if festivalId == "" {
+		log.Println("error:", models.ErrBadRequest)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	employees, err := h.userService.GetFestivalEmployees(utils.ToUint(festivalId))
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	employeesResponse := dtoUser.GetEmployeesResponse{
+		FestivalId: utils.ToUint(festivalId),
+		Employees:  make([]dtoUser.EmployeeResponse, len(employees)),
+	}
+	for i, employee := range employees {
+		employeesResponse.Employees[i] = dtoUser.EmployeeResponse{
+			ID:          employee.ID,
+			Username:    employee.User.Username,
+			Email:       employee.User.Email,
+			FirstName:   employee.FirstName,
+			LastName:    employee.LastName,
+			DateOfBirth: employee.DateOfBirth.Format("2006-01-02"),
+			PhoneNumber: employee.PhoneNumber,
+		}
+	}
+
+	utils.WriteJSON(w, http.StatusOK, employeesResponse, nil)
+	log.Println("employees retrieved successfully for festival:", festivalId)
+
 }

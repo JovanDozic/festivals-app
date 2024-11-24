@@ -24,6 +24,7 @@ type UserService interface {
 	ChangePassword(username, oldPassword, newPassword string) error
 	UpdateUserProfile(username string, updatedProfile *modelsUser.UserProfile) error
 	UpdateUserEmail(username string, email string) error
+	GetFestivalEmployees(festivalId uint) ([]modelsUser.UserProfile, error)
 }
 
 type userService struct {
@@ -288,4 +289,8 @@ func (s *userService) CreateUser(user *modelsUser.User) error {
 	}
 
 	return nil
+}
+
+func (s *userService) GetFestivalEmployees(festivalId uint) ([]modelsUser.UserProfile, error) {
+	return s.profileRepo.GetFestivalEmployees(festivalId)
 }

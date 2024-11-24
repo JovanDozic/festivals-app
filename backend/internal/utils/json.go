@@ -20,7 +20,7 @@ func (e Envelope) String() string {
 	return string(js)
 }
 
-func WriteJSON(w http.ResponseWriter, status int, data Envelope, headers http.Header) error {
+func WriteJSON(w http.ResponseWriter, status int, data any, headers http.Header) error {
 	js, err := json.Marshal(data)
 	if err != nil {
 		log.Println("error:", err)
