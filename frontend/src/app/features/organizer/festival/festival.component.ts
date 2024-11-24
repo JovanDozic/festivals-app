@@ -17,6 +17,7 @@ import {
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { EditFestivalComponent } from '../edit-festival/edit-festival.component';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-festival',
@@ -29,6 +30,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
     MatDividerModule,
     MatCardModule,
     MatChipsModule,
+    MatMenuModule,
   ],
   templateUrl: './festival.component.html',
   styleUrls: ['./festival.component.scss', '../../../app.component.scss'],
@@ -46,10 +48,14 @@ import { animate, style, transition, trigger } from '@angular/animations';
   ],
 })
 export class FestivalComponent implements OnInit {
+  onViewEmployeesClick(arg0: Festival) {
+    throw new Error('Method not implemented.');
+  }
   festival: Festival | null = null;
   isLoading: boolean = true;
   currentImageIndex: number = 0;
   previousImageIndex: number = 0;
+  employeeCount: number = 0;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -59,6 +65,7 @@ export class FestivalComponent implements OnInit {
 
   ngOnInit() {
     this.loadFestival();
+    this.loadEmployeeCount();
   }
 
   goBack() {
@@ -81,6 +88,23 @@ export class FestivalComponent implements OnInit {
           this.snackbarService.show('Error getting festival');
           this.festival = null;
           this.isLoading = true;
+        },
+      });
+    }
+  }
+
+  loadEmployeeCount() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.festivalService.getEmployeeCount(Number(id)).subscribe({
+        next: (count) => {
+          console.log('Employee count: ', count);
+          this.employeeCount = count;
+        },
+        error: (error) => {
+          console.log('Error fetching employee count: ', error);
+          this.snackbarService.show('Error getting employee count');
+          this.employeeCount = 0;
         },
       });
     }

@@ -21,6 +21,14 @@ export class FestivalService {
       .pipe(map((response) => response.festivals));
   }
 
+  getEmployeeCount(festivalId: number): Observable<number> {
+    return this.http
+      .get<{ festivalId: number; count: number }>(
+        `${this.apiUrl}/organizer/festival/${festivalId}/employee/count`
+      )
+      .pipe(map((response) => response.count));
+  }
+
   createFestival(festival: CreateFestivalRequest): Observable<any> {
     console.log('Creating a festival', festival);
     return this.http.post<any>(`${this.apiUrl}/festival`, festival);
