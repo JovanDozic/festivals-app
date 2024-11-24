@@ -29,6 +29,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
+import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-edit-festival',
@@ -56,7 +57,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 export class EditFestivalComponent implements OnInit {
   private fb = inject(FormBuilder);
   private festivalService = inject(FestivalService);
-  private snackbar = inject(MatSnackBar);
+  private snackbarService = inject(SnackbarService);
   private dialogRef = inject(MatDialogRef<EditFestivalComponent>);
   private data: Festival = inject(MAT_DIALOG_DATA);
 
@@ -115,7 +116,7 @@ export class EditFestivalComponent implements OnInit {
 
   saveChanges() {
     if (this.basicInfoFormGroup.invalid || this.addressFormGroup.invalid) {
-      this.snackbar.open('Please complete all required fields.');
+      this.snackbarService.show('Please complete all required fields.');
       return;
     }
 
@@ -142,18 +143,12 @@ export class EditFestivalComponent implements OnInit {
 
     this.festivalService.updateFestival(updatedFestival).subscribe({
       next: () => {
-        this.snackbar.open('Festival updated successfully!', 'Close', {
-          duration: 2000,
-        });
+        this.snackbarService.show('Festival updated successfully!');
         this.dialogRef.close(true);
       },
       error: (error) => {
         console.error('Error updating festival:', error);
-        this.snackbar.open(
-          'Error updating festival. Please try again.',
-          'Close',
-          { duration: 2000 }
-        );
+        this.snackbarService.show('Error updating festival. Please try again.');
       },
     });
   }

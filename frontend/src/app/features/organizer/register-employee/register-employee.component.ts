@@ -33,6 +33,7 @@ import {
   CreateProfileRequest,
   CreateUpdateUserProfileRequest,
 } from '../../../models/user/user-profile-request.model';
+import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-register-employee',
@@ -61,7 +62,7 @@ import {
 export class RegisterEmployeeComponent {
   private fb = inject(FormBuilder);
   private festivalService = inject(FestivalService);
-  private snackbar = inject(MatSnackBar);
+  private snackbarService = inject(SnackbarService);
   private dialogRef = inject(MatDialogRef<RegisterEmployeeComponent>);
   private data: { festivalId: number } = inject(MAT_DIALOG_DATA);
   private userService = inject(UserService);
@@ -115,12 +116,12 @@ export class RegisterEmployeeComponent {
       console.log('registering employee', request);
       this.userService.registerEmployee(request).subscribe({
         next: () => {
-          this.snackbar.open('Employee registered');
+          this.snackbarService.show('Employee registered');
           this.dialogRef.close(true);
         },
         error: (error) => {
           console.error('Error registering employee:', error);
-          this.snackbar.open('Failed to register employee');
+          this.snackbarService.show('Failed to register employee');
         },
       });
     }
@@ -154,13 +155,13 @@ export class RegisterEmployeeComponent {
           this.festivalService
             .employEmployee(this.data.festivalId, employee.userId)
             .subscribe(() => {
-              this.snackbar.open('Employee registered');
+              this.snackbarService.show('Employee registered');
               this.dialogRef.close(true);
             });
         },
         error: (error) => {
           console.error('Error registering employee:', error);
-          this.snackbar.open('Failed to register employee');
+          this.snackbarService.show('Failed to register employee');
         },
       });
     }

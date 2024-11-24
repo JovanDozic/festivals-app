@@ -25,6 +25,7 @@ import {
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { routes } from '../../../app.routes';
 import { Router } from '@angular/router';
+import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-create-festival',
@@ -48,7 +49,7 @@ import { Router } from '@angular/router';
 export class CreateFestivalComponent {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
-  private snackbar = inject(MatSnackBar);
+  private snackbarService = inject(SnackbarService);
   private festivalService = inject(FestivalService);
   private dialog = inject(MatDialog);
   router: Router = inject(Router);
@@ -120,16 +121,12 @@ export class CreateFestivalComponent {
         next: (response) => {
           console.log('Festival created:', response);
           this.festivalId = response.id?.toString() ?? null;
-          this.snackbar.open('Basic info saved successfully!', 'Close', {
-            duration: 2000,
-          });
+          this.snackbarService.show('Basic info saved successfully!');
           this.stepper?.next();
         },
         error: (error) => {
           console.error('Error creating festival:', error);
-          this.snackbar.open('Error creating festival', 'Close', {
-            duration: 2000,
-          });
+          this.snackbarService.show('Error creating festival');
         },
       });
     }
@@ -162,7 +159,7 @@ export class CreateFestivalComponent {
 
   uploadFestivalImages() {
     if (this.images.length === 0) {
-      this.snackbar.open('Add at least one image');
+      this.snackbarService.show('Add at least one image');
     }
     if (this.festivalId && this.images.length > 0) {
       const uploadObservables = this.images.map((imageUrl) =>
@@ -174,13 +171,13 @@ export class CreateFestivalComponent {
 
       forkJoin(uploadObservables).subscribe({
         next: () => {
-          this.snackbar.open('Festival created successfully!');
+          this.snackbarService.show('Festival created successfully!');
           this.stepper?.next();
           this.router.navigate(['organizer/my-festivals/' + this.festivalId]);
         },
         error: (error) => {
           console.error('Error uploading images:', error);
-          this.snackbar.open('Error uploading images');
+          this.snackbarService.show('Error uploading images');
         },
       });
     }
