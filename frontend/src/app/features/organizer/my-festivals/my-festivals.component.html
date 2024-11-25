@@ -84,7 +84,12 @@
         <div>
           <mat-card-header>
             <mat-card-title>{{ festival.name }}</mat-card-title>
-            <mat-card-subtitle>{{ festival.description }}</mat-card-subtitle>
+            <mat-card-subtitle
+              >{{ festival.description | slice : 0 : 200
+              }}{{
+                festival.description.length > 200 ? "..." : ""
+              }}</mat-card-subtitle
+            >
           </mat-card-header>
           <mat-card-content>
             <span class="icon-property">

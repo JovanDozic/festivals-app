@@ -9,7 +9,10 @@
       >
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <h1>{{ festival.name }}</h1>
+      <h1>
+        {{ festival.name | slice : 0 : 40
+        }}{{ festival.name.length > 40 ? "..." : "" }}
+      </h1>
     </div>
     <div class="button-container">
       <button
