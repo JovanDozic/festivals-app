@@ -36,8 +36,9 @@ func (r *itemRepo) CreateItem(item *modelsFestival.Item) error {
 		}
 		err = r.db.Create(&ticketType).Error
 		if err != nil {
-			return nil
+			return err
 		}
+		return nil
 	} else if item.Type == modelsFestival.ItemPackageAddon {
 		packageAddon := modelsFestival.PackageAddon{
 			ItemID: item.ID,
@@ -45,8 +46,9 @@ func (r *itemRepo) CreateItem(item *modelsFestival.Item) error {
 		}
 		err = r.db.Create(&packageAddon).Error
 		if err != nil {
-			return nil
+			return err
 		}
+		return nil
 	}
 
 	return errors.New("invalid item type")

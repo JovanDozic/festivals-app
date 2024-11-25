@@ -4,6 +4,7 @@ import (
 	"backend/internal/config"
 	modelsFestival "backend/internal/models/festival"
 	reposFestival "backend/internal/repositories/festival"
+	"strings"
 )
 
 type ItemService interface {
@@ -38,7 +39,7 @@ func (s *itemService) CreateItem(item *modelsFestival.Item) error {
 func (s *itemService) CreatePriceListItem(festivalId, itemId uint, priceListItem *modelsFestival.PriceListItem) error {
 
 	priceList, err := s.itemRepo.GetPriceList(festivalId)
-	if err != nil {
+	if err != nil && !strings.Contains(err.Error(), "record not found") {
 		return err
 	}
 
