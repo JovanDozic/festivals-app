@@ -444,7 +444,7 @@ func (h *userHandler) GetFestivalEmployees(w http.ResponseWriter, r *http.Reques
 	}
 	for i, employee := range employees {
 		employeesResponse.Employees[i] = dtoUser.EmployeeResponse{
-			ID:          employee.ID,
+			ID:          employee.User.ID,
 			Username:    employee.User.Username,
 			Email:       employee.User.Email,
 			FirstName:   employee.FirstName,
@@ -486,7 +486,7 @@ func (h *userHandler) GetEmployeesNotOnFestival(w http.ResponseWriter, r *http.R
 	}
 	for i, employee := range employees {
 		employeesResponse.Employees[i] = dtoUser.EmployeeResponse{
-			ID:          employee.ID,
+			ID:          employee.User.ID,
 			Username:    employee.User.Username,
 			Email:       employee.User.Email,
 			FirstName:   employee.FirstName,

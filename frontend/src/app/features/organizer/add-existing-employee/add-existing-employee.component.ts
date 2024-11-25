@@ -95,6 +95,26 @@ export class AddExistingEmployeeComponent implements OnInit {
     }
   }
 
+  addEmployee(employee: Employee) {
+    console.log('Adding employee: ', employee);
+    console.log('Festival ID: ', this.data.festivalId);
+    if (this.data.festivalId) {
+      this.festivalService
+        .employEmployee(this.data.festivalId, employee.id)
+        .subscribe({
+          next: (response) => {
+            console.log('Employee added: ', response);
+            this.snackbarService.show('Employee added to festival');
+            this.loadEmployees();
+          },
+          error: (error) => {
+            console.log('Error adding employee: ', error);
+            this.snackbarService.show('Error adding employee');
+          },
+        });
+    }
+  }
+
   done() {
     this.dialogRef.close(true);
   }
