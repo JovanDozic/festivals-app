@@ -53,43 +53,44 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	r.HandleFunc("/user/register-attendee", userHandler.RegisterAttendee).Methods(http.MethodPost)
 	// ...
 
-	protectedRouter := mux.NewRouter()
-	protectedRouter = protectedRouter.SkipClean(true)
-	protectedRouter.MethodNotAllowedHandler = http.HandlerFunc(MethodNotAllowedHandler)
-	protectedRouter.Use(middlewares.Auth(utils.NewJWTUtil(config.JWT.Secret)))
+	protR := mux.NewRouter()
+	protR = protR.SkipClean(true)
+	protR.MethodNotAllowedHandler = http.HandlerFunc(MethodNotAllowedHandler)
+	protR.Use(middlewares.Auth(utils.NewJWTUtil(config.JWT.Secret)))
 
 	// Authenticated routes
-	protectedRouter.HandleFunc("/secure-health", commonHandler.HealthCheck).Methods(http.MethodGet)
-	r.PathPrefix("").Handler(protectedRouter)
-	protectedRouter.HandleFunc("/user/profile", userHandler.CreateUserProfile).Methods(http.MethodPost)
-	protectedRouter.HandleFunc("/user/profile/address", userHandler.CreateUserAddress).Methods(http.MethodPost)
-	protectedRouter.HandleFunc("/user/profile", userHandler.GetUserProfile).Methods(http.MethodGet)
-	protectedRouter.HandleFunc("/user/change-password", userHandler.ChangePassword).Methods(http.MethodPut)
-	protectedRouter.HandleFunc("/user/profile", userHandler.UpdateUserProfile).Methods(http.MethodPut)
-	protectedRouter.HandleFunc("/user/email", userHandler.UpdateUserEmail).Methods(http.MethodPut)
+	protR.HandleFunc("/secure-health", commonHandler.HealthCheck).Methods(http.MethodGet)
+	r.PathPrefix("").Handler(protR)
+	protR.HandleFunc("/user/profile", userHandler.CreateUserProfile).Methods(http.MethodPost)
+	protR.HandleFunc("/user/profile/address", userHandler.CreateUserAddress).Methods(http.MethodPost)
+	protR.HandleFunc("/user/profile", userHandler.GetUserProfile).Methods(http.MethodGet)
+	protR.HandleFunc("/user/change-password", userHandler.ChangePassword).Methods(http.MethodPut)
+	protR.HandleFunc("/user/profile", userHandler.UpdateUserProfile).Methods(http.MethodPut)
+	protR.HandleFunc("/user/email", userHandler.UpdateUserEmail).Methods(http.MethodPut)
 	// ...
 	// todo: should this be like get all future ones, or ones in the attendee's city?
-	protectedRouter.HandleFunc("/festival", festivalHandler.GetAll).Methods(http.MethodGet)
+	protR.HandleFunc("/festival", festivalHandler.GetAll).Methods(http.MethodGet)
 	// ... ORGANIZER ONLY
-	protectedRouter.HandleFunc("/festival", festivalHandler.Create).Methods(http.MethodPost)
-	protectedRouter.HandleFunc("/organizer/festival", festivalHandler.GetByOrganizer).Methods(http.MethodGet)
-	protectedRouter.HandleFunc("/festival/{festivalId}", festivalHandler.GetById).Methods(http.MethodGet)
-	protectedRouter.HandleFunc("/festival/{festivalId}", festivalHandler.Update).Methods(http.MethodPut)
-	protectedRouter.HandleFunc("/festival/{festivalId}", festivalHandler.Delete).Methods(http.MethodDelete)
+	protR.HandleFunc("/festival", festivalHandler.Create).Methods(http.MethodPost)
+	protR.HandleFunc("/organizer/festival", festivalHandler.GetByOrganizer).Methods(http.MethodGet)
+	protR.HandleFunc("/festival/{festivalId}", festivalHandler.GetById).Methods(http.MethodGet)
+	protR.HandleFunc("/festival/{festivalId}", festivalHandler.Update).Methods(http.MethodPut)
+	protR.HandleFunc("/festival/{festivalId}", festivalHandler.Delete).Methods(http.MethodDelete)
 
-	protectedRouter.HandleFunc("/festival/{festivalId}/publish", festivalHandler.PublishFestival).Methods(http.MethodPut)
-	protectedRouter.HandleFunc("/festival/{festivalId}/cancel", festivalHandler.CancelFestival).Methods(http.MethodPut)
-	protectedRouter.HandleFunc("/festival/{festivalId}/complete", festivalHandler.CompleteFestival).Methods(http.MethodPut)
-	protectedRouter.HandleFunc("/festival/{festivalId}/store/open", festivalHandler.OpenStore).Methods(http.MethodPut)
-	protectedRouter.HandleFunc("/festival/{festivalId}/store/close", festivalHandler.CloseStore).Methods(http.MethodPut)
+	protR.HandleFunc("/festival/{festivalId}/publish", festivalHandler.PublishFestival).Methods(http.MethodPut)
+	protR.HandleFunc("/festival/{festivalId}/cancel", festivalHandler.CancelFestival).Methods(http.MethodPut)
+	protR.HandleFunc("/festival/{festivalId}/complete", festivalHandler.CompleteFestival).Methods(http.MethodPut)
+	protR.HandleFunc("/festival/{festivalId}/store/open", festivalHandler.OpenStore).Methods(http.MethodPut)
+	protR.HandleFunc("/festival/{festivalId}/store/close", festivalHandler.CloseStore).Methods(http.MethodPut)
 
-	protectedRouter.HandleFunc("/festival/{festivalId}/image", festivalHandler.GetImages).Methods(http.MethodGet)
-	protectedRouter.HandleFunc("/festival/{festivalId}/image", festivalHandler.AddImage).Methods(http.MethodPost)
+	protR.HandleFunc("/festival/{festivalId}/image", festivalHandler.GetImages).Methods(http.MethodGet)
+	protR.HandleFunc("/festival/{festivalId}/image", festivalHandler.AddImage).Methods(http.MethodPost)
 
-	protectedRouter.HandleFunc("/organizer/employee", userHandler.CreateEmployee).Methods(http.MethodPost)
-	protectedRouter.HandleFunc("/organizer/festival/{festivalId}/employee", userHandler.GetFestivalEmployees).Methods(http.MethodGet)
-	protectedRouter.HandleFunc("/organizer/festival/{festivalId}/employee/{employeeId}/employ", festivalHandler.Employ).Methods(http.MethodPut)
-	protectedRouter.HandleFunc("/organizer/festival/{festivalId}/employee/count", festivalHandler.GetEmployeeCount).Methods(http.MethodGet)
+	protR.HandleFunc("/organizer/employee", userHandler.CreateEmployee).Methods(http.MethodPost)
+	protR.HandleFunc("/organizer/festival/{festivalId}/employee", userHandler.GetFestivalEmployees).Methods(http.MethodGet)
+	protR.HandleFunc("/organizer/festival/{festivalId}/employee/{employeeId}/employ", festivalHandler.Employ).Methods(http.MethodPut)
+	protR.HandleFunc("/organizer/festival/{festivalId}/employee/count", festivalHandler.GetEmployeeCount).Methods(http.MethodGet)
+	protR.HandleFunc("/organizer/festival/{festivalId}/employee/available", userHandler.GetEmployeesNotOnFestival).Methods(http.MethodGet)
 
 	// ...
 

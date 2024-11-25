@@ -38,6 +38,14 @@ export class FestivalService {
       .pipe(map((response) => response.employees));
   }
 
+  getEmployeesNotOnFestival(festivalId: number): Observable<any> {
+    return this.http
+      .get<EmployeesResponse>(
+        `${this.apiUrl}/organizer/festival/${festivalId}/employee/available`
+      )
+      .pipe(map((response) => response.employees));
+  }
+
   employEmployee(festivalId: number, employeeId: number): Observable<void> {
     return this.http.put<void>(
       `${this.apiUrl}/organizer/festival/${festivalId}/employee/${employeeId}/employ`,

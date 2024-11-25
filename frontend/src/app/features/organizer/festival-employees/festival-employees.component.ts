@@ -11,15 +11,10 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import {
-  ConfirmationDialog,
-  ConfirmationDialogData,
-} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { EditFestivalComponent } from '../edit-festival/edit-festival.component';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { RegisterEmployeeComponent } from '../register-employee/register-employee.component';
+import { AddExistingEmployeeComponent } from '../add-existing-employee/add-existing-employee.component';
 
 @Component({
   selector: 'app-festival-employees',
@@ -42,21 +37,11 @@ import { RegisterEmployeeComponent } from '../register-employee/register-employe
   ],
 })
 export class FestivalEmployeesComponent implements OnInit {
-  onAddEmployeeClick() {
-    throw new Error('Method not implemented.');
-  }
   festival: Festival | null = null;
   isLoading = false;
   employeeCount: number = 0;
   employees: Employee[] = [];
-  displayedColumns = [
-    'id',
-    'username',
-    'email',
-    'name',
-    'phoneNumber',
-    'actions',
-  ];
+  displayedColumns = ['username', 'email', 'name', 'phoneNumber', 'actions'];
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -115,7 +100,6 @@ export class FestivalEmployeesComponent implements OnInit {
     if (id) {
       this.festivalService.getEmployees(Number(id)).subscribe({
         next: (employees) => {
-          console.log('Employees: ', employees);
           this.employees = employees;
         },
         error: (error) => {
@@ -125,6 +109,24 @@ export class FestivalEmployeesComponent implements OnInit {
         },
       });
     }
+  }
+
+  onAddEmployeeClick() {
+    const dialogRef = this.dialog.open(AddExistingEmployeeComponent, {
+      data: {
+        festivalId: this.festival?.id,
+      },
+      width: '800px',
+      height: 'auto',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('Dialog closed with result: ', result);
+      if (result) {
+        this.loadEmployeeCount();
+        this.loadEmployees();
+      }
+    });
   }
 
   onRegisterEmployee() {

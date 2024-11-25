@@ -25,6 +25,7 @@ type UserHandler interface {
 	UpdateUserEmail(w http.ResponseWriter, r *http.Request)
 	CreateEmployee(w http.ResponseWriter, r *http.Request)
 	GetFestivalEmployees(w http.ResponseWriter, r *http.Request)
+	GetEmployeesNotOnFestival(w http.ResponseWriter, r *http.Request)
 }
 
 type userHandler struct {
@@ -455,5 +456,46 @@ func (h *userHandler) GetFestivalEmployees(w http.ResponseWriter, r *http.Reques
 
 	utils.WriteJSON(w, http.StatusOK, employeesResponse, nil)
 	log.Println("employees retrieved successfully for festival:", festivalId)
+}
 
+func (h *userHandler) GetEmployeesNotOnFestival(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthOrganizerRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	vars := mux.Vars(r)
+	festivalId := vars["festivalId"]
+	if festivalId == "" {
+		log.Println("error:", models.ErrBadRequest)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	employees, err := h.userService.GetEmployeesNotOnFestival(utils.ToUint(festivalId))
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	employeesResponse := dtoUser.GetEmployeesResponse{
+		FestivalId: utils.ToUint(festivalId),
+		Employees:  make([]dtoUser.EmployeeResponse, len(employees)),
+	}
+	for i, employee := range employees {
+		employeesResponse.Employees[i] = dtoUser.EmployeeResponse{
+			ID:          employee.ID,
+			Username:    employee.User.Username,
+			Email:       employee.User.Email,
+			FirstName:   employee.FirstName,
+			LastName:    employee.LastName,
+			DateOfBirth: employee.DateOfBirth.Format("2006-01-02"),
+			PhoneNumber: employee.PhoneNumber,
+		}
+	}
+
+	utils.WriteJSON(w, http.StatusOK, employeesResponse, nil)
+	log.Println("employees not on festival retrieved successfully for festival:", festivalId)
 }

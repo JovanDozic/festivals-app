@@ -1,0 +1,85 @@
+.full-width {
+  width: 100%;
+}
+
+mat-card-header {
+  margin-bottom: 20px;
+}
+
+.error-message {
+  margin-top: 5px;
+  text-align: center;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+mat-card-actions {
+  margin-top: 5px;
+}
+
+h2,
+mat-dialog-title {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif !important;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0px 20px;
+}
+
+form {
+  margin-top: 20px;
+  overflow: hidden;
+  overflow-y: hidden;
+}
+
+.form-fields {
+  display: flex;
+  justify-content: left;
+  gap: 10px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.error-message {
+  margin-top: 5px;
+  text-align: center;
+}
+
+h1,
+strong {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif;
+}
+
+.table-container {
+  height: 400px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.table-container table {
+  width: 100%;
+  table-layout: fixed;
+  background-color: transparent;
+}
+
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}

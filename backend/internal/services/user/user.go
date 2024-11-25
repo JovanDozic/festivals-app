@@ -25,6 +25,7 @@ type UserService interface {
 	UpdateUserProfile(username string, updatedProfile *modelsUser.UserProfile) error
 	UpdateUserEmail(username string, email string) error
 	GetFestivalEmployees(festivalId uint) ([]modelsUser.UserProfile, error)
+	GetEmployeesNotOnFestival(festivalId uint) ([]modelsUser.UserProfile, error)
 }
 
 type userService struct {
@@ -293,4 +294,8 @@ func (s *userService) CreateUser(user *modelsUser.User) error {
 
 func (s *userService) GetFestivalEmployees(festivalId uint) ([]modelsUser.UserProfile, error) {
 	return s.profileRepo.GetFestivalEmployees(festivalId)
+}
+
+func (s *userService) GetEmployeesNotOnFestival(festivalId uint) ([]modelsUser.UserProfile, error) {
+	return s.profileRepo.GetEmployeesNotOnFestival(festivalId)
 }

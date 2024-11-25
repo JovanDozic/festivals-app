@@ -13,6 +13,7 @@ type UserProfileRepo interface {
 	UpdateAddressId(userID uint, addressID uint) error
 	Update(userProfile *models.UserProfile) error
 	GetFestivalEmployees(festivalId uint) ([]models.UserProfile, error)
+	GetEmployeesNotOnFestival(festivalId uint) ([]models.UserProfile, error)
 }
 
 type userProfileRepo struct {
@@ -68,6 +69,23 @@ func (r *userProfileRepo) GetFestivalEmployees(festivalId uint) ([]models.UserPr
 		Joins("join employees e on u.id = e.user_id").
 		Joins("join festival_employees fe on e.user_id = fe.user_id").
 		Where("fe.festival_id = ?", festivalId).
+		Find(&profiles).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return profiles, nil
+}
+
+func (r *userProfileRepo) GetEmployeesNotOnFestival(festivalId uint) ([]models.UserProfile, error) {
+	var profiles []models.UserProfile
+
+	err := r.db.Table("user_profiles").
+		Preload("User").
+		Preload("Address.City.Country").
+		Joins("join users u on user_profiles.user_id = u.id").
+		Joins("join employees e on u.id = e.user_id").
+		Where("e.user_id not in (select user_id from festival_employees where festival_id = ?)", festivalId).
 		Find(&profiles).Error
 	if err != nil {
 		return nil, err

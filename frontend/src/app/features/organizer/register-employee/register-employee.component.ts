@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -12,12 +12,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { FestivalService } from '../../../services/festival/festival.service';
-import {
-  CreateStaffRequest,
-  Festival,
-} from '../../../models/festival/festival.model';
+import { CreateStaffRequest } from '../../../models/festival/festival.model';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,10 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UserService } from '../../../services/user/user.service';
-import {
-  CreateProfileRequest,
-  CreateUpdateUserProfileRequest,
-} from '../../../models/user/user-profile-request.model';
+import { CreateProfileRequest } from '../../../models/user/user-profile-request.model';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 
 @Component({

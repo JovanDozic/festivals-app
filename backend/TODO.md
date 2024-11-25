@@ -24,3 +24,12 @@ can i get a list of employees that work on any festival that i'm organizer of?
 [] remove employee from the festival: PUT organizer/festival/{festivalId}/employee/{employeeId}/fire
 
 [] number of employees in the festival: GET organizer/festival/{festivalId}/employee/count
+
+[] GET all available employees that can be added to the festival
+
+- should it be all employees in the system? or employees that are not in any festival?
+- we should list out all employees that are not in any festival
+- and also list should not include any employee that's already working on that festival
+- so endpoint should look like
+  GET organizer/festival/{festivalId}/employee/available
+- so we have festival ID against which we're checking if employee is available

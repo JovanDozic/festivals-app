@@ -38,7 +38,27 @@
   width: 100%;
 }
 
-table {
-  background-color: transparent;
+.table-container {
+  height: 400px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.table-container table {
   width: 100%;
+  table-layout: fixed;
+  background-color: transparent;
+}
+
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
 }
