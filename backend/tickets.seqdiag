@@ -1,0 +1,17 @@
+fe -> hnd: create ticket type (name, desc, num, TYPE, fest_id)
+hnd -> repo: create item of type TICKET
+repo -> db: insert into ITEMS
+repo -> db: insert into TICKET_TYPES
+db -> repo: ok
+repo -> hnd: ok
+hnd -> fe: ok
+
+fe -> hnd: add price to that item (item_id, price, start, end OR is_fixed)
+hnd -> hnd: get or create festival price_list
+hnd -> hnd: item.list_id = list_id
+hnd -> repo: add this price_list_item to festivals price_list
+
+repo -> db: insert into PRICE_LIST_ITEMS
+db -> repo: ok
+repo -> hnd: ok
+hnd -> fe: ok
