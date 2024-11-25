@@ -11,6 +11,7 @@ import (
 
 type ItemHandler interface {
 	CreateItem(w http.ResponseWriter, r *http.Request)
+	CreatePriceListItem(w http.ResponseWriter, r *http.Request)
 }
 
 type itemHandler struct {

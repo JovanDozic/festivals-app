@@ -29,18 +29,21 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	countryRepo := reposCommon.NewCountryRepo(db)
 	festivalRepo := reposFestival.NewFestivalRepo(db)
 	imageRepo := reposCommon.NewImageRepo(db)
+	itemRepo := reposFestival.NewItemRepo(db)
 	// ...
 
 	// Init services
 	locationService := servicesCommon.NewLocationService(addressRepo, cityRepo, countryRepo)
 	userService := servicesUser.NewUserService(config, userRepo, userProfileRepo, locationService)
 	festivalService := services.NewFestivalService(config, festivalRepo, userRepo, locationService, imageRepo)
+	itemService := services.NewItemService(config, itemRepo)
 	// ...
 
 	// Init handlers
 	commonHandler := handlersCommon.NewHealthHandler(config)
 	userHandler := handlersUser.NewUserHandler(userService)
 	festivalHandler := handlers.NewFestivalHandler(festivalService, locationService)
+	itemHandler := handlers.NewItemHandler(itemService, festivalService)
 	// ...
 
 	r := mux.NewRouter()
@@ -96,6 +99,9 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	pR.HandleFunc("/organizer/festival/{festivalId}/employee/available", userHandler.GetEmployeesNotOnFestival).Methods(http.MethodGet)
 
 	// ...
+
+	pR.HandleFunc("/organizer/festival/{festivalId}/item", itemHandler.CreateItem).Methods(http.MethodPost)
+	pR.HandleFunc("/organizer/festival/{festivalId}/item/price", itemHandler.CreatePriceListItem).Methods(http.MethodPost)
 
 	return r
 }
