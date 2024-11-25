@@ -15,6 +15,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { RegisterEmployeeComponent } from '../register-employee/register-employee.component';
 import { AddExistingEmployeeComponent } from '../add-existing-employee/add-existing-employee.component';
+import {
+  ConfirmationDialog,
+  ConfirmationDialogData,
+} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-festival-employees',
@@ -145,5 +149,42 @@ export class FestivalEmployeesComponent implements OnInit {
         this.loadEmployees();
       }
     });
+  }
+
+  onFireEmployeeClick(employee: Employee) {
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      data: {
+        title: 'Fire Employee',
+        message: `Are you sure you want to fire ${employee.firstName} ${employee.lastName}?`,
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+      } as ConfirmationDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirm) {
+        this.fireEmployee(employee);
+      }
+    });
+  }
+
+  fireEmployee(employee: Employee) {
+    if (this.festival) {
+      this.festivalService
+        .fireEmployee(this.festival.id, employee.id)
+        .subscribe({
+          next: () => {
+            this.snackbarService.show(
+              `${employee.firstName} ${employee.lastName} removed from the festival`
+            );
+            this.loadEmployeeCount();
+            this.loadEmployees();
+          },
+          error: (error) => {
+            console.log('Error firing employee: ', error);
+            this.snackbarService.show('Error firing employee');
+          },
+        });
+    }
   }
 }

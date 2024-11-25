@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
+  MatDialog,
   MatDialogActions,
   MatDialogContent,
   MatDialogRef,
@@ -33,6 +34,10 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ConfirmationDialog,
+  ConfirmationDialogData,
+} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-add-existing-employee',
@@ -65,6 +70,7 @@ export class AddExistingEmployeeComponent implements OnInit {
   private router = inject(Router);
   private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
+  private dialog = inject(MatDialog);
 
   isLoading = false;
   employeeCount: number = 0;
@@ -95,6 +101,23 @@ export class AddExistingEmployeeComponent implements OnInit {
     }
   }
 
+  onAddEmployeeClick(employee: Employee) {
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      data: {
+        title: 'Add an Employee',
+        message: `Are you sure you want to add ${employee.firstName} ${employee.lastName} to this Festival?`,
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+      } as ConfirmationDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirm) {
+        this.addEmployee(employee);
+      }
+    });
+  }
+
   addEmployee(employee: Employee) {
     console.log('Adding employee: ', employee);
     console.log('Festival ID: ', this.data.festivalId);
@@ -104,7 +127,9 @@ export class AddExistingEmployeeComponent implements OnInit {
         .subscribe({
           next: (response) => {
             console.log('Employee added: ', response);
-            this.snackbarService.show('Employee added to festival');
+            this.snackbarService.show(
+              `${employee.firstName} ${employee.lastName} added to festival`
+            );
             this.loadEmployees();
           },
           error: (error) => {

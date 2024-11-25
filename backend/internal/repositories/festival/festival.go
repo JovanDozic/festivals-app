@@ -17,6 +17,7 @@ type FestivalRepo interface {
 	AddImage(festivalId uint, imageId uint) error
 	Employ(festivalId uint, employeeId uint) error
 	GetEmployeeCount(festivalId uint) (int, error)
+	Fire(festivalId uint, employeeId uint) error
 }
 
 type festivalRepo struct {
@@ -147,6 +148,16 @@ func (r *festivalRepo) Employ(festivalId uint, employeeId uint) error {
 		return err
 	}
 
+	return nil
+}
+
+func (r *festivalRepo) Fire(festivalId uint, employeeId uint) error {
+
+	err := r.db.Where("festival_id = ? AND user_id = ?", festivalId, employeeId).
+		Delete(&models.FestivalEmployee{}).Error
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

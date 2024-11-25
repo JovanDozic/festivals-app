@@ -54,7 +54,7 @@ export class FestivalService {
   }
 
   fireEmployee(festivalId: number, employeeId: number): Observable<void> {
-    return this.http.put<void>(
+    return this.http.delete<void>(
       `${this.apiUrl}/organizer/festival/${festivalId}/employee/${employeeId}/fire`,
       {}
     );

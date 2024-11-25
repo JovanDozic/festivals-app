@@ -30,6 +30,7 @@ type FestivalHandler interface {
 	RemoveImage(w http.ResponseWriter, r *http.Request)
 	GetImages(w http.ResponseWriter, r *http.Request)
 	Employ(w http.ResponseWriter, r *http.Request)
+	Fire(w http.ResponseWriter, r *http.Request)
 	GetEmployeeCount(w http.ResponseWriter, r *http.Request)
 }
 
@@ -476,6 +477,38 @@ func (h *festivalHandler) Employ(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "employee employed successfully"}, nil)
 	log.Println("employee employed successfully for festival:", festivalId)
+}
+
+func (h *festivalHandler) Fire(w http.ResponseWriter, r *http.Request) {
+
+	_, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	vars := mux.Vars(r)
+	festivalId := vars["festivalId"]
+	if festivalId == "" {
+		log.Println("error:", models.ErrBadRequest)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	employeeId := vars["employeeId"]
+	if employeeId == "" {
+		log.Println("error:", models.ErrBadRequest)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := h.festivalService.Fire(utils.ToUint(festivalId), utils.ToUint(employeeId)); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "employee fired successfully"}, nil)
+	log.Println("employee fired successfully for festival:", festivalId)
 }
 
 func (h *festivalHandler) GetEmployeeCount(w http.ResponseWriter, r *http.Request) {
