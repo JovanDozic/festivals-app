@@ -22,12 +22,15 @@ mat-chip {
 
 :host-context([data-theme="light"]) mat-chip,
 table {
-  background-color: #f5f2ff;
+  background-color: #f5f2ff !important;
 }
 
-:host-context([data-theme="dark"]) mat-chip,
-table {
+:host-context([data-theme="dark"]) mat-chip {
   background-color: #1b1b24;
+}
+
+:host-context([data-theme="dark"]) table {
+  background-color: #1b1b24 !important;
 }
 
 mat-chip mat-icon {
