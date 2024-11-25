@@ -307,14 +307,16 @@ func (s *festivalService) GetAddressID(festivalId uint) (uint, error) {
 func (s *festivalService) Employ(festivalId uint, employeeId uint) error {
 
 	if err := s.festivalRepo.Employ(festivalId, employeeId); err != nil {
-		if strings.Contains(err.Error(), "duplicate key value") {
-			return modelsError.ErrEmployeeAlreadyEmployed
-		} else if strings.Contains(err.Error(), "violates foreign key constraint") {
-			return modelsError.ErrNotFound
-		} else if strings.Contains(err.Error(), "foreign key constraint") {
+		switch {
+		case strings.Contains(err.Error(), "duplicate key value"):
+			return modelsError.ErrDuplicateUser
+		case strings.Contains(err.Error(), "violates foreign key constraint"):
+			return modelsError.ErrUserNotFound
+		case strings.Contains(err.Error(), "foreign key constraint"):
 			return modelsError.ErrRoleNotFound
+		default:
+			return err
 		}
-		return err
 	}
 
 	return nil
@@ -323,14 +325,16 @@ func (s *festivalService) Employ(festivalId uint, employeeId uint) error {
 func (s *festivalService) Fire(festivalId uint, employeeId uint) error {
 
 	if err := s.festivalRepo.Fire(festivalId, employeeId); err != nil {
-		if strings.Contains(err.Error(), "duplicate key value") {
-			return modelsError.ErrEmployeeAlreadyEmployed
-		} else if strings.Contains(err.Error(), "violates foreign key constraint") {
-			return modelsError.ErrNotFound
-		} else if strings.Contains(err.Error(), "foreign key constraint") {
+		switch {
+		case strings.Contains(err.Error(), "duplicate key value"):
+			return modelsError.ErrDuplicateUser
+		case strings.Contains(err.Error(), "violates foreign key constraint"):
+			return modelsError.ErrUserNotFound
+		case strings.Contains(err.Error(), "foreign key constraint"):
 			return modelsError.ErrRoleNotFound
+		default:
+			return err
 		}
-		return err
 	}
 
 	return nil

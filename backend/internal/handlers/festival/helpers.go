@@ -57,6 +57,33 @@ func (h *festivalHandler) authorizeOrganizerForFestival(w http.ResponseWriter, r
 	return festivalId, true
 }
 
+func (h *itemHandler) authorizeOrganizerForFestival(w http.ResponseWriter, r *http.Request) (uint, bool) {
+	if !utils.AuthOrganizerRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return 0, false
+	}
+
+	festivalId, err := getFestivalIDFromRequest(r)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return 0, false
+	}
+
+	isOrganizer, err := h.festivalService.IsOrganizer(utils.GetUsername(r.Context()), festivalId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return 0, false
+	} else if !isOrganizer {
+		log.Printf("error: organizer %s is not authorized for festival ID: %d", utils.GetUsername(r.Context()), festivalId)
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return 0, false
+	}
+
+	return festivalId, true
+}
+
 func mapFestivalToResponse(festival modelsFestival.Festival, images []modelsCommon.Image) dtoFestival.FestivalResponse {
 
 	var address *dtoCommon.GetAddressResponse

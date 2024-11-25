@@ -28,3 +28,18 @@ type UpdateFestivalRequest struct {
 type AddImageRequest struct {
 	ImageUrl string `json:"imageUrl"`
 }
+
+type CreateItemRequest struct {
+	Name            string `json:"name"`
+	Description     string `json:"description"`
+	AvailableNumber int    `json:"availableNumber"`
+	Type            string `json:"type" validate:"oneof=TICKET_TYPE PACKAGE_ADDON"`
+}
+
+type CreatePriceListItemRequest struct {
+	ItemId   uint    `json:"itemId"`
+	Price    float64 `json:"price"`
+	DateFrom *string `json:"dateFrom"`
+	DateTo   *string `json:"dateTo"`
+	IsFixed  bool    `json:"isFixed"`
+}

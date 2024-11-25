@@ -7,9 +7,10 @@ repo -> hnd: ok
 hnd -> fe: ok
 
 fe -> hnd: add price to that item (item_id, price, start, end OR is_fixed)
-hnd -> hnd: get or create festival price_list
+hnd -> db: get or create festival pricelist
+db -> hnd: festival's price_list
 hnd -> hnd: item.list_id = list_id
-hnd -> repo: add this price_list_item to festivals price_list
+hnd -> repo: add this pricelist_item to festivals pricelist
 
 repo -> db: insert into PRICE_LIST_ITEMS
 db -> repo: ok

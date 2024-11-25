@@ -25,3 +25,37 @@ func (f *UpdateFestivalRequest) Validate() error {
 	// TODO: implement validation
 	return nil
 }
+
+func (f *CreateItemRequest) Validate() error {
+	if f.Name == "" {
+		return models.ErrMissingFields
+	}
+	if f.Description == "" {
+		return models.ErrMissingFields
+	}
+	if f.AvailableNumber == 0 {
+		return models.ErrMissingFields
+	}
+	if f.Type == "" {
+		return models.ErrMissingFields
+	}
+	return nil
+}
+
+func (f *CreatePriceListItemRequest) Validate() error {
+	if f.ItemId == 0 {
+		return models.ErrMissingFields
+	}
+	if f.Price == 0 {
+		return models.ErrMissingFields
+	}
+	if !f.IsFixed {
+		if f.DateFrom == nil {
+			return models.ErrMissingFields
+		}
+		if f.DateTo == nil {
+			return models.ErrMissingFields
+		}
+	}
+	return nil
+}

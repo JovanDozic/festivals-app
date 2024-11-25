@@ -7,6 +7,11 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	ItemTicketType   = "TICKET_TYPE"
+	ItemPackageAddon = "PACKAGE_ADDON"
+)
+
 type PriceList struct {
 	gorm.Model
 	FestivalID uint
@@ -30,8 +35,8 @@ type PriceListItem struct {
 	PriceList   PriceList
 	ItemID      uint
 	Item        Item
-	DateFrom    time.Time
-	DateTo      time.Time
+	DateFrom    *time.Time
+	DateTo      *time.Time
 	IsFixed     bool
 	Price       float64
 }
