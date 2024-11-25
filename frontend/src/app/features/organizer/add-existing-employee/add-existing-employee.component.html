@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Add existing Employee</h2>
 
-<mat-dialog-content>
+<mat-dialog-content *ngIf="employeeCount != 0">
   <div class="table-container">
     <table mat-table [dataSource]="employees">
       <ng-container matColumnDef="username">
@@ -34,6 +34,15 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-content
+  *ngIf="employeeCount == 0"
+  style="overflow: hidden; padding-right: 30px"
+>
+  <div class="empty-list">
+    <p>All of the employees in the system work on this festival.</p>
   </div>
 </mat-dialog-content>
 

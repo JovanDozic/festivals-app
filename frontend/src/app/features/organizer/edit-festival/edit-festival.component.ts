@@ -13,7 +13,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { FestivalService } from '../../../services/festival/festival.service';
 import {
   Festival,

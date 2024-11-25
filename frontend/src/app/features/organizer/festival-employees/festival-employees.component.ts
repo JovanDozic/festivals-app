@@ -19,6 +19,7 @@ import {
   ConfirmationDialog,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
+import { EditEmployeeComponent } from '../edit-employee/edit-employee.component';
 
 @Component({
   selector: 'app-festival-employees',
@@ -113,6 +114,22 @@ export class FestivalEmployeesComponent implements OnInit {
         },
       });
     }
+  }
+
+  onEditEmployeeClick(employee: Employee) {
+    const dialogRef = this.dialog.open(EditEmployeeComponent, {
+      data: employee,
+      width: '800px',
+      height: 'auto',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('Dialog closed with result: ', result);
+      if (result) {
+        this.loadEmployeeCount();
+        this.loadEmployees();
+      }
+    });
   }
 
   onAddEmployeeClick() {

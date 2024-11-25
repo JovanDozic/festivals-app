@@ -18,7 +18,7 @@
     <div class="button-container">
       <button
         mat-icon-button
-        matTooltip="Add Employee to this Festival"
+        matTooltip="Add existing Employee"
         color="primary"
         (click)="onAddEmployeeClick()"
       >
@@ -26,7 +26,7 @@
       </button>
       <button
         mat-icon-button
-        matTooltip="Register Employee and add to this Festival"
+        matTooltip="Register new Employee"
         color="primary"
         (click)="onRegisterEmployee()"
       >
@@ -44,7 +44,7 @@
     </mat-chip-set>
   </div>
 
-  <div class="profile-content">
+  <div class="profile-content" *ngIf="employeeCount != 0">
     <mat-card class="profile-card">
       <mat-card-content>
         <div class="table-container">
@@ -92,7 +92,11 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef style="width: 100px"></th>
               <td mat-cell *matCellDef="let element">
-                <button mat-icon-button matTooltip="Edit Employee">
+                <button
+                  mat-icon-button
+                  matTooltip="Edit Employee"
+                  (click)="onEditEmployeeClick(element)"
+                >
                   <mat-icon class="material-symbols-outlined" color="primary">
                     edit
                   </mat-icon>
@@ -117,5 +121,9 @@
         </div>
       </mat-card-content>
     </mat-card>
+  </div>
+
+  <div class="empty-list" *ngIf="!isLoading && employeeCount == 0">
+    <p>This festival does not have any employees yet.</p>
   </div>
 </div>

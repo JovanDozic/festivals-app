@@ -26,6 +26,8 @@ type UserHandler interface {
 	CreateEmployee(w http.ResponseWriter, r *http.Request)
 	GetFestivalEmployees(w http.ResponseWriter, r *http.Request)
 	GetEmployeesNotOnFestival(w http.ResponseWriter, r *http.Request)
+	UpdateStaffEmail(w http.ResponseWriter, r *http.Request)
+	UpdateStaffProfile(w http.ResponseWriter, r *http.Request)
 }
 
 type userHandler struct {
@@ -67,11 +69,11 @@ func (h *userHandler) RegisterAttendee(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "attendee registered successfully"}, nil)
-
 	log.Println("attendee registered:", input.Username)
 }
 
 func (h *userHandler) Login(w http.ResponseWriter, r *http.Request) {
+
 	var input dtoUser.LoginRequest
 	if err := utils.ReadJSON(w, r, &input); err != nil {
 		log.Println("error:", err)
@@ -175,7 +177,6 @@ func (h *userHandler) CreateUserProfile(w http.ResponseWriter, r *http.Request) 
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "profile created successfully"}, nil)
-
 	log.Println("profile created successfully for user:", username)
 }
 
@@ -215,7 +216,6 @@ func (h *userHandler) ChangePassword(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "password changed successfully"}, nil)
-
 	log.Println("password changed successfully for user:", username)
 }
 
@@ -308,13 +308,48 @@ func (h *userHandler) UpdateUserEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("email updated successfully"))
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "email updated successfully"}, nil)
 	log.Println("email updated successfully for user:", username)
 }
 
-// This method only allows user that is logged in to change their profile
-// TODO: Create method that allows Organizers to change Employee profiles, as well as Administrators to all other profiles
+func (h *userHandler) UpdateStaffEmail(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthOrganizerRole((r.Context())) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	var input dtoUser.UpdateStaffEmailRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := h.userService.UpdateUserEmail(input.Username, input.Email); err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrNotFound:
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		case models.ErrDuplicateEmail:
+			http.Error(w, err.Error(), http.StatusConflict)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "email updated successfully"}, nil)
+	log.Println("email updated successfully for user:", input.Username)
+}
+
+// ! This method only allows user that is logged in to change their profile
 func (h *userHandler) UpdateUserProfile(w http.ResponseWriter, r *http.Request) {
 
 	if !utils.Auth(r.Context()) {
@@ -356,8 +391,49 @@ func (h *userHandler) UpdateUserProfile(w http.ResponseWriter, r *http.Request) 
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "profile updated successfully"}, nil)
-
 	log.Println("profile updated successfully for user:", username)
+}
+
+func (h *userHandler) UpdateStaffProfile(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthOrganizerRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	var input dtoUser.UpdateStaffProfileRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	updatedProfile := modelsUser.UserProfile{
+		FirstName:   input.FirstName,
+		LastName:    input.LastName,
+		DateOfBirth: utils.ParseDate(input.DateOfBirth),
+		PhoneNumber: input.PhoneNumber,
+	}
+
+	if err := h.userService.UpdateUserProfile(input.Username, &updatedProfile); err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrNotFound:
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "profile updated successfully"}, nil)
+	log.Println("profile updated successfully for user:", input.Username)
 }
 
 func (h *userHandler) CreateEmployee(w http.ResponseWriter, r *http.Request) {

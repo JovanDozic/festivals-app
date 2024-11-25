@@ -45,7 +45,7 @@ mat-card-title {
 
 img[mat-card-image] {
   max-height: 200px !important;
-  object-fit: fill;
+  object-fit: cover;
   width: 100%;
 }
 

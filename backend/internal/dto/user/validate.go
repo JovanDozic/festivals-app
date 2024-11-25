@@ -107,3 +107,35 @@ func (r *CreateStaffRequest) Validate() error {
 	}
 	return nil
 }
+
+func (r *UpdateStaffEmailRequest) Validate() error {
+	if r.Username == "" {
+		return models.ErrMissingFields
+	}
+	if r.Email == "" {
+		return models.ErrMissingFields
+	}
+	if !utils.IsEmailValid(r.Email) {
+		return models.ErrInvalidEmailFormat
+	}
+	return nil
+}
+
+func (r *UpdateStaffProfileRequest) Validate() error {
+	if r.FirstName == "" {
+		return models.ErrMissingFields
+	}
+	if r.LastName == "" {
+		return models.ErrMissingFields
+	}
+	if r.DateOfBirth == "" {
+		return models.ErrMissingFields
+	}
+	if r.PhoneNumber == "" {
+		return models.ErrMissingFields
+	}
+	if !utils.IsDateValid(r.DateOfBirth) {
+		return models.ErrInvalidDateFormat
+	}
+	return nil
+}

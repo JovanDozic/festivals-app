@@ -69,6 +69,7 @@ func (r *userProfileRepo) GetFestivalEmployees(festivalId uint) ([]models.UserPr
 		Joins("join employees e on u.id = e.user_id").
 		Joins("join festival_employees fe on e.user_id = fe.user_id").
 		Where("fe.festival_id = ?", festivalId).
+		Order("u.username").
 		Find(&profiles).Error
 	if err != nil {
 		return nil, err
@@ -86,6 +87,7 @@ func (r *userProfileRepo) GetEmployeesNotOnFestival(festivalId uint) ([]models.U
 		Joins("join users u on user_profiles.user_id = u.id").
 		Joins("join employees e on u.id = e.user_id").
 		Where("e.user_id not in (select user_id from festival_employees where festival_id = ?)", festivalId).
+		Order("u.username").
 		Find(&profiles).Error
 	if err != nil {
 		return nil, err

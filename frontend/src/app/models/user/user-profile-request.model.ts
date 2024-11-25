@@ -11,3 +11,16 @@ export interface CreateProfileRequest {
   dateOfBirth: string;
   phoneNumber: string;
 }
+
+export interface UpdateStaffProfileRequest {
+  username: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: Date;
+  phoneNumber: string;
+}
+
+export interface UpdateStaffEmailRequest {
+  username: string;
+  email: string;
+}

@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 import { UserProfileResponse } from '../../models/user/user-profile-response.model';
 import { map, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { CreateUpdateUserProfileRequest } from '../../models/user/user-profile-request.model';
+import {
+  CreateUpdateUserProfileRequest,
+  UpdateStaffEmailRequest,
+  UpdateStaffProfileRequest,
+} from '../../models/user/user-profile-request.model';
 import { CreateAddressRequest } from '../../models/common/create-address-request.model';
-import { RegisterEmployeeComponent } from '../../features/organizer/register-employee/register-employee.component';
 import {
   CreateStaffRequest,
   CreateStaffResponse,
@@ -55,6 +58,24 @@ export class UserService {
         employee
       )
       .pipe(map((response) => response.employee));
+  }
+
+  updateStaffProfile(updatedProfile: UpdateStaffProfileRequest) {
+    console.log(updatedProfile);
+    return this.http.put<void>(`${this.apiUrl}/organizer/employee`, {
+      username: updatedProfile.username,
+      firstName: updatedProfile.firstName,
+      lastName: updatedProfile.lastName,
+      dateOfBirth: formatDate(updatedProfile.dateOfBirth),
+      phoneNumber: updatedProfile.phoneNumber,
+    });
+  }
+
+  updateStaffEmail(updatedProfile: UpdateStaffEmailRequest) {
+    return this.http.put<void>(
+      `${this.apiUrl}/organizer/employee/email`,
+      updatedProfile
+    );
   }
 }
 

@@ -91,6 +91,7 @@ export class AddExistingEmployeeComponent implements OnInit {
           next: (employees) => {
             console.log('Employees: ', employees);
             this.employees = employees;
+            this.employeeCount = employees.length;
           },
           error: (error) => {
             console.log('Error fetching employees: ', error);
