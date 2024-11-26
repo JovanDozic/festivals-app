@@ -3,6 +3,7 @@ package repositories
 import (
 	modelsFestival "backend/internal/models/festival"
 	"errors"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -12,6 +13,7 @@ type ItemRepo interface {
 	CreatePriceList(priceList *modelsFestival.PriceList) error
 	GetPriceList(festivalId uint) (*modelsFestival.PriceList, error)
 	CreatePriceListItem(priceListItem *modelsFestival.PriceListItem) error
+	GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.PriceListItem, error)
 }
 
 type itemRepo struct {
@@ -80,4 +82,46 @@ func (r *itemRepo) CreatePriceListItem(priceListItem *modelsFestival.PriceListIt
 	}
 
 	return nil
+}
+
+func (r *itemRepo) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.PriceListItem, error) {
+
+	// * Get festival price list
+	var currentPriceList modelsFestival.PriceList
+	err := r.db.
+		Where("festival_id = ?", festivalId).
+		First(&currentPriceList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("no price list found for the given festival")
+		}
+		return nil, err
+	}
+
+	// * Get all price list items with preloaded items
+	var priceListItems []modelsFestival.PriceListItem
+	err = r.db.
+		Preload("Item").
+		Joins("JOIN items ON price_list_items.item_id = items.id").
+		Where("items.type = ?", modelsFestival.ItemTicketType).
+		Where("price_list_id = ?", currentPriceList.ID).
+		// Where("date_from <= ?", time.Now()).
+		// Where("date_to >= ?", time.Now()).
+		Find(&priceListItems).Error
+	if err != nil {
+		return nil, err
+	}
+
+	now := time.Now()
+	filteredPriceListItems := make([]modelsFestival.PriceListItem, 0)
+	for _, pli := range priceListItems {
+		if pli.IsFixed && pli.DateFrom != nil && pli.DateTo != nil {
+			if now.Before(*pli.DateFrom) || now.After(*pli.DateTo) {
+				continue
+			}
+		}
+		filteredPriceListItems = append(filteredPriceListItems, pli)
+	}
+
+	return filteredPriceListItems, nil
 }

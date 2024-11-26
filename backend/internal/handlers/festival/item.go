@@ -12,6 +12,7 @@ import (
 type ItemHandler interface {
 	CreateItem(w http.ResponseWriter, r *http.Request)
 	CreatePriceListItem(w http.ResponseWriter, r *http.Request)
+	GetCurrentTicketTypes(w http.ResponseWriter, r *http.Request)
 }
 
 type itemHandler struct {
@@ -104,4 +105,38 @@ func (h *itemHandler) CreatePriceListItem(w http.ResponseWriter, r *http.Request
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"priceListItemId": priceListItem.ID}, nil)
 	log.Println("price list item created:", priceListItem.ID)
+}
+
+func (h *itemHandler) GetCurrentTicketTypes(w http.ResponseWriter, r *http.Request) {
+
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	priceListItems, err := h.itemService.GetCurrentTicketTypes(festivalId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	var currentTicketTypes []dtoFestival.GetCurrentTicketTypesResponse
+	for _, priceListItem := range priceListItems {
+		currentTicketTypes = append(currentTicketTypes, dtoFestival.GetCurrentTicketTypesResponse{
+			ItemId:          priceListItem.ItemID,
+			PriceListItemId: priceListItem.ID,
+			Name:            priceListItem.Item.Name,
+			Description:     priceListItem.Item.Description,
+			AvailableNumber: priceListItem.Item.AvailableNumber,
+			RemainingNumber: priceListItem.Item.RemainingNumber,
+			Price:           priceListItem.Price,
+			IsFixed:         priceListItem.IsFixed,
+			DateFrom:        priceListItem.DateFrom,
+			DateTo:          priceListItem.DateTo,
+		})
+	}
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"ticketTypes": currentTicketTypes}, nil)
+	log.Println("current ticket types retrieved")
 }

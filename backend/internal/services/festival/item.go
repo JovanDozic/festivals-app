@@ -10,6 +10,7 @@ import (
 type ItemService interface {
 	CreateItem(item *modelsFestival.Item) error
 	CreatePriceListItem(festivalId, itemId uint, priceListItem *modelsFestival.PriceListItem) error
+	GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.PriceListItem, error)
 }
 
 type itemService struct {
@@ -61,4 +62,8 @@ func (s *itemService) CreatePriceListItem(festivalId, itemId uint, priceListItem
 	}
 
 	return nil
+}
+
+func (s *itemService) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.PriceListItem, error) {
+	return s.itemRepo.GetCurrentTicketTypes(festivalId)
 }

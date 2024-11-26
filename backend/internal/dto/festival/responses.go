@@ -26,3 +26,16 @@ type EmployeeCountResponse struct {
 	FestivalId uint `json:"festivalId"`
 	Count      int  `json:"count"`
 }
+
+type GetCurrentTicketTypesResponse struct {
+	ItemId          uint       `json:"itemId"`
+	PriceListItemId uint       `json:"priceListItemId"`
+	Name            string     `json:"name"`
+	Description     string     `json:"description"`
+	AvailableNumber int        `json:"availableNumber"`
+	RemainingNumber int        `json:"remainingNumber"`
+	Price           float64    `json:"price"`
+	IsFixed         bool       `json:"isFixed"`
+	DateFrom        *time.Time `json:"dateFrom"`
+	DateTo          *time.Time `json:"dateTo"`
+}
