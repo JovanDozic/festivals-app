@@ -513,28 +513,20 @@ func (h *festivalHandler) Fire(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) GetEmployeeCount(w http.ResponseWriter, r *http.Request) {
 
-	_, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
 	if !ok {
 		return
 	}
 
-	vars := mux.Vars(r)
-	festivalId := vars["festivalId"]
-	if festivalId == "" {
-		log.Println("error:", models.ErrBadRequest)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	count, err := h.festivalService.GetEmployeeCount(utils.ToUint(festivalId))
+	count, err := h.festivalService.GetEmployeeCount(festivalId)
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, dtoFestival.EmployeeCountResponse{
-		FestivalId: utils.ToUint(festivalId),
+	utils.WriteJSON(w, http.StatusOK, dtoFestival.FestivalPropCountResponse{
+		FestivalId: festivalId,
 		Count:      count,
 	}, nil)
 	log.Println("employee count retrieved successfully for festival:", festivalId)

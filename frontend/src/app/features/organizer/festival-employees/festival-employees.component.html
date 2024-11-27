@@ -92,24 +92,26 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef style="width: 100px"></th>
               <td mat-cell *matCellDef="let element">
-                <button
-                  mat-icon-button
-                  matTooltip="Edit Employee"
-                  (click)="onEditEmployeeClick(element)"
-                >
-                  <mat-icon class="material-symbols-outlined" color="primary">
-                    edit
-                  </mat-icon>
-                </button>
-                <button
-                  mat-icon-button
-                  matTooltip="Fire Employee"
-                  (click)="onFireEmployeeClick(element)"
-                >
-                  <mat-icon class="material-symbols-outlined" color="primary">
-                    delete
-                  </mat-icon>
-                </button>
+                <div style="display: flex; justify-content: end">
+                  <button
+                    mat-icon-button
+                    matTooltip="Edit Employee"
+                    (click)="onEditEmployeeClick(element)"
+                  >
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      edit
+                    </mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    matTooltip="Fire Employee"
+                    (click)="onFireEmployeeClick(element)"
+                  >
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      delete
+                    </mat-icon>
+                  </button>
+                </div>
               </td>
             </ng-container>
             <tr

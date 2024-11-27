@@ -22,7 +22,7 @@ type FestivalResponse struct {
 	Images      []dtoCommon.GetImageResponse  `json:"images"`
 }
 
-type EmployeeCountResponse struct {
+type FestivalPropCountResponse struct {
 	FestivalId uint `json:"festivalId"`
 	Count      int  `json:"count"`
 }

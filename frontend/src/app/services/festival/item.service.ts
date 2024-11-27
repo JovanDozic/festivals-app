@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { ItemsResponse } from '../../models/festival/festival.model';
+import {
+  FestivalPropCountResponse,
+  ItemsResponse,
+} from '../../models/festival/festival.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +17,16 @@ export class ItemService {
   getTicketTypes(festivalId: number): Observable<any> {
     return this.http
       .get<ItemsResponse>(
-        `${this.apiUrl}/organizer/festival/${festivalId}/item`
+        `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type`
       )
       .pipe(map((response) => response.items));
+  }
+
+  getTicketTypesCount(festivalId: number): Observable<number> {
+    return this.http
+      .get<FestivalPropCountResponse>(
+        `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/count`
+      )
+      .pipe(map((response) => response.count));
   }
 }

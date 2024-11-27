@@ -88,3 +88,8 @@ export interface Item {
   dateFrom: string;
   dateTo: string;
 }
+
+export interface FestivalPropCountResponse {
+  festivalId: number;
+  count: number;
+}

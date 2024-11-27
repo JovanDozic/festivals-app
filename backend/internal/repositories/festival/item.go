@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"backend/internal/models"
 	modelsFestival "backend/internal/models/festival"
 	"errors"
 	"time"
@@ -14,6 +15,7 @@ type ItemRepo interface {
 	GetPriceList(festivalId uint) (*modelsFestival.PriceList, error)
 	CreatePriceListItem(priceListItem *modelsFestival.PriceListItem) error
 	GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.PriceListItem, error)
+	GetTicketTypesCount(festivalId uint) (int, error)
 }
 
 type itemRepo struct {
@@ -93,7 +95,7 @@ func (r *itemRepo) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.Pric
 		First(&currentPriceList).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("no price list found for the given festival")
+			return nil, models.ErrNoPriceListFound
 		}
 		return nil, err
 	}
@@ -124,4 +126,17 @@ func (r *itemRepo) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.Pric
 	}
 
 	return filteredPriceListItems, nil
+}
+
+func (r *itemRepo) GetTicketTypesCount(festivalId uint) (int, error) {
+
+	var count int64
+	err := r.db.Table("items").
+		Where("festival_id = ? AND type = ?", festivalId, modelsFestival.ItemTicketType).
+		Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+
+	return int(count), nil
 }

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	dtoFestival "backend/internal/dto/festival"
+	"backend/internal/models"
 	modelsFestival "backend/internal/models/festival"
 	servicesFestival "backend/internal/services/festival"
 	"backend/internal/utils"
@@ -13,6 +14,7 @@ type ItemHandler interface {
 	CreateItem(w http.ResponseWriter, r *http.Request)
 	CreatePriceListItem(w http.ResponseWriter, r *http.Request)
 	GetCurrentTicketTypes(w http.ResponseWriter, r *http.Request)
+	GetTicketTypesCount(w http.ResponseWriter, r *http.Request)
 }
 
 type itemHandler struct {
@@ -117,7 +119,16 @@ func (h *itemHandler) GetCurrentTicketTypes(w http.ResponseWriter, r *http.Reque
 	priceListItems, err := h.itemService.GetCurrentTicketTypes(festivalId)
 	if err != nil {
 		log.Println("error:", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		if err == models.ErrNoPriceListFound {
+			response := dtoFestival.GetItemsResponse{
+				FestivalId: festivalId,
+				Items:      make([]dtoFestival.ItemResponse, 0),
+			}
+			utils.WriteJSON(w, http.StatusOK, response, nil)
+			log.Println("current ticket types retrieved - festival does not have a price list")
+		} else {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
 		return
 	}
 
@@ -144,4 +155,25 @@ func (h *itemHandler) GetCurrentTicketTypes(w http.ResponseWriter, r *http.Reque
 
 	utils.WriteJSON(w, http.StatusOK, response, nil)
 	log.Println("current ticket types retrieved")
+}
+
+func (h *itemHandler) GetTicketTypesCount(w http.ResponseWriter, r *http.Request) {
+
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	count, err := h.itemService.GetTicketTypesCount(festivalId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, dtoFestival.FestivalPropCountResponse{
+		FestivalId: festivalId,
+		Count:      count,
+	}, nil)
+	log.Println("ticket types count retrieved successfully for festival:", festivalId)
 }

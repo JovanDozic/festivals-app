@@ -5,6 +5,7 @@ import {
   CreateFestivalRequest,
   EmployeesResponse,
   Festival,
+  FestivalPropCountResponse,
   UpdateFestivalRequest,
 } from '../../models/festival/festival.model';
 
@@ -24,7 +25,7 @@ export class FestivalService {
 
   getEmployeeCount(festivalId: number): Observable<number> {
     return this.http
-      .get<{ festivalId: number; count: number }>(
+      .get<FestivalPropCountResponse>(
         `${this.apiUrl}/organizer/festival/${festivalId}/employee/count`
       )
       .pipe(map((response) => response.count));

@@ -18,6 +18,7 @@ import {
 import { EditFestivalComponent } from '../edit-festival/edit-festival.component';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { MatMenuModule } from '@angular/material/menu';
+import { ItemService } from '../../../services/festival/item.service';
 
 @Component({
   selector: 'app-festival',
@@ -53,16 +54,19 @@ export class FestivalComponent implements OnInit {
   currentImageIndex: number = 0;
   previousImageIndex: number = 0;
   employeeCount: number = 0;
+  ticketTypesCount: number = 0;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
+  private itemService = inject(ItemService);
   private dialog = inject(MatDialog);
 
   ngOnInit() {
     this.loadFestival();
     this.loadEmployeeCount();
+    this.loadTicketTypesCount();
   }
 
   goBack() {
@@ -107,13 +111,28 @@ export class FestivalComponent implements OnInit {
     if (id) {
       this.festivalService.getEmployeeCount(Number(id)).subscribe({
         next: (count) => {
-          console.log('Employee count: ', count);
           this.employeeCount = count;
         },
         error: (error) => {
           console.log('Error fetching employee count: ', error);
           this.snackbarService.show('Error getting employee count');
           this.employeeCount = 0;
+        },
+      });
+    }
+  }
+
+  loadTicketTypesCount() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.itemService.getTicketTypesCount(Number(id)).subscribe({
+        next: (count) => {
+          this.ticketTypesCount = count;
+        },
+        error: (error) => {
+          console.log('Error fetching ticket types count: ', error);
+          this.snackbarService.show('Error getting ticket types count');
+          this.ticketTypesCount = 0;
         },
       });
     }
