@@ -82,7 +82,7 @@ export class CreateTicketTypeComponent {
 
   infoFormGroup: FormGroup;
   ticketTypeId: number | null = null;
-  isFixedPrice: boolean = true;
+  isFixedPrice: boolean = false;
 
   fixedPriceFormGroup: FormGroup;
 
@@ -206,8 +206,7 @@ export class CreateTicketTypeComponent {
           error: (error) => {
             console.log('Error creating fixed price: ', error);
             this.snackbarService.show('Error creating Fixed Price');
-            // todo: uncomment
-            // this.dialogRef.close(false);
+            this.dialogRef.close(false);
           },
         });
     }
@@ -242,13 +241,12 @@ export class CreateTicketTypeComponent {
         next: (responses) => {
           console.log('Variable prices created: ', responses);
           this.snackbarService.show('Variable Prices created');
-          // this.dialogRef.close(true);
+          this.dialogRef.close(true);
         },
         error: (error) => {
           console.log('Error creating variable prices: ', error);
           this.snackbarService.show('Error creating Variable Prices');
-          // Uncomment if you want to close the dialog on error
-          // this.dialogRef.close(false);
+          this.dialogRef.close(false);
         },
       });
     } else {

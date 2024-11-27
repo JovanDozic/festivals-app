@@ -103,7 +103,7 @@ export class TicketTypesComponent implements OnInit {
       data: {
         festivalId: this.festival?.id,
       },
-      width: '800px',
+      width: '1200px',
       height: 'auto',
     });
 

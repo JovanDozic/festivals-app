@@ -50,6 +50,21 @@
             ></mat-slide-toggle>
             Is Price fixed?
           </span>
+          <button
+            *ngIf="!isFixedPrice"
+            mat-icon-button
+            color="primary"
+            type="button"
+            (click)="addVariablePrice()"
+            [disabled]="
+              variablePricesFormArray.length > 0 &&
+              !variablePricesFormArray.at(variablePricesFormArray.length - 1)
+                .valid
+            "
+            matTooltip="Add another variable price"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
         </div>
         <!-- ! FIXED PRICES -->
         <div *ngIf="isFixedPrice">
@@ -107,7 +122,19 @@
                       Price must be at least $1
                     </mat-error>
                   </mat-form-field>
-
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    type="button"
+                    (click)="removeVariablePrice(i)"
+                    [disabled]="variablePricesFormArray.length === 1"
+                    matTooltip="Remove this price"
+                    class="remove-variable-price-button"
+                  >
+                    <mat-icon>remove_circle</mat-icon>
+                  </button>
+                </div>
+                <div class="form-fields">
                   <mat-form-field appearance="outline">
                     <mat-label>From</mat-label>
                     <input
@@ -147,37 +174,10 @@
                       Date From is required
                     </mat-error>
                   </mat-form-field>
-
-                  <button
-                    mat-icon-button
-                    color="warn"
-                    type="button"
-                    (click)="removeVariablePrice(i)"
-                    [disabled]="variablePricesFormArray.length === 1"
-                    matTooltip="Remove this price"
-                  >
-                    <mat-icon>remove_circle</mat-icon>
-                  </button>
                 </div>
               </div>
             </div>
-            <div class="add-variable-price-button">
-              <button
-                mat-mini-fab
-                color="primary"
-                type="button"
-                (click)="addVariablePrice()"
-                [disabled]="
-                  variablePricesFormArray.length > 0 &&
-                  !variablePricesFormArray.at(
-                    variablePricesFormArray.length - 1
-                  ).valid
-                "
-                matTooltip="Add another variable price"
-              >
-                <mat-icon>add</mat-icon>
-              </button>
-            </div>
+            <div class="add-variable-price-button"></div>
           </div>
         </div>
       </div>
