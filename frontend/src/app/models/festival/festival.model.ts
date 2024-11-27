@@ -93,3 +93,18 @@ export interface FestivalPropCountResponse {
   festivalId: number;
   count: number;
 }
+
+export interface CreateItemRequest {
+  name: string;
+  description: string;
+  availableNumber: number;
+  type: string;
+}
+
+export interface CreateItemPriceRequest {
+  itemId: number;
+  price: number;
+  isFixed: boolean;
+  dateFrom?: string;
+  dateTo?: string;
+}

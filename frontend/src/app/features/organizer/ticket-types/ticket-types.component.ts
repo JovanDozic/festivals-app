@@ -21,6 +21,7 @@ import {
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { EditEmployeeComponent } from '../edit-employee/edit-employee.component';
 import { ItemService } from '../../../services/festival/item.service';
+import { CreateTicketTypeComponent } from '../create-ticket-type/create-ticket-type.component';
 
 @Component({
   selector: 'app-ticket-types',
@@ -95,5 +96,22 @@ export class TicketTypesComponent implements OnInit {
         },
       });
     }
+  }
+
+  onCreateTicketTypeClick() {
+    const dialogRef = this.dialog.open(CreateTicketTypeComponent, {
+      data: {
+        festivalId: this.festival?.id,
+      },
+      width: '800px',
+      height: 'auto',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('Dialog closed with result: ', result);
+      if (result) {
+        this.loadTicketTypes();
+      }
+    });
   }
 }

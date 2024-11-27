@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import {
+  CreateItemPriceRequest,
+  CreateItemRequest,
   FestivalPropCountResponse,
   ItemsResponse,
 } from '../../models/festival/festival.model';
@@ -28,5 +30,29 @@ export class ItemService {
         `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/count`
       )
       .pipe(map((response) => response.count));
+  }
+
+  createItem(
+    festivalId: number,
+    request: CreateItemRequest
+  ): Observable<number> {
+    return this.http
+      .post<{ itemId: number }>(
+        `${this.apiUrl}/organizer/festival/${festivalId}/item`,
+        request
+      )
+      .pipe(map((response) => response.itemId));
+  }
+
+  createItemPrice(
+    festivalId: number,
+    request: CreateItemPriceRequest
+  ): Observable<number> {
+    return this.http
+      .post<{ priceListItemId: number }>(
+        `${this.apiUrl}/organizer/festival/${festivalId}/item/price`,
+        request
+      )
+      .pipe(map((response) => response.priceListItemId));
   }
 }

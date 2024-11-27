@@ -16,7 +16,12 @@
       </h1>
     </div>
     <div class="button-container">
-      <button mat-icon-button matTooltip="Add Ticket Type" color="primary">
+      <button
+        mat-icon-button
+        matTooltip="Create Ticket Type"
+        color="primary"
+        (click)="onCreateTicketTypeClick()"
+      >
         <mat-icon class="material-symbols-outlined">add</mat-icon>
       </button>
     </div>
@@ -73,7 +78,7 @@
                 Price valid
               </th>
               <td mat-cell *matCellDef="let element">
-                <span *ngIf="element.isFixed">-</span>
+                <span *ngIf="element.isFixed">Forever</span>
                 <span *ngIf="!element.isFixed"
                   >until:
                   <span class="semibold">{{

@@ -23,7 +23,6 @@ import {
   ConfirmationDialog,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { routes } from '../../../app.routes';
 import { Router } from '@angular/router';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 
@@ -56,7 +55,6 @@ export class CreateFestivalComponent {
 
   @ViewChild('stepper') private stepper: MatStepper | undefined;
 
-  isLinear = true;
   festivalId: string | null = null;
   // todo: remove default images
   images: string[] = [
@@ -84,6 +82,10 @@ export class CreateFestivalComponent {
   imagesFormGroup = this.fb.group({
     imageUrlCtrl: [''],
   });
+
+  goBack() {
+    this.router.navigate(['organizer/my-festivals']);
+  }
 
   createFestivalBasicInfo() {
     if (this.basicInfoFormGroup.valid) {
