@@ -7,6 +7,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import {
+  FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
@@ -35,6 +36,13 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ItemService } from '../../../services/festival/item.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { forkJoin } from 'rxjs';
+
+interface VariablePrice {
+  price: number;
+  dateFrom: Date;
+  dateTo: Date;
+}
 
 @Component({
   selector: 'app-create-ticket-type',
@@ -50,7 +58,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatIconModule,
     MatDialogTitle,
     MatDialogContent,
-    MatDialogActions,
     MatTabsModule,
     MatStepperModule,
     MatSlideToggleModule,
@@ -60,6 +67,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     './create-ticket-type.component.scss',
     '../../../app.component.scss',
   ],
+  providers: [provideNativeDateAdapter()],
 })
 export class CreateTicketTypeComponent {
   private fb = inject(FormBuilder);
@@ -78,6 +86,10 @@ export class CreateTicketTypeComponent {
 
   fixedPriceFormGroup: FormGroup;
 
+  variablePrices: VariablePrice[] = [];
+
+  variablePricesFormGroup: FormGroup;
+
   constructor() {
     this.infoFormGroup = this.fb.group({
       nameCtrl: ['', Validators.required],
@@ -87,6 +99,25 @@ export class CreateTicketTypeComponent {
 
     this.fixedPriceFormGroup = this.fb.group({
       fixedPriceCtrl: ['', [Validators.required, Validators.min(0)]],
+    });
+
+    this.variablePricesFormGroup = this.fb.group({
+      variablePricesFormArray: this.fb.array([this.createVariablePriceGroup()]),
+    });
+  }
+
+  get variablePricesFormArray(): FormArray {
+    return this.variablePricesFormGroup.get(
+      'variablePricesFormArray'
+    ) as FormArray;
+  }
+
+  // Helper method to create a variable price FormGroup
+  private createVariablePriceGroup(): FormGroup {
+    return this.fb.group({
+      priceCtrl: ['', [Validators.required, Validators.min(0)]],
+      dateFromCtrl: ['', Validators.required],
+      dateToCtrl: ['', Validators.required],
     });
   }
 
@@ -115,6 +146,30 @@ export class CreateTicketTypeComponent {
           this.snackbarService.show('Error creating Ticket Type');
         },
       });
+    }
+  }
+
+  addVariablePrice() {
+    const lastGroup = this.variablePricesFormArray.at(
+      this.variablePricesFormArray.length - 1
+    ) as FormGroup;
+
+    if (lastGroup.valid) {
+      this.variablePricesFormArray.push(this.createVariablePriceGroup());
+    } else {
+      this.snackbarService.show(
+        'Please fill out the last variable price before adding a new one.'
+      );
+    }
+  }
+
+  removeVariablePrice(index: number) {
+    if (this.variablePricesFormArray.length > 1) {
+      this.variablePricesFormArray.removeAt(index);
+    } else {
+      this.snackbarService.show(
+        'At least one variable price entry is required.'
+      );
     }
   }
 
@@ -158,5 +213,53 @@ export class CreateTicketTypeComponent {
     }
   }
 
-  createNotFixedPrices() {}
+  createNotFixedPrices() {
+    if (
+      this.variablePricesFormArray.valid &&
+      this.ticketTypeId &&
+      this.data.festivalId
+    ) {
+      const variablePrices: VariablePrice[] =
+        this.variablePricesFormArray.value.map((vp: any) => ({
+          price: vp.priceCtrl,
+          dateFrom: vp.dateFromCtrl,
+          dateTo: vp.dateToCtrl,
+        }));
+
+      const requests: CreateItemPriceRequest[] = variablePrices.map((vp) => ({
+        itemId: this.ticketTypeId!,
+        price: vp.price,
+        isFixed: false,
+        dateFrom: this.formatDate(vp.dateFrom),
+        dateTo: this.formatDate(vp.dateTo),
+      }));
+
+      forkJoin(
+        requests.map((req) =>
+          this.itemService.createItemPrice(this.data.festivalId, req)
+        )
+      ).subscribe({
+        next: (responses) => {
+          console.log('Variable prices created: ', responses);
+          this.snackbarService.show('Variable Prices created');
+          // this.dialogRef.close(true);
+        },
+        error: (error) => {
+          console.log('Error creating variable prices: ', error);
+          this.snackbarService.show('Error creating Variable Prices');
+          // Uncomment if you want to close the dialog on error
+          // this.dialogRef.close(false);
+        },
+      });
+    } else {
+      this.snackbarService.show('Please fill out all variable price fields.');
+    }
+  }
+
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 }

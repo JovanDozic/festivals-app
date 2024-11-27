@@ -117,7 +117,7 @@ func (r *itemRepo) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.Pric
 	now := time.Now()
 	filteredPriceListItems := make([]modelsFestival.PriceListItem, 0)
 	for _, pli := range priceListItems {
-		if pli.IsFixed && pli.DateFrom != nil && pli.DateTo != nil {
+		if !pli.IsFixed && pli.DateFrom != nil && pli.DateTo != nil {
 			if now.Before(*pli.DateFrom) || now.After(*pli.DateTo) {
 				continue
 			}

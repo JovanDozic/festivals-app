@@ -48,6 +48,7 @@ export class ItemService {
     festivalId: number,
     request: CreateItemPriceRequest
   ): Observable<number> {
+    console.log('REQUEST', request);
     return this.http
       .post<{ priceListItemId: number }>(
         `${this.apiUrl}/organizer/festival/${festivalId}/item/price`,
