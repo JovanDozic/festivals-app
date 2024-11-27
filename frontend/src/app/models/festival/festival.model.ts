@@ -1,13 +1,9 @@
-import { ɵHttpInterceptingHandler } from '@angular/common/http';
 import { AddressResponse } from '../common/address-response.model';
 import {
   CreateAddressRequest,
   UpdateAddressRequest,
 } from '../common/create-address-request.model';
-import {
-  CreateProfileRequest,
-  CreateUpdateUserProfileRequest,
-} from '../user/user-profile-request.model';
+import { CreateProfileRequest } from '../user/user-profile-request.model';
 
 export interface Festival {
   id: number;
@@ -53,6 +49,11 @@ export interface EmployeesResponse {
   employees: Employee[];
 }
 
+export interface ItemsResponse {
+  festivalId: number;
+  items: Item[];
+}
+
 export interface Employee {
   id: number;
   username: string;
@@ -73,4 +74,17 @@ export interface CreateStaffRequest {
 export interface CreateStaffResponse {
   username: string;
   userId: number;
+}
+
+export interface Item {
+  itemId: number;
+  priceListItemId: number;
+  name: string;
+  description: string;
+  availableNumber: number;
+  remainingNumber: number;
+  price: number;
+  isFixed: boolean;
+  dateFrom: string;
+  dateTo: string;
 }

@@ -514,12 +514,12 @@ func (h *userHandler) GetFestivalEmployees(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	employeesResponse := dtoUser.GetEmployeesResponse{
+	response := dtoUser.GetEmployeesResponse{
 		FestivalId: utils.ToUint(festivalId),
 		Employees:  make([]dtoUser.EmployeeResponse, len(employees)),
 	}
 	for i, employee := range employees {
-		employeesResponse.Employees[i] = dtoUser.EmployeeResponse{
+		response.Employees[i] = dtoUser.EmployeeResponse{
 			ID:          employee.User.ID,
 			Username:    employee.User.Username,
 			Email:       employee.User.Email,
@@ -530,7 +530,7 @@ func (h *userHandler) GetFestivalEmployees(w http.ResponseWriter, r *http.Reques
 		}
 	}
 
-	utils.WriteJSON(w, http.StatusOK, employeesResponse, nil)
+	utils.WriteJSON(w, http.StatusOK, response, nil)
 	log.Println("employees retrieved successfully for festival:", festivalId)
 }
 

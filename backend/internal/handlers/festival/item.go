@@ -121,22 +121,27 @@ func (h *itemHandler) GetCurrentTicketTypes(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	var currentTicketTypes []dtoFestival.GetCurrentTicketTypesResponse
-	for _, priceListItem := range priceListItems {
-		currentTicketTypes = append(currentTicketTypes, dtoFestival.GetCurrentTicketTypesResponse{
+	response := dtoFestival.GetItemsResponse{
+		FestivalId: festivalId,
+		Items:      make([]dtoFestival.ItemResponse, len(priceListItems)),
+	}
+
+	for i, priceListItem := range priceListItems {
+		response.Items[i] = dtoFestival.ItemResponse{
 			ItemId:          priceListItem.ItemID,
 			PriceListItemId: priceListItem.ID,
 			Name:            priceListItem.Item.Name,
 			Description:     priceListItem.Item.Description,
+			Type:            priceListItem.Item.Type,
 			AvailableNumber: priceListItem.Item.AvailableNumber,
 			RemainingNumber: priceListItem.Item.RemainingNumber,
 			Price:           priceListItem.Price,
 			IsFixed:         priceListItem.IsFixed,
 			DateFrom:        priceListItem.DateFrom,
 			DateTo:          priceListItem.DateTo,
-		})
+		}
 	}
 
-	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"ticketTypes": currentTicketTypes}, nil)
+	utils.WriteJSON(w, http.StatusOK, response, nil)
 	log.Println("current ticket types retrieved")
 }

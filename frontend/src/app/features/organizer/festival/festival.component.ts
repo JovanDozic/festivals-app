@@ -75,6 +75,12 @@ export class FestivalComponent implements OnInit {
     ]);
   }
 
+  onViewTicketTypesClick() {
+    this.router.navigate([
+      `organizer/my-festivals/${this.festival?.id}/ticket-types`,
+    ]);
+  }
+
   loadFestival() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {

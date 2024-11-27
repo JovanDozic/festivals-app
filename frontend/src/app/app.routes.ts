@@ -124,6 +124,14 @@ const organizerRoutes: Routes = [
           ).then((c) => c.FestivalEmployeesComponent),
         title: 'Festival Employees',
       },
+      {
+        path: 'organizer/my-festivals/:id/ticket-types',
+        loadComponent: () =>
+          import(
+            './features/organizer/ticket-types/ticket-types.component'
+          ).then((c) => c.TicketTypesComponent),
+        title: 'Ticket Types',
+      },
       // ...
     ],
   },
