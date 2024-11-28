@@ -204,7 +204,10 @@
     mat-stroked-button
     (click)="done()"
     *ngIf="stepper.selectedIndex == 1"
-    [disabled]="infoFormGroup.invalid || variablePricesFormArray.invalid"
+    [disabled]="
+      (isFixedPrice && fixedPriceFormGroup.invalid) ||
+      (!isFixedPrice && variablePricesFormArray.invalid)
+    "
   >
     Done
   </button>

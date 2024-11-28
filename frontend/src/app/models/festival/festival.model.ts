@@ -129,6 +129,6 @@ export interface PriceListItem {
   id: number;
   price: number;
   isFixed: boolean;
-  dateFrom: string;
-  dateTo: string;
+  dateFrom?: string;
+  dateTo?: string;
 }

@@ -16,6 +16,7 @@ type ItemHandler interface {
 	GetCurrentTicketTypes(w http.ResponseWriter, r *http.Request)
 	GetTicketTypesCount(w http.ResponseWriter, r *http.Request)
 	GetTicketType(w http.ResponseWriter, r *http.Request)
+	UpdateItem(w http.ResponseWriter, r *http.Request)
 }
 
 type itemHandler struct {
@@ -202,4 +203,36 @@ func (h *itemHandler) GetTicketType(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusOK, response, nil)
 	log.Println("ticket types retrieved successfully for item:", itemId)
+}
+
+func (h *itemHandler) UpdateItem(w http.ResponseWriter, r *http.Request) {
+
+	_, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	_, err := getIDFromRequest(r, "itemId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	var input dtoFestival.UpdateItemRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	err = h.itemService.UpdateItemAndPrices(input)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, nil, nil)
+	log.Println("item updated:", input.Name)
 }

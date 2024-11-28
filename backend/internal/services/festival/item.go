@@ -5,6 +5,8 @@ import (
 	dto "backend/internal/dto/festival"
 	modelsFestival "backend/internal/models/festival"
 	reposFestival "backend/internal/repositories/festival"
+	"backend/internal/utils"
+	"log"
 	"strings"
 )
 
@@ -14,6 +16,7 @@ type ItemService interface {
 	GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.PriceListItem, error)
 	GetTicketTypesCount(festivalId uint) (int, error)
 	GetTicketTypes(itemId uint) (*dto.GetItemResponse, error)
+	UpdateItemAndPrices(request dto.UpdateItemRequest) error
 }
 
 type itemService struct {
@@ -110,4 +113,56 @@ func (s *itemService) GetTicketTypes(itemId uint) (*dto.GetItemResponse, error) 
 	}
 
 	return &response, nil
+}
+
+func (s *itemService) UpdateItemAndPrices(request dto.UpdateItemRequest) error {
+
+	itemId := request.Id
+	var priceListItemIds []uint
+	for _, priceListItem := range request.PriceListItems {
+		priceListItemIds = append(priceListItemIds, priceListItem.Id)
+	}
+
+	itemDb, priceIdsDb, err := s.itemRepo.GetItemAndPriceListItemsIDs(itemId)
+	if err != nil {
+		return err
+	}
+
+	priceListItemsDb, err := s.itemRepo.GetPriceListItemsByIDs(priceIdsDb)
+	if err != nil {
+		return err
+	}
+
+	log.Printf("itemDb: %+v", itemDb)
+	log.Printf("priceListItemIds: %+v", priceListItemIds)
+	log.Printf("priceIdsDb: %+v", priceIdsDb)
+
+	// update item
+	itemDb.Name = request.Name
+	itemDb.Description = request.Description
+	itemDb.AvailableNumber = request.AvailableNumber
+
+	err = s.itemRepo.UpdateItem(itemDb)
+	if err != nil {
+		return err
+	}
+
+	// update prices
+	for _, priceListItem := range priceListItemsDb {
+		for _, priceListItemRequest := range request.PriceListItems {
+			if priceListItem.ID == priceListItemRequest.Id {
+				priceListItem.Price = priceListItemRequest.Price
+				priceListItem.IsFixed = priceListItemRequest.IsFixed
+				priceListItem.DateFrom = utils.ParseDateNil(priceListItemRequest.DateFrom)
+				priceListItem.DateTo = utils.ParseDateNil(priceListItemRequest.DateTo)
+
+				err = s.itemRepo.UpdatePriceListItem(&priceListItem)
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+
+	return nil
 }

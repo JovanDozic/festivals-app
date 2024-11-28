@@ -63,4 +63,11 @@ export class ItemService {
       )
       .pipe(map((response) => response.priceListItemId));
   }
+
+  updateItem(festivalId: number, request: Item): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/${request.id}`,
+      request
+    );
+  }
 }

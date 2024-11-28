@@ -18,6 +18,8 @@ type ItemRepo interface {
 	GetTicketTypesCount(festivalId uint) (int, error)
 	GetItemAndPriceListItemsIDs(itemId uint) (*modelsFestival.Item, []uint, error)
 	GetPriceListItemsByIDs(priceListItemIDs []uint) ([]modelsFestival.PriceListItem, error)
+	UpdateItem(item *modelsFestival.Item) error
+	UpdatePriceListItem(priceListItem *modelsFestival.PriceListItem) error
 }
 
 type itemRepo struct {
@@ -109,8 +111,7 @@ func (r *itemRepo) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.Pric
 		Joins("JOIN items ON price_list_items.item_id = items.id").
 		Where("items.type = ?", modelsFestival.ItemTicketType).
 		Where("price_list_id = ?", currentPriceList.ID).
-		// Where("date_from <= ?", time.Now()).
-		// Where("date_to >= ?", time.Now()).
+		Order("items.id").
 		Find(&priceListItems).Error
 	if err != nil {
 		return nil, err
@@ -152,6 +153,7 @@ func (r *itemRepo) GetItemAndPriceListItemsIDs(itemId uint) (*modelsFestival.Ite
 	err := r.db.Model(&modelsFestival.PriceListItem{}).
 		Select("id").
 		Where("item_id = ?", itemId).
+		Order("date_from").
 		Find(&priceListItemIDs).Error
 	if err != nil {
 		return nil, nil, err
@@ -170,10 +172,29 @@ func (r *itemRepo) GetPriceListItemsByIDs(priceListItemIDs []uint) ([]modelsFest
 
 	err := r.db.
 		Where("id IN ?", priceListItemIDs).
+		Order("date_from").
 		Find(&priceListItems).Error
 	if err != nil {
 		return nil, err
 	}
 
 	return priceListItems, nil
+}
+
+func (r *itemRepo) UpdateItem(item *modelsFestival.Item) error {
+	err := r.db.Save(item).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *itemRepo) UpdatePriceListItem(priceListItem *modelsFestival.PriceListItem) error {
+	err := r.db.Save(priceListItem).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

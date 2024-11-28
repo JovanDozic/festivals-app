@@ -43,3 +43,21 @@ type CreatePriceListItemRequest struct {
 	DateTo   *string `json:"dateTo"`
 	IsFixed  bool    `json:"isFixed"`
 }
+
+type UpdateItemRequest struct {
+	Id              uint                         `json:"id"`
+	Name            string                       `json:"name"`
+	Description     string                       `json:"description"`
+	Type            string                       `json:"type"`
+	AvailableNumber int                          `json:"availableNumber"`
+	RemainingNumber int                          `json:"remainingNumber"`
+	PriceListItems  []UpdatePriceListItemRequest `json:"priceListItems"`
+}
+
+type UpdatePriceListItemRequest struct {
+	Id       uint    `json:"id"`
+	Price    float64 `json:"price"`
+	IsFixed  bool    `json:"isFixed"`
+	DateFrom *string `json:"dateFrom"`
+	DateTo   *string `json:"dateTo"`
+}
