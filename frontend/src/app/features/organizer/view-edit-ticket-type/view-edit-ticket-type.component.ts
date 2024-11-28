@@ -62,12 +62,6 @@ import { forkJoin } from 'rxjs';
   providers: [provideNativeDateAdapter()],
 })
 export class ViewEditTicketTypeComponent implements OnInit {
-  addVariablePrice() {
-    throw new Error('Method not implemented.');
-  }
-  saveChanges() {
-    throw new Error('Method not implemented.');
-  }
   private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
   private dialogRef = inject(MatDialogRef<ViewEditTicketTypeComponent>);
@@ -75,7 +69,7 @@ export class ViewEditTicketTypeComponent implements OnInit {
     inject(MAT_DIALOG_DATA);
   private itemService = inject(ItemService);
 
-  isEditing: boolean = false;
+  isEditing: boolean = true;
 
   infoFormGroup: FormGroup;
   fixedPriceFormGroup: FormGroup;
@@ -96,6 +90,7 @@ export class ViewEditTicketTypeComponent implements OnInit {
   constructor() {
     // todo: fill in information for selected ticket type
     // todo: fetch ticket type information from server
+
     this.infoFormGroup = this.fb.group({
       nameCtrl: ['', Validators.required],
       descriptionCtrl: ['', Validators.required],
@@ -108,6 +103,14 @@ export class ViewEditTicketTypeComponent implements OnInit {
 
     this.variablePricesFormGroup = this.fb.group({
       variablePricesFormArray: this.fb.array([this.createVariablePriceGroup()]),
+    });
+
+    this.infoFormGroup.disable();
+    this.fixedPriceFormGroup.disable();
+    this.variablePricesFormGroup.disable();
+    this.variablePricesFormArray.disable();
+    this.variablePricesFormArray.controls.forEach((control) => {
+      control.disable();
     });
   }
 
@@ -123,6 +126,32 @@ export class ViewEditTicketTypeComponent implements OnInit {
       dateFromCtrl: ['', Validators.required],
       dateToCtrl: ['', Validators.required],
     });
+  }
+
+  toggleIsEditing() {
+    console.log('Toggling is editing');
+    this.isEditing = !this.isEditing;
+    if (!this.isEditing) {
+      this.infoFormGroup.disable();
+      this.fixedPriceFormGroup.disable();
+      this.variablePricesFormGroup.disable();
+      this.variablePricesFormArray.disable();
+      this.variablePricesFormArray.controls.forEach((control) => {
+        control.disable();
+      });
+    } else {
+      this.infoFormGroup.enable();
+      this.fixedPriceFormGroup.enable();
+      this.variablePricesFormGroup.enable();
+      this.variablePricesFormArray.enable();
+      this.variablePricesFormArray.controls.forEach((control) => {
+        control.enable();
+      });
+    }
+  }
+
+  saveChanges() {
+    throw new Error('Method not implemented.');
   }
 
   loadForms() {
@@ -164,6 +193,7 @@ export class ViewEditTicketTypeComponent implements OnInit {
           this.ticketType = ticketType;
           console.log('Ticket type: ', ticketType);
           this.loadForms();
+          this.toggleIsEditing();
         },
         error: (error) => {
           console.log('Error fetching ticket type: ', error);

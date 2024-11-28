@@ -103,16 +103,6 @@
                       Price must be at least $1
                     </mat-error>
                   </mat-form-field>
-                  <!-- <button
-                    mat-icon-button
-                    color="warn"
-                    type="button"
-                    [disabled]="true"
-                    matTooltip="Remove this price"
-                    class="remove-variable-price-button"
-                  >
-                    <mat-icon>remove_circle</mat-icon>
-                  </button> -->
                 </div>
                 <div class="form-fields">
                   <mat-form-field appearance="outline">
@@ -164,10 +154,24 @@
   </mat-tab-group>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
-  <button mat-flat-button color="primary" (click)="saveChanges()">
-    <!-- [disabled]="basicInfoFormGroup.invalid || addressFormGroup.invalid" -->
-    Save changes
-  </button>
+<mat-dialog-actions align="end" class="mat-dialog-actions-with-toggle">
+  <mat-slide-toggle
+    color="primary"
+    [checked]="isEditing"
+    (toggleChange)="toggleIsEditing()"
+  >
+    <span style="margin-left: 5px">Enable editing </span>
+  </mat-slide-toggle>
+  <div *ngIf="isEditing">
+    <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+    <button mat-flat-button color="primary" (click)="saveChanges()">
+      <!-- [disabled]="basicInfoFormGroup.invalid || addressFormGroup.invalid" -->
+      Save changes
+    </button>
+  </div>
+  <div *ngIf="!isEditing">
+    <button mat-flat-button color="primary" (click)="closeDialog()">
+      Close
+    </button>
+  </div>
 </mat-dialog-actions>

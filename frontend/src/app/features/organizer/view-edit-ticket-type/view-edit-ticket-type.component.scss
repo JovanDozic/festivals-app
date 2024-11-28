@@ -95,3 +95,9 @@ mat-form-field {
 .variable-prices::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.4);
 }
+
+.mat-dialog-actions-with-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
