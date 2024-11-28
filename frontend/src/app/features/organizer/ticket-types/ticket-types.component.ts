@@ -119,10 +119,12 @@ export class TicketTypesComponent implements OnInit {
     });
   }
 
-  onViewClick() {
+  onViewClick(itemId: number) {
+    console.log('Viewing ticket type: ', itemId);
     const dialogRef = this.dialog.open(ViewEditTicketTypeComponent, {
       data: {
         festivalId: this.festival?.id,
+        itemId: itemId,
       },
       width: '800px',
       height: 'auto',

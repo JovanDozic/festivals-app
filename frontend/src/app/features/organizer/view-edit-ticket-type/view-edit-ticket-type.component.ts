@@ -64,7 +64,8 @@ export class ViewEditTicketTypeComponent implements OnInit {
   private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
   private dialogRef = inject(MatDialogRef<ViewEditTicketTypeComponent>);
-  private data: { festivalId: number } = inject(MAT_DIALOG_DATA);
+  private data: { festivalId: number; itemId: number } =
+    inject(MAT_DIALOG_DATA);
   private itemService = inject(ItemService);
 
   isEditing: boolean = false;
@@ -101,7 +102,7 @@ export class ViewEditTicketTypeComponent implements OnInit {
 
   loadTicketType() {
     const festivalId = this.data.festivalId;
-    const ticketTypeId = 29; // todo: get ticket type id from dialog data
+    const ticketTypeId = this.data.itemId;
     if (festivalId && ticketTypeId) {
       this.itemService.getTicketType(festivalId, ticketTypeId).subscribe({
         next: (ticketType) => {
@@ -113,6 +114,12 @@ export class ViewEditTicketTypeComponent implements OnInit {
           this.snackbarService.show('Error getting ticket type');
         },
       });
+    } else {
+      console.log(
+        'No festival id or ticket type id:',
+        festivalId,
+        ticketTypeId
+      );
     }
   }
 }
