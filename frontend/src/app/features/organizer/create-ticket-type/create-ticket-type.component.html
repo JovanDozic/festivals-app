@@ -151,6 +151,18 @@
                     >
                       Date From is required
                     </mat-error>
+                    <mat-error
+                      *ngIf="
+                        variablePrice.get('dateFromCtrl')?.hasError('overlap')
+                      "
+                    >
+                      Date overlaps with previous one
+                    </mat-error>
+                    <mat-error
+                      *ngIf="variablePrice.get('dateFromCtrl')?.hasError('gap')"
+                    >
+                      Date has a gap with previous one
+                    </mat-error>
                   </mat-form-field>
 
                   <mat-form-field appearance="outline">
@@ -169,7 +181,26 @@
                         variablePrice.get('dateToCtrl')?.hasError('required')
                       "
                     >
-                      Date From is required
+                      Date To is required
+                    </mat-error>
+                    <mat-error
+                      *ngIf="
+                        variablePrice.get('dateToCtrl')?.hasError('dateOrder')
+                      "
+                    >
+                      Date To must be after Date From
+                    </mat-error>
+                    <mat-error
+                      *ngIf="
+                        variablePrice.get('dateToCtrl')?.hasError('overlap')
+                      "
+                    >
+                      Date overlaps with next one
+                    </mat-error>
+                    <mat-error
+                      *ngIf="variablePrice.get('dateToCtrl')?.hasError('gap')"
+                    >
+                      Date has a gap with next one
                     </mat-error>
                   </mat-form-field>
                 </div>

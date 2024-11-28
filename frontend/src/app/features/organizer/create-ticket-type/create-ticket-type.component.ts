@@ -11,6 +11,7 @@ import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { FestivalService } from '../../../services/festival/festival.service';
@@ -88,9 +89,14 @@ export class CreateTicketTypeComponent {
       fixedPriceCtrl: ['', [Validators.required, Validators.min(0)]],
     });
 
-    this.variablePricesFormGroup = this.fb.group({
-      variablePricesFormArray: this.fb.array([this.createVariablePriceGroup()]),
-    });
+    this.variablePricesFormGroup = this.fb.group(
+      {
+        variablePricesFormArray: this.fb.array([
+          this.createVariablePriceGroup(),
+        ]),
+      },
+      { validators: this.validateVariablePrices.bind(this) }
+    );
   }
 
   get variablePricesFormArray(): FormArray {
@@ -249,5 +255,73 @@ export class CreateTicketTypeComponent {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  private validateVariablePrices(
+    formGroup: FormGroup
+  ): ValidationErrors | null {
+    const variablePricesFormArray = formGroup.get(
+      'variablePricesFormArray'
+    ) as FormArray;
+
+    const dateRanges = variablePricesFormArray.controls.map((control) => {
+      const dateFrom: Date = control.get('dateFromCtrl')?.value;
+      const dateTo: Date = control.get('dateToCtrl')?.value;
+      return {
+        dateFrom,
+        dateTo,
+        control,
+      };
+    });
+
+    let hasErrors = false;
+
+    // Clear previous errors
+    variablePricesFormArray.controls.forEach((control) => {
+      control.get('dateFromCtrl')?.setErrors(null);
+      control.get('dateToCtrl')?.setErrors(null);
+    });
+
+    // Sort date ranges by dateFrom
+    dateRanges.sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime());
+
+    for (let i = 0; i < dateRanges.length; i++) {
+      const currentRange = dateRanges[i];
+      const currentDateFrom = currentRange.dateFrom;
+      const currentDateTo = currentRange.dateTo;
+
+      // Check that dateFrom <= dateTo
+      if (currentDateFrom > currentDateTo) {
+        currentRange.control.get('dateToCtrl')?.setErrors({ dateOrder: true });
+        hasErrors = true;
+      }
+
+      if (i > 0) {
+        const previousRange = dateRanges[i - 1];
+        const previousDateTo = previousRange.dateTo;
+
+        // Check for overlaps
+        if (currentDateFrom.getTime() <= previousDateTo.getTime()) {
+          // Overlap detected
+          currentRange.control
+            .get('dateFromCtrl')
+            ?.setErrors({ overlap: true });
+          previousRange.control.get('dateToCtrl')?.setErrors({ overlap: true });
+          hasErrors = true;
+        } else {
+          // Check for gaps
+          const expectedDateFrom = new Date(previousDateTo);
+          expectedDateFrom.setDate(expectedDateFrom.getDate() + 1);
+          if (currentDateFrom.getTime() !== expectedDateFrom.getTime()) {
+            // Gap detected
+            currentRange.control.get('dateFromCtrl')?.setErrors({ gap: true });
+            previousRange.control.get('dateToCtrl')?.setErrors({ gap: true });
+            hasErrors = true;
+          }
+        }
+      }
+    }
+
+    return hasErrors ? { invalidDateRanges: true } : null;
   }
 }

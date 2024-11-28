@@ -109,6 +109,7 @@ export class TicketTypesComponent implements OnInit {
       },
       width: '800px',
       height: 'auto',
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -127,6 +128,7 @@ export class TicketTypesComponent implements OnInit {
       },
       width: '800px',
       height: 'auto',
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
