@@ -15,6 +15,7 @@ type ItemHandler interface {
 	CreatePriceListItem(w http.ResponseWriter, r *http.Request)
 	GetCurrentTicketTypes(w http.ResponseWriter, r *http.Request)
 	GetTicketTypesCount(w http.ResponseWriter, r *http.Request)
+	GetTicketType(w http.ResponseWriter, r *http.Request)
 }
 
 type itemHandler struct {
@@ -176,4 +177,29 @@ func (h *itemHandler) GetTicketTypesCount(w http.ResponseWriter, r *http.Request
 		Count:      count,
 	}, nil)
 	log.Println("ticket types count retrieved successfully for festival:", festivalId)
+}
+
+func (h *itemHandler) GetTicketType(w http.ResponseWriter, r *http.Request) {
+
+	_, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	itemId, err := getIDFromRequest(r, "itemId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	response, err := h.itemService.GetTicketTypes(itemId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response, nil)
+	log.Println("ticket types retrieved successfully for item:", itemId)
 }

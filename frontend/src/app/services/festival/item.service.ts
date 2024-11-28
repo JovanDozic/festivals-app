@@ -5,6 +5,7 @@ import {
   CreateItemPriceRequest,
   CreateItemRequest,
   FestivalPropCountResponse,
+  Item,
   ItemsResponse,
 } from '../../models/festival/festival.model';
 
@@ -30,6 +31,12 @@ export class ItemService {
         `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/count`
       )
       .pipe(map((response) => response.count));
+  }
+
+  getTicketType(festivalId: number, itemId: number): Observable<Item> {
+    return this.http.get<Item>(
+      `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/${itemId}`
+    );
   }
 
   createItem(

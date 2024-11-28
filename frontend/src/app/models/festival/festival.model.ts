@@ -119,6 +119,7 @@ export interface Item {
   id: number;
   name: string;
   description: string;
+  type: string;
   availableNumber: number;
   remainingNumber: number;
   priceListItems: PriceListItem[];

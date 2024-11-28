@@ -27,6 +27,7 @@ type FestivalPropCountResponse struct {
 	Count      int  `json:"count"`
 }
 
+// this one returns only the current price
 type ItemResponse struct {
 	ItemId          uint       `json:"itemId"`
 	PriceListItemId uint       `json:"priceListItemId"`
@@ -44,4 +45,23 @@ type ItemResponse struct {
 type GetItemsResponse struct {
 	FestivalId uint           `json:"festivalId"`
 	Items      []ItemResponse `json:"items"`
+}
+
+// this one returns all prices
+type GetItemResponse struct {
+	Id              uint                    `json:"id"`
+	Name            string                  `json:"name"`
+	Description     string                  `json:"description"`
+	Type            string                  `json:"type"`
+	AvailableNumber int                     `json:"availableNumber"`
+	RemainingNumber int                     `json:"remainingNumber"`
+	PriceListItems  []PriceListItemResponse `json:"priceListItems"`
+}
+
+type PriceListItemResponse struct {
+	Id       uint       `json:"id"`
+	Price    float64    `json:"price"`
+	IsFixed  bool       `json:"isFixed"`
+	DateFrom *time.Time `json:"dateFrom"`
+	DateTo   *time.Time `json:"dateTo"`
 }

@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogContent,
@@ -60,7 +60,7 @@ import { forkJoin } from 'rxjs';
     '../../../app.component.scss',
   ],
 })
-export class ViewEditTicketTypeComponent {
+export class ViewEditTicketTypeComponent implements OnInit {
   private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
   private dialogRef = inject(MatDialogRef<ViewEditTicketTypeComponent>);
@@ -73,14 +73,15 @@ export class ViewEditTicketTypeComponent {
   priceFormGroup: FormGroup;
   variablePriceFormGroup: FormGroup;
 
-  ticketType: Item | null = null; // enter dialog data in here
+  ticketType: Item | null = null;
+
+  ngOnInit(): void {
+    this.loadTicketType();
+  }
 
   constructor() {
     // todo: fill in information for selected ticket type
     // todo: fetch ticket type information from server
-
-    this.loadTicketType();
-
     this.infoFormGroup = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -99,6 +100,19 @@ export class ViewEditTicketTypeComponent {
   }
 
   loadTicketType() {
-    // todo: by ID
+    const festivalId = this.data.festivalId;
+    const ticketTypeId = 29; // todo: get ticket type id from dialog data
+    if (festivalId && ticketTypeId) {
+      this.itemService.getTicketType(festivalId, ticketTypeId).subscribe({
+        next: (ticketType) => {
+          this.ticketType = ticketType;
+          console.log('Ticket type: ', ticketType);
+        },
+        error: (error) => {
+          console.log('Error fetching ticket type: ', error);
+          this.snackbarService.show('Error getting ticket type');
+        },
+      });
+    }
   }
 }

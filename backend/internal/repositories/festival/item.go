@@ -16,6 +16,8 @@ type ItemRepo interface {
 	CreatePriceListItem(priceListItem *modelsFestival.PriceListItem) error
 	GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.PriceListItem, error)
 	GetTicketTypesCount(festivalId uint) (int, error)
+	GetItemAndPriceListItemsIDs(itemId uint) (*modelsFestival.Item, []uint, error)
+	GetPriceListItemsByIDs(priceListItemIDs []uint) ([]modelsFestival.PriceListItem, error)
 }
 
 type itemRepo struct {
@@ -130,6 +132,7 @@ func (r *itemRepo) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.Pric
 
 func (r *itemRepo) GetTicketTypesCount(festivalId uint) (int, error) {
 
+	// todo: make sure this returns only ticket types that have a price with them
 	var count int64
 	err := r.db.Table("items").
 		Where("festival_id = ? AND type = ?", festivalId, modelsFestival.ItemTicketType).
@@ -139,4 +142,38 @@ func (r *itemRepo) GetTicketTypesCount(festivalId uint) (int, error) {
 	}
 
 	return int(count), nil
+}
+
+// this guy returns item info and IDs of all of it's prices
+func (r *itemRepo) GetItemAndPriceListItemsIDs(itemId uint) (*modelsFestival.Item, []uint, error) {
+	var item modelsFestival.Item
+	var priceListItemIDs []uint
+
+	err := r.db.Model(&modelsFestival.PriceListItem{}).
+		Select("id").
+		Where("item_id = ?", itemId).
+		Find(&priceListItemIDs).Error
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if err := r.db.First(&item, itemId).Error; err != nil {
+		return nil, nil, err
+	}
+
+	return &item, priceListItemIDs, nil
+}
+
+// this guy get all prices for given list of IDs
+func (r *itemRepo) GetPriceListItemsByIDs(priceListItemIDs []uint) ([]modelsFestival.PriceListItem, error) {
+	var priceListItems []modelsFestival.PriceListItem
+
+	err := r.db.
+		Where("id IN ?", priceListItemIDs).
+		Find(&priceListItems).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return priceListItems, nil
 }

@@ -25,6 +25,7 @@ import {
 import { EditEmployeeComponent } from '../edit-employee/edit-employee.component';
 import { ItemService } from '../../../services/festival/item.service';
 import { CreateTicketTypeComponent } from '../create-ticket-type/create-ticket-type.component';
+import { ViewEditTicketTypeComponent } from '../view-edit-ticket-type/view-edit-ticket-type.component';
 
 @Component({
   selector: 'app-ticket-types',
@@ -106,7 +107,24 @@ export class TicketTypesComponent implements OnInit {
       data: {
         festivalId: this.festival?.id,
       },
-      width: '1200px',
+      width: '800px',
+      height: 'auto',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('Dialog closed with result: ', result);
+      if (result) {
+        this.loadTicketTypes();
+      }
+    });
+  }
+
+  onViewClick() {
+    const dialogRef = this.dialog.open(ViewEditTicketTypeComponent, {
+      data: {
+        festivalId: this.festival?.id,
+      },
+      width: '800px',
       height: 'auto',
     });
 
