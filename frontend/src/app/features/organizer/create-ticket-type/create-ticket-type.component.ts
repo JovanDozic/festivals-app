@@ -2,6 +2,7 @@ import { Component, inject, ViewChild } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogContent,
+  MatDialogModule,
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
@@ -47,11 +48,10 @@ import { forkJoin } from 'rxjs';
     MatDatepickerModule,
     MatGridListModule,
     MatIconModule,
-    MatDialogTitle,
-    MatDialogContent,
     MatTabsModule,
     MatStepperModule,
     MatSlideToggleModule,
+    MatDialogModule,
   ],
   templateUrl: './create-ticket-type.component.html',
   styleUrls: [
@@ -99,7 +99,6 @@ export class CreateTicketTypeComponent {
     ) as FormArray;
   }
 
-  // Helper method to create a variable price FormGroup
   private createVariablePriceGroup(): FormGroup {
     return this.fb.group({
       priceCtrl: ['', [Validators.required, Validators.min(0)]],
@@ -110,6 +109,10 @@ export class CreateTicketTypeComponent {
 
   toggleIsFixed() {
     this.isFixedPrice = !this.isFixedPrice;
+  }
+
+  closeDialog() {
+    this.dialogRef.close(false);
   }
 
   createTicketType() {

@@ -56,14 +56,21 @@ strong {
   justify-content: space-between;
   align-items: center;
   height: 40px;
+  width: 100%;
+  margin-top: -5px !important;
 }
 
 .variable-prices {
-  // border: 1px solid lime;
   // padding-top: 5px;
   overflow: hidden;
   overflow-y: scroll;
-  height: 200px;
+  height: 230px;
+  width: 100%;
+}
+
+.edit-tab {
+  height: 300px !important;
+  padding-top: 20px;
 }
 
 mat-form-field {

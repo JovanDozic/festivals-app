@@ -33,8 +33,6 @@
             />
           </mat-form-field>
         </div>
-
-        <button mat-stroked-button (click)="createTicketType()">Next</button>
       </form>
     </mat-step>
 
@@ -181,7 +179,33 @@
           </div>
         </div>
       </div>
-      <button mat-stroked-button (click)="done()">Done</button>
     </mat-step>
   </mat-stepper>
 </mat-dialog-content>
+
+<mat-dialog-actions align="end" style="margin-top: -20px">
+  <button
+    mat-button
+    color="warn"
+    (click)="closeDialog()"
+    *ngIf="stepper.selectedIndex == 0"
+  >
+    Cancel
+  </button>
+  <button
+    mat-stroked-button
+    (click)="createTicketType()"
+    *ngIf="stepper.selectedIndex == 0"
+    [disabled]="infoFormGroup.invalid"
+  >
+    Next
+  </button>
+  <button
+    mat-stroked-button
+    (click)="done()"
+    *ngIf="stepper.selectedIndex == 1"
+    [disabled]="infoFormGroup.invalid || variablePricesFormArray.invalid"
+  >
+    Done
+  </button>
+</mat-dialog-actions>

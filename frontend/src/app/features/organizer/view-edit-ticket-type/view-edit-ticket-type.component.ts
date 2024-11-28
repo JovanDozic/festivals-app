@@ -2,6 +2,7 @@ import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogContent,
+  MatDialogModule,
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
@@ -48,19 +49,25 @@ import { forkJoin } from 'rxjs';
     MatDatepickerModule,
     MatGridListModule,
     MatIconModule,
-    MatDialogTitle,
-    MatDialogContent,
     MatTabsModule,
     MatStepperModule,
     MatSlideToggleModule,
+    MatDialogModule,
   ],
   templateUrl: './view-edit-ticket-type.component.html',
   styleUrls: [
     './view-edit-ticket-type.component.scss',
     '../../../app.component.scss',
   ],
+  providers: [provideNativeDateAdapter()],
 })
 export class ViewEditTicketTypeComponent implements OnInit {
+  addVariablePrice() {
+    throw new Error('Method not implemented.');
+  }
+  saveChanges() {
+    throw new Error('Method not implemented.');
+  }
   private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
   private dialogRef = inject(MatDialogRef<ViewEditTicketTypeComponent>);
@@ -71,8 +78,10 @@ export class ViewEditTicketTypeComponent implements OnInit {
   isEditing: boolean = false;
 
   infoFormGroup: FormGroup;
-  priceFormGroup: FormGroup;
-  variablePriceFormGroup: FormGroup;
+  fixedPriceFormGroup: FormGroup;
+  variablePricesFormGroup: FormGroup;
+
+  isFixedPrice: boolean = true;
 
   ticketType: Item | null = null;
 
@@ -80,24 +89,70 @@ export class ViewEditTicketTypeComponent implements OnInit {
     this.loadTicketType();
   }
 
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
   constructor() {
     // todo: fill in information for selected ticket type
     // todo: fetch ticket type information from server
     this.infoFormGroup = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      availableNumber: [0, Validators.required],
-      type: [''],
+      nameCtrl: ['', Validators.required],
+      descriptionCtrl: ['', Validators.required],
+      availableNumberCtrl: [0, Validators.required],
     });
 
-    this.priceFormGroup = this.fb.group({
-      price: [0, Validators.required],
-      isFixed: [true, Validators.required],
+    this.fixedPriceFormGroup = this.fb.group({
+      fixedPriceCtrl: ['', [Validators.required, Validators.min(0)]],
     });
 
-    this.variablePriceFormGroup = this.fb.group({
-      variablePrices: this.fb.array([]),
+    this.variablePricesFormGroup = this.fb.group({
+      variablePricesFormArray: this.fb.array([this.createVariablePriceGroup()]),
     });
+  }
+
+  get variablePricesFormArray(): FormArray {
+    return this.variablePricesFormGroup.get(
+      'variablePricesFormArray'
+    ) as FormArray;
+  }
+
+  private createVariablePriceGroup(): FormGroup {
+    return this.fb.group({
+      priceCtrl: ['', [Validators.required, Validators.min(0)]],
+      dateFromCtrl: ['', Validators.required],
+      dateToCtrl: ['', Validators.required],
+    });
+  }
+
+  loadForms() {
+    if (this.ticketType) {
+      console.log('Ticket type: ', this.ticketType);
+      this.infoFormGroup.setValue({
+        nameCtrl: this.ticketType.name,
+        descriptionCtrl: this.ticketType.description,
+        availableNumberCtrl: this.ticketType.availableNumber,
+      });
+
+      this.isFixedPrice = this.ticketType.priceListItems[0].isFixed;
+
+      if (this.isFixedPrice) {
+        this.fixedPriceFormGroup.setValue({
+          fixedPriceCtrl: this.ticketType.priceListItems[0].price,
+        });
+      } else {
+        this.variablePricesFormArray.clear();
+        this.ticketType.priceListItems.forEach((priceListItem) => {
+          const variablePriceGroup = this.createVariablePriceGroup();
+          variablePriceGroup.setValue({
+            priceCtrl: priceListItem.price,
+            dateFromCtrl: new Date(priceListItem.dateFrom),
+            dateToCtrl: new Date(priceListItem.dateTo),
+          });
+          this.variablePricesFormArray.push(variablePriceGroup);
+        });
+      }
+    }
   }
 
   loadTicketType() {
@@ -108,6 +163,7 @@ export class ViewEditTicketTypeComponent implements OnInit {
         next: (ticketType) => {
           this.ticketType = ticketType;
           console.log('Ticket type: ', ticketType);
+          this.loadForms();
         },
         error: (error) => {
           console.log('Error fetching ticket type: ', error);

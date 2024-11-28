@@ -1,1 +1,173 @@
-<p>view-edit-ticket-type works!</p>
+<h2 mat-dialog-title>Edit Ticket Type</h2>
+
+<mat-dialog-content>
+  <mat-tab-group>
+    <mat-tab label="Ticket Info">
+      <form [formGroup]="infoFormGroup" class="edit-tab">
+        <ng-template matStepLabel>Ticket Info</ng-template>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="nameCtrl" required />
+          </mat-form-field>
+        </div>
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="descriptionCtrl"
+              required
+            />
+          </mat-form-field>
+        </div>
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Available Number</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="availableNumberCtrl"
+              required
+            />
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-tab>
+    <mat-tab label="Price Configuration">
+      <div class="edit-tab">
+        <div class="form-fields toggle-form-field">
+          <span>
+            <mat-slide-toggle
+              color="primary"
+              [checked]="isFixedPrice"
+              [disabled]="true"
+            ></mat-slide-toggle>
+            Is Price fixed?
+          </span>
+        </div>
+        <!-- ! FIXED PRICES -->
+        <div *ngIf="isFixedPrice">
+          <form [formGroup]="fixedPriceFormGroup">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Price</mat-label>
+              <span matTextPrefix>$ &nbsp;&nbsp;</span>
+              <input
+                matInput
+                type="number"
+                formControlName="fixedPriceCtrl"
+                required
+                step="0.01"
+                min="0"
+                inputmode="decimal"
+              />
+            </mat-form-field>
+          </form>
+        </div>
+        <!-- ! VARIABLE PRICES -->
+        <div class="variable-prices" *ngIf="!isFixedPrice">
+          <div [formGroup]="variablePricesFormGroup">
+            <div formArrayName="variablePricesFormArray">
+              <div
+                *ngFor="
+                  let variablePrice of variablePricesFormArray.controls;
+                  let i = index
+                "
+                [formGroupName]="i"
+                class="variable-price"
+              >
+                <div class="form-fields">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Price</mat-label>
+                    <span matTextPrefix>$ &nbsp;&nbsp;</span>
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="priceCtrl"
+                      required
+                      step="0.01"
+                      min="0"
+                      inputmode="decimal"
+                    />
+                    <mat-error
+                      *ngIf="
+                        variablePrice.get('priceCtrl')?.hasError('required')
+                      "
+                    >
+                      Price is required
+                    </mat-error>
+                    <mat-error
+                      *ngIf="variablePrice.get('priceCtrl')?.hasError('min')"
+                    >
+                      Price must be at least $1
+                    </mat-error>
+                  </mat-form-field>
+                  <!-- <button
+                    mat-icon-button
+                    color="warn"
+                    type="button"
+                    [disabled]="true"
+                    matTooltip="Remove this price"
+                    class="remove-variable-price-button"
+                  >
+                    <mat-icon>remove_circle</mat-icon>
+                  </button> -->
+                </div>
+                <div class="form-fields">
+                  <mat-form-field appearance="outline">
+                    <mat-label>From</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="fromDatePicker"
+                      formControlName="dateFromCtrl"
+                      required
+                    />
+                    <mat-datepicker-toggle matSuffix [for]="fromDatePicker">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #fromDatePicker></mat-datepicker>
+                    <mat-error
+                      *ngIf="
+                        variablePrice.get('dateFromCtrl')?.hasError('required')
+                      "
+                    >
+                      Date From is required
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>To</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="toDatePicker"
+                      formControlName="dateToCtrl"
+                      required
+                    />
+                    <mat-datepicker-toggle matSuffix [for]="toDatePicker">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #toDatePicker></mat-datepicker>
+                    <mat-error
+                      *ngIf="
+                        variablePrice.get('dateToCtrl')?.hasError('required')
+                      "
+                    >
+                      Date From is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="saveChanges()">
+    <!-- [disabled]="basicInfoFormGroup.invalid || addressFormGroup.invalid" -->
+    Save changes
+  </button>
+</mat-dialog-actions>
