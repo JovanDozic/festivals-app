@@ -3,6 +3,7 @@ package repositories
 import (
 	"backend/internal/models"
 	modelsFestival "backend/internal/models/festival"
+	"backend/internal/utils"
 	"errors"
 	"time"
 
@@ -117,11 +118,14 @@ func (r *itemRepo) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.Pric
 		return nil, err
 	}
 
-	now := time.Now()
-	filteredPriceListItems := make([]modelsFestival.PriceListItem, 0)
+	today := utils.StripTime(time.Now())
+
+	filteredPriceListItems := make([]modelsFestival.PriceListItem, 0, len(priceListItems))
 	for _, pli := range priceListItems {
 		if !pli.IsFixed && pli.DateFrom != nil && pli.DateTo != nil {
-			if now.Before(*pli.DateFrom) || now.After(*pli.DateTo) {
+			dateFrom := utils.StripTime(*pli.DateFrom)
+			dateTo := utils.StripTime(*pli.DateTo)
+			if !utils.IsDateInRange(today, dateFrom, dateTo) {
 				continue
 			}
 		}
