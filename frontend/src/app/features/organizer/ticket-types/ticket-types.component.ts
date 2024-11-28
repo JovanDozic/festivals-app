@@ -1,5 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Festival, Item } from '../../../models/festival/festival.model';
+import {
+  Festival,
+  ItemCurrentPrice,
+} from '../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FestivalService } from '../../../services/festival/festival.service';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
@@ -43,7 +46,7 @@ import { CreateTicketTypeComponent } from '../create-ticket-type/create-ticket-t
 export class TicketTypesComponent implements OnInit {
   festival: Festival | null = null;
   ticketTypesCount: number = 0;
-  ticketTypes: Item[] = [];
+  ticketTypes: ItemCurrentPrice[] = [];
   displayedColumns = ['id', 'name', 'price', 'isFixed', 'dateTo', 'actions'];
 
   private route = inject(ActivatedRoute);

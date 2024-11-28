@@ -1,7 +1,6 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
-  MatDialogActions,
   MatDialogContent,
   MatDialogRef,
   MatDialogTitle,
@@ -17,6 +16,7 @@ import { FestivalService } from '../../../services/festival/festival.service';
 import {
   CreateItemPriceRequest,
   CreateItemRequest,
+  VariablePrice,
 } from '../../../models/festival/festival.model';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -26,10 +26,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import {
-  MATERIAL_SANITY_CHECKS,
-  provideNativeDateAdapter,
-} from '@angular/material/core';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UserService } from '../../../services/user/user.service';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
@@ -37,12 +34,6 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ItemService } from '../../../services/festival/item.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { forkJoin } from 'rxjs';
-
-interface VariablePrice {
-  price: number;
-  dateFrom: Date;
-  dateTo: Date;
-}
 
 @Component({
   selector: 'app-create-ticket-type',
@@ -71,24 +62,20 @@ interface VariablePrice {
 })
 export class CreateTicketTypeComponent {
   private fb = inject(FormBuilder);
-  private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
   private dialogRef = inject(MatDialogRef<CreateTicketTypeComponent>);
   private data: { festivalId: number } = inject(MAT_DIALOG_DATA);
-  private userService = inject(UserService);
   private itemService = inject(ItemService);
 
   @ViewChild('stepper') private stepper: MatStepper | undefined;
 
   infoFormGroup: FormGroup;
+  fixedPriceFormGroup: FormGroup;
+  variablePricesFormGroup: FormGroup;
+
   ticketTypeId: number | null = null;
   isFixedPrice: boolean = false;
-
-  fixedPriceFormGroup: FormGroup;
-
   variablePrices: VariablePrice[] = [];
-
-  variablePricesFormGroup: FormGroup;
 
   constructor() {
     this.infoFormGroup = this.fb.group({

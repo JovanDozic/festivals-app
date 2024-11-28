@@ -1,0 +1,90 @@
+.full-width {
+  width: 100%;
+}
+
+mat-card-header {
+  margin-bottom: 20px;
+}
+
+.error-message {
+  margin-top: 5px;
+  text-align: center;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+mat-card-actions {
+  margin-top: 5px;
+}
+
+h2,
+mat-dialog-title {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif !important;
+}
+
+.form-fields {
+  display: flex;
+  justify-content: left;
+  gap: 10px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.error-message {
+  margin-top: 5px;
+  text-align: center;
+}
+
+h1,
+strong {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif;
+}
+
+.price-form {
+  height: 300px;
+}
+
+.toggle-form-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
+
+.variable-prices {
+  // border: 1px solid lime;
+  // padding-top: 5px;
+  overflow: hidden;
+  overflow-y: scroll;
+  height: 200px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin: 5px 0 0 0 !important;
+}
+
+.remove-variable-price-button {
+  vertical-align: middle;
+  margin-top: 10px;
+}
+
+.variable-prices::-webkit-scrollbar {
+  width: 8px;
+}
+
+.variable-prices::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.variable-prices::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}

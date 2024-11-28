@@ -60,15 +60,12 @@ export class EditFestivalComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<EditFestivalComponent>);
   private data: Festival = inject(MAT_DIALOG_DATA);
 
-  @ViewChild('stepper') private stepper!: MatStepper;
-
   isLinear = true;
 
   basicInfoFormGroup: FormGroup;
   addressFormGroup: FormGroup;
 
   constructor() {
-    // Initialize form groups with validators
     this.basicInfoFormGroup = this.fb.group({
       nameCtrl: ['', Validators.required],
       descriptionCtrl: ['', Validators.required],
@@ -89,7 +86,6 @@ export class EditFestivalComponent implements OnInit {
 
   ngOnInit() {
     if (this.data) {
-      // Populate form groups with existing festival data
       this.basicInfoFormGroup.patchValue({
         nameCtrl: this.data.name,
         descriptionCtrl: this.data.description,
@@ -107,10 +103,6 @@ export class EditFestivalComponent implements OnInit {
         countryISO3Ctrl: this.data.address?.countryISO3,
       });
     }
-  }
-
-  goBack() {
-    this.stepper.previous();
   }
 
   saveChanges() {

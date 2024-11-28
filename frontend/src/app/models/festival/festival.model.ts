@@ -51,7 +51,7 @@ export interface EmployeesResponse {
 
 export interface ItemsResponse {
   festivalId: number;
-  items: Item[];
+  items: ItemCurrentPrice[];
 }
 
 export interface Employee {
@@ -76,7 +76,7 @@ export interface CreateStaffResponse {
   userId: number;
 }
 
-export interface Item {
+export interface ItemCurrentPrice {
   itemId: number;
   priceListItemId: number;
   name: string;
@@ -107,4 +107,27 @@ export interface CreateItemPriceRequest {
   isFixed: boolean;
   dateFrom?: string;
   dateTo?: string;
+}
+
+export interface VariablePrice {
+  price: number;
+  dateFrom: Date;
+  dateTo: Date;
+}
+
+export interface Item {
+  id: number;
+  name: string;
+  description: string;
+  availableNumber: number;
+  remainingNumber: number;
+  priceListItems: PriceListItem[];
+}
+
+export interface PriceListItem {
+  id: number;
+  price: number;
+  isFixed: boolean;
+  dateFrom: string;
+  dateTo: string;
 }
