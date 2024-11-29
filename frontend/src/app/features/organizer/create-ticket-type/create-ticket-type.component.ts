@@ -132,7 +132,6 @@ export class CreateTicketTypeComponent {
 
       this.itemService.createItem(this.data.festivalId, request).subscribe({
         next: (response) => {
-          console.log('Ticket type created: ', response);
           this.snackbarService.show('Ticket Type created');
           this.ticketTypeId = response;
           this.stepper?.next();
@@ -195,7 +194,6 @@ export class CreateTicketTypeComponent {
         .createItemPrice(this.data.festivalId, request)
         .subscribe({
           next: (response) => {
-            console.log('Fixed price created: ', response);
             this.snackbarService.show('Fixed Price created');
             this.dialogRef.close(true);
           },
@@ -235,7 +233,6 @@ export class CreateTicketTypeComponent {
         )
       ).subscribe({
         next: (responses) => {
-          console.log('Variable prices created: ', responses);
           this.snackbarService.show('Variable Prices created');
           this.dialogRef.close(true);
         },

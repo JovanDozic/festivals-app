@@ -189,27 +189,20 @@ export class ViewEditTicketTypeComponent implements OnInit {
   }
 
   loadTicketType() {
-    const festivalId = this.data.festivalId;
-    const ticketTypeId = this.data.itemId;
-    if (festivalId && ticketTypeId) {
-      this.itemService.getTicketType(festivalId, ticketTypeId).subscribe({
-        next: (ticketType) => {
-          this.ticketType = ticketType;
-          console.log('Ticket type: ', ticketType);
-          this.loadForms();
-          this.toggleIsEditing();
-        },
-        error: (error) => {
-          console.log('Error fetching ticket type: ', error);
-          this.snackbarService.show('Error getting ticket type');
-        },
-      });
-    } else {
-      console.log(
-        'No festival id or ticket type id:',
-        festivalId,
-        ticketTypeId
-      );
+    if (this.data.festivalId && this.data.itemId) {
+      this.itemService
+        .getTicketType(this.data.festivalId, this.data.itemId)
+        .subscribe({
+          next: (ticketType) => {
+            this.ticketType = ticketType;
+            this.loadForms();
+            this.toggleIsEditing();
+          },
+          error: (error) => {
+            console.log('Error fetching ticket type: ', error);
+            this.snackbarService.show('Error getting ticket type');
+          },
+        });
     }
   }
 
@@ -246,8 +239,6 @@ export class ViewEditTicketTypeComponent implements OnInit {
           request.priceListItems.push(variablePriceRequest);
         });
       }
-
-      console.log('Request: ', request);
 
       this.itemService.updateItem(this.data.festivalId, request).subscribe({
         next: () => {

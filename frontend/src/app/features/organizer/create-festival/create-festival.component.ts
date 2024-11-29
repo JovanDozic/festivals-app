@@ -121,7 +121,6 @@ export class CreateFestivalComponent {
 
       this.festivalService.createFestival(festival).subscribe({
         next: (response) => {
-          console.log('Festival created:', response);
           this.festivalId = response.id?.toString() ?? null;
           this.snackbarService.show('Basic info saved successfully!');
           this.stepper?.next();

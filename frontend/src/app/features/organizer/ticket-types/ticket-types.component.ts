@@ -16,13 +16,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
-import { RegisterEmployeeComponent } from '../register-employee/register-employee.component';
-import { AddExistingEmployeeComponent } from '../add-existing-employee/add-existing-employee.component';
 import {
   ConfirmationDialog,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { EditEmployeeComponent } from '../edit-employee/edit-employee.component';
 import { ItemService } from '../../../services/festival/item.service';
 import { CreateTicketTypeComponent } from '../create-ticket-type/create-ticket-type.component';
 import { ViewEditTicketTypeComponent } from '../view-edit-ticket-type/view-edit-ticket-type.component';
@@ -73,7 +70,6 @@ export class TicketTypesComponent implements OnInit {
         next: (ticketTypes) => {
           this.ticketTypes = ticketTypes;
           this.ticketTypesCount = this.ticketTypes.length;
-          console.log('Ticket types: ', ticketTypes);
         },
         error: (error) => {
           console.log('Error fetching ticket types: ', error);
@@ -90,7 +86,6 @@ export class TicketTypesComponent implements OnInit {
     if (id) {
       this.festivalService.getFestival(Number(id)).subscribe({
         next: (festival) => {
-          console.log('Festival: ', festival);
           this.festival = festival;
         },
         error: (error) => {
@@ -113,7 +108,6 @@ export class TicketTypesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('Dialog closed with result: ', result);
       if (result) {
         this.loadTicketTypes();
       }
@@ -132,9 +126,36 @@ export class TicketTypesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('Dialog closed with result: ', result);
       if (result) {
         this.loadTicketTypes();
+      }
+    });
+  }
+
+  onDeleteTicketTypeClick(itemId: number, name: string) {
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      data: {
+        title: 'Fire Employee',
+        message: `Are you sure you want to delete ${name}? You won't be able to delete this ticket type if it has been used in any transactions.`,
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+      } as ConfirmationDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirm) {
+        this.itemService
+          .deleteItem(Number(this.festival?.id), itemId)
+          .subscribe({
+            next: () => {
+              this.snackbarService.show('Ticket type deleted');
+              this.loadTicketTypes();
+            },
+            error: (error) => {
+              console.log('Error deleting ticket type: ', error);
+              this.snackbarService.show('Error deleting ticket type');
+            },
+          });
       }
     });
   }

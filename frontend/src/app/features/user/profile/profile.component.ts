@@ -67,12 +67,6 @@ export class ProfileComponent implements OnInit {
 
   changePassword() {
     const dialogRef = this.dialog.open(ChangePasswordDialogComponent);
-
-    dialogRef.afterClosed().subscribe((success) => {
-      if (success) {
-        console.log('Password changed successfully');
-      }
-    });
   }
 
   changeProfile() {
@@ -88,7 +82,6 @@ export class ProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe((success) => {
       if (success) {
         this.getUserProfile();
-        console.log('Profile changed successfully');
       }
     });
   }

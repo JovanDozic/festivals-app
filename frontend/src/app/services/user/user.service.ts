@@ -61,7 +61,6 @@ export class UserService {
   }
 
   updateStaffProfile(updatedProfile: UpdateStaffProfileRequest) {
-    console.log(updatedProfile);
     return this.http.put<void>(`${this.apiUrl}/organizer/employee`, {
       username: updatedProfile.username,
       firstName: updatedProfile.firstName,

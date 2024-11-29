@@ -76,7 +76,6 @@ export class EditEmployeeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.data);
     if (this.data) {
       this.infoFormGroup.patchValue({
         emailCtrl: this.data.email,

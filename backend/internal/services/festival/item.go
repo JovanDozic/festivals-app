@@ -17,6 +17,7 @@ type ItemService interface {
 	GetTicketTypesCount(festivalId uint) (int, error)
 	GetTicketTypes(itemId uint) (*dto.GetItemResponse, error)
 	UpdateItemAndPrices(request dto.UpdateItemRequest) error
+	DeleteTicketType(itemId uint) error
 }
 
 type itemService struct {
@@ -165,4 +166,8 @@ func (s *itemService) UpdateItemAndPrices(request dto.UpdateItemRequest) error {
 	}
 
 	return nil
+}
+
+func (s *itemService) DeleteTicketType(itemId uint) error {
+	return s.itemRepo.DeleteTicketType(itemId)
 }

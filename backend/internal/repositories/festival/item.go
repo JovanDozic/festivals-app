@@ -21,6 +21,7 @@ type ItemRepo interface {
 	GetPriceListItemsByIDs(priceListItemIDs []uint) ([]modelsFestival.PriceListItem, error)
 	UpdateItem(item *modelsFestival.Item) error
 	UpdatePriceListItem(priceListItem *modelsFestival.PriceListItem) error
+	DeleteTicketType(itemID uint) error
 }
 
 type itemRepo struct {
@@ -136,11 +137,11 @@ func (r *itemRepo) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.Pric
 }
 
 func (r *itemRepo) GetTicketTypesCount(festivalId uint) (int, error) {
-
-	// todo: make sure this returns only ticket types that have a price with them
 	var count int64
 	err := r.db.Table("items").
-		Where("festival_id = ? AND type = ?", festivalId, modelsFestival.ItemTicketType).
+		Joins("JOIN price_list_items ON items.id = price_list_items.item_id").
+		Where("items.festival_id = ? AND items.type = ? AND items.deleted_at IS NULL", festivalId, modelsFestival.ItemTicketType).
+		Select("COUNT(DISTINCT items.id)").
 		Count(&count).Error
 	if err != nil {
 		return 0, err
@@ -201,4 +202,23 @@ func (r *itemRepo) UpdatePriceListItem(priceListItem *modelsFestival.PriceListIt
 	}
 
 	return nil
+}
+
+func (r *itemRepo) DeleteTicketType(itemID uint) error {
+
+	return r.db.Transaction((func(tx *gorm.DB) error {
+		if err := tx.Where("item_id = ?", itemID).Delete(&modelsFestival.PriceListItem{}).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Where("item_id = ?", itemID).Delete(&modelsFestival.TicketType{}).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Delete(&modelsFestival.Item{}, itemID).Error; err != nil {
+			return err
+		}
+
+		return nil
+	}))
 }

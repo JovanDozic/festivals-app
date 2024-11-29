@@ -79,7 +79,6 @@ export class AddExistingEmployeeComponent implements OnInit {
   private data: { festivalId: number } = inject(MAT_DIALOG_DATA);
 
   ngOnInit(): void {
-    console.log('Festival ID: ', this.data.festivalId);
     this.loadEmployees();
   }
 
@@ -89,7 +88,6 @@ export class AddExistingEmployeeComponent implements OnInit {
         .getEmployeesNotOnFestival(Number(this.data.festivalId))
         .subscribe({
           next: (employees) => {
-            console.log('Employees: ', employees);
             this.employees = employees;
             this.employeeCount = employees.length;
           },
@@ -120,14 +118,11 @@ export class AddExistingEmployeeComponent implements OnInit {
   }
 
   addEmployee(employee: Employee) {
-    console.log('Adding employee: ', employee);
-    console.log('Festival ID: ', this.data.festivalId);
     if (this.data.festivalId) {
       this.festivalService
         .employEmployee(this.data.festivalId, employee.id)
         .subscribe({
           next: (response) => {
-            console.log('Employee added: ', response);
             this.snackbarService.show(
               `${employee.firstName} ${employee.lastName} added to festival`
             );

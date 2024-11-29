@@ -55,7 +55,6 @@ export class ItemService {
     festivalId: number,
     request: CreateItemPriceRequest
   ): Observable<number> {
-    console.log('REQUEST', request);
     return this.http
       .post<{ priceListItemId: number }>(
         `${this.apiUrl}/organizer/festival/${festivalId}/item/price`,
@@ -68,6 +67,12 @@ export class ItemService {
     return this.http.put(
       `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/${request.id}`,
       request
+    );
+  }
+
+  deleteItem(festivalId: number, itemId: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/${itemId}`
     );
   }
 }
