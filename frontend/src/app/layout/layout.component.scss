@@ -23,6 +23,18 @@ mat-sidenav-content {
   overflow: auto;
   border-radius: 16px;
   box-sizing: border-box;
+
+  // background-image: url("../../../public/festival.jpg");
+}
+
+:host-context([data-theme="light"]) .sidenav-scroll-wrapper {
+  background-image: url("../../../public/bg-light.jpg");
+  background-size: cover;
+}
+
+:host-context([data-theme="dark"]) .sidenav-scroll-wrapper {
+  background-image: url("../../../public/bg-dark.jpg");
+  background-size: cover;
 }
 
 .sidenav-content {
