@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Package",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/api/main.go",
+      "env": {
+        "APP_API_VERSION": "v1",
+        "APP_NAME": "backend",
+        "APP_PORT": "4000",
+        "APP_ENV": "dev",
+        "DB_CONNECTION_STRING": "postgres://USERNAME:PASSWORD@localhost/DATABASE_NAME?sslmode=disable",
+        "JWT_SECRET": "JWT_SECRET"
+      }
+    }
+  ]
+}

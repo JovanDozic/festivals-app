@@ -189,27 +189,20 @@ export class ViewEditTicketTypeComponent implements OnInit {
   }
 
   loadTicketType() {
-    const festivalId = this.data.festivalId;
-    const ticketTypeId = this.data.itemId;
-    if (festivalId && ticketTypeId) {
-      this.itemService.getTicketType(festivalId, ticketTypeId).subscribe({
-        next: (ticketType) => {
-          this.ticketType = ticketType;
-          console.log('Ticket type: ', ticketType);
-          this.loadForms();
-          this.toggleIsEditing();
-        },
-        error: (error) => {
-          console.log('Error fetching ticket type: ', error);
-          this.snackbarService.show('Error getting ticket type');
-        },
-      });
-    } else {
-      console.log(
-        'No festival id or ticket type id:',
-        festivalId,
-        ticketTypeId
-      );
+    if (this.data.festivalId && this.data.itemId) {
+      this.itemService
+        .getTicketType(this.data.festivalId, this.data.itemId)
+        .subscribe({
+          next: (ticketType) => {
+            this.ticketType = ticketType;
+            this.loadForms();
+            this.toggleIsEditing();
+          },
+          error: (error) => {
+            console.log('Error fetching ticket type: ', error);
+            this.snackbarService.show('Error getting ticket type');
+          },
+        });
     }
   }
 
@@ -246,8 +239,6 @@ export class ViewEditTicketTypeComponent implements OnInit {
           request.priceListItems.push(variablePriceRequest);
         });
       }
-
-      console.log('Request: ', request);
 
       this.itemService.updateItem(this.data.festivalId, request).subscribe({
         next: () => {
@@ -288,37 +279,86 @@ export class ViewEditTicketTypeComponent implements OnInit {
 
     let hasErrors = false;
 
-    // Clear previous errors
+    // Clear previous errors but preserve 'required' errors
     variablePricesFormArray.controls.forEach((control) => {
-      control.get('dateFromCtrl')?.setErrors(null);
-      control.get('dateToCtrl')?.setErrors(null);
+      const dateFromCtrl = control.get('dateFromCtrl');
+      const dateToCtrl = control.get('dateToCtrl');
+
+      if (dateFromCtrl?.errors && !dateFromCtrl.errors['required']) {
+        delete dateFromCtrl.errors['dateOrder'];
+        delete dateFromCtrl.errors['overlap'];
+        delete dateFromCtrl.errors['gap'];
+        if (Object.keys(dateFromCtrl.errors).length === 0) {
+          dateFromCtrl.setErrors(null);
+        }
+      }
+
+      if (dateToCtrl?.errors && !dateToCtrl.errors['required']) {
+        delete dateToCtrl.errors['dateOrder'];
+        delete dateToCtrl.errors['overlap'];
+        delete dateToCtrl.errors['gap'];
+        if (Object.keys(dateToCtrl.errors).length === 0) {
+          dateToCtrl.setErrors(null);
+        }
+      }
     });
+
+    // Validate each date range
+    dateRanges.forEach((currentRange, index) => {
+      const dateFromCtrl = currentRange.control.get('dateFromCtrl');
+      const dateToCtrl = currentRange.control.get('dateToCtrl');
+      const currentDateFrom = currentRange.dateFrom;
+      const currentDateTo = currentRange.dateTo;
+
+      // Check for required dates
+      if (!currentDateFrom) {
+        dateFromCtrl?.setErrors({ ...dateFromCtrl.errors, required: true });
+        hasErrors = true;
+      }
+      if (!currentDateTo) {
+        dateToCtrl?.setErrors({ ...dateToCtrl.errors, required: true });
+        hasErrors = true;
+      }
+
+      // Proceed only if both dates are present
+      if (currentDateFrom && currentDateTo) {
+        // Check that dateFrom <= dateTo
+        if (currentDateFrom > currentDateTo) {
+          dateToCtrl?.setErrors({ ...dateToCtrl.errors, dateOrder: true });
+          hasErrors = true;
+        }
+      }
+    });
+
+    // Proceed only if all dateFrom and dateTo are present
+    if (hasErrors) {
+      return { invalidDateRanges: true };
+    }
 
     // Sort date ranges by dateFrom
     dateRanges.sort((a, b) => a.dateFrom.getTime() - b.dateFrom.getTime());
 
+    // Check for overlaps and gaps
     for (let i = 0; i < dateRanges.length; i++) {
       const currentRange = dateRanges[i];
       const currentDateFrom = currentRange.dateFrom;
       const currentDateTo = currentRange.dateTo;
-
-      // Check that dateFrom <= dateTo
-      if (currentDateFrom > currentDateTo) {
-        currentRange.control.get('dateToCtrl')?.setErrors({ dateOrder: true });
-        hasErrors = true;
-      }
+      const dateFromCtrl = currentRange.control.get('dateFromCtrl');
+      const dateToCtrl = currentRange.control.get('dateToCtrl');
 
       if (i > 0) {
         const previousRange = dateRanges[i - 1];
         const previousDateTo = previousRange.dateTo;
+        const previousDateToCtrl = previousRange.control.get('dateToCtrl');
 
         // Check for overlaps
         if (currentDateFrom.getTime() <= previousDateTo.getTime()) {
           // Overlap detected
-          currentRange.control
-            .get('dateFromCtrl')
-            ?.setErrors({ overlap: true });
-          previousRange.control.get('dateToCtrl')?.setErrors({ overlap: true });
+          dateFromCtrl?.setErrors({ ...dateFromCtrl.errors, overlap: true });
+          previousDateToCtrl?.setErrors({
+            ...previousDateToCtrl.errors,
+            overlap: true,
+          });
           hasErrors = true;
         } else {
           // Check for gaps
@@ -326,8 +366,11 @@ export class ViewEditTicketTypeComponent implements OnInit {
           expectedDateFrom.setDate(expectedDateFrom.getDate() + 1);
           if (currentDateFrom.getTime() !== expectedDateFrom.getTime()) {
             // Gap detected
-            currentRange.control.get('dateFromCtrl')?.setErrors({ gap: true });
-            previousRange.control.get('dateToCtrl')?.setErrors({ gap: true });
+            dateFromCtrl?.setErrors({ ...dateFromCtrl.errors, gap: true });
+            previousDateToCtrl?.setErrors({
+              ...previousDateToCtrl.errors,
+              gap: true,
+            });
             hasErrors = true;
           }
         }

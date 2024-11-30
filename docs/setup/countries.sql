@@ -1,8 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
-ALTER TABLE countries
-ALTER COLUMN country_id SET DEFAULT uuid_generate_v4();
-
 INSERT INTO countries (iso, name, nice_name, iso3, num_code, phone_code) VALUES
 ('AF', 'AFGHANISTAN', 'Afghanistan', 'AFG', 4, 93),
 ('AL', 'ALBANIA', 'Albania', 'ALB', 8, 355),

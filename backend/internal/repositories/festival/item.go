@@ -3,6 +3,7 @@ package repositories
 import (
 	"backend/internal/models"
 	modelsFestival "backend/internal/models/festival"
+	"backend/internal/utils"
 	"errors"
 	"time"
 
@@ -20,6 +21,7 @@ type ItemRepo interface {
 	GetPriceListItemsByIDs(priceListItemIDs []uint) ([]modelsFestival.PriceListItem, error)
 	UpdateItem(item *modelsFestival.Item) error
 	UpdatePriceListItem(priceListItem *modelsFestival.PriceListItem) error
+	DeleteTicketType(itemID uint) error
 }
 
 type itemRepo struct {
@@ -117,11 +119,14 @@ func (r *itemRepo) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.Pric
 		return nil, err
 	}
 
-	now := time.Now()
-	filteredPriceListItems := make([]modelsFestival.PriceListItem, 0)
+	today := utils.StripTime(time.Now())
+
+	filteredPriceListItems := make([]modelsFestival.PriceListItem, 0, len(priceListItems))
 	for _, pli := range priceListItems {
 		if !pli.IsFixed && pli.DateFrom != nil && pli.DateTo != nil {
-			if now.Before(*pli.DateFrom) || now.After(*pli.DateTo) {
+			dateFrom := utils.StripTime(*pli.DateFrom)
+			dateTo := utils.StripTime(*pli.DateTo)
+			if !utils.IsDateInRange(today, dateFrom, dateTo) {
 				continue
 			}
 		}
@@ -132,11 +137,11 @@ func (r *itemRepo) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.Pric
 }
 
 func (r *itemRepo) GetTicketTypesCount(festivalId uint) (int, error) {
-
-	// todo: make sure this returns only ticket types that have a price with them
 	var count int64
 	err := r.db.Table("items").
-		Where("festival_id = ? AND type = ?", festivalId, modelsFestival.ItemTicketType).
+		Joins("JOIN price_list_items ON items.id = price_list_items.item_id").
+		Where("items.festival_id = ? AND items.type = ? AND items.deleted_at IS NULL", festivalId, modelsFestival.ItemTicketType).
+		Select("COUNT(DISTINCT items.id)").
 		Count(&count).Error
 	if err != nil {
 		return 0, err
@@ -197,4 +202,23 @@ func (r *itemRepo) UpdatePriceListItem(priceListItem *modelsFestival.PriceListIt
 	}
 
 	return nil
+}
+
+func (r *itemRepo) DeleteTicketType(itemID uint) error {
+
+	return r.db.Transaction((func(tx *gorm.DB) error {
+		if err := tx.Where("item_id = ?", itemID).Delete(&modelsFestival.PriceListItem{}).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Where("item_id = ?", itemID).Delete(&modelsFestival.TicketType{}).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Delete(&modelsFestival.Item{}, itemID).Error; err != nil {
+			return err
+		}
+
+		return nil
+	}))
 }

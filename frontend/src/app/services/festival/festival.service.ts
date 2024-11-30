@@ -62,7 +62,6 @@ export class FestivalService {
   }
 
   createFestival(festival: CreateFestivalRequest): Observable<any> {
-    console.log('Creating a festival', festival);
     return this.http.post<any>(`${this.apiUrl}/festival`, festival);
   }
 

@@ -75,14 +75,12 @@ export class RegisterAttendeeComponent {
         email: this.accountFormGroup.get('emailCtrl')?.value ?? '',
         password: this.accountFormGroup.get('passwordCtrl')?.value ?? '',
       };
-      console.log('Account data:', accountData);
       this.authService.registerAttendee(accountData).subscribe({
         next: () => {
           this.snackbarService.show(
             'Account created successfully, logging in...'
           );
 
-          // Automatically log in the user
           this.authService
             .login(
               {

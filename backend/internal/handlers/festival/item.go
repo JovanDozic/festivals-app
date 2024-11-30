@@ -17,6 +17,7 @@ type ItemHandler interface {
 	GetTicketTypesCount(w http.ResponseWriter, r *http.Request)
 	GetTicketType(w http.ResponseWriter, r *http.Request)
 	UpdateItem(w http.ResponseWriter, r *http.Request)
+	DeleteTicketType(w http.ResponseWriter, r *http.Request)
 }
 
 type itemHandler struct {
@@ -235,4 +236,29 @@ func (h *itemHandler) UpdateItem(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
 	log.Println("item updated:", input.Name)
+}
+
+func (h *itemHandler) DeleteTicketType(w http.ResponseWriter, r *http.Request) {
+
+	_, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	itemId, err := getIDFromRequest(r, "itemId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	err = h.itemService.DeleteTicketType(itemId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, nil, nil)
+	log.Println("ticket type deleted:", itemId)
 }

@@ -90,11 +90,13 @@ export class FestivalComponent implements OnInit {
     if (id) {
       this.festivalService.getFestival(Number(id)).subscribe({
         next: (festival) => {
-          console.log('Festival: ', festival);
           this.festival = festival;
           this.isLoading = false;
           this.currentImageIndex = 0;
           this.previousImageIndex = 0;
+          console.log(
+            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`
+          );
         },
         error: (error) => {
           console.log('Error fetching festival information: ', error);
@@ -156,7 +158,6 @@ export class FestivalComponent implements OnInit {
   }
 
   onDeleteClick(): void {
-    console.log('Delete clicked for:', this.festival?.name);
     const dialogRef = this.dialog.open(ConfirmationDialog, {
       data: {
         title: 'Delete Festival',
@@ -183,7 +184,6 @@ export class FestivalComponent implements OnInit {
   }
 
   onEditClick(): void {
-    console.log('Edit clicked for:', this.festival?.name);
     const dialogRef = this.dialog.open(EditFestivalComponent, {
       data: {
         id: this.festival?.id,
@@ -200,14 +200,12 @@ export class FestivalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((success) => {
       if (success) {
-        console.log('Festival updated successfully');
         this.loadFestival();
       }
     });
   }
 
   onPublishClick(): void {
-    console.log('Publish clicked for:', this.festival?.name);
     const dialogRef = this.dialog.open(ConfirmationDialog, {
       data: {
         title: 'Publish Festival',
@@ -219,12 +217,10 @@ export class FestivalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirm) {
-        console.log('Publishing festival:', this.festival?.name);
         this.festivalService
           .publishFestival(Number(this.festival?.id))
           .subscribe({
             next: () => {
-              console.log('Festival published:', this.festival?.name);
               this.snackbarService.show('Festival published');
               this.loadFestival();
             },
@@ -238,7 +234,6 @@ export class FestivalComponent implements OnInit {
   }
 
   onCancelClick(): void {
-    console.log('Cancel clicked for:', this.festival?.name);
     const dialogRef = this.dialog.open(ConfirmationDialog, {
       data: {
         title: 'Cancel Festival',
@@ -250,12 +245,10 @@ export class FestivalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirm) {
-        console.log('Cancelling festival:', this.festival?.name);
         this.festivalService
           .cancelFestival(Number(this.festival?.id))
           .subscribe({
             next: () => {
-              console.log('Festival cancelled:', this.festival?.name);
               this.snackbarService.show('Festival cancelled');
               this.loadFestival();
             },
@@ -269,7 +262,6 @@ export class FestivalComponent implements OnInit {
   }
 
   onCompleteClick(): void {
-    console.log('Complete clicked for:', this.festival?.name);
     const dialogRef = this.dialog.open(ConfirmationDialog, {
       data: {
         title: 'Complete Festival',
@@ -281,12 +273,10 @@ export class FestivalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirm) {
-        console.log('Completing festival:', this.festival?.name);
         this.festivalService
           .completeFestival(Number(this.festival?.id))
           .subscribe({
             next: () => {
-              console.log('Festival completed:', this.festival?.name);
               this.snackbarService.show('Festival completed');
               this.loadFestival();
             },
@@ -300,7 +290,6 @@ export class FestivalComponent implements OnInit {
   }
 
   onStoreOpenClick(): void {
-    console.log('Store open clicked for:', this.festival?.name);
     const dialogRef = this.dialog.open(ConfirmationDialog, {
       data: {
         title: 'Open Store',
@@ -312,12 +301,10 @@ export class FestivalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirm) {
-        console.log('Opening store for festival:', this.festival?.name);
         this.festivalService
           .openFestivalStore(Number(this.festival?.id))
           .subscribe({
             next: () => {
-              console.log('Store opened for festival:', this.festival?.name);
               this.snackbarService.show('Store opened');
               this.loadFestival();
             },
@@ -331,7 +318,6 @@ export class FestivalComponent implements OnInit {
   }
 
   onStoreCloseClick(): void {
-    console.log('Store close clicked for:', this.festival?.name);
     const dialogRef = this.dialog.open(ConfirmationDialog, {
       data: {
         title: 'Close Store',
@@ -343,12 +329,10 @@ export class FestivalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirm) {
-        console.log('Closing store for festival:', this.festival?.name);
         this.festivalService
           .closeFestivalStore(Number(this.festival?.id))
           .subscribe({
             next: () => {
-              console.log('Store closed for festival:', this.festival?.name);
               this.snackbarService.show('Store closed');
               this.loadFestival();
             },

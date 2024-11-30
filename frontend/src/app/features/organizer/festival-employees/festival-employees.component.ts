@@ -69,7 +69,6 @@ export class FestivalEmployeesComponent implements OnInit {
     if (id) {
       this.festivalService.getFestival(Number(id)).subscribe({
         next: (festival) => {
-          console.log('Festival: ', festival);
           this.festival = festival;
           this.isLoading = false;
         },
@@ -88,7 +87,6 @@ export class FestivalEmployeesComponent implements OnInit {
     if (id) {
       this.festivalService.getEmployeeCount(Number(id)).subscribe({
         next: (count) => {
-          console.log('Employee count: ', count);
           this.employeeCount = count;
         },
         error: (error) => {
@@ -124,7 +122,6 @@ export class FestivalEmployeesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('Dialog closed with result: ', result);
       if (result) {
         this.loadEmployeeCount();
         this.loadEmployees();
@@ -142,7 +139,6 @@ export class FestivalEmployeesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('Dialog closed with result: ', result);
       if (result) {
         this.loadEmployeeCount();
         this.loadEmployees();
@@ -160,7 +156,6 @@ export class FestivalEmployeesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('Dialog closed with result: ', result);
       if (result) {
         this.loadEmployeeCount();
         this.loadEmployees();

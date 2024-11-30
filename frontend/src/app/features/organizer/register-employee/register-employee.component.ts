@@ -89,7 +89,6 @@ export class RegisterEmployeeComponent {
   }
 
   register() {
-    console.log(this.infoFormGroup.value);
     if (this.infoFormGroup.valid) {
       const profile: CreateProfileRequest = {
         firstName: this.infoFormGroup.get('firstNameCtrl')?.value,
@@ -106,7 +105,6 @@ export class RegisterEmployeeComponent {
         userProfile: profile,
       };
 
-      console.log('registering employee', request);
       this.userService.registerEmployee(request).subscribe({
         next: () => {
           this.snackbarService.show('Employee registered');
@@ -139,12 +137,6 @@ export class RegisterEmployeeComponent {
 
       this.userService.registerEmployee(request).subscribe({
         next: (employee) => {
-          console.log(
-            'employing employee',
-            employee,
-            'to festival',
-            this.data.festivalId
-          );
           this.festivalService
             .employEmployee(this.data.festivalId, employee.userId)
             .subscribe(() => {

@@ -26,3 +26,11 @@ func ParseDateNil(input *string) *time.Time {
 	}
 	return &date
 }
+
+func StripTime(t time.Time) time.Time {
+	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
+}
+
+func IsDateInRange(current, from, to time.Time) bool {
+	return !current.Before(from) && !current.After(to)
+}

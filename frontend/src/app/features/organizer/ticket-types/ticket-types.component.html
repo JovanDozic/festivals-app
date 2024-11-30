@@ -97,7 +97,12 @@
                       visibility
                     </mat-icon>
                   </button>
-                  <button mat-icon-button>
+                  <button
+                    mat-icon-button
+                    (click)="
+                      onDeleteTicketTypeClick(element.itemId, element.name)
+                    "
+                  >
                     <mat-icon class="material-symbols-outlined" color="primary">
                       delete
                     </mat-icon>
