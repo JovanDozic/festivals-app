@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Create Package Addon</h2>
+
+<mat-dialog-content>
+  <form>
+    <div class="form-field">
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select [(ngModel)]="selectedCategory" name="category">
+          <mat-option
+            *ngFor="let category of categories"
+            [value]="category.value"
+          >
+            {{ category.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button mat-flat-button (click)="choose()">
+    <!-- todo: disable if none selected -->
+    Create Addon
+  </button>
+</mat-dialog-actions>

@@ -1,10 +1,8 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
-  MatDialogContent,
   MatDialogModule,
   MatDialogRef,
-  MatDialogTitle,
 } from '@angular/material/dialog';
 import {
   FormArray,
@@ -14,7 +12,6 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { FestivalService } from '../../../services/festival/festival.service';
 import {
   CreateItemPriceRequest,
   CreateItemRequest,
@@ -30,7 +27,6 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { UserService } from '../../../services/user/user.service';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ItemService } from '../../../services/festival/item.service';

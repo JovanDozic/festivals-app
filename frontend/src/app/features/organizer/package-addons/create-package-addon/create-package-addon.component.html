@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Create Package Addon</h2>
+
+<mat-dialog-content>
+  <mat-stepper [linear]="true" #stepper>
+    <mat-step [editable]="false">
+      <ng-template matStepLabel>Information</ng-template>
+
+      <p>step 2</p>
+    </mat-step>
+    <mat-step [editable]="false">
+      <ng-template matStepLabel>Customization</ng-template>
+
+      <p>step 3</p>
+    </mat-step>
+    <mat-step [editable]="false">
+      <ng-template matStepLabel>Price</ng-template>
+
+      <p>step 4</p>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+</mat-dialog-actions>

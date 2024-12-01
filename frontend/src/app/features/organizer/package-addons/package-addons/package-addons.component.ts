@@ -13,6 +13,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
+import { CreatePackageAddonComponent } from '../create-package-addon/create-package-addon.component';
+import { CreatePackageAddonChooserComponent } from '../create-package-addon-chooser/create-package-addon-chooser.component';
 
 @Component({
   selector: 'app-package-addons',
@@ -86,14 +88,47 @@ export class PackageAddonsComponent implements OnInit {
       `organizer/my-festivals/${this.festival?.id}/package-addons/general`,
     ]);
   }
+
   onViewTransportAddonsClick() {
     this.router.navigate([
       `organizer/my-festivals/${this.festival?.id}/package-addons/transport`,
     ]);
   }
+
   onViewCampAddonsClick() {
     this.router.navigate([
       `organizer/my-festivals/${this.festival?.id}/package-addons/camp`,
     ]);
+  }
+
+  onAddPackageAddonClick() {
+    const dialogRef = this.dialog.open(CreatePackageAddonChooserComponent, {
+      data: { festivalId: this.festival?.id },
+      width: '800px',
+      height: 'auto',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.launchCreatePackageAddonDialog(result);
+      }
+    });
+  }
+
+  launchCreatePackageAddonDialog(result: any) {
+    console.log('Selected category: ', result);
+    const dialogRef = this.dialog.open(CreatePackageAddonComponent, {
+      data: { festivalId: this.festival?.id },
+      width: '800px',
+      height: 'auto',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadCounts();
+      }
+    });
   }
 }
