@@ -13,7 +13,11 @@
         "APP_PORT": "4000",
         "APP_ENV": "dev",
         "DB_CONNECTION_STRING": "postgres://USERNAME:PASSWORD@localhost/DATABASE_NAME?sslmode=disable",
-        "JWT_SECRET": "JWT_SECRET"
+        "JWT_SECRET": "JWT_SECRET",
+        "AWS_ACCESS_KEY_ID": "KEY",
+        "AWS_SECRET_ACCESS_KEY": "SECRET_KEY",
+        "AWS_REGION": "eu-west-1",
+        "AWS_S3_BUCKET_NAME": "diplomski-rad-2024"
       }
     }
   ]
