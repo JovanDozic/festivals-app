@@ -39,17 +39,6 @@
     <mat-step [editable]="false">
       <div class="price-form">
         <ng-template matStepLabel>Price</ng-template>
-        <div class="form-fields toggle-form-field">
-          <span>
-            <mat-slide-toggle
-              color="primary"
-              [checked]="isFixedPrice"
-              [disabled]="true"
-            ></mat-slide-toggle>
-            Is Price fixed?
-          </span>
-        </div>
-        <!-- ! FIXED PRICES -->
         <div *ngIf="isFixedPrice">
           <form [formGroup]="fixedPriceFormGroup">
             <mat-form-field appearance="outline" class="full-width">

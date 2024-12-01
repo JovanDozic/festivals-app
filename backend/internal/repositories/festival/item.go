@@ -206,6 +206,7 @@ func (r *itemRepo) GetTicketTypesCount(festivalId uint) (int, error) {
 func (r *itemRepo) GetPackageAddonsCount(festivalId uint, category string) (int, error) {
 	var count int64
 	err := r.db.Table("items").
+		Joins("JOIN price_list_items ON items.id = price_list_items.item_id").
 		Joins("JOIN package_addons ON items.id = package_addons.item_id").
 		Where("items.festival_id = ? AND items.type = ? AND items.deleted_at IS NULL AND package_addons.category = ?", festivalId, modelsFestival.ItemPackageAddon, category).
 		Select("COUNT(DISTINCT items.id)").
