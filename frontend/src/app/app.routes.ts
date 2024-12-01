@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './core/auth.guard';
+import { AuthGuard } from './services/auth/auth.guard';
 import { UnauthorizedComponent } from './shared/unauthorized/unauthorized.component';
-import { AuthRedirectGuard } from './core/auth-redirect.guard';
+import { AuthRedirectGuard } from './services/auth/auth-redirect.guard';
 
 const publicRoutes: Routes = [
   {
@@ -65,14 +65,6 @@ const attendeeRoutes: Routes = [
     canActivate: [AuthGuard],
     data: { expectedRoles: ['ATTENDEE'] },
     children: [
-      {
-        path: 'dashboard',
-        loadComponent: () =>
-          import('./dashboard/dashboard.component').then(
-            (c) => c.DashboardComponent
-          ),
-        title: 'Dashboard',
-      },
       // ...
     ],
   },
@@ -84,14 +76,6 @@ const organizerRoutes: Routes = [
     canActivate: [AuthGuard],
     data: { expectedRoles: ['ORGANIZER'] },
     children: [
-      {
-        path: 'address',
-        loadComponent: () =>
-          import('./address-form/address-form.component').then(
-            (c) => c.AddressFormComponent
-          ),
-        title: 'Address',
-      },
       {
         path: 'organizer/my-festivals',
         loadComponent: () =>

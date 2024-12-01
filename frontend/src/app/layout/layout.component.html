@@ -29,28 +29,6 @@
 
       <a
         mat-list-item
-        routerLink="/dashboard"
-        *ngIf="visibleForRole('ATTENDEE')"
-        #link="routerLinkActive"
-        routerLinkActive
-        [activated]="link.isActive"
-      >
-        Dashboard
-      </a>
-
-      <a
-        mat-list-item
-        routerLink="/address"
-        *ngIf="visibleForRole('ORGANIZER')"
-        #link="routerLinkActive"
-        routerLinkActive
-        [activated]="link.isActive"
-      >
-        Address
-      </a>
-
-      <a
-        mat-list-item
         routerLink="/login"
         *ngIf="!isLoggedIn()"
         #link="routerLinkActive"

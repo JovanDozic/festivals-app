@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { AuthService } from '../../../core/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 import { UserService } from '../../../services/user/user.service';
 import { CreateUpdateUserProfileRequest } from '../../../models/user/user-profile-request.model';

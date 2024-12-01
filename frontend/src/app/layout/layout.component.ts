@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '../core/auth.service';
+import { AuthService } from '../services/auth/auth.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ThemeService } from '../services/theme/theme.service';
 

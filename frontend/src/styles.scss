@@ -43,8 +43,6 @@ $dark-theme: m3-theme.$dark-theme;
 }
 
 :root[data-theme="light"] {
-  @include mat.all-component-colors($theme);
-
   @include layout-component.theme($theme);
 
   @include mat.color-variants-backwards-compatibility($theme);

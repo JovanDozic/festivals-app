@@ -7,7 +7,7 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { AuthInterceptor } from './core/auth.interceptor';
+import { AuthInterceptor } from './services/auth/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [

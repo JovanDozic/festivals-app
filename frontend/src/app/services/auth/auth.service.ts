@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
-import { LoginResponse } from '../models/auth/login-response.model';
+import { LoginResponse } from '../../models/auth/login-response.model';
 
 @Injectable({
   providedIn: 'root',

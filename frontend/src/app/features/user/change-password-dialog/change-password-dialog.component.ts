@@ -12,7 +12,7 @@ import {
   MatDialogContent,
   MatDialogActions,
 } from '@angular/material/dialog';
-import { AuthService } from '../../../core/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';

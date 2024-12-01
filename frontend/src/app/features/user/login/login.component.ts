@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { AuthService } from '../../../core/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 
