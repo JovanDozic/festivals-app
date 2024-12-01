@@ -1,6 +1,9 @@
 package dto
 
-import "backend/internal/models"
+import (
+	"backend/internal/models"
+	modelsFestival "backend/internal/models/festival"
+)
 
 func (f *CreateFestivalRequest) Validate() error {
 	if f.Name == "" {
@@ -58,4 +61,24 @@ func (f *CreatePriceListItemRequest) Validate() error {
 		}
 	}
 	return nil
+}
+
+func (f *CreatePackageAddonRequest) Validate() error {
+	if f.ItemID == 0 {
+		return models.ErrMissingFields
+	}
+	if f.Category == "" {
+		return models.ErrMissingFields
+	}
+	if f.Category != modelsFestival.PackageAddonGeneral {
+		return models.ErrInvalidFields
+	}
+	if f.Category != modelsFestival.PackageAddonCamp {
+		return models.ErrInvalidFields
+	}
+	if f.Category != modelsFestival.PackageAddonTransport {
+		return models.ErrInvalidFields
+	}
+	return nil
+
 }

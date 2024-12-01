@@ -136,9 +136,33 @@ const organizerRoutes: Routes = [
         path: 'organizer/my-festivals/:id/package-addons',
         loadComponent: () =>
           import(
-            './features/organizer/package-addons/package-addons.component'
+            './features/organizer/package-addons/package-addons/package-addons.component'
           ).then((c) => c.PackageAddonsComponent),
         title: 'Package Addons',
+      },
+      {
+        path: 'organizer/my-festivals/:id/package-addons/general',
+        loadComponent: () =>
+          import(
+            './features/organizer/package-addons/general-package-addons/general-package-addons.component'
+          ).then((c) => c.GeneralPackageAddonsComponent),
+        title: 'General Addons',
+      },
+      {
+        path: 'organizer/my-festivals/:id/package-addons/transport',
+        loadComponent: () =>
+          import(
+            './features/organizer/package-addons/transport-package-addons/transport-package-addons.component'
+          ).then((c) => c.TransportPackageAddonsComponent),
+        title: 'Transport Addons',
+      },
+      {
+        path: 'organizer/my-festivals/:id/package-addons/camp',
+        loadComponent: () =>
+          import(
+            './features/organizer/package-addons/camp-package-addons/camp-package-addons.component'
+          ).then((c) => c.CampPackageAddonsComponent),
+        title: 'Camp Addons',
       },
       // ...
     ],

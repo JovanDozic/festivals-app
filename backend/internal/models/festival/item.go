@@ -10,6 +10,10 @@ import (
 const (
 	ItemTicketType   = "TICKET_TYPE"
 	ItemPackageAddon = "PACKAGE_ADDON"
+
+	PackageAddonGeneral   = "GENERAL"
+	PackageAddonCamp      = "CAMP"
+	PackageAddonTransport = "TRANSPORT"
 )
 
 type PriceList struct {

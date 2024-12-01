@@ -36,6 +36,11 @@ type CreateItemRequest struct {
 	Type            string `json:"type" validate:"oneof=TICKET_TYPE PACKAGE_ADDON"`
 }
 
+type CreatePackageAddonRequest struct {
+	ItemID   uint   `json:"itemId"`
+	Category string `json:"category"`
+}
+
 type CreatePriceListItemRequest struct {
 	ItemId   uint    `json:"itemId"`
 	Price    float64 `json:"price"`

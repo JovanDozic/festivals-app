@@ -1,23 +1,30 @@
 package handlers
 
 import (
+	"fmt"
+
 	dtoFestival "backend/internal/dto/festival"
 	"backend/internal/models"
+
 	modelsFestival "backend/internal/models/festival"
+
 	servicesFestival "backend/internal/services/festival"
 	"backend/internal/utils"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type ItemHandler interface {
 	CreateItem(w http.ResponseWriter, r *http.Request)
+	CreatePackageAddon(w http.ResponseWriter, r *http.Request)
 	CreatePriceListItem(w http.ResponseWriter, r *http.Request)
 	GetCurrentTicketTypes(w http.ResponseWriter, r *http.Request)
 	GetTicketTypesCount(w http.ResponseWriter, r *http.Request)
 	GetTicketType(w http.ResponseWriter, r *http.Request)
 	UpdateItem(w http.ResponseWriter, r *http.Request)
 	DeleteTicketType(w http.ResponseWriter, r *http.Request)
+	GetCurrentPackageAddons(w http.ResponseWriter, r *http.Request)
 }
 
 type itemHandler struct {
@@ -72,6 +79,41 @@ func (h *itemHandler) CreateItem(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"itemId": item.ID}, nil)
 	log.Println("item created:", input.Name)
+}
+
+func (h *itemHandler) CreatePackageAddon(w http.ResponseWriter, r *http.Request) {
+
+	_, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	var input dtoFestival.CreatePackageAddonRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	packageAddon := modelsFestival.PackageAddon{
+		ItemID:   input.ItemID,
+		Category: input.Category,
+	}
+
+	if err := h.itemService.CreatePackageAddon(&packageAddon); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusCreated, fmt.Sprint("item ID %u is now a package addon", packageAddon.ItemID), nil)
+	log.Println("package addon created for item ID", packageAddon.ItemID)
 }
 
 func (h *itemHandler) CreatePriceListItem(w http.ResponseWriter, r *http.Request) {
@@ -188,7 +230,7 @@ func (h *itemHandler) GetTicketType(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	itemId, err := getIDFromRequest(r, "itemId")
+	itemId, err := getIDParamFromRequest(r, "itemId")
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -213,7 +255,7 @@ func (h *itemHandler) UpdateItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := getIDFromRequest(r, "itemId")
+	_, err := getIDParamFromRequest(r, "itemId")
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -245,7 +287,7 @@ func (h *itemHandler) DeleteTicketType(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	itemId, err := getIDFromRequest(r, "itemId")
+	itemId, err := getIDParamFromRequest(r, "itemId")
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -261,4 +303,52 @@ func (h *itemHandler) DeleteTicketType(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
 	log.Println("ticket type deleted:", itemId)
+}
+
+// * this one should be able to return all categories of package addons, so in the request or in parameter we should have what we want to get
+func (h *itemHandler) GetCurrentPackageAddons(w http.ResponseWriter, r *http.Request) {
+
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	category, err := getParamFromRequest(r, "category")
+	if category == "" || err != nil {
+		log.Println("error: category is required")
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	priceListItems, err := h.itemService.GetCurrentPackageAddons(festivalId, category)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	response := dtoFestival.GetPackageAddonsResponse{
+		FestivalId: festivalId,
+		Category:   strings.ToUpper(category),
+		Items:      make([]dtoFestival.ItemResponse, len(priceListItems)),
+	}
+
+	for i, priceListItem := range priceListItems {
+		response.Items[i] = dtoFestival.ItemResponse{
+			ItemId:          priceListItem.ItemID,
+			PriceListItemId: priceListItem.ID,
+			Name:            priceListItem.Item.Name,
+			Description:     priceListItem.Item.Description,
+			Type:            priceListItem.Item.Type,
+			AvailableNumber: priceListItem.Item.AvailableNumber,
+			RemainingNumber: priceListItem.Item.RemainingNumber,
+			Price:           priceListItem.Price,
+			IsFixed:         priceListItem.IsFixed,
+			DateFrom:        priceListItem.DateFrom,
+			DateTo:          priceListItem.DateTo,
+		}
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response, nil)
+	log.Println("current ticket types retrieved")
 }

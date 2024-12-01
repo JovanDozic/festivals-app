@@ -65,3 +65,9 @@ type PriceListItemResponse struct {
 	DateFrom *time.Time `json:"dateFrom"`
 	DateTo   *time.Time `json:"dateTo"`
 }
+
+type GetPackageAddonsResponse struct {
+	FestivalId uint           `json:"festivalId"`
+	Category   string         `json:"category"`
+	Items      []ItemResponse `json:"items"`
+}

@@ -14,7 +14,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func getIDFromRequest(r *http.Request, paramName string) (uint, error) {
+func getIDParamFromRequest(r *http.Request, paramName string) (uint, error) {
 	vars := mux.Vars(r)
 	idString := vars[paramName]
 
@@ -28,6 +28,17 @@ func getIDFromRequest(r *http.Request, paramName string) (uint, error) {
 	}
 
 	return uint(id), nil
+}
+
+func getParamFromRequest(r *http.Request, paramName string) (string, error) {
+	vars := mux.Vars(r)
+	paramString := vars[paramName]
+
+	if paramString == "" {
+		return "", models.ErrBadRequest
+	}
+
+	return paramString, nil
 }
 
 func getFestivalIDFromRequest(r *http.Request) (uint, error) {

@@ -12,6 +12,7 @@ import (
 
 type ItemRepo interface {
 	CreateItem(item *modelsFestival.Item) error
+	CreatePackageAddon(packageAddon *modelsFestival.PackageAddon) error
 	CreatePriceList(priceList *modelsFestival.PriceList) error
 	GetPriceList(festivalId uint) (*modelsFestival.PriceList, error)
 	CreatePriceListItem(priceListItem *modelsFestival.PriceListItem) error
@@ -22,6 +23,7 @@ type ItemRepo interface {
 	UpdateItem(item *modelsFestival.Item) error
 	UpdatePriceListItem(priceListItem *modelsFestival.PriceListItem) error
 	DeleteTicketType(itemID uint) error
+	GetCurrentPackageAddons(festivalId uint, category string) ([]modelsFestival.PriceListItem, error)
 }
 
 type itemRepo struct {
@@ -62,6 +64,10 @@ func (r *itemRepo) CreateItem(item *modelsFestival.Item) error {
 	}
 
 	return errors.New("invalid item type")
+}
+
+func (r *itemRepo) CreatePackageAddon(packageAddon *modelsFestival.PackageAddon) error {
+	return r.db.Create(packageAddon).Error
 }
 
 func (r *itemRepo) CreatePriceList(priceList *modelsFestival.PriceList) error {
@@ -111,6 +117,52 @@ func (r *itemRepo) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.Pric
 	err = r.db.
 		Preload("Item").
 		Joins("JOIN items ON price_list_items.item_id = items.id").
+		Where("items.type = ?", modelsFestival.ItemTicketType).
+		Where("price_list_id = ?", currentPriceList.ID).
+		Order("items.id").
+		Find(&priceListItems).Error
+	if err != nil {
+		return nil, err
+	}
+
+	today := utils.StripTime(time.Now())
+
+	filteredPriceListItems := make([]modelsFestival.PriceListItem, 0, len(priceListItems))
+	for _, pli := range priceListItems {
+		if !pli.IsFixed && pli.DateFrom != nil && pli.DateTo != nil {
+			dateFrom := utils.StripTime(*pli.DateFrom)
+			dateTo := utils.StripTime(*pli.DateTo)
+			if !utils.IsDateInRange(today, dateFrom, dateTo) {
+				continue
+			}
+		}
+		filteredPriceListItems = append(filteredPriceListItems, pli)
+	}
+
+	return filteredPriceListItems, nil
+}
+
+func (r *itemRepo) GetCurrentPackageAddons(festivalId uint, category string) ([]modelsFestival.PriceListItem, error) {
+
+	// * Get festival price list
+	var currentPriceList modelsFestival.PriceList
+	err := r.db.
+		Where("festival_id = ?", festivalId).
+		First(&currentPriceList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, models.ErrNoPriceListFound
+		}
+		return nil, err
+	}
+
+	// * Get all price list items with preloaded items
+	var priceListItems []modelsFestival.PriceListItem
+	err = r.db.
+		Preload("Item").
+		Joins("JOIN items ON price_list_items.item_id = items.id").
+		Joins("JOIN package_addons ON package_addons.item_id = items.id").
+		Where("package_addons.category = ?", category).
 		Where("items.type = ?", modelsFestival.ItemTicketType).
 		Where("price_list_id = ?", currentPriceList.ID).
 		Order("items.id").

@@ -6,18 +6,21 @@ import (
 	modelsFestival "backend/internal/models/festival"
 	reposFestival "backend/internal/repositories/festival"
 	"backend/internal/utils"
+	"errors"
 	"log"
 	"strings"
 )
 
 type ItemService interface {
 	CreateItem(item *modelsFestival.Item) error
+	CreatePackageAddon(packageAddon *modelsFestival.PackageAddon) error
 	CreatePriceListItem(festivalId, itemId uint, priceListItem *modelsFestival.PriceListItem) error
 	GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.PriceListItem, error)
 	GetTicketTypesCount(festivalId uint) (int, error)
 	GetTicketTypes(itemId uint) (*dto.GetItemResponse, error)
 	UpdateItemAndPrices(request dto.UpdateItemRequest) error
 	DeleteTicketType(itemId uint) error
+	GetCurrentPackageAddons(festivalId uint, category string) ([]modelsFestival.PriceListItem, error)
 }
 
 type itemService struct {
@@ -44,8 +47,15 @@ func (s *itemService) CreateItem(item *modelsFestival.Item) error {
 	return nil
 }
 
-func (s *itemService) CreatePriceListItem(festivalId, itemId uint, priceListItem *modelsFestival.PriceListItem) error {
+func (s *itemService) CreatePackageAddon(packageAddon *modelsFestival.PackageAddon) error {
+	err := s.itemRepo.CreatePackageAddon(packageAddon)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
+func (s *itemService) CreatePriceListItem(festivalId, itemId uint, priceListItem *modelsFestival.PriceListItem) error {
 	priceList, err := s.itemRepo.GetPriceList(festivalId)
 	if err != nil && !strings.Contains(err.Error(), "record not found") {
 		return err
@@ -73,6 +83,23 @@ func (s *itemService) CreatePriceListItem(festivalId, itemId uint, priceListItem
 
 func (s *itemService) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.PriceListItem, error) {
 	return s.itemRepo.GetCurrentTicketTypes(festivalId)
+}
+
+func (s *itemService) GetCurrentPackageAddons(festivalId uint, category string) ([]modelsFestival.PriceListItem, error) {
+	if category == "" {
+		return nil, nil
+	}
+	if category == modelsFestival.PackageAddonGeneral {
+		return s.itemRepo.GetCurrentPackageAddons(festivalId, modelsFestival.PackageAddonGeneral)
+	}
+	if category == modelsFestival.PackageAddonCamp {
+		return s.itemRepo.GetCurrentPackageAddons(festivalId, modelsFestival.PackageAddonCamp)
+	}
+	if category == modelsFestival.PackageAddonTransport {
+		return s.itemRepo.GetCurrentPackageAddons(festivalId, modelsFestival.PackageAddonTransport)
+	}
+
+	return nil, errors.New("invalid category")
 }
 
 func (s *itemService) GetTicketTypesCount(festivalId uint) (int, error) {

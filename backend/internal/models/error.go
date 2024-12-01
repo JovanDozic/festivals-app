@@ -31,4 +31,5 @@ var (
 	ErrDuplicateEmail          = errors.New("email already exists")
 	ErrEmployeeAlreadyEmployed = errors.New("employee is already employed")
 	ErrNoPriceListFound        = errors.New("no price list found")
+	ErrInvalidFields           = errors.New("invalid fields")
 )
