@@ -27,8 +27,8 @@ func NewAWSHandler(awsService servicesCommon.AWSService, festivalService service
 
 func (h *awsHandler) GetPresignedURL(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
-	if !ok {
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
 
@@ -47,5 +47,5 @@ func (h *awsHandler) GetPresignedURL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, response, nil)
-	log.Println("retrieved presigned upload URL for festival:", festivalId)
+	log.Println("retrieved presigned upload image URL")
 }

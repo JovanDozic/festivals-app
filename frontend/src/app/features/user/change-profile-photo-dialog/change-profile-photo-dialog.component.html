@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Change Profile Photo</h2>
+
+<mat-dialog-content class="dialog-content">
+  <div class="profile-photo-container">
+    <img
+      *ngIf="imagePreviewUrl; else placeholder"
+      [src]="imagePreviewUrl"
+      alt="Profile Photo Preview"
+      class="profile-photo-preview"
+    />
+    <ng-template #placeholder>
+      <div class="placeholder-photo">
+        <mat-icon class="material-symbols-outlined" color="primary"
+          >person</mat-icon
+        >
+      </div>
+    </ng-template>
+  </div>
+
+  <button mat-stroked-button color="primary" (click)="fileInput.click()">
+    Choose Photo
+  </button>
+  <input
+    #fileInput
+    type="file"
+    accept="image/*"
+    (change)="onFileSelected($event)"
+    style="display: none"
+  />
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="saveChanges()"
+    [disabled]="!selectedFile"
+  >
+    Save Changes
+  </button>
+</mat-dialog-actions>

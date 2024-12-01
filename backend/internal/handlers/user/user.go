@@ -110,6 +110,7 @@ func (h *userHandler) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *userHandler) GetUserProfile(w http.ResponseWriter, r *http.Request) {
+
 	if !utils.Auth(r.Context()) {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
@@ -599,7 +600,7 @@ func (h *userHandler) UpdateProfilePhoto(w http.ResponseWriter, r *http.Request)
 
 	username := utils.GetUsername(r.Context())
 	image := modelsCommon.Image{
-		URL: input.URL,
+		URL: input.ImageURL,
 	}
 
 	if err := h.userService.UpdateProfilePhoto(username, &image); err != nil {

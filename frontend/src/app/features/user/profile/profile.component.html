@@ -8,7 +8,9 @@
         matTooltip="Logout"
         color="primary"
       >
-        <mat-icon>logout</mat-icon>
+        <mat-icon class="material-symbols-outlined" color="primary"
+          >logout</mat-icon
+        >
       </button>
       <button
         mat-icon-button
@@ -16,7 +18,9 @@
         color="primary"
         (click)="changePassword()"
       >
-        <mat-icon>password</mat-icon>
+        <mat-icon class="material-symbols-outlined" color="primary"
+          >password</mat-icon
+        >
       </button>
       <button
         mat-icon-button
@@ -24,7 +28,19 @@
         color="primary"
         (click)="changeProfile()"
       >
-        <mat-icon>badge</mat-icon>
+        <mat-icon class="material-symbols-outlined" color="primary"
+          >badge</mat-icon
+        >
+      </button>
+      <button
+        mat-icon-button
+        matTooltip="Change profile photo"
+        color="primary"
+        (click)="changeProfilePhoto()"
+      >
+        <mat-icon class="material-symbols-outlined" color="primary"
+          >image</mat-icon
+        >
       </button>
     </div>
   </div>

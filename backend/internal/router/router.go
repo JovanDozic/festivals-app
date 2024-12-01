@@ -93,7 +93,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	pR.HandleFunc("/user/change-password", userHandler.ChangePassword).Methods(http.MethodPut)
 	pR.HandleFunc("/user/profile", userHandler.UpdateUserProfile).Methods(http.MethodPut)
 	pR.HandleFunc("/user/email", userHandler.UpdateUserEmail).Methods(http.MethodPut)
-	pR.HandleFunc("/user/profile/photo", userHandler.UpdateProfilePhoto).Methods(http.MethodPost)
+	pR.HandleFunc("/user/profile/photo", userHandler.UpdateProfilePhoto).Methods(http.MethodPut)
 	// ...
 	// todo: should this be like get all future ones, or ones in the attendee's city?
 	pR.HandleFunc("/festival", festivalHandler.GetAll).Methods(http.MethodGet)
@@ -134,7 +134,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// ...
 
-	pR.HandleFunc("/organizer/festival/{festivalId}/image/upload", awsHandler.GetPresignedURL).Methods(http.MethodPost)
+	pR.HandleFunc("/image/upload", awsHandler.GetPresignedURL).Methods(http.MethodPost)
 
 	return r
 }

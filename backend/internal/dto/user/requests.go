@@ -55,5 +55,5 @@ type CreateStaffRequest struct {
 }
 
 type UpdateProfilePhotoRequest struct {
-	URL string `json:"uri"`
+	ImageURL string `json:"imageURL"`
 }

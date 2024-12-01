@@ -15,6 +15,7 @@ import {
 import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ChangeProfileDialogComponent } from '../change-profile-dialog/change-profile-dialog.component';
+import { ChangeProfilePhotoDialogComponent } from '../change-profile-photo-dialog/change-profile-photo-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -78,6 +79,18 @@ export class ProfileComponent implements OnInit {
         dateOfBirth: this.userProfile?.dateOfBirth,
         phoneNumber: this.userProfile?.phoneNumber,
       },
+    });
+
+    dialogRef.afterClosed().subscribe((success) => {
+      if (success) {
+        this.getUserProfile();
+      }
+    });
+  }
+
+  changeProfilePhoto() {
+    const dialogRef = this.dialog.open(ChangeProfilePhotoDialogComponent, {
+      data: {},
     });
 
     dialogRef.afterClosed().subscribe((success) => {

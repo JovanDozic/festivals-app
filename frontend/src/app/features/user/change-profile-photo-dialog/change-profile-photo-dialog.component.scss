@@ -1,0 +1,31 @@
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-photo-container {
+  margin-bottom: 16px;
+}
+
+.profile-photo-preview {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.placeholder-photo {
+  width: 200px;
+  height: 200px;
+  background-color: #e0e0e0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholder-photo mat-icon {
+  font-size: 100px;
+  color: #9e9e9e;
+}

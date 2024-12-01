@@ -141,7 +141,7 @@ func (r *UpdateStaffProfileRequest) Validate() error {
 }
 
 func (r *UpdateProfilePhotoRequest) Validate() error {
-	if r.URL == "" {
+	if r.ImageURL == "" {
 		return models.ErrMissingFields
 	}
 	return nil

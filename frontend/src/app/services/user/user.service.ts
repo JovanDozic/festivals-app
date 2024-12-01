@@ -27,6 +27,12 @@ export class UserService {
       .pipe(map((response) => response.userProfile));
   }
 
+  updateUserProfilePhoto(imageURL: string) {
+    return this.http.put<void>(`${this.apiUrl}/user/profile/photo`, {
+      imageURL,
+    });
+  }
+
   updateUserProfile(updatedProfile: CreateUpdateUserProfileRequest) {
     return this.http.put<void>(`${this.apiUrl}/user/profile`, {
       firstName: updatedProfile.firstName,
