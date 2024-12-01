@@ -72,8 +72,8 @@ export class CreatePackageAddonComponent {
   infoFormGroup: FormGroup;
   fixedPriceFormGroup: FormGroup;
 
-  packageAddonId: number | null = null;
-  isFixedPrice: boolean = false;
+  itemId: number | null = null;
+  isFixedPrice: boolean = true;
 
   constructor() {
     this.category = this.data?.category;
@@ -94,10 +94,57 @@ export class CreatePackageAddonComponent {
   }
 
   done() {
-    throw new Error('Method not implemented.');
+    if (this.itemId) {
+      this.createFixedPrice();
+    }
   }
 
   createPackageAddon() {
-    throw new Error('Method not implemented.');
+    if (this.infoFormGroup.valid && this.data.festivalId) {
+      const request: CreateItemRequest = {
+        name: this.infoFormGroup.get('nameCtrl')?.value,
+        description: this.infoFormGroup.get('descriptionCtrl')?.value,
+        availableNumber: this.infoFormGroup.get('availableNumberCtrl')?.value,
+        type: 'PACKAGE_ADDON',
+      };
+
+      this.itemService
+        .createPackageAddon(this.data.festivalId, request, this.category)
+        .subscribe({
+          next: (response) => {
+            this.snackbarService.show('Package Addon created');
+            this.itemId = response;
+            this.stepper?.next();
+          },
+          error: (error) => {
+            console.log('Error creating Package Addon: ', error);
+            this.snackbarService.show('Error creating Package Addon');
+          },
+        });
+    }
+  }
+
+  createFixedPrice() {
+    if (this.fixedPriceFormGroup.valid && this.itemId && this.data.festivalId) {
+      const request: CreateItemPriceRequest = {
+        itemId: this.itemId,
+        price: this.fixedPriceFormGroup.get('fixedPriceCtrl')?.value,
+        isFixed: true,
+      };
+
+      this.itemService
+        .createItemPrice(this.data.festivalId, request)
+        .subscribe({
+          next: (response) => {
+            this.snackbarService.show('Fixed Price created');
+            this.dialogRef.close(true);
+          },
+          error: (error) => {
+            console.log('Error creating fixed price: ', error);
+            this.snackbarService.show('Error creating Fixed Price');
+            this.dialogRef.close(false);
+          },
+        });
+    }
   }
 }

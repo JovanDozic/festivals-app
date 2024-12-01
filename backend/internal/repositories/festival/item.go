@@ -12,7 +12,7 @@ import (
 
 type ItemRepo interface {
 	CreateItem(item *modelsFestival.Item) error
-	CreatePackageAddon(packageAddon *modelsFestival.PackageAddon) error
+	UpdatePackageAddonCategory(packageAddon *modelsFestival.PackageAddon) error
 	CreatePriceList(priceList *modelsFestival.PriceList) error
 	GetPriceList(festivalId uint) (*modelsFestival.PriceList, error)
 	CreatePriceListItem(priceListItem *modelsFestival.PriceListItem) error
@@ -66,8 +66,8 @@ func (r *itemRepo) CreateItem(item *modelsFestival.Item) error {
 	return errors.New("invalid item type")
 }
 
-func (r *itemRepo) CreatePackageAddon(packageAddon *modelsFestival.PackageAddon) error {
-	return r.db.Create(packageAddon).Error
+func (r *itemRepo) UpdatePackageAddonCategory(packageAddon *modelsFestival.PackageAddon) error {
+	return r.db.Save(packageAddon).Error
 }
 
 func (r *itemRepo) CreatePriceList(priceList *modelsFestival.PriceList) error {

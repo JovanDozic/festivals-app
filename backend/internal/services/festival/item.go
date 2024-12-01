@@ -13,7 +13,7 @@ import (
 
 type ItemService interface {
 	CreateItem(item *modelsFestival.Item) error
-	CreatePackageAddon(packageAddon *modelsFestival.PackageAddon) error
+	UpdatePackageAddonCategory(packageAddon *modelsFestival.PackageAddon) error
 	CreatePriceListItem(festivalId, itemId uint, priceListItem *modelsFestival.PriceListItem) error
 	GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.PriceListItem, error)
 	GetTicketTypesCount(festivalId uint) (int, error)
@@ -47,8 +47,8 @@ func (s *itemService) CreateItem(item *modelsFestival.Item) error {
 	return nil
 }
 
-func (s *itemService) CreatePackageAddon(packageAddon *modelsFestival.PackageAddon) error {
-	err := s.itemRepo.CreatePackageAddon(packageAddon)
+func (s *itemService) UpdatePackageAddonCategory(packageAddon *modelsFestival.PackageAddon) error {
+	err := s.itemRepo.UpdatePackageAddonCategory(packageAddon)
 	if err != nil {
 		return err
 	}

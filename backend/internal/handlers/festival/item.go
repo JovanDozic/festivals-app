@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"fmt"
-
 	dtoFestival "backend/internal/dto/festival"
 	"backend/internal/models"
 
@@ -106,13 +104,13 @@ func (h *itemHandler) CreatePackageAddon(w http.ResponseWriter, r *http.Request)
 		Category: input.Category,
 	}
 
-	if err := h.itemService.CreatePackageAddon(&packageAddon); err != nil {
+	if err := h.itemService.UpdatePackageAddonCategory(&packageAddon); err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusCreated, fmt.Sprint("item ID %u is now a package addon", packageAddon.ItemID), nil)
+	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"itemId": packageAddon.ItemID}, nil)
 	log.Println("package addon created for item ID", packageAddon.ItemID)
 }
 

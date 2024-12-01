@@ -2,16 +2,40 @@
 
 <mat-dialog-content>
   <mat-stepper [linear]="true" #stepper>
-    <mat-step [editable]="false">
-      <ng-template matStepLabel>Information</ng-template>
-
-      <p>step 2</p>
+    <mat-step [stepControl]="infoFormGroup" [editable]="false">
+      <form [formGroup]="infoFormGroup">
+        <ng-template matStepLabel>Ticket Info</ng-template>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="nameCtrl" required />
+          </mat-form-field>
+        </div>
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="descriptionCtrl"
+              required
+            />
+          </mat-form-field>
+        </div>
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Available Number</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="availableNumberCtrl"
+              required
+            />
+          </mat-form-field>
+        </div>
+      </form>
     </mat-step>
-    <!-- <mat-step [editable]="false">
-      <ng-template matStepLabel>Customization</ng-template>
 
-      <p>step 3</p>
-    </mat-step> -->
     <mat-step [editable]="false">
       <div class="price-form">
         <ng-template matStepLabel>Price</ng-template>

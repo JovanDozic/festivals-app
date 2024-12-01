@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import {
   CreateItemPriceRequest,
   CreateItemRequest,
@@ -49,6 +49,28 @@ export class ItemService {
         request
       )
       .pipe(map((response) => response.itemId));
+  }
+
+  createPackageAddon(
+    festivalId: number,
+    request: CreateItemRequest,
+    category: string
+  ): Observable<number> {
+    return this.http
+      .post<{ itemId: number }>(
+        `${this.apiUrl}/organizer/festival/${festivalId}/item`,
+        request
+      )
+      .pipe(
+        map((response) => response.itemId),
+        switchMap((itemId) =>
+          this.http.post<{ itemId: number }>(
+            `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon`,
+            { itemId, category }
+          )
+        ),
+        map((response) => response.itemId)
+      );
   }
 
   createItemPrice(

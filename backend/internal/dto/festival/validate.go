@@ -70,15 +70,8 @@ func (f *CreatePackageAddonRequest) Validate() error {
 	if f.Category == "" {
 		return models.ErrMissingFields
 	}
-	if f.Category != modelsFestival.PackageAddonGeneral {
-		return models.ErrInvalidFields
-	}
-	if f.Category != modelsFestival.PackageAddonCamp {
-		return models.ErrInvalidFields
-	}
-	if f.Category != modelsFestival.PackageAddonTransport {
+	if f.Category != modelsFestival.PackageAddonGeneral && f.Category != modelsFestival.PackageAddonCamp && f.Category != modelsFestival.PackageAddonTransport {
 		return models.ErrInvalidFields
 	}
 	return nil
-
 }
