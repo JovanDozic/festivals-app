@@ -86,20 +86,15 @@ func (s *itemService) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.P
 }
 
 func (s *itemService) GetCurrentPackageAddons(festivalId uint, category string) ([]modelsFestival.PriceListItem, error) {
-	if category == "" {
-		return nil, nil
-	}
-	if category == modelsFestival.PackageAddonGeneral {
-		return s.itemRepo.GetCurrentPackageAddons(festivalId, modelsFestival.PackageAddonGeneral)
-	}
-	if category == modelsFestival.PackageAddonCamp {
-		return s.itemRepo.GetCurrentPackageAddons(festivalId, modelsFestival.PackageAddonCamp)
-	}
-	if category == modelsFestival.PackageAddonTransport {
-		return s.itemRepo.GetCurrentPackageAddons(festivalId, modelsFestival.PackageAddonTransport)
+
+	if category == "" ||
+		(strings.ToUpper(category) != modelsFestival.PackageAddonGeneral &&
+			strings.ToUpper(category) != modelsFestival.PackageAddonCamp &&
+			strings.ToUpper(category) != modelsFestival.PackageAddonTransport) {
+		return nil, errors.New("invalid category")
 	}
 
-	return nil, errors.New("invalid category")
+	return s.itemRepo.GetCurrentPackageAddons(festivalId, strings.ToUpper(category))
 }
 
 func (s *itemService) GetTicketTypesCount(festivalId uint) (int, error) {

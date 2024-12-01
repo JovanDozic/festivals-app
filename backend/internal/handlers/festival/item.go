@@ -348,5 +348,5 @@ func (h *itemHandler) GetCurrentPackageAddons(w http.ResponseWriter, r *http.Req
 	}
 
 	utils.WriteJSON(w, http.StatusOK, response, nil)
-	log.Println("current ticket types retrieved")
+	log.Println("current package addons retrieved")
 }

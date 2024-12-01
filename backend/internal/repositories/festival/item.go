@@ -161,9 +161,9 @@ func (r *itemRepo) GetCurrentPackageAddons(festivalId uint, category string) ([]
 	err = r.db.
 		Preload("Item").
 		Joins("JOIN items ON price_list_items.item_id = items.id").
-		Joins("JOIN package_addons ON package_addons.item_id = items.id").
+		Joins("JOIN package_addons ON items.id = package_addons.item_id").
 		Where("package_addons.category = ?", category).
-		Where("items.type = ?", modelsFestival.ItemTicketType).
+		Where("items.type = ?", modelsFestival.ItemPackageAddon).
 		Where("price_list_id = ?", currentPriceList.ID).
 		Order("items.id").
 		Find(&priceListItems).Error
