@@ -11,12 +11,10 @@ type CreateFestivalRequest struct {
 	EndDate     string                         `json:"endDate"`
 	Capacity    int                            `json:"capacity"`
 	Address     dtoCommon.CreateAddressRequest `json:"address"`
-	// Status is defaulting to PRIVATE
-	// StoreStatus is defaulting to CLOSED
 }
 
 type UpdateFestivalRequest struct {
-	Id          uint                           `json:"id"`
+	ID          uint                           `json:"id"`
 	Name        string                         `json:"name"`
 	Description string                         `json:"description"`
 	StartDate   string                         `json:"startDate"`
@@ -42,7 +40,7 @@ type CreatePackageAddonRequest struct {
 }
 
 type CreatePriceListItemRequest struct {
-	ItemId   uint    `json:"itemId"`
+	ItemID   uint    `json:"itemId"`
 	Price    float64 `json:"price"`
 	DateFrom *string `json:"dateFrom"`
 	DateTo   *string `json:"dateTo"`
@@ -50,7 +48,7 @@ type CreatePriceListItemRequest struct {
 }
 
 type UpdateItemRequest struct {
-	Id              uint                         `json:"id"`
+	ID              uint                         `json:"id"`
 	Name            string                       `json:"name"`
 	Description     string                       `json:"description"`
 	Type            string                       `json:"type"`
@@ -60,9 +58,29 @@ type UpdateItemRequest struct {
 }
 
 type UpdatePriceListItemRequest struct {
-	Id       uint    `json:"id"`
+	ID       uint    `json:"id"`
 	Price    float64 `json:"price"`
 	IsFixed  bool    `json:"isFixed"`
 	DateFrom *string `json:"dateFrom"`
 	DateTo   *string `json:"dateTo"`
+}
+
+type CityRequest struct {
+	Name        string `json:"name"`
+	PostalCode  string `json:"postalCode"`
+	CountryISO3 string `json:"countryISO3"`
+}
+
+type CreateTransportPackageAddonRequest struct {
+	ItemID        uint   `json:"itemId"`
+	TransportType string `json:"transportType" validate:"oneof=BUS TRAIN PLANE"`
+
+	DepartureCity CityRequest `json:"departureCity"`
+	ArrivalCity   CityRequest `json:"arrivalCity"`
+
+	DepartureTime string `json:"departureTime"`
+	ArrivalTime   string `json:"arrivalTime"`
+
+	ReturnDepartureTime string `json:"returnDepartureTime"`
+	ReturnArrivalTime   string `json:"returnArrivalTime"`
 }

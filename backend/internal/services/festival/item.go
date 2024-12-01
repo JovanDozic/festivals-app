@@ -3,8 +3,10 @@ package services
 import (
 	"backend/internal/config"
 	dto "backend/internal/dto/festival"
+	modelsCommon "backend/internal/models/common"
 	modelsFestival "backend/internal/models/festival"
 	reposFestival "backend/internal/repositories/festival"
+	services "backend/internal/services/common"
 	"backend/internal/utils"
 	"errors"
 	"log"
@@ -22,20 +24,24 @@ type ItemService interface {
 	UpdateItemAndPrices(request dto.UpdateItemRequest) error
 	DeleteTicketType(itemId uint) error
 	GetCurrentPackageAddons(festivalId uint, category string) ([]modelsFestival.PriceListItem, error)
+	CreateTransportPackageAddon(request dto.CreateTransportPackageAddonRequest) error
 }
 
 type itemService struct {
-	config   *config.Config
-	itemRepo reposFestival.ItemRepo
+	config          *config.Config
+	itemRepo        reposFestival.ItemRepo
+	locationService services.LocationService
 }
 
 func NewItemService(
 	config *config.Config,
 	itemRepo reposFestival.ItemRepo,
+	locationService services.LocationService,
 ) ItemService {
 	return &itemService{
-		config:   config,
-		itemRepo: itemRepo,
+		config:          config,
+		itemRepo:        itemRepo,
+		locationService: locationService,
 	}
 }
 
@@ -152,10 +158,10 @@ func (s *itemService) GetTicketTypes(itemId uint) (*dto.GetItemResponse, error) 
 
 func (s *itemService) UpdateItemAndPrices(request dto.UpdateItemRequest) error {
 
-	itemId := request.Id
+	itemId := request.ID
 	var priceListItemIds []uint
 	for _, priceListItem := range request.PriceListItems {
-		priceListItemIds = append(priceListItemIds, priceListItem.Id)
+		priceListItemIds = append(priceListItemIds, priceListItem.ID)
 	}
 
 	itemDb, priceIdsDb, err := s.itemRepo.GetItemAndPriceListItemsIDs(itemId)
@@ -185,7 +191,7 @@ func (s *itemService) UpdateItemAndPrices(request dto.UpdateItemRequest) error {
 	// update prices
 	for _, priceListItem := range priceListItemsDb {
 		for _, priceListItemRequest := range request.PriceListItems {
-			if priceListItem.ID == priceListItemRequest.Id {
+			if priceListItem.ID == priceListItemRequest.ID {
 				priceListItem.Price = priceListItemRequest.Price
 				priceListItem.IsFixed = priceListItemRequest.IsFixed
 				priceListItem.DateFrom = utils.ParseDateNil(priceListItemRequest.DateFrom)
@@ -204,4 +210,56 @@ func (s *itemService) UpdateItemAndPrices(request dto.UpdateItemRequest) error {
 
 func (s *itemService) DeleteTicketType(itemId uint) error {
 	return s.itemRepo.DeleteTicketType(itemId)
+}
+
+func (s *itemService) CreateTransportPackageAddon(request dto.CreateTransportPackageAddonRequest) error {
+
+	departureCity := &modelsCommon.City{
+		Name:       request.DepartureCity.Name,
+		PostalCode: request.DepartureCity.PostalCode,
+	}
+
+	departureCountry := &modelsCommon.Country{
+		ISO3: request.DepartureCity.CountryISO3,
+	}
+
+	arrivalCity := &modelsCommon.City{
+		Name:       request.ArrivalCity.Name,
+		PostalCode: request.ArrivalCity.PostalCode,
+	}
+
+	arrivalCountry := &modelsCommon.Country{
+		ISO3: request.ArrivalCity.CountryISO3,
+	}
+
+	err := s.locationService.GetCityAndCountry(departureCity, departureCountry)
+	if err != nil {
+		log.Println("error getting city and country:", err)
+		return err
+	}
+
+	err = s.locationService.GetCityAndCountry(arrivalCity, arrivalCountry)
+	if err != nil {
+		log.Println("error getting city and country:", err)
+		return err
+	}
+
+	transportAddon := &modelsFestival.TransportAddon{
+		ItemID:              request.ItemID,
+		DepartureCityID:     departureCity.ID,
+		ArrivalCityID:       arrivalCity.ID,
+		DepartureTime:       utils.ParseDateTime(request.DepartureTime),
+		ArrivalTime:         utils.ParseDateTime(request.ArrivalTime),
+		ReturnDepartureTime: utils.ParseDateTime(request.ReturnDepartureTime),
+		ReturnArrivalTime:   utils.ParseDateTime(request.ReturnArrivalTime),
+		TransportType:       request.TransportType,
+	}
+
+	err = s.itemRepo.CreateTransportPackageAddon(transportAddon)
+	if err != nil {
+		log.Println("error creating transport package addon:", err)
+		return err
+	}
+
+	return nil
 }

@@ -15,6 +15,15 @@ func ParseDate(input string) time.Time {
 	return date
 }
 
+func ParseDateTime(input string) time.Time {
+	date, err := time.Parse("2006-01-02 15:04:05", input)
+	if err != nil {
+		log.Println("error parsing date:", err)
+		return time.Time{}
+	}
+	return date
+}
+
 func ParseDateNil(input *string) *time.Time {
 	if input == nil {
 		return nil

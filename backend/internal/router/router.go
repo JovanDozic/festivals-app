@@ -57,7 +57,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	locationService := servicesCommon.NewLocationService(addressRepo, cityRepo, countryRepo)
 	userService := servicesUser.NewUserService(config, userRepo, userProfileRepo, locationService, imageRepo)
 	festivalService := services.NewFestivalService(config, festivalRepo, userRepo, locationService, imageRepo)
-	itemService := services.NewItemService(config, itemRepo)
+	itemService := services.NewItemService(config, itemRepo, locationService)
 	awsService := servicesCommon.NewAWSService(s3Client, s3Presign, config)
 	// ...
 
@@ -140,6 +140,8 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon", itemHandler.CreatePackageAddon).Methods(http.MethodPost)
 	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/{category}", itemHandler.GetCurrentPackageAddons).Methods(http.MethodGet)
 	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/{category}/count", itemHandler.GetPackageAddonsCount).Methods(http.MethodGet)
+
+	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/transport", itemHandler.CreateTransportPackageAddon).Methods(http.MethodPost)
 
 	// ...
 

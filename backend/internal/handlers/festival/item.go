@@ -24,6 +24,7 @@ type ItemHandler interface {
 	DeleteTicketType(w http.ResponseWriter, r *http.Request)
 	GetCurrentPackageAddons(w http.ResponseWriter, r *http.Request)
 	GetPackageAddonsCount(w http.ResponseWriter, r *http.Request)
+	CreateTransportPackageAddon(w http.ResponseWriter, r *http.Request)
 }
 
 type itemHandler struct {
@@ -136,14 +137,14 @@ func (h *itemHandler) CreatePriceListItem(w http.ResponseWriter, r *http.Request
 	}
 
 	priceListItem := modelsFestival.PriceListItem{
-		ItemID:   input.ItemId,
+		ItemID:   input.ItemID,
 		Price:    input.Price,
 		IsFixed:  input.IsFixed,
 		DateFrom: utils.ParseDateNil(input.DateFrom),
 		DateTo:   utils.ParseDateNil(input.DateTo),
 	}
 
-	if err := h.itemService.CreatePriceListItem(festivalId, input.ItemId, &priceListItem); err != nil {
+	if err := h.itemService.CreatePriceListItem(festivalId, input.ItemID, &priceListItem); err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
@@ -378,4 +379,34 @@ func (h *itemHandler) GetPackageAddonsCount(w http.ResponseWriter, r *http.Reque
 		Count:      count,
 	}, nil)
 	log.Println("package addon count retrieved successfully for festival:", festivalId)
+}
+
+func (h *itemHandler) CreateTransportPackageAddon(w http.ResponseWriter, r *http.Request) {
+
+	_, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	var input dtoFestival.CreateTransportPackageAddonRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := h.itemService.CreateTransportPackageAddon(input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusCreated, nil, nil)
+	log.Println("transport package addon created for item ID", input.ItemID)
 }

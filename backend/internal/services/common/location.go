@@ -12,6 +12,7 @@ type LocationService interface {
 	CreateAddress(address *modelsCommon.Address) error
 	GetAddressByID(id uint) (*modelsCommon.Address, error)
 	UpdateAddress(addressId uint, updatedAddress *modelsCommon.Address) error
+	GetCityAndCountry(city *modelsCommon.City, country *modelsCommon.Country) error
 }
 
 type locationService struct {
@@ -127,5 +128,41 @@ func (s *locationService) UpdateAddress(addressId uint, updatedAddress *modelsCo
 	}
 
 	log.Println("address updated successfully:", address.ID)
+	return nil
+}
+
+func (s *locationService) GetCityAndCountry(city *modelsCommon.City, country *modelsCommon.Country) error {
+
+	// check if country exists
+
+	dbCountry, err := s.countryRepo.GetByISO3(country.ISO3)
+	if err != nil || dbCountry == nil {
+		log.Println("country'", country.ISO3, "'does not exist")
+		return modelsError.ErrCountryNotFound
+	}
+
+	country.ID = dbCountry.ID
+
+	// check if city exists in that country
+	dbCity, err := s.cityRepo.GetByCountryPostalCode(country.ID, city.PostalCode)
+	if err != nil || dbCity == nil {
+		// if it does not, create one
+
+		city.CountryID = dbCountry.ID
+		city.Country = *dbCountry
+
+		err = s.cityRepo.Create(city)
+		if err != nil {
+			log.Println("error creating city:", err)
+			return err
+		}
+	} else {
+		city.ID = dbCity.ID
+		city.CountryID = dbCountry.ID
+		city.Country = *dbCountry
+	}
+
+	// now we have the city and the country filled out
+
 	return nil
 }

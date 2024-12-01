@@ -10,7 +10,7 @@ type CreateAddressRequest struct {
 }
 
 type UpdateAddressRequest struct {
-	ID             uint   `json:"id"`
+	Id             uint   `json:"id"`
 	Street         string `json:"street"`
 	Number         string `json:"number"`
 	ApartmentSuite string `json:"apartmentSuite"`
