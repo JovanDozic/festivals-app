@@ -1,4 +1,5 @@
 import { AddressResponse } from '../common/address-response.model';
+import { CityRequest } from '../common/address.model';
 import {
   CreateAddressRequest,
   UpdateAddressRequest,
@@ -131,4 +132,15 @@ export interface PriceListItem {
   isFixed: boolean;
   dateFrom?: string;
   dateTo?: string;
+}
+
+export interface AddTransportConfigRequest {
+  itemId: number;
+  transportType: string;
+  departureCity: CityRequest;
+  arrivalCity: CityRequest;
+  departureTime: string;
+  arrivalTime: string;
+  returnDepartureTime: string;
+  returnArrivalTime: string;
 }

@@ -2,7 +2,7 @@
 
 <mat-dialog-content>
   <mat-stepper [linear]="true" #stepper>
-    <!-- <mat-step [stepControl]="infoFormGroup" [editable]="false">
+    <mat-step [stepControl]="infoFormGroup" [editable]="false">
       <form [formGroup]="infoFormGroup">
         <ng-template matStepLabel>Ticket Info</ng-template>
         <div class="form-fields">
@@ -34,7 +34,7 @@
           </mat-form-field>
         </div>
       </form>
-    </mat-step> -->
+    </mat-step>
 
     <mat-step [stepControl]="configurationFormGroup" [editable]="false">
       <ng-template matStepLabel>Configuration</ng-template>
@@ -59,7 +59,15 @@
               </mat-select>
             </mat-form-field>
             <div>
-              <button mat-stroked-button matStepperNext>Next</button>
+              <button
+                mat-stroked-button
+                matStepperNext
+                [disabled]="
+                  !configurationFormGroup.get('transportTypeCtrl')?.value
+                "
+              >
+                Next
+              </button>
             </div>
           </mat-step>
 
@@ -98,7 +106,18 @@
             </div>
             <div>
               <button mat-button matStepperPrevious>Back</button>
-              <button mat-stroked-button matStepperNext>Next</button>
+              <button
+                mat-stroked-button
+                matStepperNext
+                [disabled]="
+                  !configurationFormGroup.get('departureCityNameCtrl')?.value ||
+                  !configurationFormGroup.get('departureCityPostalCodeCtrl')
+                    ?.value ||
+                  !configurationFormGroup.get('departureCountryISO3Ctrl')?.value
+                "
+              >
+                Next
+              </button>
             </div>
           </mat-step>
 
@@ -137,7 +156,18 @@
             </div>
             <div>
               <button mat-button matStepperPrevious>Back</button>
-              <button mat-stroked-button matStepperNext>Next</button>
+              <button
+                mat-stroked-button
+                matStepperNext
+                [disabled]="
+                  !configurationFormGroup.get('arrivalCityNameCtrl')?.value ||
+                  !configurationFormGroup.get('arrivalCityPostalCodeCtrl')
+                    ?.value ||
+                  !configurationFormGroup.get('arrivalCountryISO3Ctrl')?.value
+                "
+              >
+                Next
+              </button>
             </div>
           </mat-step>
 
@@ -229,7 +259,18 @@
 
             <div>
               <button mat-button matStepperPrevious>Back</button>
-              <button mat-stroked-button matStepperNext>Next</button>
+              <button
+                mat-stroked-button
+                matStepperNext
+                [disabled]="
+                  !configurationFormGroup.get('departureDateCtrl')?.value ||
+                  !configurationFormGroup.get('departureTimeCtrl')?.value ||
+                  !configurationFormGroup.get('arrivalDateCtrl')?.value ||
+                  !configurationFormGroup.get('arrivalTimeCtrl')?.value
+                "
+              >
+                Next
+              </button>
             </div>
           </mat-step>
 
@@ -374,8 +415,17 @@
   </button>
   <button
     mat-stroked-button
-    (click)="done()"
+    (click)="addTransportConfig()"
     *ngIf="stepper.selectedIndex == 1"
+    [disabled]="configurationFormGroup.invalid"
+  >
+    Next
+  </button>
+  <button
+    mat-stroked-button
+    (click)="done()"
+    *ngIf="stepper.selectedIndex == 2"
+    [disabled]="fixedPriceFormGroup.invalid"
   >
     Done
   </button>

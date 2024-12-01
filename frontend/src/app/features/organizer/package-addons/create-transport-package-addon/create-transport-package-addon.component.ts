@@ -14,6 +14,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {
+  AddTransportConfigRequest,
   CreateItemPriceRequest,
   CreateItemRequest,
   VariablePrice,
@@ -32,9 +33,10 @@ import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ItemService } from '../../../../services/festival/item.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTimepickerModule } from '@angular/material/timepicker';
+import { CityRequest } from '../../../../models/common/address.model';
 
 interface TransportType {
   value: string;
@@ -133,6 +135,10 @@ export class CreateTransportPackageAddonComponent {
     });
   }
 
+  isValid(fieldName: string) {
+    return this.infoFormGroup.get(fieldName)?.valid || false;
+  }
+
   closeDialog() {
     this.dialogRef.close(false);
   }
@@ -168,6 +174,65 @@ export class CreateTransportPackageAddonComponent {
     }
   }
 
+  addTransportConfig() {
+    if (this.configurationFormGroup.valid && this.itemId) {
+      const departureCity: CityRequest = {
+        name: this.configurationFormGroup.get('departureCityNameCtrl')?.value,
+        postalCode: this.configurationFormGroup.get(
+          'departureCityPostalCodeCtrl'
+        )?.value,
+        countryISO3: this.configurationFormGroup.get('departureCountryISO3Ctrl')
+          ?.value,
+      };
+
+      const arrivalCity: CityRequest = {
+        name: this.configurationFormGroup.get('arrivalCityNameCtrl')?.value,
+        postalCode: this.configurationFormGroup.get('arrivalCityPostalCodeCtrl')
+          ?.value,
+        countryISO3: this.configurationFormGroup.get('arrivalCountryISO3Ctrl')
+          ?.value,
+      };
+
+      const request: AddTransportConfigRequest = {
+        itemId: this.itemId,
+        transportType:
+          this.configurationFormGroup.get('transportTypeCtrl')?.value,
+        departureCity: departureCity,
+        arrivalCity: arrivalCity,
+        departureTime: formatDateTime(
+          new Date(
+            this.configurationFormGroup.get('departureDateCtrl')?.value +
+              ' ' +
+              this.configurationFormGroup.get('departureTimeCtrl')?.value
+          )
+        ),
+        arrivalTime: formatDateTime(
+          new Date(
+            this.configurationFormGroup.get('arrivalDateCtrl')?.value +
+              ' ' +
+              this.configurationFormGroup.get('arrivalTimeCtrl')?.value
+          )
+        ),
+        returnDepartureTime: formatDateTime(
+          new Date(
+            this.configurationFormGroup.get('returnDepartureDateCtrl')?.value +
+              ' ' +
+              this.configurationFormGroup.get('returnDepartureTimeCtrl')?.value
+          )
+        ),
+        returnArrivalTime: formatDateTime(
+          new Date(
+            this.configurationFormGroup.get('returnArrivalDateCtrl')?.value +
+              ' ' +
+              this.configurationFormGroup.get('returnArrivalTimeCtrl')?.value
+          )
+        ),
+      };
+
+      console.log('Request: ', request);
+    }
+  }
+
   createFixedPrice() {
     if (this.fixedPriceFormGroup.valid && this.itemId && this.data.festivalId) {
       const request: CreateItemPriceRequest = {
@@ -191,4 +256,14 @@ export class CreateTransportPackageAddonComponent {
         });
     }
   }
+}
+
+function formatDateTime(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
