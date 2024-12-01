@@ -1,1 +1,39 @@
-<p>camp-package-addons works!</p>
+<div class="container mat-elevation-z4" *ngIf="festival">
+  <div class="profile-header">
+    <div class="title-container">
+      <button
+        mat-icon-button
+        matTooltip="Go Back"
+        color="primary"
+        (click)="goBack()"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>
+        {{ festival.name | slice : 0 : 20
+        }}{{ festival.name.length > 20 ? "..." : "" }}
+        <mat-icon color="primary">arrow_forward_ios</mat-icon> Camp Addons
+      </h1>
+    </div>
+    <div class="button-container"></div>
+  </div>
+
+  <div class="profile-content">
+    <!-- <mat-card class="profile-card">
+      <mat-card-title>General</mat-card-title>
+      <mat-card-content>
+        <span class="employee-count"> {{ generalCount }}</span>
+      </mat-card-content>
+      <mat-card-actions>
+        <button
+          class="main-card-action"
+          mat-button
+          color="primary"
+          (click)="onViewGeneralAddonsClick()"
+        >
+          View
+        </button>
+      </mat-card-actions>
+    </mat-card> -->
+  </div>
+</div>
