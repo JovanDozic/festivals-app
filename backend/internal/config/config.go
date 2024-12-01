@@ -19,6 +19,12 @@ type Config struct {
 	JWT struct {
 		Secret string
 	}
+	AWS struct {
+		AccessKeyID     string
+		SecretAccessKey string
+		Region          string
+		S3BucketName    string
+	}
 }
 
 func (c *Config) Load() {
@@ -41,6 +47,18 @@ func (c *Config) Load() {
 	flag.StringVar(&c.JWT.Secret, "jwt",
 		os.Getenv("JWT_SECRET"),
 		"JWT secret")
+	flag.StringVar(&c.AWS.AccessKeyID, "awsAccessKeyID",
+		os.Getenv("AWS_ACCESS_KEY_ID"),
+		"AWS access key ID")
+	flag.StringVar(&c.AWS.SecretAccessKey, "awsSecretAccessKey",
+		os.Getenv("AWS_SECRET_ACCESS_KEY"),
+		"AWS secret access key")
+	flag.StringVar(&c.AWS.Region, "awsRegion",
+		os.Getenv("AWS_REGION"),
+		"AWS region")
+	flag.StringVar(&c.AWS.S3BucketName, "awsS3BucketName",
+		os.Getenv("AWS_S3_BUCKET_NAME"),
+		"AWS S3 bucket name")
 
 	flag.Parse()
 }
@@ -63,6 +81,18 @@ func (c Config) Validate() error {
 	}
 	if c.JWT.Secret == "" {
 		return errors.New("JWT secret is required")
+	}
+	if c.AWS.AccessKeyID == "" {
+		return errors.New("AWS access key ID is required")
+	}
+	if c.AWS.SecretAccessKey == "" {
+		return errors.New("AWS secret access key is required")
+	}
+	if c.AWS.Region == "" {
+		return errors.New("AWS region is required")
+	}
+	if c.AWS.S3BucketName == "" {
+		return errors.New("AWS S3 bucket name is required")
 	}
 	return nil
 }

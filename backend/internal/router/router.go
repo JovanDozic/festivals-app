@@ -13,13 +13,34 @@ import (
 	services "backend/internal/services/festival"
 	servicesUser "backend/internal/services/user"
 	"backend/internal/utils"
+	"context"
+	"log"
 	"net/http"
+
+	awsConfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
 
 func Init(db *gorm.DB, config *config.Config) *mux.Router {
+
+	// Init AWS
+	awsCfg, err := awsConfig.LoadDefaultConfig(context.TODO(),
+		awsConfig.WithRegion(config.AWS.Region),
+		awsConfig.WithCredentialsProvider(
+			credentials.NewStaticCredentialsProvider(config.AWS.AccessKeyID, config.AWS.SecretAccessKey, ""),
+		),
+	)
+	if err != nil {
+		log.Fatalf("error initializing AWS config: %v", err)
+		panic(err)
+	}
+
+	s3Client := s3.NewFromConfig(awsCfg)
+	s3Presign := s3.NewPresignClient(s3Client)
 
 	// Init repositories
 	userRepo := reposUser.NewUserRepo(db)
@@ -37,6 +58,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	userService := servicesUser.NewUserService(config, userRepo, userProfileRepo, locationService)
 	festivalService := services.NewFestivalService(config, festivalRepo, userRepo, locationService, imageRepo)
 	itemService := services.NewItemService(config, itemRepo)
+	awsService := servicesCommon.NewAWSService(s3Client, s3Presign, config)
 	// ...
 
 	// Init handlers
@@ -44,6 +66,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	userHandler := handlersUser.NewUserHandler(userService)
 	festivalHandler := handlers.NewFestivalHandler(festivalService, locationService)
 	itemHandler := handlers.NewItemHandler(itemService, festivalService)
+	awsHandler := handlersCommon.NewAWSHandler(awsService, festivalService)
 	// ...
 
 	r := mux.NewRouter()
@@ -107,6 +130,10 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	pR.HandleFunc("/organizer/festival/{festivalId}/item/ticket-type/{itemId}", itemHandler.GetTicketType).Methods(http.MethodGet)
 	pR.HandleFunc("/organizer/festival/{festivalId}/item/ticket-type/{itemId}", itemHandler.UpdateItem).Methods(http.MethodPut)
 	pR.HandleFunc("/organizer/festival/{festivalId}/item/ticket-type/{itemId}", itemHandler.DeleteTicketType).Methods(http.MethodDelete)
+
+	// ...
+
+	pR.HandleFunc("/organizer/festival/{festivalId}/image/upload", awsHandler.GetPresignedURL).Methods(http.MethodPost)
 
 	return r
 }

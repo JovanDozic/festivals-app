@@ -22,3 +22,8 @@ type GetAddressResponse struct {
 type GetImageResponse struct {
 	Url string `json:"url"`
 }
+
+type GetPresignedURLResponse struct {
+	UploadURL string `json:"uploadURL"`
+	ImageURL  string `json:"imageURL"`
+}
