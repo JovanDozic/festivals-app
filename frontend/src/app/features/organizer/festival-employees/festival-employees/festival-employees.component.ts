@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Employee, Festival } from '../../../models/festival/festival.model';
+import { Employee, Festival } from '../../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FestivalService } from '../../../services/festival/festival.service';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { FestivalService } from '../../../../services/festival/festival.service';
+import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -18,7 +18,7 @@ import { AddExistingEmployeeComponent } from '../add-existing-employee/add-exist
 import {
   ConfirmationDialog,
   ConfirmationDialogData,
-} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
+} from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { EditEmployeeComponent } from '../edit-employee/edit-employee.component';
 
 @Component({
@@ -38,7 +38,7 @@ import { EditEmployeeComponent } from '../edit-employee/edit-employee.component'
   templateUrl: './festival-employees.component.html',
   styleUrls: [
     './festival-employees.component.scss',
-    '../../../app.component.scss',
+    '../../../../app.component.scss',
   ],
 })
 export class FestivalEmployeesComponent implements OnInit {

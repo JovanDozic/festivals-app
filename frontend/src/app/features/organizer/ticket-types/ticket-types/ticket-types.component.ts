@@ -2,10 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import {
   Festival,
   ItemCurrentPrice,
-} from '../../../models/festival/festival.model';
+} from '../../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FestivalService } from '../../../services/festival/festival.service';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { FestivalService } from '../../../../services/festival/festival.service';
+import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -19,8 +19,8 @@ import { MatTableModule } from '@angular/material/table';
 import {
   ConfirmationDialog,
   ConfirmationDialogData,
-} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { ItemService } from '../../../services/festival/item.service';
+} from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
+import { ItemService } from '../../../../services/festival/item.service';
 import { CreateTicketTypeComponent } from '../create-ticket-type/create-ticket-type.component';
 import { ViewEditTicketTypeComponent } from '../view-edit-ticket-type/view-edit-ticket-type.component';
 
@@ -39,7 +39,10 @@ import { ViewEditTicketTypeComponent } from '../view-edit-ticket-type/view-edit-
     MatTableModule,
   ],
   templateUrl: './ticket-types.component.html',
-  styleUrls: ['./ticket-types.component.scss', '../../../app.component.scss'],
+  styleUrls: [
+    './ticket-types.component.scss',
+    '../../../../app.component.scss',
+  ],
 })
 export class TicketTypesComponent implements OnInit {
   festival: Festival | null = null;

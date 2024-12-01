@@ -12,8 +12,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { FestivalService } from '../../../services/festival/festival.service';
-import { CreateStaffRequest } from '../../../models/festival/festival.model';
+import { FestivalService } from '../../../../services/festival/festival.service';
+import { CreateStaffRequest } from '../../../../models/festival/festival.model';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,9 +24,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { UserService } from '../../../services/user/user.service';
-import { CreateProfileRequest } from '../../../models/user/user-profile-request.model';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { UserService } from '../../../../services/user/user.service';
+import { CreateProfileRequest } from '../../../../models/user/user-profile-request.model';
+import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-register-employee',
@@ -48,7 +48,7 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
   templateUrl: './register-employee.component.html',
   styleUrls: [
     './register-employee.component.scss',
-    '../../../app.component.scss',
+    '../../../../app.component.scss',
   ],
   providers: [provideNativeDateAdapter()],
 })

@@ -12,7 +12,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { FestivalService } from '../../../services/festival/festival.service';
+import { FestivalService } from '../../../../services/festival/festival.service';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,14 +23,14 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { UserService } from '../../../services/user/user.service';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
-import { Employee } from '../../../models/festival/festival.model';
+import { UserService } from '../../../../services/user/user.service';
+import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
+import { Employee } from '../../../../models/festival/festival.model';
 import {
   CreateUpdateUserProfileRequest,
   UpdateStaffEmailRequest,
   UpdateStaffProfileRequest,
-} from '../../../models/user/user-profile-request.model';
+} from '../../../../models/user/user-profile-request.model';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -52,7 +52,10 @@ import { forkJoin } from 'rxjs';
     MatTabsModule,
   ],
   templateUrl: './edit-employee.component.html',
-  styleUrls: ['./edit-employee.component.scss', '../../../app.component.scss'],
+  styleUrls: [
+    './edit-employee.component.scss',
+    '../../../../app.component.scss',
+  ],
   providers: [provideNativeDateAdapter()],
 })
 export class EditEmployeeComponent implements OnInit {

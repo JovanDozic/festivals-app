@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -13,10 +13,9 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  CreateItemPriceRequest,
-  CreateItemRequest,
-  VariablePrice,
-} from '../../../models/festival/festival.model';
+  Item,
+  PriceListItem,
+} from '../../../../models/festival/festival.model';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,14 +26,12 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
-import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { ItemService } from '../../../services/festival/item.service';
+import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
+import { ItemService } from '../../../../services/festival/item.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'app-create-ticket-type',
+  selector: 'app-view-edit-ticket-type',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -46,39 +43,49 @@ import { forkJoin } from 'rxjs';
     MatGridListModule,
     MatIconModule,
     MatTabsModule,
-    MatStepperModule,
     MatSlideToggleModule,
     MatDialogModule,
   ],
-  templateUrl: './create-ticket-type.component.html',
+  templateUrl: './view-edit-ticket-type.component.html',
   styleUrls: [
-    './create-ticket-type.component.scss',
-    '../../../app.component.scss',
+    './view-edit-ticket-type.component.scss',
+    '../../../../app.component.scss',
   ],
   providers: [provideNativeDateAdapter()],
 })
-export class CreateTicketTypeComponent {
+export class ViewEditTicketTypeComponent implements OnInit {
   private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
-  private dialogRef = inject(MatDialogRef<CreateTicketTypeComponent>);
-  private data: { festivalId: number } = inject(MAT_DIALOG_DATA);
+  private dialogRef = inject(MatDialogRef<ViewEditTicketTypeComponent>);
   private itemService = inject(ItemService);
+  private data: {
+    festivalId: number;
+    itemId: number;
+  } = inject(MAT_DIALOG_DATA);
 
-  @ViewChild('stepper') private stepper: MatStepper | undefined;
+  isEditing: boolean = true;
 
   infoFormGroup: FormGroup;
   fixedPriceFormGroup: FormGroup;
   variablePricesFormGroup: FormGroup;
 
-  ticketTypeId: number | null = null;
-  isFixedPrice: boolean = false;
-  variablePrices: VariablePrice[] = [];
+  isFixedPrice: boolean = true;
+
+  ticketType: Item | null = null;
+
+  ngOnInit(): void {
+    this.loadTicketType();
+  }
+
+  closeDialog() {
+    this.dialogRef.close(false);
+  }
 
   constructor() {
     this.infoFormGroup = this.fb.group({
       nameCtrl: ['', Validators.required],
       descriptionCtrl: ['', Validators.required],
-      availableNumberCtrl: ['', [Validators.required, Validators.min(1)]],
+      availableNumberCtrl: [0, Validators.required],
     });
 
     this.fixedPriceFormGroup = this.fb.group({
@@ -93,6 +100,14 @@ export class CreateTicketTypeComponent {
       },
       { validators: this.validateVariablePrices.bind(this) }
     );
+
+    this.infoFormGroup.disable();
+    this.fixedPriceFormGroup.disable();
+    this.variablePricesFormGroup.disable();
+    this.variablePricesFormArray.disable();
+    this.variablePricesFormArray.controls.forEach((control) => {
+      control.disable();
+    });
   }
 
   get variablePricesFormArray(): FormArray {
@@ -103,143 +118,128 @@ export class CreateTicketTypeComponent {
 
   private createVariablePriceGroup(): FormGroup {
     return this.fb.group({
+      idCtrl: [0],
+      isFixed: [false],
       priceCtrl: ['', [Validators.required, Validators.min(0)]],
-      dateFromCtrl: ['', Validators.required],
-      dateToCtrl: ['', Validators.required],
+      dateFromCtrl: [null, Validators.required],
+      dateToCtrl: [null, Validators.required],
     });
   }
 
-  toggleIsFixed() {
-    this.isFixedPrice = !this.isFixedPrice;
-  }
-
-  closeDialog() {
-    this.dialogRef.close(false);
-  }
-
-  createTicketType() {
-    if (this.infoFormGroup.valid && this.data.festivalId) {
-      const request: CreateItemRequest = {
-        name: this.infoFormGroup.get('nameCtrl')?.value,
-        description: this.infoFormGroup.get('descriptionCtrl')?.value,
-        availableNumber: this.infoFormGroup.get('availableNumberCtrl')?.value,
-        type: 'TICKET_TYPE',
-      };
-
-      this.itemService.createItem(this.data.festivalId, request).subscribe({
-        next: (response) => {
-          this.snackbarService.show('Ticket Type created');
-          this.ticketTypeId = response;
-          this.stepper?.next();
-        },
-        error: (error) => {
-          console.log('Error creating ticket type: ', error);
-          this.snackbarService.show('Error creating Ticket Type');
-        },
+  toggleIsEditing() {
+    this.isEditing = !this.isEditing;
+    if (!this.isEditing) {
+      this.infoFormGroup.disable();
+      this.fixedPriceFormGroup.disable();
+      this.variablePricesFormGroup.disable();
+      this.variablePricesFormArray.disable();
+      this.variablePricesFormArray.controls.forEach((control) => {
+        control.disable();
+      });
+    } else {
+      this.infoFormGroup.enable();
+      this.fixedPriceFormGroup.enable();
+      this.variablePricesFormGroup.enable();
+      this.variablePricesFormArray.enable();
+      this.variablePricesFormArray.controls.forEach((control) => {
+        control.enable();
       });
     }
   }
 
-  addVariablePrice() {
-    const lastGroup = this.variablePricesFormArray.at(
-      this.variablePricesFormArray.length - 1
-    ) as FormGroup;
+  loadForms() {
+    if (this.ticketType) {
+      this.infoFormGroup.setValue({
+        nameCtrl: this.ticketType.name,
+        descriptionCtrl: this.ticketType.description,
+        availableNumberCtrl: this.ticketType.availableNumber,
+      });
 
-    if (lastGroup.valid) {
-      this.variablePricesFormArray.push(this.createVariablePriceGroup());
-    } else {
-      this.snackbarService.show(
-        'Please fill out the last variable price before adding a new one.'
-      );
-    }
-  }
+      this.isFixedPrice = this.ticketType.priceListItems[0].isFixed;
 
-  removeVariablePrice(index: number) {
-    if (this.variablePricesFormArray.length > 1) {
-      this.variablePricesFormArray.removeAt(index);
-    } else {
-      this.snackbarService.show(
-        'At least one variable price entry is required.'
-      );
-    }
-  }
-
-  done() {
-    if (this.ticketTypeId) {
       if (this.isFixedPrice) {
-        this.createFixedPrice();
+        this.fixedPriceFormGroup.setValue({
+          fixedPriceCtrl: this.ticketType.priceListItems[0].price,
+        });
       } else {
-        this.createNotFixedPrices();
+        this.variablePricesFormArray.clear();
+        this.ticketType.priceListItems.forEach((priceListItem) => {
+          const variablePriceGroup = this.createVariablePriceGroup();
+          variablePriceGroup.setValue({
+            idCtrl: priceListItem.id,
+            isFixed: priceListItem.isFixed,
+            priceCtrl: priceListItem.price,
+            dateFromCtrl: new Date(priceListItem.dateFrom ?? ''),
+            dateToCtrl: new Date(priceListItem.dateTo ?? ''),
+          });
+          this.variablePricesFormArray.push(variablePriceGroup);
+        });
       }
     }
   }
 
-  createFixedPrice() {
-    if (
-      this.fixedPriceFormGroup.valid &&
-      this.ticketTypeId &&
-      this.data.festivalId
-    ) {
-      const request: CreateItemPriceRequest = {
-        itemId: this.ticketTypeId,
-        price: this.fixedPriceFormGroup.get('fixedPriceCtrl')?.value,
-        isFixed: true,
-      };
-
+  loadTicketType() {
+    if (this.data.festivalId && this.data.itemId) {
       this.itemService
-        .createItemPrice(this.data.festivalId, request)
+        .getTicketType(this.data.festivalId, this.data.itemId)
         .subscribe({
-          next: (response) => {
-            this.snackbarService.show('Fixed Price created');
-            this.dialogRef.close(true);
+          next: (ticketType) => {
+            this.ticketType = ticketType;
+            this.loadForms();
+            this.toggleIsEditing();
           },
           error: (error) => {
-            console.log('Error creating fixed price: ', error);
-            this.snackbarService.show('Error creating Fixed Price');
-            this.dialogRef.close(false);
+            console.log('Error fetching ticket type: ', error);
+            this.snackbarService.show('Error getting ticket type');
           },
         });
     }
   }
 
-  createNotFixedPrices() {
-    if (
-      this.variablePricesFormArray.valid &&
-      this.ticketTypeId &&
-      this.data.festivalId
-    ) {
-      const variablePrices: VariablePrice[] =
-        this.variablePricesFormArray.value.map((vp: any) => ({
-          price: vp.priceCtrl,
-          dateFrom: vp.dateFromCtrl,
-          dateTo: vp.dateToCtrl,
-        }));
+  saveChanges() {
+    if (this.infoFormGroup.valid) {
+      const request: Item = {
+        id: this.data.itemId,
+        name: this.infoFormGroup.get('nameCtrl')?.value,
+        description: this.infoFormGroup.get('descriptionCtrl')?.value,
+        availableNumber: this.infoFormGroup.get('availableNumberCtrl')?.value,
+        type: 'TICKET_TYPE',
+        remainingNumber: this.ticketType?.remainingNumber ?? 0,
+        priceListItems: [],
+      };
 
-      const requests: CreateItemPriceRequest[] = variablePrices.map((vp) => ({
-        itemId: this.ticketTypeId!,
-        price: vp.price,
-        isFixed: false,
-        dateFrom: this.formatDate(vp.dateFrom),
-        dateTo: this.formatDate(vp.dateTo),
-      }));
+      if (this.isFixedPrice) {
+        const fixedPriceRequest: PriceListItem = {
+          id: this.ticketType?.priceListItems[0].id ?? 0,
+          isFixed: true,
+          price: this.fixedPriceFormGroup.get('fixedPriceCtrl')?.value,
+          dateFrom: this.ticketType?.priceListItems[0].dateFrom,
+          dateTo: this.ticketType?.priceListItems[0].dateTo,
+        };
+        request.priceListItems.push(fixedPriceRequest);
+      } else {
+        this.variablePricesFormArray.controls.forEach((control) => {
+          const variablePriceRequest: PriceListItem = {
+            id: control.get('idCtrl')?.value,
+            isFixed: control.get('isFixed')?.value,
+            price: control.get('priceCtrl')?.value,
+            dateFrom: this.formatDate(control.get('dateFromCtrl')?.value),
+            dateTo: this.formatDate(control.get('dateToCtrl')?.value),
+          };
+          request.priceListItems.push(variablePriceRequest);
+        });
+      }
 
-      forkJoin(
-        requests.map((req) =>
-          this.itemService.createItemPrice(this.data.festivalId, req)
-        )
-      ).subscribe({
-        next: (responses) => {
-          this.snackbarService.show('Variable Prices created');
+      this.itemService.updateItem(this.data.festivalId, request).subscribe({
+        next: () => {
+          this.snackbarService.show('Ticket type updated');
           this.dialogRef.close(true);
         },
         error: (error) => {
-          console.log('Error creating variable prices: ', error);
-          this.snackbarService.show('Error creating Variable Prices');
-          this.dialogRef.close(false);
+          console.log('Error updating ticket type: ', error);
+          this.snackbarService.show('Error updating ticket type');
         },
       });
-    } else {
-      this.snackbarService.show('Please fill out all variable price fields.');
     }
   }
 

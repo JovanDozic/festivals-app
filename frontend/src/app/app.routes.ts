@@ -104,7 +104,7 @@ const organizerRoutes: Routes = [
         path: 'organizer/my-festivals/:id/employees',
         loadComponent: () =>
           import(
-            './features/organizer/festival-employees/festival-employees.component'
+            './features/organizer/festival-employees/festival-employees/festival-employees.component'
           ).then((c) => c.FestivalEmployeesComponent),
         title: 'Festival Employees',
       },
@@ -112,7 +112,7 @@ const organizerRoutes: Routes = [
         path: 'organizer/my-festivals/:id/ticket-types',
         loadComponent: () =>
           import(
-            './features/organizer/ticket-types/ticket-types.component'
+            './features/organizer/ticket-types/ticket-types/ticket-types.component'
           ).then((c) => c.TicketTypesComponent),
         title: 'Ticket Types',
       },
