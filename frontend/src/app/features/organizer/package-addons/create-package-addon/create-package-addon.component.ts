@@ -61,18 +61,23 @@ export class CreatePackageAddonComponent {
   private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
   private dialogRef = inject(MatDialogRef<CreatePackageAddonComponent>);
-  private data: { festivalId: number } = inject(MAT_DIALOG_DATA);
+  private data: { festivalId: number; category: string } =
+    inject(MAT_DIALOG_DATA);
   private itemService = inject(ItemService);
 
   @ViewChild('stepper') private stepper: MatStepper | undefined;
 
+  category: string = '';
+
   infoFormGroup: FormGroup;
   fixedPriceFormGroup: FormGroup;
 
-  ticketTypeId: number | null = null;
+  packageAddonId: number | null = null;
   isFixedPrice: boolean = false;
 
   constructor() {
+    this.category = this.data?.category;
+
     this.infoFormGroup = this.fb.group({
       nameCtrl: ['', Validators.required],
       descriptionCtrl: ['', Validators.required],
@@ -86,5 +91,13 @@ export class CreatePackageAddonComponent {
 
   closeDialog() {
     this.dialogRef.close(false);
+  }
+
+  done() {
+    throw new Error('Method not implemented.');
+  }
+
+  createPackageAddon() {
+    throw new Error('Method not implemented.');
   }
 }

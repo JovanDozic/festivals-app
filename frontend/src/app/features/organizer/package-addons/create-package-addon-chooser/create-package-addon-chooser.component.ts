@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -65,16 +65,19 @@ interface Category {
     '../../../../app.component.scss',
   ],
 })
-export class CreatePackageAddonChooserComponent {
+export class CreatePackageAddonChooserComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<CreatePackageAddonChooserComponent>);
   private data: { festivalId: number } = inject(MAT_DIALOG_DATA);
 
-  selectedCategory: Category | null = null;
   categories: Category[] = [
     { value: 'GENERAL', viewValue: 'General' },
     { value: 'TRANSPORT', viewValue: 'Transport' },
     { value: 'CAMP', viewValue: 'Camp' },
   ];
+
+  selectedCategory: any | null = this.categories[0].value;
+
+  ngOnInit(): void {}
 
   closeDialog() {
     this.dialogRef.close(false);

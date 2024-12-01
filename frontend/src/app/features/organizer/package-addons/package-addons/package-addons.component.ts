@@ -119,7 +119,7 @@ export class PackageAddonsComponent implements OnInit {
   launchCreatePackageAddonDialog(result: any) {
     console.log('Selected category: ', result);
     const dialogRef = this.dialog.open(CreatePackageAddonComponent, {
-      data: { festivalId: this.festival?.id },
+      data: { festivalId: this.festival?.id, category: result },
       width: '800px',
       height: 'auto',
       disableClose: true,
