@@ -8,7 +8,12 @@
     [opened]="(isHandset$ | async) === false"
   >
     <mat-toolbar>
-      <mat-icon aria-label="Side nav toggle icon">rocket</mat-icon>
+      <mat-icon
+        class="material-symbols-outlined main-icon"
+        color="primary"
+        aria-label="Side nav toggle icon"
+        >rocket</mat-icon
+      >
     </mat-toolbar>
     <mat-nav-list>
       <a

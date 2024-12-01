@@ -53,10 +53,10 @@ export class MyFestivalsComponent implements OnInit {
   loadFestivals(): void {
     this.festivalService.getMyFestivals().subscribe({
       next: (response) => {
-        setTimeout(() => {
-          this.festivals = response;
-          this.isLoading = false;
-        }, 250);
+        // setTimeout(() => {
+        this.festivals = response;
+        this.isLoading = false;
+        // }, 250);
       },
       error: (error) => {
         console.error('Error fetching festivals:', error);
