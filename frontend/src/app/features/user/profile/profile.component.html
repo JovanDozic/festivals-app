@@ -1,6 +1,9 @@
 <div class="container mat-elevation-z4" *ngIf="userProfile">
   <div class="profile-header">
-    <h1>Hello, {{ userProfile.firstName }} {{ userProfile.lastName }}</h1>
+    <span class="header-container">
+      <img [src]="userProfile.imageURL" alt="User profile photo" />
+      <h1>Hello, {{ userProfile.firstName }} {{ userProfile.lastName }}</h1>
+    </span>
     <div class="button-container">
       <button
         mat-icon-button
