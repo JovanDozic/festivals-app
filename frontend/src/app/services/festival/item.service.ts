@@ -110,4 +110,11 @@ export class ItemService {
       `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/${itemId}`
     );
   }
+
+  addTransportConfig(festivalId: number, config: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/transport`,
+      config
+    );
+  }
 }

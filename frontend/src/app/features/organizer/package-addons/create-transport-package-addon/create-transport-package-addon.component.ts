@@ -176,6 +176,50 @@ export class CreateTransportPackageAddonComponent {
 
   addTransportConfig() {
     if (this.configurationFormGroup.valid && this.itemId) {
+      const departureDate: Date =
+        this.configurationFormGroup.get('departureDateCtrl')?.value;
+      const departureTime: Date =
+        this.configurationFormGroup.get('departureTimeCtrl')?.value;
+      const arrivalDate: Date =
+        this.configurationFormGroup.get('arrivalDateCtrl')?.value;
+      const arrivalTime: Date =
+        this.configurationFormGroup.get('arrivalTimeCtrl')?.value;
+      const returnDepartureDate: Date = this.configurationFormGroup.get(
+        'returnDepartureDateCtrl'
+      )?.value;
+      const returnDepartureTime: Date = this.configurationFormGroup.get(
+        'returnDepartureTimeCtrl'
+      )?.value;
+      const returnArrivalDate: Date = this.configurationFormGroup.get(
+        'returnArrivalDateCtrl'
+      )?.value;
+      const returnArrivalTime: Date = this.configurationFormGroup.get(
+        'returnArrivalTimeCtrl'
+      )?.value;
+
+      const departureDateTime = this.combineDateAndTime(
+        departureDate,
+        departureTime
+      );
+      const arrivalDateTime = this.combineDateAndTime(arrivalDate, arrivalTime);
+      const returnDepartureDateTime = this.combineDateAndTime(
+        returnDepartureDate,
+        returnDepartureTime
+      );
+      const returnArrivalDateTime = this.combineDateAndTime(
+        returnArrivalDate,
+        returnArrivalTime
+      );
+
+      const departureDateTimeFormatted = formatDateTime(departureDateTime);
+      const arrivalDateTimeFormatted = formatDateTime(arrivalDateTime);
+      const returnDepartureDateTimeFormatted = formatDateTime(
+        returnDepartureDateTime
+      );
+      const returnArrivalDateTimeFormatted = formatDateTime(
+        returnArrivalDateTime
+      );
+
       const departureCity: CityRequest = {
         name: this.configurationFormGroup.get('departureCityNameCtrl')?.value,
         postalCode: this.configurationFormGroup.get(
@@ -199,38 +243,35 @@ export class CreateTransportPackageAddonComponent {
           this.configurationFormGroup.get('transportTypeCtrl')?.value,
         departureCity: departureCity,
         arrivalCity: arrivalCity,
-        departureTime: formatDateTime(
-          new Date(
-            this.configurationFormGroup.get('departureDateCtrl')?.value +
-              ' ' +
-              this.configurationFormGroup.get('departureTimeCtrl')?.value
-          )
-        ),
-        arrivalTime: formatDateTime(
-          new Date(
-            this.configurationFormGroup.get('arrivalDateCtrl')?.value +
-              ' ' +
-              this.configurationFormGroup.get('arrivalTimeCtrl')?.value
-          )
-        ),
-        returnDepartureTime: formatDateTime(
-          new Date(
-            this.configurationFormGroup.get('returnDepartureDateCtrl')?.value +
-              ' ' +
-              this.configurationFormGroup.get('returnDepartureTimeCtrl')?.value
-          )
-        ),
-        returnArrivalTime: formatDateTime(
-          new Date(
-            this.configurationFormGroup.get('returnArrivalDateCtrl')?.value +
-              ' ' +
-              this.configurationFormGroup.get('returnArrivalTimeCtrl')?.value
-          )
-        ),
+        departureTime: departureDateTimeFormatted,
+        arrivalTime: arrivalDateTimeFormatted,
+        returnDepartureTime: returnDepartureDateTimeFormatted,
+        returnArrivalTime: returnArrivalDateTimeFormatted,
       };
 
       console.log('Request: ', request);
+
+      this.itemService
+        .addTransportConfig(this.data.festivalId, request)
+        .subscribe({
+          next: (response) => {
+            this.snackbarService.show('Transport configuration added');
+            this.stepper?.next();
+          },
+          error: (error) => {
+            console.log('Error adding transport configuration: ', error);
+            this.snackbarService.show('Error adding transport configuration');
+          },
+        });
     }
+  }
+
+  private combineDateAndTime(date: Date, time: Date): Date {
+    const hours = time.getHours();
+    const minutes = time.getMinutes();
+    const combined = new Date(date);
+    combined.setHours(hours, minutes, 0, 0);
+    return combined;
   }
 
   createFixedPrice() {
