@@ -1,3 +1,5 @@
+@use "@angular/material" as mat;
+
 .dialog-content {
   display: flex;
   flex-direction: column;
@@ -13,6 +15,7 @@
   height: 200px;
   object-fit: cover;
   border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(61, 61, 61, 0.5);
 }
 
 .placeholder-photo {
@@ -28,4 +31,22 @@
 .placeholder-photo mat-icon {
   font-size: 100px;
   color: #9e9e9e;
+}
+
+.save-changes-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.save-changes-button mat-spinner {
+  height: 25px !important;
+}
+
+.save-changes-button {
+  @include mat.progress-spinner-overrides(
+    (
+      active-indicator-color: #fff,
+    )
+  );
 }

@@ -1,7 +1,18 @@
 <div class="container mat-elevation-z4" *ngIf="userProfile">
   <div class="profile-header">
     <span class="header-container">
-      <img [src]="userProfile.imageURL" alt="User profile photo" />
+      <img
+        *ngIf="userProfile.imageURL"
+        [src]="userProfile.imageURL"
+        alt="User profile photo"
+      />
+      <mat-icon
+        *ngIf="!userProfile.imageURL"
+        class="material-symbols-outlined profile-missing-photo"
+        color="primary"
+      >
+        face
+      </mat-icon>
       <h1>Hello, {{ userProfile.firstName }} {{ userProfile.lastName }}</h1>
     </span>
     <div class="button-container">
@@ -11,9 +22,9 @@
         matTooltip="Logout"
         color="primary"
       >
-        <mat-icon class="material-symbols-outlined" color="primary"
-          >logout</mat-icon
-        >
+        <mat-icon class="material-symbols-outlined" color="primary">
+          logout
+        </mat-icon>
       </button>
       <button
         mat-icon-button
@@ -21,9 +32,9 @@
         color="primary"
         (click)="changePassword()"
       >
-        <mat-icon class="material-symbols-outlined" color="primary"
-          >password</mat-icon
-        >
+        <mat-icon class="material-symbols-outlined" color="primary">
+          password
+        </mat-icon>
       </button>
       <button
         mat-icon-button
@@ -31,9 +42,9 @@
         color="primary"
         (click)="changeProfile()"
       >
-        <mat-icon class="material-symbols-outlined" color="primary"
-          >badge</mat-icon
-        >
+        <mat-icon class="material-symbols-outlined" color="primary">
+          badge
+        </mat-icon>
       </button>
       <button
         mat-icon-button
@@ -41,9 +52,9 @@
         color="primary"
         (click)="changeProfilePhoto()"
       >
-        <mat-icon class="material-symbols-outlined" color="primary"
-          >image</mat-icon
-        >
+        <mat-icon class="material-symbols-outlined" color="primary">
+          image
+        </mat-icon>
       </button>
     </div>
   </div>

@@ -16,10 +16,10 @@ import {
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { UserService } from '../../../services/user/user.service';
-import { provideNativeDateAdapter } from '@angular/material/core';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 import { ImageService } from '../../../services/image/image.service';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-change-profile-photo-dialog',
@@ -33,6 +33,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatDatepickerModule,
     MatIconModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './change-profile-photo-dialog.component.html',
   styleUrls: [
@@ -50,28 +51,37 @@ export class ChangeProfilePhotoDialogComponent implements OnInit {
 
   selectedFile: File | null = null;
   imagePreviewUrl: string | ArrayBuffer | null = null;
+  isUploading = false;
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.data);
+    this.imagePreviewUrl = this.data.currentImageURL;
+  }
 
   saveChanges() {
+    setTimeout(() => {}, 2000);
     if (this.selectedFile) {
+      this.isUploading = true;
       this.imageService.uploadProfilePhoto(this.selectedFile).subscribe({
         next: (response) => {
           console.log(response);
           this.snackbarService.show('Profile photo uploaded successfully!');
           this.userService.updateUserProfilePhoto(response.imageURL).subscribe({
             next: () => {
+              this.isUploading = false;
               this.snackbarService.show('Profile photo updated successfully!');
               this.dialogRef.close(true);
             },
             error: (error) => {
               console.log(error);
+              this.isUploading = false;
               this.snackbarService.show('Failed to update profile photo.');
             },
           });
         },
         error: (error) => {
           console.log(error);
+          this.isUploading = false;
           this.snackbarService.show('Failed to update profile photo.');
         },
       });

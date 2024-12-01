@@ -90,7 +90,11 @@ export class ProfileComponent implements OnInit {
 
   changeProfilePhoto() {
     const dialogRef = this.dialog.open(ChangeProfilePhotoDialogComponent, {
-      data: {},
+      data: {
+        currentImageURL: this.userProfile?.imageURL,
+      },
+      width: '400px',
+      height: '410px',
     });
 
     dialogRef.afterClosed().subscribe((success) => {

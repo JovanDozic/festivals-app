@@ -36,7 +36,9 @@
     color="primary"
     (click)="saveChanges()"
     [disabled]="!selectedFile"
+    class="save-changes-button"
   >
-    Save Changes
+    <mat-spinner *ngIf="isUploading"></mat-spinner>
+    <span *ngIf="!isUploading">Save Changes</span>
   </button>
 </mat-dialog-actions>
