@@ -2,7 +2,7 @@
 
 <mat-dialog-content>
   <mat-stepper [linear]="true" #stepper>
-    <mat-step [stepControl]="infoFormGroup" [editable]="false">
+    <!-- <mat-step [stepControl]="infoFormGroup" [editable]="false">
       <form [formGroup]="infoFormGroup">
         <ng-template matStepLabel>Ticket Info</ng-template>
         <div class="form-fields">
@@ -34,6 +34,300 @@
           </mat-form-field>
         </div>
       </form>
+    </mat-step> -->
+
+    <mat-step [stepControl]="configurationFormGroup" [editable]="false">
+      <ng-template matStepLabel>Configuration</ng-template>
+      <mat-stepper
+        orientation="vertical"
+        [linear]="true"
+        #configStepper
+        class="configuration-step"
+      >
+        <form [formGroup]="configurationFormGroup">
+          <mat-step>
+            <ng-template matStepLabel>Travel Type</ng-template>
+            <mat-form-field appearance="outline">
+              <mat-label>Type</mat-label>
+              <mat-select formControlName="transportTypeCtrl" required>
+                <mat-option
+                  *ngFor="let type of transportTypes"
+                  [value]="type.value"
+                >
+                  {{ type.viewValue }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step>
+            <ng-template matStepLabel>Departure City</ng-template>
+            <div class="form-field">
+              <mat-form-field appearance="outline">
+                <mat-label>City Name</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="departureCityNameCtrl"
+                  required
+                />
+              </mat-form-field>
+            </div>
+            <div class="form-field form-field-two">
+              <mat-form-field appearance="outline">
+                <mat-label>Postal Code</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="departureCityPostalCodeCtrl"
+                  required
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Country (ISO3)</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="departureCountryISO3Ctrl"
+                  required
+                />
+              </mat-form-field>
+            </div>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step>
+            <ng-template matStepLabel>Arrival City</ng-template>
+            <div class="form-field">
+              <mat-form-field appearance="outline">
+                <mat-label>City Name</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="arrivalCityNameCtrl"
+                  required
+                />
+              </mat-form-field>
+            </div>
+            <div class="form-field form-field-two">
+              <mat-form-field appearance="outline">
+                <mat-label>Postal Code</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="arrivalCityPostalCodeCtrl"
+                  required
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Country (ISO3)</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="arrivalCountryISO3Ctrl"
+                  required
+                />
+              </mat-form-field>
+            </div>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <!-- ! TRIP TIMES -->
+          <mat-step>
+            <ng-template matStepLabel>Trip Times</ng-template>
+
+            <div class="form-fields">
+              <p>
+                Departure time from
+                <b
+                  >{{
+                    configurationFormGroup.get("departureCityNameCtrl")?.value
+                  }}:</b
+                >
+              </p>
+            </div>
+            <div class="form-field form-field-two">
+              <mat-form-field appearance="outline">
+                <mat-label>Departure Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="departureDatePicker"
+                  formControlName="departureDateCtrl"
+                  required
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="departureDatePicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #departureDatePicker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Departure Time</mat-label>
+                <input
+                  matInput
+                  [matTimepicker]="departureTimePicker"
+                  formControlName="departureTimeCtrl"
+                  required
+                />
+                <mat-timepicker-toggle
+                  matSuffix
+                  [for]="departureTimePicker"
+                ></mat-timepicker-toggle>
+                <mat-timepicker #departureTimePicker></mat-timepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="form-fields">
+              <p>
+                Arrival time to
+                <b
+                  >{{
+                    configurationFormGroup.get("arrivalCityNameCtrl")?.value
+                  }}:</b
+                >
+              </p>
+            </div>
+            <div class="form-field form-field-two">
+              <mat-form-field appearance="outline">
+                <mat-label>Arrival Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="arrivalDatePicker"
+                  formControlName="arrivalDateCtrl"
+                  required
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="arrivalDatePicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #arrivalDatePicker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Arrival Time</mat-label>
+                <input
+                  matInput
+                  [matTimepicker]="arrivalTimePicker"
+                  formControlName="arrivalTimeCtrl"
+                  required
+                />
+                <mat-timepicker-toggle
+                  matSuffix
+                  [for]="arrivalTimePicker"
+                ></mat-timepicker-toggle>
+                <mat-timepicker #arrivalTimePicker></mat-timepicker>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <!-- ! RETURN TRIP TIMES -->
+          <mat-step>
+            <ng-template matStepLabel>Return Trip Times</ng-template>
+
+            <div class="form-fields">
+              <!-- * switched city names for return trip -->
+              <p>
+                Departure time from
+                <b
+                  >{{
+                    configurationFormGroup.get("arrivalCityNameCtrl")?.value
+                  }}:</b
+                >
+              </p>
+            </div>
+            <div class="form-field form-field-two">
+              <mat-form-field appearance="outline">
+                <mat-label>Departure Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="returnDepartureDatePicker"
+                  formControlName="returnDepartureDateCtrl"
+                  required
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="returnDepartureDatePicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #returnDepartureDatePicker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Departure Time</mat-label>
+                <input
+                  matInput
+                  [matTimepicker]="returnDepartureTimePicker"
+                  formControlName="returnDepartureTimeCtrl"
+                  required
+                />
+                <mat-timepicker-toggle
+                  matSuffix
+                  [for]="returnDepartureTimePicker"
+                ></mat-timepicker-toggle>
+                <mat-timepicker #returnDepartureTimePicker></mat-timepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="form-fields">
+              <!-- * switched city names for return trip -->
+              <p>
+                Arrival time to
+                <b
+                  >{{
+                    configurationFormGroup.get("departureCityNameCtrl")?.value
+                  }}:</b
+                >
+              </p>
+            </div>
+            <div class="form-field form-field-two">
+              <mat-form-field appearance="outline">
+                <mat-label>Arrival Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="returnArrivalDatePicker"
+                  formControlName="returnArrivalDateCtrl"
+                  required
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="returnArrivalDatePicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #returnArrivalDatePicker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Arrival Time</mat-label>
+                <input
+                  matInput
+                  [matTimepicker]="returnArrivalTimePicker"
+                  formControlName="returnArrivalTimeCtrl"
+                  required
+                />
+                <mat-timepicker-toggle
+                  matSuffix
+                  [for]="returnArrivalTimePicker"
+                ></mat-timepicker-toggle>
+                <mat-timepicker #returnArrivalTimePicker></mat-timepicker>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <!-- <button mat-stroked-button matStepperNext>Done</button> -->
+            </div>
+          </mat-step>
+        </form>
+      </mat-stepper>
     </mat-step>
 
     <mat-step [editable]="false">

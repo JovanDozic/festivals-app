@@ -75,7 +75,7 @@ export class CreatePackageAddonChooserComponent implements OnInit {
     { value: 'CAMP', viewValue: 'Camp' },
   ];
 
-  selectedCategory: any | null = this.categories[0].value;
+  selectedCategory: any | null = this.categories[1].value;
 
   ngOnInit(): void {}
 

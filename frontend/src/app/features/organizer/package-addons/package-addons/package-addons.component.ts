@@ -189,7 +189,7 @@ export class PackageAddonsComponent implements OnInit {
     const dialogRef = this.dialog.open(CreateTransportPackageAddonComponent, {
       data: { festivalId: this.festival?.id, category: result },
       width: '800px',
-      height: 'auto',
+      height: '700px',
       disableClose: true,
     });
 

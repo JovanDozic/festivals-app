@@ -8,6 +8,7 @@ import {
   FormArray,
   FormBuilder,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   ValidationErrors,
   Validators,
@@ -32,23 +33,33 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ItemService } from '../../../../services/festival/item.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { forkJoin } from 'rxjs';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTimepickerModule } from '@angular/material/timepicker';
+
+interface TransportType {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-create-transport-package-addon',
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
     MatCardModule,
     MatDatepickerModule,
+    MatTimepickerModule,
     MatGridListModule,
     MatIconModule,
     MatTabsModule,
     MatStepperModule,
     MatSlideToggleModule,
     MatDialogModule,
+    MatSelectModule,
   ],
   templateUrl: './create-transport-package-addon.component.html',
   styleUrls: [
@@ -72,10 +83,19 @@ export class CreateTransportPackageAddonComponent {
   category: string = '';
 
   infoFormGroup: FormGroup;
+  configurationFormGroup: FormGroup;
   fixedPriceFormGroup: FormGroup;
 
   itemId: number | null = null;
   isFixedPrice: boolean = true;
+
+  transportTypes: TransportType[] = [
+    { value: 'BUS', viewValue: 'Bus' },
+    { value: 'PLANE', viewValue: 'Plane' },
+    { value: 'TRAIN', viewValue: 'Train' },
+  ];
+
+  selectedTransportType: any | null;
 
   constructor() {
     this.category = this.data?.category;
@@ -84,6 +104,28 @@ export class CreateTransportPackageAddonComponent {
       nameCtrl: ['', Validators.required],
       descriptionCtrl: ['', Validators.required],
       availableNumberCtrl: ['', [Validators.required, Validators.min(1)]],
+    });
+
+    this.configurationFormGroup = this.fb.group({
+      transportTypeCtrl: ['', Validators.required],
+      departureCityNameCtrl: ['', Validators.required],
+      departureCityPostalCodeCtrl: ['', Validators.required],
+      departureCountryISO3Ctrl: ['', Validators.required],
+      arrivalCityNameCtrl: ['', Validators.required],
+      arrivalCityPostalCodeCtrl: ['', Validators.required],
+      arrivalCountryISO3Ctrl: ['', Validators.required],
+
+      departureDateCtrl: ['', Validators.required],
+      departureTimeCtrl: ['', Validators.required],
+
+      arrivalDateCtrl: ['', Validators.required],
+      arrivalTimeCtrl: ['', Validators.required],
+
+      returnDepartureDateCtrl: ['', Validators.required],
+      returnDepartureTimeCtrl: ['', Validators.required],
+
+      returnArrivalDateCtrl: ['', Validators.required],
+      returnArrivalTimeCtrl: ['', Validators.required],
     });
 
     this.fixedPriceFormGroup = this.fb.group({
