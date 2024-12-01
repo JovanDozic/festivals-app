@@ -23,6 +23,7 @@ type ItemHandler interface {
 	UpdateItem(w http.ResponseWriter, r *http.Request)
 	DeleteTicketType(w http.ResponseWriter, r *http.Request)
 	GetCurrentPackageAddons(w http.ResponseWriter, r *http.Request)
+	GetPackageAddonsCount(w http.ResponseWriter, r *http.Request)
 }
 
 type itemHandler struct {
@@ -349,4 +350,32 @@ func (h *itemHandler) GetCurrentPackageAddons(w http.ResponseWriter, r *http.Req
 
 	utils.WriteJSON(w, http.StatusOK, response, nil)
 	log.Println("current package addons retrieved")
+}
+
+func (h *itemHandler) GetPackageAddonsCount(w http.ResponseWriter, r *http.Request) {
+
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	category, err := getParamFromRequest(r, "category")
+	if category == "" || err != nil {
+		log.Println("error: category is required")
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	count, err := h.itemService.GetPackageAddonsCount(festivalId, category)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, dtoFestival.FestivalPropCountResponse{
+		FestivalId: festivalId,
+		Count:      count,
+	}, nil)
+	log.Println("package addon count retrieved successfully for festival:", festivalId)
 }

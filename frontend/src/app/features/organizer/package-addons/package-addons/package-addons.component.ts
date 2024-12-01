@@ -55,7 +55,53 @@ export class PackageAddonsComponent implements OnInit {
   }
 
   loadCounts() {
-    throw new Error('Method not implemented.');
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.itemService.getPackageAddonsCount(Number(id), 'general').subscribe({
+        next: (count) => {
+          console.log('General package addon count: ', count);
+          this.generalCount = count;
+        },
+        error: (error) => {
+          console.log('Error fetching general package addon count: ', error);
+          this.snackbarService.show(
+            'Error getting general package addon count'
+          );
+          this.generalCount = 0;
+        },
+      });
+
+      this.itemService
+        .getPackageAddonsCount(Number(id), 'transport')
+        .subscribe({
+          next: (count) => {
+            console.log('Transport package addon count: ', count);
+            this.transportCount = count;
+          },
+          error: (error) => {
+            console.log(
+              'Error fetching transport package addon count: ',
+              error
+            );
+            this.snackbarService.show(
+              'Error getting transport package addon count'
+            );
+            this.transportCount = 0;
+          },
+        });
+
+      this.itemService.getPackageAddonsCount(Number(id), 'camp').subscribe({
+        next: (count) => {
+          console.log('Camp package addon count: ', count);
+          this.campCount = count;
+        },
+        error: (error) => {
+          console.log('Error fetching camp package addon count: ', error);
+          this.snackbarService.show('Error getting camp package addon count');
+          this.campCount = 0;
+        },
+      });
+    }
   }
 
   goBack() {

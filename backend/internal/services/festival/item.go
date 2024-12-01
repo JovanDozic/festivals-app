@@ -17,6 +17,7 @@ type ItemService interface {
 	CreatePriceListItem(festivalId, itemId uint, priceListItem *modelsFestival.PriceListItem) error
 	GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.PriceListItem, error)
 	GetTicketTypesCount(festivalId uint) (int, error)
+	GetPackageAddonsCount(festivalId uint, category string) (int, error)
 	GetTicketTypes(itemId uint) (*dto.GetItemResponse, error)
 	UpdateItemAndPrices(request dto.UpdateItemRequest) error
 	DeleteTicketType(itemId uint) error
@@ -99,6 +100,17 @@ func (s *itemService) GetCurrentPackageAddons(festivalId uint, category string) 
 
 func (s *itemService) GetTicketTypesCount(festivalId uint) (int, error) {
 	return s.itemRepo.GetTicketTypesCount(festivalId)
+}
+
+func (s *itemService) GetPackageAddonsCount(festivalId uint, category string) (int, error) {
+	if category == "" ||
+		(strings.ToUpper(category) != modelsFestival.PackageAddonGeneral &&
+			strings.ToUpper(category) != modelsFestival.PackageAddonCamp &&
+			strings.ToUpper(category) != modelsFestival.PackageAddonTransport) {
+		return 0, errors.New("invalid category")
+	}
+
+	return s.itemRepo.GetPackageAddonsCount(festivalId, strings.ToUpper(category))
 }
 
 func (s *itemService) GetTicketTypes(itemId uint) (*dto.GetItemResponse, error) {
