@@ -139,3 +139,10 @@ func (r *UpdateStaffProfileRequest) Validate() error {
 	}
 	return nil
 }
+
+func (r *UpdateProfilePhotoRequest) Validate() error {
+	if r.URL == "" {
+		return models.ErrMissingFields
+	}
+	return nil
+}

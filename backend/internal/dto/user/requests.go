@@ -53,3 +53,7 @@ type CreateStaffRequest struct {
 	Password    string                   `json:"password"`
 	UserProfile CreateUserProfileRequest `json:"userProfile"`
 }
+
+type UpdateProfilePhotoRequest struct {
+	URL string `json:"uri"`
+}

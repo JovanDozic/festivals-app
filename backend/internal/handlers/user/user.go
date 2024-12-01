@@ -28,6 +28,7 @@ type UserHandler interface {
 	GetEmployeesNotOnFestival(w http.ResponseWriter, r *http.Request)
 	UpdateStaffEmail(w http.ResponseWriter, r *http.Request)
 	UpdateStaffProfile(w http.ResponseWriter, r *http.Request)
+	UpdateProfilePhoto(w http.ResponseWriter, r *http.Request)
 }
 
 type userHandler struct {
@@ -574,4 +575,44 @@ func (h *userHandler) GetEmployeesNotOnFestival(w http.ResponseWriter, r *http.R
 
 	utils.WriteJSON(w, http.StatusOK, employeesResponse, nil)
 	log.Println("employees not on festival retrieved successfully for festival:", festivalId)
+}
+
+func (h *userHandler) UpdateProfilePhoto(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	var input dtoUser.UpdateProfilePhotoRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	username := utils.GetUsername(r.Context())
+	image := modelsCommon.Image{
+		URL: input.URL,
+	}
+
+	if err := h.userService.UpdateProfilePhoto(username, &image); err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrNotFound:
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "profile photo updated successfully"}, nil)
+	log.Println("profile photo updated successfully for user:", username)
 }

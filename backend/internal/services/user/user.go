@@ -7,6 +7,7 @@ import (
 	modelsError "backend/internal/models"
 	modelsCommon "backend/internal/models/common"
 	modelsUser "backend/internal/models/user"
+	reposCommon "backend/internal/repositories/common"
 	reposUser "backend/internal/repositories/user"
 	servicesCommon "backend/internal/services/common"
 	"backend/internal/utils"
@@ -26,6 +27,7 @@ type UserService interface {
 	UpdateUserEmail(username string, email string) error
 	GetFestivalEmployees(festivalId uint) ([]modelsUser.UserProfile, error)
 	GetEmployeesNotOnFestival(festivalId uint) ([]modelsUser.UserProfile, error)
+	UpdateProfilePhoto(username string, image *modelsCommon.Image) error
 }
 
 type userService struct {
@@ -33,10 +35,11 @@ type userService struct {
 	userRepo        reposUser.UserRepo
 	profileRepo     reposUser.UserProfileRepo
 	locationService servicesCommon.LocationService
+	imageRepo       reposCommon.ImageRepo
 }
 
-func NewUserService(c *config.Config, r reposUser.UserRepo, p reposUser.UserProfileRepo, l servicesCommon.LocationService) UserService {
-	return &userService{userRepo: r, config: c, profileRepo: p, locationService: l}
+func NewUserService(c *config.Config, r reposUser.UserRepo, p reposUser.UserProfileRepo, l servicesCommon.LocationService, i reposCommon.ImageRepo) UserService {
+	return &userService{userRepo: r, config: c, profileRepo: p, locationService: l, imageRepo: i}
 }
 
 func (s *userService) Create(user *modelsUser.User) error {
@@ -106,6 +109,11 @@ func (s *userService) GetUserProfile(username string) (*dto.GetUserProfileRespon
 		DateOfBirth: userProfile.DateOfBirth.Format("2006-01-02"),
 		PhoneNumber: userProfile.PhoneNumber,
 		Address:     nil,
+		ImageURL:    nil,
+	}
+
+	if userProfile.Image != nil {
+		response.ImageURL = &userProfile.Image.URL
 	}
 
 	if userProfile.Address != nil {
@@ -298,4 +306,29 @@ func (s *userService) GetFestivalEmployees(festivalId uint) ([]modelsUser.UserPr
 
 func (s *userService) GetEmployeesNotOnFestival(festivalId uint) ([]modelsUser.UserProfile, error) {
 	return s.profileRepo.GetEmployeesNotOnFestival(festivalId)
+}
+
+func (s *userService) UpdateProfilePhoto(username string, image *modelsCommon.Image) error {
+
+	if err := image.Validate(); err != nil {
+		return err
+	}
+
+	if err := s.imageRepo.Create(image); err != nil {
+		return err
+	}
+
+	profile, err := s.profileRepo.GetFullByUsername(username)
+	if err != nil {
+		return err
+	}
+
+	profile.ImageID = &image.ID
+	profile.Image = image
+
+	if err := s.profileRepo.Update(profile); err != nil {
+		return err
+	}
+
+	return nil
 }
