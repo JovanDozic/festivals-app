@@ -15,6 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
 import { CreateGeneralPackageAddonComponent } from '../create-general-package-addon/create-general-package-addon.component';
 import { CreatePackageAddonChooserComponent } from '../create-package-addon-chooser/create-package-addon-chooser.component';
+import { CreateTransportPackageAddonComponent } from '../create-transport-package-addon/create-transport-package-addon.component';
 
 @Component({
   selector: 'app-package-addons',
@@ -161,6 +162,45 @@ export class PackageAddonsComponent implements OnInit {
 
   launchCreatePackageAddonDialog(result: any) {
     console.log('Selected category: ', result);
+
+    if (!result) {
+      return;
+    }
+
+    if (result === 'GENERAL') {
+      this.launchCreateGeneralPackageAddonDialog(result);
+    }
+
+    if (result === 'TRANSPORT') {
+      this.launchCreateTransportPackageAddonDialog(result);
+    }
+
+    if (result === 'CAMP') {
+      this.launchCreateCampPackageAddonDialog(result);
+    }
+  }
+
+  launchCreateCampPackageAddonDialog(result: any) {
+    this.snackbarService.show('Camp package addons not implemented');
+    throw new Error('Method not implemented.');
+  }
+
+  launchCreateTransportPackageAddonDialog(result: any) {
+    const dialogRef = this.dialog.open(CreateTransportPackageAddonComponent, {
+      data: { festivalId: this.festival?.id, category: result },
+      width: '800px',
+      height: 'auto',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadCounts();
+      }
+    });
+  }
+
+  launchCreateGeneralPackageAddonDialog(result: any) {
     const dialogRef = this.dialog.open(CreateGeneralPackageAddonComponent, {
       data: { festivalId: this.festival?.id, category: result },
       width: '800px',
