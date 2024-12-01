@@ -85,6 +85,12 @@ export class FestivalComponent implements OnInit {
     ]);
   }
 
+  onViewPackageAddonsClick() {
+    this.router.navigate([
+      `organizer/my-festivals/${this.festival?.id}/package-addons`,
+    ]);
+  }
+
   loadFestival() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {

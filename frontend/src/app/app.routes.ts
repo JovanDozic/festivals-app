@@ -132,6 +132,14 @@ const organizerRoutes: Routes = [
           ).then((c) => c.TicketTypesComponent),
         title: 'Ticket Types',
       },
+      {
+        path: 'organizer/my-festivals/:id/package-addons',
+        loadComponent: () =>
+          import(
+            './features/organizer/package-addons/package-addons.component'
+          ).then((c) => c.PackageAddonsComponent),
+        title: 'Package Addons',
+      },
       // ...
     ],
   },
