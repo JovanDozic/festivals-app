@@ -34,7 +34,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'app-create-package-addon',
+  selector: 'app-create-general-package-addon',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -50,17 +50,17 @@ import { forkJoin } from 'rxjs';
     MatSlideToggleModule,
     MatDialogModule,
   ],
-  templateUrl: './create-package-addon.component.html',
+  templateUrl: './create-general-package-addon.component.html',
   styleUrls: [
-    './create-package-addon.component.scss',
+    './create-general-package-addon.component.scss',
     '../../../../app.component.scss',
   ],
   providers: [provideNativeDateAdapter()],
 })
-export class CreatePackageAddonComponent {
+export class CreateGeneralPackageAddonComponent {
   private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
-  private dialogRef = inject(MatDialogRef<CreatePackageAddonComponent>);
+  private dialogRef = inject(MatDialogRef<CreateGeneralPackageAddonComponent>);
   private data: { festivalId: number; category: string } =
     inject(MAT_DIALOG_DATA);
   private itemService = inject(ItemService);

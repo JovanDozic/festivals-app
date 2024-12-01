@@ -13,7 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
-import { CreatePackageAddonComponent } from '../create-package-addon/create-package-addon.component';
+import { CreateGeneralPackageAddonComponent } from '../create-general-package-addon/create-general-package-addon.component';
 import { CreatePackageAddonChooserComponent } from '../create-package-addon-chooser/create-package-addon-chooser.component';
 
 @Component({
@@ -59,7 +59,6 @@ export class PackageAddonsComponent implements OnInit {
     if (id) {
       this.itemService.getPackageAddonsCount(Number(id), 'general').subscribe({
         next: (count) => {
-          console.log('General package addon count: ', count);
           this.generalCount = count;
         },
         error: (error) => {
@@ -75,7 +74,6 @@ export class PackageAddonsComponent implements OnInit {
         .getPackageAddonsCount(Number(id), 'transport')
         .subscribe({
           next: (count) => {
-            console.log('Transport package addon count: ', count);
             this.transportCount = count;
           },
           error: (error) => {
@@ -92,7 +90,6 @@ export class PackageAddonsComponent implements OnInit {
 
       this.itemService.getPackageAddonsCount(Number(id), 'camp').subscribe({
         next: (count) => {
-          console.log('Camp package addon count: ', count);
           this.campCount = count;
         },
         error: (error) => {
@@ -164,7 +161,7 @@ export class PackageAddonsComponent implements OnInit {
 
   launchCreatePackageAddonDialog(result: any) {
     console.log('Selected category: ', result);
-    const dialogRef = this.dialog.open(CreatePackageAddonComponent, {
+    const dialogRef = this.dialog.open(CreateGeneralPackageAddonComponent, {
       data: { festivalId: this.festival?.id, category: result },
       width: '800px',
       height: 'auto',
