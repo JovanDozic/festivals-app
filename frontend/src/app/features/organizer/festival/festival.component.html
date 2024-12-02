@@ -213,7 +213,6 @@
           {{ festival.address.city }} {{ festival.address.postalCode }}
         </span>
         <span class="icon-property">
-          <!-- <mat-icon class="material-symbols-outlined" color="primary"> flag </mat-icon> -->
           <span
             [ngClass]="'fi fi-' + festival.address.countryISO2.toLowerCase()"
           >
@@ -281,8 +280,4 @@
       </mat-card-actions>
     </mat-card>
   </div>
-</div>
-
-<div class="container mat-elevation-z4" *ngIf="!festival">
-  <p>loading...</p>
 </div>
