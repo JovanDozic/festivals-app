@@ -27,6 +27,7 @@ type ItemHandler interface {
 	CreateTransportPackageAddon(w http.ResponseWriter, r *http.Request)
 	CreateCampPackageAddon(w http.ResponseWriter, r *http.Request)
 	GetTransportAddons(w http.ResponseWriter, r *http.Request)
+	GetGeneralAddons(w http.ResponseWriter, r *http.Request)
 }
 
 type itemHandler struct {
@@ -451,6 +452,24 @@ func (h *itemHandler) GetTransportAddons(w http.ResponseWriter, r *http.Request)
 	}
 
 	response, err := h.itemService.GetTransportAddons(festivalId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response, nil)
+	log.Println("transport addons retrieved successfully for festival:", festivalId)
+}
+
+func (h *itemHandler) GetGeneralAddons(w http.ResponseWriter, r *http.Request) {
+
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	response, err := h.itemService.GetGeneralAddons(festivalId)
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

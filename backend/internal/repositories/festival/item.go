@@ -31,6 +31,7 @@ type ItemRepo interface {
 	CreateCampEquipment(campEquipment *modelsFestival.CampEquipment) error
 	CreatePackageAddonImage(packageAddonImage *modelsFestival.PackageAddonImage) error
 	GetTransportAddons(festivalId uint) ([]dtoFestival.TransportAddonDTO, error)
+	GetGeneralAddons(festivalId uint) ([]dtoFestival.GeneralAddonDTO, error)
 }
 
 type itemRepo struct {
@@ -365,4 +366,36 @@ func (r *itemRepo) GetTransportAddons(festivalId uint) ([]dtoFestival.TransportA
 	}
 
 	return transportAddons, nil
+}
+
+func (r *itemRepo) GetGeneralAddons(festivalId uint) ([]dtoFestival.GeneralAddonDTO, error) {
+	var generalAddons []dtoFestival.GeneralAddonDTO
+
+	err := r.db.
+		Table("price_list_items pli").
+		Select(`
+			pli.id as price_list_item_id,
+			pli.price_list_id,
+			pli.item_id,
+			i.name as item_name,
+			i.description as item_description,
+			i.type as item_type,
+			i.available_number as item_available_number,
+			i.remaining_number as item_remaining_number,
+			pli.date_from as date_from,
+			pli.date_to as date_to,
+			pli.is_fixed as is_fixed,
+			pli.price as price,
+			pa.category as package_addon_category
+		`).
+		Joins("JOIN items i ON pli.item_id = i.id").
+		Joins("JOIN package_addons pa ON i.id = pa.item_id").
+		Where("i.festival_id = ?", festivalId).
+		Scan(&generalAddons).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return generalAddons, nil
 }

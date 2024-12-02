@@ -104,3 +104,19 @@ type TransportAddonDTO struct {
 	ArrivalCountryISO        string     `json:"arrivalCountryISO"`
 	ArrivalCountryNiceName   string     `json:"arrivalCountryNiceName"`
 }
+
+type GeneralAddonDTO struct {
+	PriceListItemID       uint       `json:"priceListItemId"`
+	PriceListID           uint       `json:"priceListId"`
+	ItemID                uint       `json:"itemId"`
+	ItemName              string     `json:"itemName"`
+	ItemDescription       string     `json:"itemDescription"`
+	ItemType              string     `json:"itemType"`
+	ItemAvailableNumber   int        `json:"itemAvailableNumber"`
+	ItemRemainingNumber   int        `json:"itemRemainingNumber"`
+	PriceListItemDateFrom *time.Time `json:"dateFrom"`
+	PriceListItemDateTo   *time.Time `json:"dateTo"`
+	PriceListItemIsFixed  bool       `json:"isFixed"`
+	Price                 float64    `json:"price"`
+	PackageAddonCategory  string     `json:"packageAddonCategory"`
+}
