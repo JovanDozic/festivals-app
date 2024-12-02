@@ -162,8 +162,6 @@ export class PackageAddonsComponent implements OnInit {
   }
 
   launchCreatePackageAddonDialog(result: any) {
-    console.log('Selected category: ', result);
-
     if (!result) {
       return;
     }

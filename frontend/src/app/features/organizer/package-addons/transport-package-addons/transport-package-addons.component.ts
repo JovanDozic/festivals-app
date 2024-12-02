@@ -16,6 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
+import { CreateTransportPackageAddonComponent } from '../create-transport-package-addon/create-transport-package-addon.component';
 
 @Component({
   selector: 'app-transport-package-addons',
@@ -48,6 +49,7 @@ export class TransportPackageAddonsComponent implements OnInit {
   private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
   private itemService = inject(ItemService);
+  private dialog = inject(MatDialog);
 
   ngOnInit() {
     this.loadFestival();
@@ -97,5 +99,20 @@ export class TransportPackageAddonsComponent implements OnInit {
         },
       });
     }
+  }
+
+  onAddAddonClick() {
+    const dialogRef = this.dialog.open(CreateTransportPackageAddonComponent, {
+      data: { festivalId: this.festival?.id, category: 'TRANSPORT' },
+      width: '800px',
+      height: '700px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadAddons();
+      }
+    });
   }
 }

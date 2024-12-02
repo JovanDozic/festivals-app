@@ -15,7 +15,18 @@
         <mat-icon color="primary">arrow_forward_ios</mat-icon> Camp Addons
       </h1>
     </div>
-    <div class="button-container"></div>
+    <div class="button-container">
+      <button
+        mat-icon-button
+        matTooltip="Add Package Addon"
+        color="primary"
+        (click)="onAddAddonClick()"
+      >
+        <mat-icon class="material-symbols-outlined" color="primary">
+          add
+        </mat-icon>
+      </button>
+    </div>
   </div>
 
   <div class="chip-container">
