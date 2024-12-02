@@ -36,10 +36,10 @@ import { CreateCampPackageAddonComponent } from '../create-camp-package-addon/cr
     '../../../../app.component.scss',
   ],
 })
-export class CampPackageAddonsComponent {
-  isLoading: boolean = true;
+export class CampPackageAddonsComponent implements OnInit {
+  isLoading = true;
   festival: Festival | null = null;
-  campCount: number = 0;
+  campCount = 0;
 
   campAddons: CampAddonDTO[] = [];
 

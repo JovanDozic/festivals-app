@@ -10,7 +10,6 @@ import { CommonModule } from '@angular/common';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -35,7 +34,6 @@ export class LoginComponent {
       this.authService
         .login(this.loginForm.value as { username: string; password: string })
         .subscribe({
-          next: () => {},
           error: (err) => {
             console.error('Login error:', err);
             this.errorMessage = 'Invalid username or password';

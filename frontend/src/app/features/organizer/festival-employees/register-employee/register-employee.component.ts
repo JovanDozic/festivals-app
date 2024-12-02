@@ -7,9 +7,11 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { FestivalService } from '../../../../services/festival/festival.service';
@@ -82,7 +84,7 @@ export class RegisterEmployeeComponent {
       ]);
   }
 
-  passwordMatchValidator(control: any) {
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     return control.value === this.infoFormGroup.get('passwordCtrl')?.value
       ? null
       : { mismatch: true };
@@ -95,7 +97,7 @@ export class RegisterEmployeeComponent {
         lastName: this.infoFormGroup.get('lastNameCtrl')?.value,
         phoneNumber: this.infoFormGroup.get('phoneNumberCtrl')?.value,
         dateOfBirth: this.formatDate(
-          this.infoFormGroup.get('dateOfBirthCtrl')?.value
+          this.infoFormGroup.get('dateOfBirthCtrl')?.value,
         ),
       };
       const request: CreateStaffRequest = {
@@ -125,7 +127,7 @@ export class RegisterEmployeeComponent {
         lastName: this.infoFormGroup.get('lastNameCtrl')?.value,
         phoneNumber: this.infoFormGroup.get('phoneNumberCtrl')?.value,
         dateOfBirth: this.formatDate(
-          this.infoFormGroup.get('dateOfBirthCtrl')?.value
+          this.infoFormGroup.get('dateOfBirthCtrl')?.value,
         ),
       };
       const request: CreateStaffRequest = {

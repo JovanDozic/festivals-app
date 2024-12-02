@@ -10,7 +10,7 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
       <h1>
-        {{ festival.name | slice : 0 : 20
+        {{ festival.name | slice: 0 : 20
         }}{{ festival.name.length > 20 ? "..." : "" }}
         <mat-icon color="primary">arrow_forward_ios</mat-icon> Camp Addons
       </h1>
@@ -68,7 +68,7 @@
               <span class="number">{{ addon.itemAvailableNumber }}</span>
             </span>
 
-            <ng-container *ngIf="addon.equipmentNames != ''">
+            <ng-container *ngIf="addon.equipmentNames !== ''">
               <div class="divider"></div>
               <span class="icon-property">
                 <mat-icon class="material-symbols-outlined" color="primary">
@@ -108,7 +108,7 @@
     </mat-card>
   </div>
 
-  <div class="empty-list" *ngIf="!isLoading && campCount == 0">
+  <div class="empty-list" *ngIf="!isLoading && campCount === 0">
     <p>You do not have any General Package Addons.</p>
   </div>
 </div>

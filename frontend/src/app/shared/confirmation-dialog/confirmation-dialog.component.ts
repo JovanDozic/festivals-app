@@ -19,9 +19,8 @@ export interface ConfirmationDialogData {
 }
 
 @Component({
-  selector: 'confirmation-dialog',
+  selector: 'app-confirmation-dialog',
   templateUrl: './confirmation-dialog.component.html',
-  standalone: true,
   imports: [
     MatButtonModule,
     MatDialogTitle,
@@ -30,8 +29,8 @@ export interface ConfirmationDialogData {
     MatDialogActions,
   ],
 })
-export class ConfirmationDialog {
-  readonly dialogRef = inject(MatDialogRef<ConfirmationDialog>);
+export class ConfirmationDialogComponent {
+  readonly dialogRef = inject(MatDialogRef<ConfirmationDialogComponent>);
   readonly data = inject<ConfirmationDialogData>(MAT_DIALOG_DATA);
 
   closeDialog(confirm: boolean) {

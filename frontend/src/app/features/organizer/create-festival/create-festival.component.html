@@ -154,11 +154,14 @@
               <p>Click on any image to remove it.</p>
               <mat-grid-list cols="3" rowHeight="200px">
                 <mat-grid-tile *ngFor="let image of images">
-                  <img
-                    [src]="image"
-                    alt="Image Preview"
+                  <button
+                    type="button"
+                    class="image-button"
                     (click)="removeImage(image)"
-                  />
+                    aria-label="Remove image"
+                  >
+                    <img [src]="image" alt="Image Preview" />
+                  </button>
                 </mat-grid-tile>
               </mat-grid-list>
             </div>

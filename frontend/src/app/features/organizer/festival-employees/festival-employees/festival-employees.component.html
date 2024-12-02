@@ -10,7 +10,7 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
       <h1>
-        {{ festival.name | slice : 0 : 20
+        {{ festival.name | slice: 0 : 20
         }}{{ festival.name.length > 20 ? "..." : "" }}
         <mat-icon color="primary">arrow_forward_ios</mat-icon> Employees
       </h1>
@@ -44,7 +44,7 @@
     </mat-chip-set>
   </div>
 
-  <div class="profile-content" *ngIf="employeeCount != 0">
+  <div class="profile-content" *ngIf="employeeCount !== 0">
     <mat-card class="profile-card">
       <mat-card-content>
         <div class="table-container">
@@ -125,7 +125,7 @@
     </mat-card>
   </div>
 
-  <div class="empty-list" *ngIf="!isLoading && employeeCount == 0">
+  <div class="empty-list" *ngIf="!isLoading && employeeCount === 0">
     <p>This festival does not have any employees yet.</p>
   </div>
 </div>

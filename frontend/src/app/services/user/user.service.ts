@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UserProfileResponse } from '../../models/user/user-profile-response.model';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {
   CreateUpdateUserProfileRequest,
@@ -56,13 +56,12 @@ export class UserService {
   }
 
   registerEmployee(
-    employee: CreateStaffRequest
+    employee: CreateStaffRequest,
   ): Observable<CreateStaffResponse> {
     return this.http
-      .post<{ employee: CreateStaffResponse }>(
-        `${this.apiUrl}/organizer/employee`,
-        employee
-      )
+      .post<{
+        employee: CreateStaffResponse;
+      }>(`${this.apiUrl}/organizer/employee`, employee)
       .pipe(map((response) => response.employee));
   }
 
@@ -79,7 +78,7 @@ export class UserService {
   updateStaffEmail(updatedProfile: UpdateStaffEmailRequest) {
     return this.http.put<void>(
       `${this.apiUrl}/organizer/employee/email`,
-      updatedProfile
+      updatedProfile,
     );
   }
 }

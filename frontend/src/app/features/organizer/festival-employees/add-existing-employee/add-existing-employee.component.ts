@@ -24,7 +24,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  ConfirmationDialog,
+  ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 
@@ -62,7 +62,7 @@ export class AddExistingEmployeeComponent implements OnInit {
   private dialog = inject(MatDialog);
 
   isLoading = false;
-  employeeCount: number = 0;
+  employeeCount = 0;
   employees: Employee[] = [];
   displayedColumns = ['username', 'email', 'name', 'actions'];
   private data: { festivalId: number } = inject(MAT_DIALOG_DATA);
@@ -90,7 +90,7 @@ export class AddExistingEmployeeComponent implements OnInit {
   }
 
   onAddEmployeeClick(employee: Employee) {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Add an Employee',
         message: `Are you sure you want to add ${employee.firstName} ${employee.lastName} to this Festival?`,
@@ -111,9 +111,9 @@ export class AddExistingEmployeeComponent implements OnInit {
       this.festivalService
         .employEmployee(this.data.festivalId, employee.id)
         .subscribe({
-          next: (response) => {
+          next: () => {
             this.snackbarService.show(
-              `${employee.firstName} ${employee.lastName} added to festival`
+              `${employee.firstName} ${employee.lastName} added to festival`,
             );
             this.loadEmployees();
           },

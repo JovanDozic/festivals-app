@@ -14,7 +14,7 @@
           width: '100%',
           height: '200px',
           margin: '0 0 16px 0',
-          'border-radius': '8px'
+          'border-radius': '8px',
         }"
         class="skeleton-image"
       ></ngx-skeleton-loader>
@@ -26,7 +26,7 @@
             width: '60%',
             height: '20px',
             margin: '8px 0',
-            'border-radius': '4px'
+            'border-radius': '4px',
           }"
         ></ngx-skeleton-loader>
         <ngx-skeleton-loader
@@ -36,7 +36,7 @@
             width: '80%',
             height: '16px',
             margin: '8px 0',
-            'border-radius': '4px'
+            'border-radius': '4px',
           }"
         ></ngx-skeleton-loader>
         <div class="skeleton-properties">
@@ -48,7 +48,7 @@
               width: '40%',
               height: '16px',
               margin: '8px 16px 8px 0',
-              'border-radius': '4px'
+              'border-radius': '4px',
             }"
           ></ngx-skeleton-loader>
         </div>
@@ -60,7 +60,7 @@
               width: '80px',
               height: '32px',
               margin: '8px 8px 8px 0',
-              'border-radius': '4px'
+              'border-radius': '4px',
             }"
           ></ngx-skeleton-loader>
         </div>
@@ -85,7 +85,7 @@
           <mat-card-header>
             <mat-card-title>{{ festival.name }}</mat-card-title>
             <mat-card-subtitle
-              >{{ festival.description | slice : 0 : 200
+              >{{ festival.description | slice: 0 : 200
               }}{{
                 festival.description.length > 200 ? "..." : ""
               }}</mat-card-subtitle
@@ -96,28 +96,28 @@
               <mat-icon class="material-symbols-outlined" color="primary">
                 calendar_month
               </mat-icon>
-              {{ festival.startDate | date : "d MMM" }} -
-              {{ festival.endDate | date : "d MMM" }}
+              {{ festival.startDate | date: "d MMM" }} -
+              {{ festival.endDate | date: "d MMM" }}
             </span>
-            <span class="icon-property" *ngIf="festival.status == 'PRIVATE'">
+            <span class="icon-property" *ngIf="festival.status === 'PRIVATE'">
               <mat-icon class="material-symbols-outlined" color="primary">
                 visibility_off</mat-icon
               >
               Private
             </span>
-            <span class="icon-property" *ngIf="festival.status == 'PUBLIC'">
+            <span class="icon-property" *ngIf="festival.status === 'PUBLIC'">
               <mat-icon class="material-symbols-outlined" color="primary"
                 >visibility</mat-icon
               >
               Public
             </span>
-            <span class="icon-property" *ngIf="festival.status == 'CANCELLED'">
+            <span class="icon-property" *ngIf="festival.status === 'CANCELLED'">
               <mat-icon class="material-symbols-outlined" color="primary"
                 >cancel</mat-icon
               >
               Cancelled
             </span>
-            <span class="icon-property" *ngIf="festival.status == 'COMPLETED'">
+            <span class="icon-property" *ngIf="festival.status === 'COMPLETED'">
               <mat-icon class="material-symbols-outlined" color="primary"
                 >done_all</mat-icon
               >
@@ -126,7 +126,7 @@
             <span
               class="icon-property"
               *ngIf="
-                festival.storeStatus == 'OPEN' && festival.status == 'PUBLIC'
+                festival.storeStatus === 'OPEN' && festival.status === 'PUBLIC'
               "
             >
               <mat-icon class="material-symbols-outlined" color="primary"
@@ -137,7 +137,8 @@
             <span
               class="icon-property"
               *ngIf="
-                festival.storeStatus == 'CLOSED' && festival.status == 'PUBLIC'
+                festival.storeStatus === 'CLOSED' &&
+                festival.status === 'PUBLIC'
               "
             >
               <mat-icon class="material-symbols-outlined" color="primary"
@@ -171,7 +172,7 @@
             <button
               mat-menu-item
               (click)="onPublishClick(festival)"
-              *ngIf="festival.status == 'PRIVATE'"
+              *ngIf="festival.status === 'PRIVATE'"
             >
               <mat-icon class="material-symbols-outlined" color="primary"
                 >published</mat-icon
@@ -182,7 +183,8 @@
               mat-menu-item
               (click)="onCancelClick(festival)"
               *ngIf="
-                festival.status != 'CANCELLED' && festival.status != 'COMPLETED'
+                festival.status !== 'CANCELLED' &&
+                festival.status !== 'COMPLETED'
               "
             >
               <mat-icon class="material-symbols-outlined" color="primary"
@@ -194,7 +196,7 @@
             <button
               mat-menu-item
               (click)="onCompleteClick(festival)"
-              *ngIf="festival.status == 'PUBLIC'"
+              *ngIf="festival.status === 'PUBLIC'"
             >
               <mat-icon class="material-symbols-outlined" color="primary"
                 >done_all</mat-icon
@@ -206,7 +208,8 @@
               mat-menu-item
               (click)="onStoreOpenClick(festival)"
               *ngIf="
-                festival.status == 'PUBLIC' && festival.storeStatus == 'CLOSED'
+                festival.status === 'PUBLIC' &&
+                festival.storeStatus === 'CLOSED'
               "
             >
               <mat-icon class="material-symbols-outlined" color="primary"
@@ -219,7 +222,7 @@
               mat-menu-item
               (click)="onStoreCloseClick(festival)"
               *ngIf="
-                festival.status == 'PUBLIC' && festival.storeStatus == 'OPEN'
+                festival.status === 'PUBLIC' && festival.storeStatus === 'OPEN'
               "
             >
               <mat-icon class="material-symbols-outlined" color="primary"
@@ -244,7 +247,7 @@
     Create Festival
   </button>
 
-  <div class="empty-list" *ngIf="!isLoading && festivals.length == 0">
+  <div class="empty-list" *ngIf="!isLoading && festivals.length === 0">
     <p>
       You do not have any festivals. Click the button below to create a new one.
     </p>

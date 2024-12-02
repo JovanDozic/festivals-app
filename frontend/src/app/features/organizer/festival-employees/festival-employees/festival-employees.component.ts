@@ -16,7 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { RegisterEmployeeComponent } from '../register-employee/register-employee.component';
 import { AddExistingEmployeeComponent } from '../add-existing-employee/add-existing-employee.component';
 import {
-  ConfirmationDialog,
+  ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { EditEmployeeComponent } from '../edit-employee/edit-employee.component';
@@ -44,7 +44,7 @@ import { EditEmployeeComponent } from '../edit-employee/edit-employee.component'
 export class FestivalEmployeesComponent implements OnInit {
   festival: Festival | null = null;
   isLoading = false;
-  employeeCount: number = 0;
+  employeeCount = 0;
   employees: Employee[] = [];
   displayedColumns = ['username', 'email', 'name', 'phoneNumber', 'actions'];
 
@@ -164,7 +164,7 @@ export class FestivalEmployeesComponent implements OnInit {
   }
 
   onFireEmployeeClick(employee: Employee) {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Fire Employee',
         message: `Are you sure you want to fire ${employee.firstName} ${employee.lastName}?`,
@@ -187,7 +187,7 @@ export class FestivalEmployeesComponent implements OnInit {
         .subscribe({
           next: () => {
             this.snackbarService.show(
-              `${employee.firstName} ${employee.lastName} removed from the festival`
+              `${employee.firstName} ${employee.lastName} removed from the festival`,
             );
             this.loadEmployeeCount();
             this.loadEmployees();

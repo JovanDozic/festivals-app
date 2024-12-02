@@ -17,7 +17,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import {
-  ConfirmationDialog,
+  ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { ItemService } from '../../../../services/festival/item.service';
@@ -46,7 +46,7 @@ import { ViewEditTicketTypeComponent } from '../view-edit-ticket-type/view-edit-
 })
 export class TicketTypesComponent implements OnInit {
   festival: Festival | null = null;
-  ticketTypesCount: number = 0;
+  ticketTypesCount = 0;
   ticketTypes: ItemCurrentPrice[] = [];
   displayedColumns = ['id', 'name', 'price', 'isFixed', 'dateTo', 'actions'];
 
@@ -136,7 +136,7 @@ export class TicketTypesComponent implements OnInit {
   }
 
   onDeleteTicketTypeClick(itemId: number, name: string) {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Fire Employee',
         message: `Are you sure you want to delete ${name}? You won't be able to delete this ticket type if it has been used in any transactions.`,

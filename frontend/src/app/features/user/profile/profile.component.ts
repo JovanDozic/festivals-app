@@ -9,7 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import {
-  ConfirmationDialog,
+  ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
@@ -21,7 +21,6 @@ import { ChangeProfilePhotoDialogComponent } from '../change-profile-photo-dialo
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss', '../../../app.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     MatButtonModule,
@@ -51,7 +50,7 @@ export class ProfileComponent implements OnInit {
   }
 
   logout() {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Logout',
         message: 'Are you sure you want to log out?',
@@ -68,7 +67,7 @@ export class ProfileComponent implements OnInit {
   }
 
   changePassword() {
-    const dialogRef = this.dialog.open(ChangePasswordDialogComponent);
+    this.dialog.open(ChangePasswordDialogComponent);
   }
 
   changeProfile() {

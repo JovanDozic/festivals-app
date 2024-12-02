@@ -5,9 +5,10 @@ import { AuthService } from '../../services/auth/auth.service';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
+  standalone: true,
 })
 export class HomeComponent implements OnInit {
-  isLoggedInStatus: boolean = false;
+  isLoggedInStatus = false;
   userRole: string | null = null;
 
   constructor(private authService: AuthService) {}

@@ -70,7 +70,7 @@ export class CreateTransportPackageAddonComponent {
   private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
   private dialogRef = inject(
-    MatDialogRef<CreateTransportPackageAddonComponent>
+    MatDialogRef<CreateTransportPackageAddonComponent>,
   );
   private data: { festivalId: number; category: string } =
     inject(MAT_DIALOG_DATA);
@@ -78,14 +78,14 @@ export class CreateTransportPackageAddonComponent {
 
   @ViewChild('stepper') private stepper: MatStepper | undefined;
 
-  category: string = '';
+  category = '';
 
   infoFormGroup: FormGroup;
   configurationFormGroup: FormGroup;
   fixedPriceFormGroup: FormGroup;
 
   itemId: number | null = null;
-  isFixedPrice: boolean = true;
+  isFixedPrice = true;
 
   transportTypes: TransportType[] = [
     { value: 'BUS', viewValue: 'Bus' },
@@ -93,7 +93,7 @@ export class CreateTransportPackageAddonComponent {
     { value: 'TRAIN', viewValue: 'Train' },
   ];
 
-  selectedTransportType: any | null;
+  selectedTransportType: TransportType | null = null;
 
   constructor() {
     this.category = this.data?.category;
@@ -177,45 +177,45 @@ export class CreateTransportPackageAddonComponent {
       const arrivalTime: Date =
         this.configurationFormGroup.get('arrivalTimeCtrl')?.value;
       const returnDepartureDate: Date = this.configurationFormGroup.get(
-        'returnDepartureDateCtrl'
+        'returnDepartureDateCtrl',
       )?.value;
       const returnDepartureTime: Date = this.configurationFormGroup.get(
-        'returnDepartureTimeCtrl'
+        'returnDepartureTimeCtrl',
       )?.value;
       const returnArrivalDate: Date = this.configurationFormGroup.get(
-        'returnArrivalDateCtrl'
+        'returnArrivalDateCtrl',
       )?.value;
       const returnArrivalTime: Date = this.configurationFormGroup.get(
-        'returnArrivalTimeCtrl'
+        'returnArrivalTimeCtrl',
       )?.value;
 
       const departureDateTime = this.combineDateAndTime(
         departureDate,
-        departureTime
+        departureTime,
       );
       const arrivalDateTime = this.combineDateAndTime(arrivalDate, arrivalTime);
       const returnDepartureDateTime = this.combineDateAndTime(
         returnDepartureDate,
-        returnDepartureTime
+        returnDepartureTime,
       );
       const returnArrivalDateTime = this.combineDateAndTime(
         returnArrivalDate,
-        returnArrivalTime
+        returnArrivalTime,
       );
 
       const departureDateTimeFormatted = formatDateTime(departureDateTime);
       const arrivalDateTimeFormatted = formatDateTime(arrivalDateTime);
       const returnDepartureDateTimeFormatted = formatDateTime(
-        returnDepartureDateTime
+        returnDepartureDateTime,
       );
       const returnArrivalDateTimeFormatted = formatDateTime(
-        returnArrivalDateTime
+        returnArrivalDateTime,
       );
 
       const departureCity: CityRequest = {
         name: this.configurationFormGroup.get('departureCityNameCtrl')?.value,
         postalCode: this.configurationFormGroup.get(
-          'departureCityPostalCodeCtrl'
+          'departureCityPostalCodeCtrl',
         )?.value,
         countryISO3: this.configurationFormGroup.get('departureCountryISO3Ctrl')
           ?.value,
@@ -275,7 +275,7 @@ export class CreateTransportPackageAddonComponent {
       this.itemService
         .createItemPrice(this.data.festivalId, request)
         .subscribe({
-          next: (response) => {
+          next: () => {
             this.snackbarService.show('Fixed Price created');
             this.dialogRef.close(true);
           },

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -12,7 +12,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule } from '@angular/material/stepper';
 import { FestivalService } from '../../../services/festival/festival.service';
 import {
   Festival,
@@ -34,7 +34,6 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
   selector: 'app-edit-festival',
   templateUrl: './edit-festival.component.html',
   styleUrls: ['./edit-festival.component.scss', '../../../app.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -116,10 +115,10 @@ export class EditFestivalComponent implements OnInit {
       name: this.basicInfoFormGroup.get('nameCtrl')?.value,
       description: this.basicInfoFormGroup.get('descriptionCtrl')?.value,
       startDate: this.formatDate(
-        this.basicInfoFormGroup.get('startDateCtrl')?.value
+        this.basicInfoFormGroup.get('startDateCtrl')?.value,
       ),
       endDate: this.formatDate(
-        this.basicInfoFormGroup.get('endDateCtrl')?.value
+        this.basicInfoFormGroup.get('endDateCtrl')?.value,
       ),
       capacity: Number(this.basicInfoFormGroup.get('capacityCtrl')?.value),
       address: {

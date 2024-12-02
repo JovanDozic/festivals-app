@@ -71,7 +71,7 @@ export class CreateTicketTypeComponent {
   variablePricesFormGroup: FormGroup;
 
   ticketTypeId: number | null = null;
-  isFixedPrice: boolean = false;
+  isFixedPrice = false;
   variablePrices: VariablePrice[] = [];
 
   constructor() {
@@ -91,13 +91,13 @@ export class CreateTicketTypeComponent {
           this.createVariablePriceGroup(),
         ]),
       },
-      { validators: this.validateVariablePrices.bind(this) }
+      { validators: this.validateVariablePrices.bind(this) },
     );
   }
 
   get variablePricesFormArray(): FormArray {
     return this.variablePricesFormGroup.get(
-      'variablePricesFormArray'
+      'variablePricesFormArray',
     ) as FormArray;
   }
 
@@ -142,14 +142,14 @@ export class CreateTicketTypeComponent {
 
   addVariablePrice() {
     const lastGroup = this.variablePricesFormArray.at(
-      this.variablePricesFormArray.length - 1
+      this.variablePricesFormArray.length - 1,
     ) as FormGroup;
 
     if (lastGroup.valid) {
       this.variablePricesFormArray.push(this.createVariablePriceGroup());
     } else {
       this.snackbarService.show(
-        'Please fill out the last variable price before adding a new one.'
+        'Please fill out the last variable price before adding a new one.',
       );
     }
   }
@@ -159,7 +159,7 @@ export class CreateTicketTypeComponent {
       this.variablePricesFormArray.removeAt(index);
     } else {
       this.snackbarService.show(
-        'At least one variable price entry is required.'
+        'At least one variable price entry is required.',
       );
     }
   }
@@ -189,7 +189,7 @@ export class CreateTicketTypeComponent {
       this.itemService
         .createItemPrice(this.data.festivalId, request)
         .subscribe({
-          next: (response) => {
+          next: () => {
             this.snackbarService.show('Fixed Price created');
             this.dialogRef.close(true);
           },
@@ -225,10 +225,10 @@ export class CreateTicketTypeComponent {
 
       forkJoin(
         requests.map((req) =>
-          this.itemService.createItemPrice(this.data.festivalId, req)
-        )
+          this.itemService.createItemPrice(this.data.festivalId, req),
+        ),
       ).subscribe({
-        next: (responses) => {
+        next: () => {
           this.snackbarService.show('Variable Prices created');
           this.dialogRef.close(true);
         },
@@ -251,10 +251,10 @@ export class CreateTicketTypeComponent {
   }
 
   private validateVariablePrices(
-    formGroup: FormGroup
+    formGroup: FormGroup,
   ): ValidationErrors | null {
     const variablePricesFormArray = formGroup.get(
-      'variablePricesFormArray'
+      'variablePricesFormArray',
     ) as FormArray;
 
     const dateRanges = variablePricesFormArray.controls.map((control) => {
@@ -294,7 +294,7 @@ export class CreateTicketTypeComponent {
     });
 
     // Validate each date range
-    dateRanges.forEach((currentRange, index) => {
+    dateRanges.forEach((currentRange) => {
       const dateFromCtrl = currentRange.control.get('dateFromCtrl');
       const dateToCtrl = currentRange.control.get('dateToCtrl');
       const currentDateFrom = currentRange.dateFrom;
@@ -332,9 +332,7 @@ export class CreateTicketTypeComponent {
     for (let i = 0; i < dateRanges.length; i++) {
       const currentRange = dateRanges[i];
       const currentDateFrom = currentRange.dateFrom;
-      const currentDateTo = currentRange.dateTo;
       const dateFromCtrl = currentRange.control.get('dateFromCtrl');
-      const dateToCtrl = currentRange.control.get('dateToCtrl');
 
       if (i > 0) {
         const previousRange = dateRanges[i - 1];

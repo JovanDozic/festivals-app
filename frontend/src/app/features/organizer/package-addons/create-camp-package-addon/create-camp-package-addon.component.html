@@ -197,14 +197,14 @@
     mat-button
     color="warn"
     (click)="closeDialog()"
-    *ngIf="stepper.selectedIndex == 0"
+    *ngIf="stepper.selectedIndex === 0"
   >
     Cancel
   </button>
   <button
     mat-stroked-button
     (click)="createPackageAddon()"
-    *ngIf="stepper.selectedIndex == 0"
+    *ngIf="stepper.selectedIndex === 0"
     [disabled]="infoFormGroup.invalid"
   >
     Next
@@ -212,7 +212,7 @@
   <button
     mat-stroked-button
     (click)="addCampConfig()"
-    *ngIf="stepper.selectedIndex == 1"
+    *ngIf="stepper.selectedIndex === 1"
     [disabled]="configurationFormGroup.invalid || !selectedFile"
   >
     Next
@@ -220,7 +220,7 @@
   <button
     mat-stroked-button
     (click)="done()"
-    *ngIf="stepper.selectedIndex == 2"
+    *ngIf="stepper.selectedIndex === 2"
     [disabled]="fixedPriceFormGroup.invalid"
   >
     Done

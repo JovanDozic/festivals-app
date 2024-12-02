@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -63,13 +63,13 @@ export class ViewEditTicketTypeComponent implements OnInit {
     itemId: number;
   } = inject(MAT_DIALOG_DATA);
 
-  isEditing: boolean = true;
+  isEditing = true;
 
   infoFormGroup: FormGroup;
   fixedPriceFormGroup: FormGroup;
   variablePricesFormGroup: FormGroup;
 
-  isFixedPrice: boolean = true;
+  isFixedPrice = true;
 
   ticketType: Item | null = null;
 
@@ -98,7 +98,7 @@ export class ViewEditTicketTypeComponent implements OnInit {
           this.createVariablePriceGroup(),
         ]),
       },
-      { validators: this.validateVariablePrices.bind(this) }
+      { validators: this.validateVariablePrices.bind(this) },
     );
 
     this.infoFormGroup.disable();
@@ -112,7 +112,7 @@ export class ViewEditTicketTypeComponent implements OnInit {
 
   get variablePricesFormArray(): FormArray {
     return this.variablePricesFormGroup.get(
-      'variablePricesFormArray'
+      'variablePricesFormArray',
     ) as FormArray;
   }
 
@@ -251,10 +251,10 @@ export class ViewEditTicketTypeComponent implements OnInit {
   }
 
   private validateVariablePrices(
-    formGroup: FormGroup
+    formGroup: FormGroup,
   ): ValidationErrors | null {
     const variablePricesFormArray = formGroup.get(
-      'variablePricesFormArray'
+      'variablePricesFormArray',
     ) as FormArray;
 
     const dateRanges = variablePricesFormArray.controls.map((control) => {
@@ -294,7 +294,7 @@ export class ViewEditTicketTypeComponent implements OnInit {
     });
 
     // Validate each date range
-    dateRanges.forEach((currentRange, index) => {
+    dateRanges.forEach((currentRange) => {
       const dateFromCtrl = currentRange.control.get('dateFromCtrl');
       const dateToCtrl = currentRange.control.get('dateToCtrl');
       const currentDateFrom = currentRange.dateFrom;
@@ -332,9 +332,7 @@ export class ViewEditTicketTypeComponent implements OnInit {
     for (let i = 0; i < dateRanges.length; i++) {
       const currentRange = dateRanges[i];
       const currentDateFrom = currentRange.dateFrom;
-      const currentDateTo = currentRange.dateTo;
       const dateFromCtrl = currentRange.control.get('dateFromCtrl');
-      const dateToCtrl = currentRange.control.get('dateToCtrl');
 
       if (i > 0) {
         const previousRange = dateRanges[i - 1];

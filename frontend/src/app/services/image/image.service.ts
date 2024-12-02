@@ -18,11 +18,11 @@ export class ImageService {
   getPresignedURL(request: GetUploadURIRequest) {
     return this.http.post<GetUploadURIResponse>(
       `${this.apiUrl}/image/upload`,
-      request
+      request,
     );
   }
 
-  uploadImageAndGetURL(file: File): Observable<any> {
+  uploadImageAndGetURL(file: File): Observable<{ imageURL: string }> {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -52,9 +52,9 @@ export class ImageService {
               catchError((error) => {
                 console.error('Error uploading image:', error);
                 throw error;
-              })
+              }),
             );
-        })
+        }),
       );
   }
 }

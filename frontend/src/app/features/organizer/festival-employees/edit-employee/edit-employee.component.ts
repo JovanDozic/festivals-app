@@ -27,7 +27,6 @@ import { UserService } from '../../../../services/user/user.service';
 import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { Employee } from '../../../../models/festival/festival.model';
 import {
-  CreateUpdateUserProfileRequest,
   UpdateStaffEmailRequest,
   UpdateStaffProfileRequest,
 } from '../../../../models/user/user-profile-request.model';
@@ -35,7 +34,6 @@ import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-edit-employee',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

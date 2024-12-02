@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,13 +20,12 @@ import { MatInputModule } from '@angular/material/input';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 
 @Component({
-  selector: 'change-password-dialog',
+  selector: 'app-change-password-dialog',
   templateUrl: './change-password-dialog.component.html',
   styleUrls: [
     './change-password-dialog.component.scss',
     '../../../app.component.scss',
   ],
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -56,7 +57,7 @@ export class ChangePasswordDialogComponent {
       ]);
   }
 
-  passwordMatchValidator(control: any) {
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     return control.value === this.changePasswordForm.get('newPassword')?.value
       ? null
       : { mismatch: true };

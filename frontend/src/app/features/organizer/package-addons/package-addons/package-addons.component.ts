@@ -38,11 +38,11 @@ import { CreateCampPackageAddonComponent } from '../create-camp-package-addon/cr
   ],
 })
 export class PackageAddonsComponent implements OnInit {
-  isLoading: boolean = true;
+  isLoading = true;
   festival: Festival | null = null;
-  generalCount: number = 0;
-  transportCount: number = 0;
-  campCount: number = 0;
+  generalCount = 0;
+  transportCount = 0;
+  campCount = 0;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -66,7 +66,7 @@ export class PackageAddonsComponent implements OnInit {
         error: (error) => {
           console.log('Error fetching general package addon count: ', error);
           this.snackbarService.show(
-            'Error getting general package addon count'
+            'Error getting general package addon count',
           );
           this.generalCount = 0;
         },
@@ -81,10 +81,10 @@ export class PackageAddonsComponent implements OnInit {
           error: (error) => {
             console.log(
               'Error fetching transport package addon count: ',
-              error
+              error,
             );
             this.snackbarService.show(
-              'Error getting transport package addon count'
+              'Error getting transport package addon count',
             );
             this.transportCount = 0;
           },
@@ -115,7 +115,7 @@ export class PackageAddonsComponent implements OnInit {
           this.festival = festival;
           this.isLoading = false;
           console.log(
-            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`
+            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`,
           );
         },
         error: (error) => {
@@ -161,7 +161,7 @@ export class PackageAddonsComponent implements OnInit {
     });
   }
 
-  launchCreatePackageAddonDialog(result: any) {
+  launchCreatePackageAddonDialog(result: string) {
     if (!result) {
       return;
     }
@@ -179,7 +179,7 @@ export class PackageAddonsComponent implements OnInit {
     }
   }
 
-  launchCreateCampPackageAddonDialog(result: any) {
+  launchCreateCampPackageAddonDialog(result: string) {
     const dialogRef = this.dialog.open(CreateCampPackageAddonComponent, {
       data: { festivalId: this.festival?.id, category: result },
       width: '800px',
@@ -194,7 +194,7 @@ export class PackageAddonsComponent implements OnInit {
     });
   }
 
-  launchCreateTransportPackageAddonDialog(result: any) {
+  launchCreateTransportPackageAddonDialog(result: string) {
     const dialogRef = this.dialog.open(CreateTransportPackageAddonComponent, {
       data: { festivalId: this.festival?.id, category: result },
       width: '800px',
@@ -209,7 +209,7 @@ export class PackageAddonsComponent implements OnInit {
     });
   }
 
-  launchCreateGeneralPackageAddonDialog(result: any) {
+  launchCreateGeneralPackageAddonDialog(result: string) {
     const dialogRef = this.dialog.open(CreateGeneralPackageAddonComponent, {
       data: { festivalId: this.festival?.id, category: result },
       width: '800px',

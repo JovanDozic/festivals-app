@@ -10,7 +10,7 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
       <h1>
-        {{ festival.name | slice : 0 : 20
+        {{ festival.name | slice: 0 : 20
         }}{{ festival.name.length > 20 ? "..." : "" }}
         <mat-icon color="primary">arrow_forward_ios</mat-icon> Travel Addons
       </h1>
@@ -48,19 +48,19 @@
           </mat-card-header>
 
           <mat-card-content>
-            <span class="icon-property" *ngIf="addon.transportType == 'PLANE'">
+            <span class="icon-property" *ngIf="addon.transportType === 'PLANE'">
               <mat-icon class="material-symbols-outlined" color="primary">
                 flight
               </mat-icon>
               <h3>Flight Package</h3>
             </span>
-            <span class="icon-property" *ngIf="addon.transportType == 'BUS'">
+            <span class="icon-property" *ngIf="addon.transportType === 'BUS'">
               <mat-icon class="material-symbols-outlined" color="primary">
                 directions_bus
               </mat-icon>
               <h3>Bus Package</h3>
             </span>
-            <span class="icon-property" *ngIf="addon.transportType == 'TRAIN'">
+            <span class="icon-property" *ngIf="addon.transportType === 'TRAIN'">
               <mat-icon class="material-symbols-outlined" color="primary">
                 train
               </mat-icon>
@@ -119,14 +119,14 @@
               <mat-icon class="material-symbols-outlined" color="primary">
               </mat-icon>
               <span>
-                {{ addon.departureTime | date : "yyyy-MM-dd HH:mm" }}
+                {{ addon.departureTime | date: "yyyy-MM-dd HH:mm" }}
                 <mat-icon
                   class="material-symbols-outlined inline-arrow"
                   color="primary"
                 >
                   arrow_right_alt
                 </mat-icon>
-                {{ addon.arrivalTime | date : "yyyy-MM-dd HH:mm" }}
+                {{ addon.arrivalTime | date: "yyyy-MM-dd HH:mm" }}
               </span>
             </span>
 
@@ -166,14 +166,14 @@
               <mat-icon class="material-symbols-outlined" color="primary">
               </mat-icon>
               <span>
-                {{ addon.returnDepartureTime | date : "yyyy-MM-dd HH:mm" }}
+                {{ addon.returnDepartureTime | date: "yyyy-MM-dd HH:mm" }}
                 <mat-icon
                   class="material-symbols-outlined inline-arrow"
                   color="primary"
                 >
                   arrow_right_alt
                 </mat-icon>
-                {{ addon.returnArrivalTime | date : "yyyy-MM-dd HH:mm" }}
+                {{ addon.returnArrivalTime | date: "yyyy-MM-dd HH:mm" }}
               </span>
             </span>
 
@@ -213,7 +213,7 @@
     </mat-card>
   </div>
 
-  <div class="empty-list" *ngIf="!isLoading && transportCount == 0">
+  <div class="empty-list" *ngIf="!isLoading && transportCount === 0">
     <p>You do not have any Travel Package Addons.</p>
   </div>
 </div>

@@ -17,7 +17,6 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-register-attendee',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -66,8 +65,6 @@ export class RegisterAttendeeComponent {
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit() {}
-
   createAccount() {
     if (this.accountFormGroup.valid) {
       const accountData = {
@@ -78,7 +75,7 @@ export class RegisterAttendeeComponent {
       this.authService.registerAttendee(accountData).subscribe({
         next: () => {
           this.snackbarService.show(
-            'Account created successfully, logging in...'
+            'Account created successfully, logging in...',
           );
 
           this.authService
@@ -87,7 +84,7 @@ export class RegisterAttendeeComponent {
                 username: accountData.username,
                 password: accountData.password,
               },
-              false
+              false,
             )
             .subscribe({
               next: () => {
@@ -120,7 +117,7 @@ export class RegisterAttendeeComponent {
         firstName: this.personalFormGroup.get('firstNameCtrl')?.value ?? '',
         lastName: this.personalFormGroup.get('lastNameCtrl')?.value ?? '',
         dateOfBirth: new Date(
-          this.personalFormGroup.get('birthdayCtrl')?.value ?? ''
+          this.personalFormGroup.get('birthdayCtrl')?.value ?? '',
         ),
         phoneNumber: this.personalFormGroup.get('phoneCtrl')?.value ?? '',
       };

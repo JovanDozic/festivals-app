@@ -5,17 +5,14 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import {
-  FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import {
   CreateItemPriceRequest,
   CreateItemRequest,
-  VariablePrice,
 } from '../../../../models/festival/festival.model';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -31,7 +28,6 @@ import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ItemService } from '../../../../services/festival/item.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-create-general-package-addon',
@@ -67,13 +63,13 @@ export class CreateGeneralPackageAddonComponent {
 
   @ViewChild('stepper') private stepper: MatStepper | undefined;
 
-  category: string = '';
+  category = '';
 
   infoFormGroup: FormGroup;
   fixedPriceFormGroup: FormGroup;
 
   itemId: number | null = null;
-  isFixedPrice: boolean = true;
+  isFixedPrice = true;
 
   constructor() {
     this.category = this.data?.category;
@@ -135,7 +131,7 @@ export class CreateGeneralPackageAddonComponent {
       this.itemService
         .createItemPrice(this.data.festivalId, request)
         .subscribe({
-          next: (response) => {
+          next: () => {
             this.snackbarService.show('Fixed Price created');
             this.dialogRef.close(true);
           },

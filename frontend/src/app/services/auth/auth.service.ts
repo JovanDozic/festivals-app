@@ -4,11 +4,20 @@ import { Observable, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { LoginResponse } from '../../models/auth/login-response.model';
 
+export interface JwtPayload {
+  username: string;
+  role: string;
+  exp?: number;
+  iat?: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = 'http://localhost:4000';
+
+  constructor(private http: HttpClient) {}
 
   setToken(token: string): void {
     localStorage.setItem('authToken', token);
@@ -27,32 +36,36 @@ export class AuthService {
     window.location.reload();
   }
 
-  getUserRole(): string | null {
+  // Use the JwtPayload interface with jwtDecode
+  private getDecodedToken(): JwtPayload | null {
     const token = this.getToken();
     if (token) {
-      const decodedToken: any = jwtDecode(token);
-      return decodedToken.role;
+      try {
+        return jwtDecode<JwtPayload>(token);
+      } catch (error) {
+        console.error('Invalid token', error);
+        return null;
+      }
     }
     return null;
+  }
+
+  getUserRole(): string | null {
+    const decodedToken = this.getDecodedToken();
+    return decodedToken ? decodedToken.role : null;
   }
 
   getUsername(): string | null {
-    const token = this.getToken();
-    if (token) {
-      const decodedToken: any = jwtDecode(token);
-      return decodedToken.username;
-    }
-    return null;
+    const decodedToken = this.getDecodedToken();
+    return decodedToken ? decodedToken.username : null;
   }
-
-  constructor(private http: HttpClient) {}
 
   login(
     credentials: {
       username: string;
       password: string;
     },
-    reload: boolean = true
+    reload = true,
   ): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(`${this.apiUrl}/user/login`, credentials)
@@ -60,17 +73,15 @@ export class AuthService {
         tap((response) => {
           this.setToken(response.token);
           if (reload) window.location.reload();
-        })
+        }),
       );
   }
 
   changePassword(oldPassword: string, newPassword: string): Observable<void> {
-    return this.http
-      .put<void>(`${this.apiUrl}/user/change-password`, {
-        oldPassword,
-        newPassword,
-      })
-      .pipe(tap(() => {}));
+    return this.http.put<void>(`${this.apiUrl}/user/change-password`, {
+      oldPassword,
+      newPassword,
+    });
   }
 
   registerAttendee(credentials: {
@@ -80,7 +91,7 @@ export class AuthService {
   }): Observable<void> {
     return this.http.post<void>(
       `${this.apiUrl}/user/register-attendee`,
-      credentials
+      credentials,
     );
   }
 }

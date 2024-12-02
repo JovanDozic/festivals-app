@@ -12,7 +12,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import {
-  ConfirmationDialog,
+  ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { EditFestivalComponent } from '../edit-festival/edit-festival.component';
@@ -50,12 +50,12 @@ import { ItemService } from '../../../services/festival/item.service';
 })
 export class FestivalComponent implements OnInit {
   festival: Festival | null = null;
-  isLoading: boolean = true;
-  currentImageIndex: number = 0;
-  previousImageIndex: number = 0;
-  employeeCount: number = 0;
-  ticketTypesCount: number = 0;
-  packageAddonsCount: number = 0;
+  isLoading = true;
+  currentImageIndex = 0;
+  previousImageIndex = 0;
+  employeeCount = 0;
+  ticketTypesCount = 0;
+  packageAddonsCount = 0;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -103,7 +103,7 @@ export class FestivalComponent implements OnInit {
           this.currentImageIndex = 0;
           this.previousImageIndex = 0;
           console.log(
-            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`
+            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`,
           );
         },
         error: (error) => {
@@ -182,7 +182,7 @@ export class FestivalComponent implements OnInit {
   }
 
   onDeleteClick(): void {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Delete Festival',
         message: `Are you sure you want to delete ${this.festival?.name}?`,
@@ -230,7 +230,7 @@ export class FestivalComponent implements OnInit {
   }
 
   onPublishClick(): void {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Publish Festival',
         message: `Are you sure you want to publish ${this.festival?.name}?`,
@@ -258,7 +258,7 @@ export class FestivalComponent implements OnInit {
   }
 
   onCancelClick(): void {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Cancel Festival',
         message: `Are you sure you want to cancel ${this.festival?.name}?`,
@@ -286,7 +286,7 @@ export class FestivalComponent implements OnInit {
   }
 
   onCompleteClick(): void {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Complete Festival',
         message: `Are you sure you want to complete ${this.festival?.name}?`,
@@ -314,7 +314,7 @@ export class FestivalComponent implements OnInit {
   }
 
   onStoreOpenClick(): void {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Open Store',
         message: `Are you sure you want to open store for ${this.festival?.name}?`,
@@ -342,7 +342,7 @@ export class FestivalComponent implements OnInit {
   }
 
   onStoreCloseClick(): void {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Close Store',
         message: `Are you sure you want to close store for ${this.festival?.name}?`,

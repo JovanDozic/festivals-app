@@ -10,7 +10,7 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
       <h1>
-        {{ festival.name | slice : 0 : 20
+        {{ festival.name | slice: 0 : 20
         }}{{ festival.name.length > 20 ? "..." : "" }}
         <mat-icon color="primary">arrow_forward_ios</mat-icon> Ticket Types
       </h1>
@@ -36,7 +36,7 @@
     </mat-chip-set>
   </div>
 
-  <div class="profile-content" *ngIf="ticketTypesCount != 0">
+  <div class="profile-content" *ngIf="ticketTypesCount !== 0">
     <mat-card class="profile-card">
       <mat-card-content>
         <div class="table-container">
@@ -82,7 +82,7 @@
                 <span *ngIf="!element.isFixed"
                   >until:
                   <span class="semibold">{{
-                    element.dateTo | date : "dd. MMM yyyy"
+                    element.dateTo | date: "dd. MMM yyyy"
                   }}</span></span
                 >
               </td>
@@ -121,7 +121,7 @@
     </mat-card>
   </div>
 
-  <div class="empty-list" *ngIf="ticketTypesCount == 0">
+  <div class="empty-list" *ngIf="ticketTypesCount === 0">
     <p>This festival does not have any ticket types yet.</p>
   </div>
 </div>

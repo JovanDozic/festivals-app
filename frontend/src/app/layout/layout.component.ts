@@ -1,4 +1,9 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  AfterViewInit,
+} from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -17,7 +22,6 @@ import { ThemeService } from '../services/theme/theme.service';
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
-  standalone: true,
   imports: [
     CommonModule,
     MatToolbarModule,
@@ -31,13 +35,13 @@ import { ThemeService } from '../services/theme/theme.service';
     MatSnackBarModule,
   ],
 })
-export class LayoutComponent {
+export class LayoutComponent implements AfterViewInit {
   private breakpointObserver = inject(BreakpointObserver);
   private authService = inject(AuthService);
   private themeService = inject(ThemeService);
 
-  userRole: string = '';
-  username: string = '';
+  userRole = '';
+  username = '';
 
   constructor(private cdr: ChangeDetectorRef) {
     this.userRole = this.authService.getUserRole() ?? '';
@@ -71,6 +75,6 @@ export class LayoutComponent {
     .observe(Breakpoints.Handset)
     .pipe(
       map((result) => result.matches),
-      shareReplay()
+      shareReplay(),
     );
 }

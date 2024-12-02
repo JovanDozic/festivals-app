@@ -1,5 +1,4 @@
 import { AddressResponse } from '../common/address-response.model';
-import { ImageResponse } from '../festival/festival.model';
 
 export interface UserProfileResponse {
   username: string;

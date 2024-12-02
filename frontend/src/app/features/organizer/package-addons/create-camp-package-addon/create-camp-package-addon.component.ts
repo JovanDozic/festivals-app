@@ -14,7 +14,6 @@ import {
 } from '@angular/forms';
 import {
   AddCampConfigRequest,
-  AddTransportConfigRequest,
   CreateItemPriceRequest,
   CreateItemRequest,
   EquipmentDTO,
@@ -27,7 +26,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
@@ -35,7 +33,6 @@ import { ItemService } from '../../../../services/festival/item.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTimepickerModule } from '@angular/material/timepicker';
-import { CityRequest } from '../../../../models/common/address.model';
 import { ImageService } from '../../../../services/image/image.service';
 
 @Component({
@@ -75,14 +72,14 @@ export class CreateCampPackageAddonComponent {
 
   @ViewChild('stepper') private stepper: MatStepper | undefined;
 
-  category: string = '';
+  category = '';
 
   infoFormGroup: FormGroup;
   configurationFormGroup: FormGroup;
   fixedPriceFormGroup: FormGroup;
 
   itemId: number | null = null;
-  isFixedPrice: boolean = true;
+  isFixedPrice = true;
 
   selectedFile: File | null = null;
   imagePreviewUrl: string | ArrayBuffer | null = null;
@@ -122,7 +119,7 @@ export class CreateCampPackageAddonComponent {
 
   addEquipment() {
     const lastGroup = this.equipmentFormArray.at(
-      this.equipmentFormArray.length - 1
+      this.equipmentFormArray.length - 1,
     ) as FormGroup;
 
     if (lastGroup.valid) {
@@ -223,7 +220,7 @@ export class CreateCampPackageAddonComponent {
       this.itemService
         .createItemPrice(this.data.festivalId, request)
         .subscribe({
-          next: (response) => {
+          next: () => {
             this.snackbarService.show('Fixed Price created');
             this.dialogRef.close(true);
           },

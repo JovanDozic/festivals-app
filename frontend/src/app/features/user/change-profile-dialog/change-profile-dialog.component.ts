@@ -42,7 +42,12 @@ export class ChangeProfileDialogComponent implements OnInit {
   private userService = inject(UserService);
   readonly dialogRef = inject(MatDialogRef<ChangeProfileDialogComponent>);
   readonly formBuilder = inject(FormBuilder);
-  readonly data = inject<any>(MAT_DIALOG_DATA);
+  readonly data = inject<{
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    phoneNumber: string;
+  }>(MAT_DIALOG_DATA);
   private snackbarService = inject(SnackbarService);
 
   changeProfileForm: FormGroup = this.formBuilder.group({

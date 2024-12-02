@@ -1,11 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {
@@ -43,7 +38,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class ChangeProfilePhotoDialogComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<ChangeProfilePhotoDialogComponent>);
-  readonly data = inject<any>(MAT_DIALOG_DATA);
+  readonly data = inject<{ currentImageURL: string }>(MAT_DIALOG_DATA);
 
   private imageService = inject(ImageService);
   private userService = inject(UserService);

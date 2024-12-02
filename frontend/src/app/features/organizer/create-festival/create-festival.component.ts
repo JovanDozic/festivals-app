@@ -2,7 +2,6 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,16 +10,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { FestivalService } from '../../../services/festival/festival.service';
-import {
-  CreateFestivalRequest,
-  Festival,
-} from '../../../models/festival/festival.model';
+import { CreateFestivalRequest } from '../../../models/festival/festival.model';
 import { forkJoin } from 'rxjs';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import {
-  ConfirmationDialog,
+  ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { Router } from '@angular/router';
@@ -30,7 +26,6 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
   selector: 'app-create-festival',
   templateUrl: './create-festival.component.html',
   styleUrls: ['./create-festival.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -100,13 +95,12 @@ export class CreateFestivalComponent {
         description:
           this.basicInfoFormGroup.get('descriptionCtrl')?.value ?? '',
         startDate: formatDate(
-          new Date(this.basicInfoFormGroup.get('startDateCtrl')?.value ?? '')
+          new Date(this.basicInfoFormGroup.get('startDateCtrl')?.value ?? ''),
         ),
         endDate: formatDate(
-          new Date(this.basicInfoFormGroup.get('endDateCtrl')?.value ?? '')
+          new Date(this.basicInfoFormGroup.get('endDateCtrl')?.value ?? ''),
         ),
-        capacity:
-          Number(this.basicInfoFormGroup.get('capacityCtrl')?.value) ?? 0,
+        capacity: Number(this.basicInfoFormGroup.get('capacityCtrl')?.value),
         address: {
           street: this.addressFormGroup.get('streetCtrl')?.value ?? '',
           number: this.addressFormGroup.get('numberCtrl')?.value ?? '',
@@ -142,7 +136,7 @@ export class CreateFestivalComponent {
   }
 
   removeImage(url: string) {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Remove Image',
         message: `Are you sure?`,
@@ -166,8 +160,8 @@ export class CreateFestivalComponent {
       const uploadObservables = this.images.map((imageUrl) =>
         this.http.post(
           `http://localhost:4000/festival/${this.festivalId}/image`,
-          { imageUrl }
-        )
+          { imageUrl },
+        ),
       );
 
       forkJoin(uploadObservables).subscribe({

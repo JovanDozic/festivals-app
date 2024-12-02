@@ -10,7 +10,7 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
       <h1>
-        {{ festival.name | slice : 0 : 20
+        {{ festival.name | slice: 0 : 20
         }}{{ festival.name.length > 20 ? "..." : "" }}
         <mat-icon color="primary">arrow_forward_ios</mat-icon> General Addons
       </h1>
@@ -88,7 +88,7 @@
     </mat-card>
   </div>
 
-  <div class="empty-list" *ngIf="!isLoading && generalCount == 0">
+  <div class="empty-list" *ngIf="!isLoading && generalCount === 0">
     <p>You do not have any General Package Addons.</p>
   </div>
 </div>

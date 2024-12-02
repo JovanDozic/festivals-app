@@ -10,7 +10,7 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
       <h1>
-        {{ festival.name | slice : 0 : 40
+        {{ festival.name | slice: 0 : 40
         }}{{ festival.name.length > 40 ? "..." : "" }}
       </h1>
     </div>
@@ -36,7 +36,7 @@
         matTooltip="Publish Festival"
         color="primary"
         (click)="onPublishClick()"
-        *ngIf="festival.status == 'PRIVATE'"
+        *ngIf="festival.status === 'PRIVATE'"
       >
         <mat-icon class="material-symbols-outlined">published</mat-icon>
       </button>
@@ -45,7 +45,9 @@
         matTooltip="Cancel Festival"
         color="primary"
         (click)="onCancelClick()"
-        *ngIf="festival.status != 'CANCELLED' && festival.status != 'COMPLETED'"
+        *ngIf="
+          festival.status !== 'CANCELLED' && festival.status !== 'COMPLETED'
+        "
       >
         <mat-icon class="material-symbols-outlined">cancel</mat-icon>
       </button>
@@ -54,7 +56,7 @@
         matTooltip="Complete Festival"
         color="primary"
         (click)="onCompleteClick()"
-        *ngIf="festival.status == 'PUBLIC'"
+        *ngIf="festival.status === 'PUBLIC'"
       >
         <mat-icon class="material-symbols-outlined">done_all</mat-icon>
       </button>
@@ -63,7 +65,9 @@
         matTooltip="Open Festival Store"
         color="primary"
         (click)="onStoreOpenClick()"
-        *ngIf="festival.status == 'PUBLIC' && festival.storeStatus == 'CLOSED'"
+        *ngIf="
+          festival.status === 'PUBLIC' && festival.storeStatus === 'CLOSED'
+        "
       >
         <mat-icon class="material-symbols-outlined">shopping_cart</mat-icon>
       </button>
@@ -72,7 +76,7 @@
         matTooltip="Close Festival Store"
         color="primary"
         (click)="onStoreCloseClick()"
-        *ngIf="festival.status == 'PUBLIC' && festival.storeStatus == 'OPEN'"
+        *ngIf="festival.status === 'PUBLIC' && festival.storeStatus === 'OPEN'"
       >
         <mat-icon class="material-symbols-outlined">shopping_cart_off</mat-icon>
       </button>
@@ -83,7 +87,7 @@
     <mat-chip-set>
       <mat-chip
         selected="true"
-        *ngIf="festival.status == 'PUBLIC'"
+        *ngIf="festival.status === 'PUBLIC'"
         matTooltip="Festival is visible to public"
       >
         <mat-icon class="material-symbols-outlined" color="primary"
@@ -93,7 +97,7 @@
       </mat-chip>
       <mat-chip
         selected="true"
-        *ngIf="festival.status == 'PRIVATE'"
+        *ngIf="festival.status === 'PRIVATE'"
         matTooltip="Only organizers of this festival can access this festival"
       >
         <mat-icon class="material-symbols-outlined" color="primary"
@@ -103,7 +107,7 @@
       </mat-chip>
       <mat-chip
         selected="true"
-        *ngIf="festival.status == 'CANCELLED'"
+        *ngIf="festival.status === 'CANCELLED'"
         matTooltip="Festival is cancelled"
       >
         <mat-icon class="material-symbols-outlined" color="primary"
@@ -113,7 +117,7 @@
       </mat-chip>
       <mat-chip
         selected="true"
-        *ngIf="festival.status == 'COMPLETED'"
+        *ngIf="festival.status === 'COMPLETED'"
         matTooltip="Festival is completed"
       >
         <mat-icon class="material-symbols-outlined" color="primary"
@@ -123,7 +127,7 @@
       </mat-chip>
       <mat-chip
         color="primary"
-        *ngIf="festival.storeStatus == 'OPEN' && festival.status == 'PUBLIC'"
+        *ngIf="festival.storeStatus === 'OPEN' && festival.status === 'PUBLIC'"
         matTooltip="Attendees can purchase tickets and packages for this festival"
       >
         <mat-icon class="material-symbols-outlined" color="primary"
@@ -133,7 +137,9 @@
       </mat-chip>
       <mat-chip
         color="primary"
-        *ngIf="festival.storeStatus == 'CLOSED' && festival.status == 'PUBLIC'"
+        *ngIf="
+          festival.storeStatus === 'CLOSED' && festival.status === 'PUBLIC'
+        "
         matTooltip="Attendees cannot purchase tickets and packages for this festival"
       >
         <mat-icon class="material-symbols-outlined" color="primary"
@@ -150,6 +156,7 @@
         mat-card-image
         [src]="festival.images[currentImageIndex].url"
         [@fadeAnimation]="currentImageIndex"
+        alt="Festival Image"
       />
       <button
         class="prev-button"
@@ -186,8 +193,8 @@
           <mat-icon class="material-symbols-outlined" color="primary">
             calendar_month
           </mat-icon>
-          {{ festival.startDate | date : "d MMM" }} -
-          {{ festival.endDate | date : "d MMM yyyy" }}
+          {{ festival.startDate | date: "d MMM" }} -
+          {{ festival.endDate | date: "d MMM yyyy" }}
         </span>
         <span class="icon-property">
           <mat-icon class="material-symbols-outlined" color="primary">

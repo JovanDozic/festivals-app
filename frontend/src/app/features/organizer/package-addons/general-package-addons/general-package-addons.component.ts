@@ -37,9 +37,9 @@ import { CreateGeneralPackageAddonComponent } from '../create-general-package-ad
   ],
 })
 export class GeneralPackageAddonsComponent implements OnInit {
-  isLoading: boolean = true;
+  isLoading = true;
   festival: Festival | null = null;
-  generalCount: number = 0;
+  generalCount = 0;
 
   generalAddons: GeneralAddonDTO[] = [];
 

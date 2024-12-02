@@ -38,9 +38,9 @@ import { CreateTransportPackageAddonComponent } from '../create-transport-packag
   ],
 })
 export class TransportPackageAddonsComponent implements OnInit {
-  isLoading: boolean = true;
+  isLoading = true;
   festival: Festival | null = null;
-  transportCount: number = 0;
+  transportCount = 0;
 
   transportAddons: TransportAddonDTO[] = [];
 

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import {
   CreateFestivalRequest,
+  Employee,
   EmployeesResponse,
   Festival,
   FestivalPropCountResponse,
@@ -26,21 +27,21 @@ export class FestivalService {
   getEmployeeCount(festivalId: number): Observable<number> {
     return this.http
       .get<FestivalPropCountResponse>(
-        `${this.apiUrl}/festival/${festivalId}/employee/count`
+        `${this.apiUrl}/festival/${festivalId}/employee/count`,
       )
       .pipe(map((response) => response.count));
   }
 
-  getEmployees(festivalId: number): Observable<any> {
+  getEmployees(festivalId: number): Observable<Employee[]> {
     return this.http
       .get<EmployeesResponse>(`${this.apiUrl}/festival/${festivalId}/employee`)
       .pipe(map((response) => response.employees));
   }
 
-  getEmployeesNotOnFestival(festivalId: number): Observable<any> {
+  getEmployeesNotOnFestival(festivalId: number): Observable<Employee[]> {
     return this.http
       .get<EmployeesResponse>(
-        `${this.apiUrl}/festival/${festivalId}/employee/available`
+        `${this.apiUrl}/festival/${festivalId}/employee/available`,
       )
       .pipe(map((response) => response.employees));
   }
@@ -48,19 +49,19 @@ export class FestivalService {
   employEmployee(festivalId: number, employeeId: number): Observable<void> {
     return this.http.put<void>(
       `${this.apiUrl}/festival/${festivalId}/employee/${employeeId}/employ`,
-      {}
+      {},
     );
   }
 
   fireEmployee(festivalId: number, employeeId: number): Observable<void> {
     return this.http.delete<void>(
       `${this.apiUrl}/festival/${festivalId}/employee/${employeeId}/fire`,
-      {}
+      {},
     );
   }
 
-  createFestival(festival: CreateFestivalRequest): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/festival`, festival);
+  createFestival(festival: CreateFestivalRequest): Observable<{ id: number }> {
+    return this.http.post<{ id: number }>(`${this.apiUrl}/festival`, festival);
   }
 
   deleteFestival(festivalId: number): Observable<void> {
@@ -70,42 +71,42 @@ export class FestivalService {
   publishFestival(festivalId: number): Observable<void> {
     return this.http.put<void>(
       `${this.apiUrl}/festival/${festivalId}/publish`,
-      {}
+      {},
     );
   }
 
   cancelFestival(festivalId: number): Observable<void> {
     return this.http.put<void>(
       `${this.apiUrl}/festival/${festivalId}/cancel`,
-      {}
+      {},
     );
   }
 
   completeFestival(festivalId: number): Observable<void> {
     return this.http.put<void>(
       `${this.apiUrl}/festival/${festivalId}/complete`,
-      {}
+      {},
     );
   }
 
   openFestivalStore(festivalId: number): Observable<void> {
     return this.http.put<void>(
       `${this.apiUrl}/festival/${festivalId}/store/open`,
-      {}
+      {},
     );
   }
 
   closeFestivalStore(festivalId: number): Observable<void> {
     return this.http.put<void>(
       `${this.apiUrl}/festival/${festivalId}/store/close`,
-      {}
+      {},
     );
   }
 
   updateFestival(festival: UpdateFestivalRequest): Observable<void> {
     return this.http.put<void>(
       `${this.apiUrl}/festival/${festival.id}`,
-      festival
+      festival,
     );
   }
 
