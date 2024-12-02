@@ -138,10 +138,12 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// * ... PACKAGE ADDONS
 
 	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon", itemHandler.CreatePackageAddon).Methods(http.MethodPost)
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/{category}", itemHandler.GetCurrentPackageAddons).Methods(http.MethodGet)
+	// ! no use this: pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/{category}", itemHandler.GetCurrentPackageAddons).Methods(http.MethodGet)
 	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/{category}/count", itemHandler.GetPackageAddonsCount).Methods(http.MethodGet)
 
+	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/transport", itemHandler.GetTransportAddons).Methods(http.MethodGet)
 	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/transport", itemHandler.CreateTransportPackageAddon).Methods(http.MethodPost)
+
 	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/camp", itemHandler.CreateCampPackageAddon).Methods(http.MethodPost)
 
 	// ...

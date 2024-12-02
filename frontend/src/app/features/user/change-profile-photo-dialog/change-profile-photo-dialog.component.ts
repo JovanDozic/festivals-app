@@ -62,7 +62,6 @@ export class ChangeProfilePhotoDialogComponent implements OnInit {
       this.isUploading = true;
       this.imageService.uploadImageAndGetURL(this.selectedFile).subscribe({
         next: (response) => {
-          console.log(response);
           this.snackbarService.show('Profile photo uploaded successfully!');
           this.userService.updateUserProfilePhoto(response.imageURL).subscribe({
             next: () => {

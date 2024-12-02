@@ -27,6 +27,7 @@ type ItemService interface {
 	GetCurrentPackageAddons(festivalId uint, category string) ([]modelsFestival.PriceListItem, error)
 	CreateTransportPackageAddon(request dto.CreateTransportPackageAddonRequest) error
 	CreateCampPackageAddon(request dto.CreateCampPackageAddonRequest) error
+	GetTransportAddons(festivalId uint) ([]dto.TransportAddonDTO, error)
 }
 
 type itemService struct {
@@ -320,4 +321,12 @@ func (s *itemService) CreateCampPackageAddon(request dto.CreateCampPackageAddonR
 	}
 
 	return nil
+}
+
+func (s *itemService) GetTransportAddons(festivalId uint) ([]dto.TransportAddonDTO, error) {
+	transportAddons, err := s.itemRepo.GetTransportAddons(festivalId)
+	if err != nil {
+		return nil, err
+	}
+	return transportAddons, nil
 }

@@ -156,3 +156,36 @@ export interface AddCampConfigRequest {
 export interface EquipmentRequest {
   name: string;
 }
+
+export interface TransportAddonDTO {
+  priceListItemId: number;
+  priceListId: number;
+  itemId: number;
+  itemName: string;
+  itemDescription: string;
+  itemType: string;
+  itemAvailableNumber: number;
+  itemRemainingNumber: number;
+  dateFrom: Date | null;
+  dateTo: Date | null;
+  isFixed: boolean;
+  price: number;
+  packageAddonCategory: string;
+  transportType: string;
+  departureTime: Date;
+  arrivalTime: Date;
+  returnDepartureTime: Date;
+  returnArrivalTime: Date;
+  departureCityId: number;
+  departureCityName: string;
+  departurePostalCode: string;
+  departureCountryISO3: string;
+  departureCountryISO: string;
+  departureCountryNiceName: string;
+  arrivalCityId: number;
+  arrivalCityName: string;
+  arrivalPostalCode: string;
+  arrivalCountryISO3: string;
+  arrivalCountryISO: string;
+  arrivalCountryNiceName: string;
+}

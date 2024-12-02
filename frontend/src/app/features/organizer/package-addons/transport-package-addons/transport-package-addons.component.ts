@@ -39,6 +39,8 @@ export class TransportPackageAddonsComponent {
   transportCount: number = 0;
   campCount: number = 0;
 
+  transportAddons: any[] = [];
+
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private festivalService = inject(FestivalService);
@@ -48,11 +50,24 @@ export class TransportPackageAddonsComponent {
 
   ngOnInit() {
     this.loadFestival();
-    this.loadCounts();
+    this.loadAddons();
   }
 
-  loadCounts() {
-    throw new Error('Method not implemented.');
+  loadAddons() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.itemService.getTransportAddons(Number(id)).subscribe({
+        next: (response) => {
+          console.log(`Transport Addons`, response);
+          this.transportAddons = response;
+        },
+        error: (error) => {
+          console.log('Error fetching transport addons: ', error);
+          this.snackbarService.show('Error getting transport addons');
+          this.transportAddons = [];
+        },
+      });
+    }
   }
 
   goBack() {

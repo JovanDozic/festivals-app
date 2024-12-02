@@ -7,6 +7,7 @@ import {
   FestivalPropCountResponse,
   Item,
   ItemsResponse,
+  TransportAddonDTO,
 } from '../../models/festival/festival.model';
 
 @Injectable({
@@ -122,6 +123,12 @@ export class ItemService {
     return this.http.post(
       `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/camp`,
       request
+    );
+  }
+
+  getTransportAddons(festivalId: number): Observable<any> {
+    return this.http.get<TransportAddonDTO[]>(
+      `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/transport`
     );
   }
 }

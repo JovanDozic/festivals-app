@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	dtoFestival "backend/internal/dto/festival"
 	"backend/internal/models"
 	modelsFestival "backend/internal/models/festival"
 	"backend/internal/utils"
@@ -29,6 +30,7 @@ type ItemRepo interface {
 	CreateCampPackageAddon(campAddon *modelsFestival.CampAddon) error
 	CreateCampEquipment(campEquipment *modelsFestival.CampEquipment) error
 	CreatePackageAddonImage(packageAddonImage *modelsFestival.PackageAddonImage) error
+	GetTransportAddons(festivalId uint) ([]dtoFestival.TransportAddonDTO, error)
 }
 
 type itemRepo struct {
@@ -309,4 +311,58 @@ func (r *itemRepo) CreateCampEquipment(campEquipment *modelsFestival.CampEquipme
 
 func (r *itemRepo) CreatePackageAddonImage(packageAddonImage *modelsFestival.PackageAddonImage) error {
 	return r.db.Create(packageAddonImage).Error
+}
+
+func (r *itemRepo) GetTransportAddons(festivalId uint) ([]dtoFestival.TransportAddonDTO, error) {
+	var transportAddons []dtoFestival.TransportAddonDTO
+
+	err := r.db.
+		Table("price_list_items pli").
+		Select(`
+			pli.id as price_list_item_id,
+			pli.price_list_id,
+			pli.item_id,
+			i.name as item_name,
+			i.description as item_description,
+			i.type as item_type,
+			i.available_number as item_available_number,
+			i.remaining_number as item_remaining_number,
+			pli.date_from as date_from,
+			pli.date_to as date_to,
+			pli.is_fixed as is_fixed,
+			pli.price as price,
+			pa.category as package_addon_category,
+			ta.transport_type,
+			ta.departure_time,
+			ta.arrival_time,
+			ta.return_departure_time,
+			ta.return_arrival_time,
+			cd.id as departure_city_id,
+			cd.name as departure_city_name,
+			cd.postal_code as departure_postal_code,
+			ccd.iso3 as departure_country_iso3,
+			ccd.iso as departure_country_iso,
+			ccd.nice_name as departure_country_nice_name,
+			ca.id as arrival_city_id,
+			ca.name as arrival_city_name,
+			ca.postal_code as arrival_postal_code,
+			cca.iso3 as arrival_country_iso3,
+			cca.iso as arrival_country_iso,
+			cca.nice_name as arrival_country_nice_name
+		`).
+		Joins("JOIN items i ON pli.item_id = i.id").
+		Joins("JOIN package_addons pa ON i.id = pa.item_id").
+		Joins("JOIN transport_addons ta ON pa.item_id = ta.item_id").
+		Joins("JOIN cities cd ON ta.departure_city_id = cd.id").
+		Joins("JOIN countries ccd ON cd.country_id = ccd.id").
+		Joins("JOIN cities ca ON ta.arrival_city_id = ca.id").
+		Joins("JOIN countries cca ON ca.country_id = cca.id").
+		Where("i.festival_id = ?", festivalId).
+		Scan(&transportAddons).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return transportAddons, nil
 }

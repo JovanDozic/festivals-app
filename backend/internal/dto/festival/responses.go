@@ -71,3 +71,36 @@ type GetPackageAddonsResponse struct {
 	Category   string         `json:"category"`
 	Items      []ItemResponse `json:"items"`
 }
+
+type TransportAddonDTO struct {
+	PriceListItemID          uint       `json:"priceListItemId"`
+	PriceListID              uint       `json:"priceListId"`
+	ItemID                   uint       `json:"itemId"`
+	ItemName                 string     `json:"itemName"`
+	ItemDescription          string     `json:"itemDescription"`
+	ItemType                 string     `json:"itemType"`
+	ItemAvailableNumber      int        `json:"itemAvailableNumber"`
+	ItemRemainingNumber      int        `json:"itemRemainingNumber"`
+	PriceListItemDateFrom    *time.Time `json:"dateFrom"`
+	PriceListItemDateTo      *time.Time `json:"dateTo"`
+	PriceListItemIsFixed     bool       `json:"isFixed"`
+	Price                    float64    `json:"price"`
+	PackageAddonCategory     string     `json:"packageAddonCategory"`
+	TransportType            string     `json:"transportType"`
+	DepartureTime            time.Time  `json:"departureTime"`
+	ArrivalTime              time.Time  `json:"arrivalTime"`
+	ReturnDepartureTime      time.Time  `json:"returnDepartureTime"`
+	ReturnArrivalTime        time.Time  `json:"returnArrivalTime"`
+	DepartureCityID          uint       `json:"departureCityId"`
+	DepartureCityName        string     `json:"departureCityName"`
+	DeparturePostalCode      string     `json:"departurePostalCode"`
+	DepartureCountryISO3     string     `json:"departureCountryISO3"`
+	DepartureCountryISO      string     `json:"departureCountryISO"`
+	DepartureCountryNiceName string     `json:"departureCountryNiceName"`
+	ArrivalCityID            uint       `json:"arrivalCityId"`
+	ArrivalCityName          string     `json:"arrivalCityName"`
+	ArrivalPostalCode        string     `json:"arrivalPostalCode"`
+	ArrivalCountryISO3       string     `json:"arrivalCountryISO3"`
+	ArrivalCountryISO        string     `json:"arrivalCountryISO"`
+	ArrivalCountryNiceName   string     `json:"arrivalCountryNiceName"`
+}
