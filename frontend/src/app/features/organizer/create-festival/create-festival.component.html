@@ -9,7 +9,7 @@
       >
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <h1>Create Festival</h1>
+      <h1>Create a Festival</h1>
     </div>
   </div>
 
@@ -173,11 +173,14 @@
             </div>
 
             <button
-              mat-raised-button
+              mat-flat-button
+              color="primary"
               (click)="uploadFestivalImages()"
+              class="save-changes-button"
               [disabled]="images.length === 0"
             >
-              Done
+              <mat-spinner *ngIf="isUploading"></mat-spinner>
+              <span *ngIf="!isUploading">Done</span>
             </button>
           </mat-step>
         </mat-stepper>

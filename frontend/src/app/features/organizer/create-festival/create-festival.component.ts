@@ -22,6 +22,7 @@ import {
 import { Router } from '@angular/router';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 import { ImageService } from '../../../services/image/image.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 interface ImagePreview {
   file: File;
@@ -43,6 +44,7 @@ interface ImagePreview {
     MatDatepickerModule,
     MatGridListModule,
     MatIconModule,
+    MatProgressSpinnerModule,
   ],
   providers: [provideNativeDateAdapter()],
 })
@@ -59,6 +61,7 @@ export class CreateFestivalComponent {
 
   festivalId: string | null = null;
   images: ImagePreview[] = [];
+  isUploading = false;
 
   basicInfoFormGroup = this.fb.group({
     nameCtrl: ['', Validators.required],
@@ -168,6 +171,8 @@ export class CreateFestivalComponent {
       return;
     }
     if (this.festivalId && this.images.length > 0) {
+      this.isUploading = true;
+
       const uploadObservables = this.images.map((image) =>
         this.imageService.uploadImageAndGetURL(image.file),
       );
@@ -185,6 +190,8 @@ export class CreateFestivalComponent {
 
           forkJoin(addImageObservables).subscribe({
             next: () => {
+              this.isUploading = false;
+
               this.snackbarService.show('Festival created successfully!');
               this.stepper?.next();
               this.router.navigate([
@@ -192,12 +199,15 @@ export class CreateFestivalComponent {
               ]);
             },
             error: (error) => {
+              this.isUploading = false;
+
               console.error('Error adding images to festival:', error);
               this.snackbarService.show('Error adding images to festival');
             },
           });
         },
         error: (error) => {
+          this.isUploading = false;
           console.error('Error uploading images:', error);
           this.snackbarService.show('Error uploading images');
         },
