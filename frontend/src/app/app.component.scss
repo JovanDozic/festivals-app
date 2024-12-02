@@ -86,6 +86,14 @@ mat-card-content {
   border: 3px dashed #f5f2ff;
 }
 
+:host-context([data-theme="light"]) .placeholder-photo {
+  background-color: #e0e0e0;
+}
+
+:host-context([data-theme="dark"]) .placeholder-photo {
+  background-color: #ffffff22;
+}
+
 mat-form-field {
   margin: 15px 0;
 }
