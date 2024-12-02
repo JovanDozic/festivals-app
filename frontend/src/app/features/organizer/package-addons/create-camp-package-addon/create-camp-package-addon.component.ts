@@ -13,9 +13,11 @@ import {
   Validators,
 } from '@angular/forms';
 import {
+  AddCampConfigRequest,
   AddTransportConfigRequest,
   CreateItemPriceRequest,
   CreateItemRequest,
+  EquipmentRequest,
 } from '../../../../models/festival/festival.model';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -141,8 +143,6 @@ export class CreateCampPackageAddonComponent {
   }
 
   createPackageAddon() {
-    this.stepper?.next();
-    return;
     if (this.infoFormGroup.valid && this.data.festivalId) {
       const request: CreateItemRequest = {
         name: this.infoFormGroup.get('nameCtrl')?.value,
@@ -168,8 +168,24 @@ export class CreateCampPackageAddonComponent {
   }
 
   addCampConfig() {
-    this.stepper?.next();
-    return;
+    if (this.configurationFormGroup.valid && this.itemId) {
+      const equipmentList: EquipmentRequest[] = [];
+      this.equipmentFormArray.controls.forEach((control) => {
+        const equipmentName = control.get('equipmentNameCtrl')?.value;
+        if (equipmentName) {
+          equipmentList.push({ name: equipmentName });
+        }
+      });
+
+      const request: AddCampConfigRequest = {
+        itemId: this.itemId,
+        campName: this.configurationFormGroup.get('campNameCtrl')?.value,
+        imageURL: this.configurationFormGroup.get('imageURLCtrl')?.value,
+        equipmentList: equipmentList,
+      };
+
+      console.log('Add Camp Config Request: ', request);
+    }
   }
 
   createFixedPrice() {

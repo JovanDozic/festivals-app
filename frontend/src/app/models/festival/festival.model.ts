@@ -1,3 +1,4 @@
+import { NumberValueAccessor } from '@angular/forms';
 import { AddressResponse } from '../common/address-response.model';
 import { CityRequest } from '../common/address.model';
 import {
@@ -143,4 +144,15 @@ export interface AddTransportConfigRequest {
   arrivalTime: string;
   returnDepartureTime: string;
   returnArrivalTime: string;
+}
+
+export interface AddCampConfigRequest {
+  itemId: number;
+  campName: string;
+  imageURL: string;
+  equipmentList: EquipmentRequest[];
+}
+
+export interface EquipmentRequest {
+  name: string;
 }
