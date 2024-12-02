@@ -2,7 +2,7 @@
 
 <mat-dialog-content>
   <mat-stepper [linear]="true" #stepper>
-    <mat-step [stepControl]="infoFormGroup" [editable]="false">
+    <!-- <mat-step [stepControl]="infoFormGroup" [editable]="false">
       <form [formGroup]="infoFormGroup">
         <ng-template matStepLabel>Info</ng-template>
         <div class="form-fields">
@@ -34,7 +34,7 @@
           </mat-form-field>
         </div>
       </form>
-    </mat-step>
+    </mat-step> -->
 
     <mat-step [stepControl]="configurationFormGroup" [editable]="false">
       <ng-template matStepLabel>Configuration</ng-template>
@@ -63,19 +63,40 @@
 
           <mat-step>
             <ng-template matStepLabel>Image</ng-template>
-            <div class="form-field">
-              <mat-form-field appearance="outline">
-                <mat-label>TODO</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  required
-                  formControlName="imageURLCtrl"
+            <div class="form-field camp-photo-field">
+              <div class="camp-photo-container">
+                <img
+                  *ngIf="imagePreviewUrl; else placeholder"
+                  [src]="imagePreviewUrl"
+                  alt="Camp Photo Preview"
+                  class="camp-photo-preview"
                 />
-              </mat-form-field>
+                <ng-template #placeholder>
+                  <div class="placeholder-photo">
+                    <mat-icon class="material-symbols-outlined" color="primary"
+                      >person</mat-icon
+                    >
+                  </div>
+                </ng-template>
+              </div>
+              <input
+                #fileInput
+                type="file"
+                accept="image/*"
+                (change)="onFileSelected($event)"
+                style="display: none"
+              />
             </div>
             <div>
               <button mat-button matStepperPrevious>Back</button>
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="fileInput.click()"
+                style="margin-right: 10px"
+              >
+                Choose Photo
+              </button>
               <button mat-stroked-button matStepperNext>Next</button>
             </div>
           </mat-step>

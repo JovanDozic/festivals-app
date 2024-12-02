@@ -54,12 +54,10 @@ export class ChangeProfilePhotoDialogComponent implements OnInit {
   isUploading = false;
 
   ngOnInit() {
-    console.log(this.data);
     this.imagePreviewUrl = this.data.currentImageURL;
   }
 
   saveChanges() {
-    setTimeout(() => {}, 2000);
     if (this.selectedFile) {
       this.isUploading = true;
       this.imageService.uploadProfilePhoto(this.selectedFile).subscribe({

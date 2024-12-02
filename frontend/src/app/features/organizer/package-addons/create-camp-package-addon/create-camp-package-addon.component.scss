@@ -106,3 +106,38 @@ mat-form-field {
 .remove-equipment-button {
   margin-top: 11px;
 }
+
+.camp-photo-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.camp-photo-container {
+  margin-bottom: 16px;
+}
+
+.camp-photo-preview {
+  width: 375px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(61, 61, 61, 0.5);
+}
+
+.placeholder-photo {
+  width: 375px;
+  height: 200px;
+  background-color: #e0e0e0;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholder-photo mat-icon {
+  font-size: 100px;
+  color: #9e9e9e;
+}

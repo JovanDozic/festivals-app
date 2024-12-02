@@ -36,6 +36,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { CityRequest } from '../../../../models/common/address.model';
+import { ImageService } from '../../../../services/image/image.service';
 
 @Component({
   selector: 'app-create-camp-package-addon',
@@ -70,6 +71,7 @@ export class CreateCampPackageAddonComponent {
   private data: { festivalId: number; category: string } =
     inject(MAT_DIALOG_DATA);
   private itemService = inject(ItemService);
+  private imageService = inject(ImageService);
 
   @ViewChild('stepper') private stepper: MatStepper | undefined;
 
@@ -81,6 +83,9 @@ export class CreateCampPackageAddonComponent {
 
   itemId: number | null = null;
   isFixedPrice: boolean = true;
+
+  selectedFile: File | null = null;
+  imagePreviewUrl: string | ArrayBuffer | null = null;
 
   constructor() {
     this.category = this.data?.category;
@@ -209,6 +214,22 @@ export class CreateCampPackageAddonComponent {
             this.dialogRef.close(false);
           },
         });
+    }
+  }
+
+  onFileSelected(event: Event) {
+    const fileInput = event.target as HTMLInputElement;
+
+    if (fileInput.files && fileInput.files.length > 0) {
+      this.selectedFile = fileInput.files[0];
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.imagePreviewUrl = reader.result;
+      };
+
+      reader.readAsDataURL(this.selectedFile);
     }
   }
 }
