@@ -28,63 +28,152 @@
             <mat-card-title>{{ addon.itemName }}</mat-card-title>
             <mat-card-subtitle>{{ addon.itemDescription }}</mat-card-subtitle>
           </mat-card-header>
+
           <mat-card-content>
+            <span class="icon-property" *ngIf="addon.transportType == 'PLANE'">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                flight
+              </mat-icon>
+              <h3>Flight Package</h3>
+            </span>
+            <span class="icon-property" *ngIf="addon.transportType == 'BUS'">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                directions_bus
+              </mat-icon>
+              <h3>Bus Package</h3>
+            </span>
+            <span class="icon-property" *ngIf="addon.transportType == 'TRAIN'">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                train
+              </mat-icon>
+              <h3>Train Package</h3>
+            </span>
+
+            <div class="divider"></div>
+
             <span class="icon-property">
               <mat-icon class="material-symbols-outlined" color="primary">
-                calendar_month
+                attach_money
               </mat-icon>
-              {{ festival.startDate | date : "d MMM" }} -
-              {{ festival.endDate | date : "d MMM" }}
+              <span class="number">{{ addon.price }}</span>
             </span>
-            <span class="icon-property" *ngIf="festival.status == 'PRIVATE'">
+
+            <span class="icon-property">
               <mat-icon class="material-symbols-outlined" color="primary">
-                visibility_off</mat-icon
-              >
-              Private
+                numbers
+              </mat-icon>
+              <span class="number">{{ addon.itemRemainingNumber }}</span>
+              remaining out of
+              <span class="number">{{ addon.itemAvailableNumber }}</span>
             </span>
-            <span class="icon-property" *ngIf="festival.status == 'PUBLIC'">
-              <mat-icon class="material-symbols-outlined" color="primary"
-                >visibility</mat-icon
-              >
-              Public
+
+            <div class="divider"></div>
+
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                home
+              </mat-icon>
+              <h3>Roundtrip:</h3>
             </span>
-            <span class="icon-property" *ngIf="festival.status == 'CANCELLED'">
-              <mat-icon class="material-symbols-outlined" color="primary"
-                >cancel</mat-icon
-              >
-              Cancelled
+
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined"> more_vert </mat-icon>
             </span>
-            <span class="icon-property" *ngIf="festival.status == 'COMPLETED'">
-              <mat-icon class="material-symbols-outlined" color="primary"
-                >done_all</mat-icon
-              >
-              Completed
+
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                flight_takeoff
+              </mat-icon>
+              <b>
+                {{ addon.departureCityName }}
+                ({{ addon.departureCountryISO3 }})
+                <mat-icon
+                  class="material-symbols-outlined inline-arrow"
+                  color="primary"
+                >
+                  arrow_right_alt
+                </mat-icon>
+                {{ addon.arrivalCityName }} ({{ addon.arrivalCountryISO3 }})
+              </b>
             </span>
-            <span
-              class="icon-property"
-              *ngIf="
-                festival.storeStatus == 'OPEN' && festival.status == 'PUBLIC'
-              "
-            >
-              <mat-icon class="material-symbols-outlined" color="primary"
-                >shopping_cart</mat-icon
-              >
-              Store Opened
+
+            <span class="icon-property continued">
+              <mat-icon class="material-symbols-outlined" color="primary">
+              </mat-icon>
+              <span>
+                {{ addon.departureTime | date : "yyyy-MM-dd HH:mm" }}
+                <mat-icon
+                  class="material-symbols-outlined inline-arrow"
+                  color="primary"
+                >
+                  arrow_right_alt
+                </mat-icon>
+                {{ addon.arrivalTime | date : "yyyy-MM-dd HH:mm" }}
+              </span>
             </span>
-            <span
-              class="icon-property"
-              *ngIf="
-                festival.storeStatus == 'CLOSED' && festival.status == 'PUBLIC'
-              "
-            >
-              <mat-icon class="material-symbols-outlined" color="primary"
-                >shopping_cart_off</mat-icon
-              >
-              Store Closed
+
+            <span class="icon-property continued">
+              <mat-icon class="material-symbols-outlined"> more_vert </mat-icon>
+            </span>
+
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                celebration
+              </mat-icon>
+              <h3>{{ festival.name }}</h3>
+            </span>
+
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined"> more_vert </mat-icon>
+            </span>
+
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                flight_land
+              </mat-icon>
+              <b>
+                {{ addon.arrivalCityName }}
+                ({{ addon.arrivalCountryISO3 }})
+                <mat-icon
+                  class="material-symbols-outlined inline-arrow"
+                  color="primary"
+                >
+                  arrow_right_alt
+                </mat-icon>
+                {{ addon.departureCityName }} ({{ addon.departureCountryISO3 }})
+              </b>
+            </span>
+
+            <span class="icon-property continued">
+              <mat-icon class="material-symbols-outlined" color="primary">
+              </mat-icon>
+              <span>
+                {{ addon.returnDepartureTime | date : "yyyy-MM-dd HH:mm" }}
+                <mat-icon
+                  class="material-symbols-outlined inline-arrow"
+                  color="primary"
+                >
+                  arrow_right_alt
+                </mat-icon>
+                {{ addon.returnArrivalTime | date : "yyyy-MM-dd HH:mm" }}
+              </span>
+            </span>
+
+            <span class="icon-property continued">
+              <mat-icon class="material-symbols-outlined"> more_vert </mat-icon>
+            </span>
+
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                home
+              </mat-icon>
+              <h3>End of the Journey</h3>
             </span>
           </mat-card-content>
         </div>
-        <mat-card-actions></mat-card-actions>
+        <!-- <mat-card-actions>
+          todo: sometime, add edit button or whatever
+        </mat-card-actions> -->
       </div>
     </mat-card>
   </div>

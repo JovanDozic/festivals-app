@@ -1,9 +1,3 @@
-.profile-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0px 20px;
-}
-
 .profile-header {
   display: flex;
   flex-direction: row;
@@ -28,9 +22,9 @@
 
 .profile-content {
   display: flex;
-  flex-direction: row;
-  gap: 20px;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: space-between;
 }
 
 .profile-card {
@@ -54,6 +48,13 @@ h1 {
 
 .festival-card-skeleton .card-content {
   padding-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .festival-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
 }
 
 mat-card-title {
@@ -84,4 +85,32 @@ mat-card-actions {
   right: 16px;
   z-index: 1000;
   margin: 16px;
+}
+
+.number {
+  font-weight: 500;
+}
+
+.inline-arrow {
+  position: relative;
+  top: 6px !important;
+}
+
+.continued {
+  margin-top: -10px !important;
+}
+
+.continues {
+  margin-bottom: 5px !important;
+}
+
+h3 {
+  margin: 3px 0;
+  font-family: "Funnel Display", sans-serif;
+  font-weight: 500;
+  font-size: large;
+}
+
+.divider {
+  height: 25px;
 }
