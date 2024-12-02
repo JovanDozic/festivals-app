@@ -99,7 +99,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	pR.HandleFunc("/festival", festivalHandler.GetAll).Methods(http.MethodGet)
 	// ... ORGANIZER ONLY
 	pR.HandleFunc("/festival", festivalHandler.Create).Methods(http.MethodPost)
-	pR.HandleFunc("/organizer/festival", festivalHandler.GetByOrganizer).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/organizer", festivalHandler.GetByOrganizer).Methods(http.MethodGet) // get all by organizer
 	pR.HandleFunc("/festival/{festivalId}", festivalHandler.GetById).Methods(http.MethodGet)
 	pR.HandleFunc("/festival/{festivalId}", festivalHandler.Update).Methods(http.MethodPut)
 	pR.HandleFunc("/festival/{festivalId}", festivalHandler.Delete).Methods(http.MethodDelete)
@@ -116,39 +116,38 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	pR.HandleFunc("/organizer/employee", userHandler.CreateEmployee).Methods(http.MethodPost)
 	pR.HandleFunc("/organizer/employee", userHandler.UpdateStaffProfile).Methods(http.MethodPut)
 	pR.HandleFunc("/organizer/employee/email", userHandler.UpdateStaffEmail).Methods(http.MethodPut)
-	pR.HandleFunc("/organizer/festival/{festivalId}/employee", userHandler.GetFestivalEmployees).Methods(http.MethodGet)
-	pR.HandleFunc("/organizer/festival/{festivalId}/employee/{employeeId}/employ", festivalHandler.Employ).Methods(http.MethodPut)
-	pR.HandleFunc("/organizer/festival/{festivalId}/employee/{employeeId}/fire", festivalHandler.Fire).Methods(http.MethodDelete)
-	pR.HandleFunc("/organizer/festival/{festivalId}/employee/count", festivalHandler.GetEmployeeCount).Methods(http.MethodGet)
-	pR.HandleFunc("/organizer/festival/{festivalId}/employee/available", userHandler.GetEmployeesNotOnFestival).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/{festivalId}/employee", userHandler.GetFestivalEmployees).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/{festivalId}/employee/{employeeId}/employ", festivalHandler.Employ).Methods(http.MethodPut)
+	pR.HandleFunc("/festival/{festivalId}/employee/{employeeId}/fire", festivalHandler.Fire).Methods(http.MethodDelete)
+	pR.HandleFunc("/festival/{festivalId}/employee/count", festivalHandler.GetEmployeeCount).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/{festivalId}/employee/available", userHandler.GetEmployeesNotOnFestival).Methods(http.MethodGet)
 
 	// * ...ITEMS
 
-	pR.HandleFunc("/organizer/festival/{festivalId}/item", itemHandler.CreateItem).Methods(http.MethodPost)
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/price", itemHandler.CreatePriceListItem).Methods(http.MethodPost)
+	pR.HandleFunc("/festival/{festivalId}/item", itemHandler.CreateItem).Methods(http.MethodPost)
+	pR.HandleFunc("/festival/{festivalId}/item/price", itemHandler.CreatePriceListItem).Methods(http.MethodPost)
 
 	// * ... TICKET TYPES
 
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/ticket-type", itemHandler.GetCurrentTicketTypes).Methods(http.MethodGet)
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/ticket-type/count", itemHandler.GetTicketTypesCount).Methods(http.MethodGet)
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/ticket-type/{itemId}", itemHandler.GetTicketType).Methods(http.MethodGet)
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/ticket-type/{itemId}", itemHandler.UpdateItem).Methods(http.MethodPut)
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/ticket-type/{itemId}", itemHandler.DeleteTicketType).Methods(http.MethodDelete)
+	pR.HandleFunc("/festival/{festivalId}/item/ticket-type", itemHandler.GetCurrentTicketTypes).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/{festivalId}/item/ticket-type/count", itemHandler.GetTicketTypesCount).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/{festivalId}/item/ticket-type/{itemId}", itemHandler.GetTicketType).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/{festivalId}/item/ticket-type/{itemId}", itemHandler.UpdateItem).Methods(http.MethodPut)
+	pR.HandleFunc("/festival/{festivalId}/item/ticket-type/{itemId}", itemHandler.DeleteTicketType).Methods(http.MethodDelete)
 
 	// * ... PACKAGE ADDONS
 
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon", itemHandler.CreatePackageAddon).Methods(http.MethodPost)
-	// ! no use this: pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/{category}", itemHandler.GetCurrentPackageAddons).Methods(http.MethodGet)
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/{category}/count", itemHandler.GetPackageAddonsCount).Methods(http.MethodGet)
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/count", itemHandler.GetAllPackageAddonsCount).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/{festivalId}/item/package-addon", itemHandler.CreatePackageAddon).Methods(http.MethodPost)
+	pR.HandleFunc("/festival/{festivalId}/item/package-addon/{category}/count", itemHandler.GetPackageAddonsCount).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/{festivalId}/item/package-addon/count", itemHandler.GetAllPackageAddonsCount).Methods(http.MethodGet)
 
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/general", itemHandler.GetGeneralAddons).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/{festivalId}/item/package-addon/general", itemHandler.GetGeneralAddons).Methods(http.MethodGet)
 
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/transport", itemHandler.GetTransportAddons).Methods(http.MethodGet)
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/transport", itemHandler.CreateTransportPackageAddon).Methods(http.MethodPost)
+	pR.HandleFunc("/festival/{festivalId}/item/package-addon/transport", itemHandler.GetTransportAddons).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/{festivalId}/item/package-addon/transport", itemHandler.CreateTransportPackageAddon).Methods(http.MethodPost)
 
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/camp", itemHandler.GetCampAddons).Methods(http.MethodGet)
-	pR.HandleFunc("/organizer/festival/{festivalId}/item/package-addon/camp", itemHandler.CreateCampPackageAddon).Methods(http.MethodPost)
+	pR.HandleFunc("/festival/{festivalId}/item/package-addon/camp", itemHandler.GetCampAddons).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/{festivalId}/item/package-addon/camp", itemHandler.CreateCampPackageAddon).Methods(http.MethodPost)
 
 	// ...
 

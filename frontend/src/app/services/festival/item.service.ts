@@ -23,7 +23,7 @@ export class ItemService {
   getTicketTypes(festivalId: number): Observable<any> {
     return this.http
       .get<ItemsResponse>(
-        `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type`
+        `${this.apiUrl}/festival/${festivalId}/item/ticket-type`
       )
       .pipe(map((response) => response.items));
   }
@@ -31,7 +31,7 @@ export class ItemService {
   getTicketTypesCount(festivalId: number): Observable<number> {
     return this.http
       .get<FestivalPropCountResponse>(
-        `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/count`
+        `${this.apiUrl}/festival/${festivalId}/item/ticket-type/count`
       )
       .pipe(map((response) => response.count));
   }
@@ -44,7 +44,7 @@ export class ItemService {
       .get<FestivalPropCountResponse>(
         `${
           this.apiUrl
-        }/organizer/festival/${festivalId}/item/package-addon/${category.toUpperCase()}/count`
+        }/festival/${festivalId}/item/package-addon/${category.toUpperCase()}/count`
       )
       .pipe(map((response) => response.count));
   }
@@ -52,14 +52,14 @@ export class ItemService {
   getAllPackageAddonsCount(festivalId: number): Observable<number> {
     return this.http
       .get<FestivalPropCountResponse>(
-        `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/count`
+        `${this.apiUrl}/festival/${festivalId}/item/package-addon/count`
       )
       .pipe(map((response) => response.count));
   }
 
   getTicketType(festivalId: number, itemId: number): Observable<Item> {
     return this.http.get<Item>(
-      `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/${itemId}`
+      `${this.apiUrl}/festival/${festivalId}/item/ticket-type/${itemId}`
     );
   }
 
@@ -69,7 +69,7 @@ export class ItemService {
   ): Observable<number> {
     return this.http
       .post<{ itemId: number }>(
-        `${this.apiUrl}/organizer/festival/${festivalId}/item`,
+        `${this.apiUrl}/festival/${festivalId}/item`,
         request
       )
       .pipe(map((response) => response.itemId));
@@ -82,14 +82,14 @@ export class ItemService {
   ): Observable<number> {
     return this.http
       .post<{ itemId: number }>(
-        `${this.apiUrl}/organizer/festival/${festivalId}/item`,
+        `${this.apiUrl}/festival/${festivalId}/item`,
         request
       )
       .pipe(
         map((response) => response.itemId),
         switchMap((itemId) =>
           this.http.post<{ itemId: number }>(
-            `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon`,
+            `${this.apiUrl}/festival/${festivalId}/item/package-addon`,
             { itemId, category }
           )
         ),
@@ -103,7 +103,7 @@ export class ItemService {
   ): Observable<number> {
     return this.http
       .post<{ priceListItemId: number }>(
-        `${this.apiUrl}/organizer/festival/${festivalId}/item/price`,
+        `${this.apiUrl}/festival/${festivalId}/item/price`,
         request
       )
       .pipe(map((response) => response.priceListItemId));
@@ -111,46 +111,46 @@ export class ItemService {
 
   updateItem(festivalId: number, request: Item): Observable<any> {
     return this.http.put(
-      `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/${request.id}`,
+      `${this.apiUrl}/festival/${festivalId}/item/ticket-type/${request.id}`,
       request
     );
   }
 
   deleteItem(festivalId: number, itemId: number): Observable<any> {
     return this.http.delete(
-      `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/${itemId}`
+      `${this.apiUrl}/festival/${festivalId}/item/ticket-type/${itemId}`
     );
   }
 
   addTransportConfig(festivalId: number, request: any): Observable<any> {
     return this.http.post(
-      `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/transport`,
+      `${this.apiUrl}/festival/${festivalId}/item/package-addon/transport`,
       request
     );
   }
 
   addCampConfig(festivalId: number, request: any): Observable<any> {
     return this.http.post(
-      `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/camp`,
+      `${this.apiUrl}/festival/${festivalId}/item/package-addon/camp`,
       request
     );
   }
 
   getTransportAddons(festivalId: number): Observable<TransportAddonDTO[]> {
     return this.http.get<TransportAddonDTO[]>(
-      `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/transport`
+      `${this.apiUrl}/festival/${festivalId}/item/package-addon/transport`
     );
   }
 
   getGeneralAddons(festivalId: number): Observable<GeneralAddonDTO[]> {
     return this.http.get<GeneralAddonDTO[]>(
-      `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/general`
+      `${this.apiUrl}/festival/${festivalId}/item/package-addon/general`
     );
   }
 
   getCampAddons(festivalId: number): Observable<CampAddonDTO[]> {
     return this.http.get<CampAddonDTO[]>(
-      `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/camp`
+      `${this.apiUrl}/festival/${festivalId}/item/package-addon/camp`
     );
   }
 }

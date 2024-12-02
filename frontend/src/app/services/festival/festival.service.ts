@@ -19,44 +19,42 @@ export class FestivalService {
 
   getMyFestivals(): Observable<Festival[]> {
     return this.http
-      .get<{ festivals: Festival[] }>(`${this.apiUrl}/organizer/festival`)
+      .get<{ festivals: Festival[] }>(`${this.apiUrl}/festival/organizer`)
       .pipe(map((response) => response.festivals));
   }
 
   getEmployeeCount(festivalId: number): Observable<number> {
     return this.http
       .get<FestivalPropCountResponse>(
-        `${this.apiUrl}/organizer/festival/${festivalId}/employee/count`
+        `${this.apiUrl}/festival/${festivalId}/employee/count`
       )
       .pipe(map((response) => response.count));
   }
 
   getEmployees(festivalId: number): Observable<any> {
     return this.http
-      .get<EmployeesResponse>(
-        `${this.apiUrl}/organizer/festival/${festivalId}/employee`
-      )
+      .get<EmployeesResponse>(`${this.apiUrl}/festival/${festivalId}/employee`)
       .pipe(map((response) => response.employees));
   }
 
   getEmployeesNotOnFestival(festivalId: number): Observable<any> {
     return this.http
       .get<EmployeesResponse>(
-        `${this.apiUrl}/organizer/festival/${festivalId}/employee/available`
+        `${this.apiUrl}/festival/${festivalId}/employee/available`
       )
       .pipe(map((response) => response.employees));
   }
 
   employEmployee(festivalId: number, employeeId: number): Observable<void> {
     return this.http.put<void>(
-      `${this.apiUrl}/organizer/festival/${festivalId}/employee/${employeeId}/employ`,
+      `${this.apiUrl}/festival/${festivalId}/employee/${employeeId}/employ`,
       {}
     );
   }
 
   fireEmployee(festivalId: number, employeeId: number): Observable<void> {
     return this.http.delete<void>(
-      `${this.apiUrl}/organizer/festival/${festivalId}/employee/${employeeId}/fire`,
+      `${this.apiUrl}/festival/${festivalId}/employee/${employeeId}/fire`,
       {}
     );
   }
