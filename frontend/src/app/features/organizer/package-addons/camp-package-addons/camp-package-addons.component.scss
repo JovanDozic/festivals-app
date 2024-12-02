@@ -50,6 +50,12 @@ h1 {
   padding-left: 20px;
 }
 
+img[mat-card-image] {
+  max-height: 200px !important;
+  object-fit: cover;
+  width: 100%;
+}
+
 @media (max-width: 768px) {
   .festival-card {
     flex: 1 1 100%;
@@ -113,4 +119,10 @@ h3 {
 
 .divider {
   height: 25px;
+}
+
+.long-span {
+  border: 1px solid lime;
+  width: 90%;
+  vertical-align: bottom !important;
 }
