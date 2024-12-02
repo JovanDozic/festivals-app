@@ -90,7 +90,7 @@ export class CreatePackageAddonChooserComponent implements OnInit {
     },
   ];
 
-  selectedCategory: any | null = this.categories[1].value;
+  selectedCategory: any | null = this.categories[2].value;
 
   ngOnInit(): void {}
 

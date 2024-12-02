@@ -16,6 +16,7 @@ import { ItemService } from '../../../../services/festival/item.service';
 import { CreateGeneralPackageAddonComponent } from '../create-general-package-addon/create-general-package-addon.component';
 import { CreatePackageAddonChooserComponent } from '../create-package-addon-chooser/create-package-addon-chooser.component';
 import { CreateTransportPackageAddonComponent } from '../create-transport-package-addon/create-transport-package-addon.component';
+import { CreateCampPackageAddonComponent } from '../create-camp-package-addon/create-camp-package-addon.component';
 
 @Component({
   selector: 'app-package-addons',
@@ -181,8 +182,18 @@ export class PackageAddonsComponent implements OnInit {
   }
 
   launchCreateCampPackageAddonDialog(result: any) {
-    this.snackbarService.show('Camp package addons not implemented');
-    throw new Error('Method not implemented.');
+    const dialogRef = this.dialog.open(CreateCampPackageAddonComponent, {
+      data: { festivalId: this.festival?.id, category: result },
+      width: '800px',
+      height: '700px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadCounts();
+      }
+    });
   }
 
   launchCreateTransportPackageAddonDialog(result: any) {

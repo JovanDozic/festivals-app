@@ -1,1 +1,202 @@
-<p>create-camp-package-addon works!</p>
+<h2 mat-dialog-title>Create Camp Package Addon</h2>
+
+<mat-dialog-content>
+  <mat-stepper [linear]="true" #stepper>
+    <!-- <mat-step [stepControl]="infoFormGroup" [editable]="false">
+      <form [formGroup]="infoFormGroup">
+        <ng-template matStepLabel>Info</ng-template>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="nameCtrl" required />
+          </mat-form-field>
+        </div>
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="descriptionCtrl"
+              required
+            />
+          </mat-form-field>
+        </div>
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Available Number</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="availableNumberCtrl"
+              required
+            />
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-step> -->
+
+    <mat-step [stepControl]="configurationFormGroup" [editable]="false">
+      <ng-template matStepLabel>Configuration</ng-template>
+      <mat-stepper
+        orientation="vertical"
+        [linear]="true"
+        #configStepper
+        class="configuration-step"
+      >
+        <form [formGroup]="configurationFormGroup">
+          <mat-step>
+            <ng-template matStepLabel>Camp Info</ng-template>
+            <mat-form-field appearance="outline">
+              <mat-label>Camp Name</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="campNameCtrl"
+                required
+              />
+            </mat-form-field>
+            <div>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step>
+            <ng-template matStepLabel>Image</ng-template>
+            <div class="form-field">
+              <mat-form-field appearance="outline">
+                <mat-label>TODO</mat-label>
+                <input matInput type="text" required />
+              </mat-form-field>
+            </div>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step>
+            <ng-template matStepLabel>Included Equipment</ng-template>
+            <div class="equipment-list" formArrayName="equipmentFormArray">
+              <div
+                *ngFor="
+                  let equipment of equipmentFormArray.controls;
+                  let i = index
+                "
+                [formGroupName]="i"
+                class="equipment-piece"
+              >
+                <div class="form-fields">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input
+                      matInput
+                      type="text"
+                      formControlName="equipmentNameCtrl"
+                      required
+                    />
+                    <mat-error
+                      *ngIf="
+                        equipment.get('equipmentNameCtrl')?.hasError('required')
+                      "
+                    >
+                      Name is required
+                    </mat-error>
+                  </mat-form-field>
+
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    type="button"
+                    (click)="removeEquipment(i)"
+                    [disabled]="equipmentFormArray.length === 1"
+                    matTooltip="Remove this equipment"
+                    class="remove-equipment-button"
+                  >
+                    <mat-icon class="material-symbols-outlined"
+                      >remove_circle</mat-icon
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button
+                mat-stroked-button
+                color="primary"
+                type="button"
+                (click)="addEquipment()"
+                [disabled]="
+                  equipmentFormArray.length > 0 &&
+                  !equipmentFormArray.at(equipmentFormArray.length - 1).valid
+                "
+                matTooltip="Add another Equipment"
+              >
+                Add more Equipment
+              </button>
+            </div>
+          </mat-step>
+        </form>
+      </mat-stepper>
+    </mat-step>
+
+    <mat-step [editable]="false">
+      <div class="price-form">
+        <ng-template matStepLabel>Price</ng-template>
+        <div *ngIf="isFixedPrice">
+          <form [formGroup]="fixedPriceFormGroup">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Price</mat-label>
+              <span matTextPrefix>$ &nbsp;&nbsp;</span>
+              <input
+                matInput
+                type="number"
+                formControlName="fixedPriceCtrl"
+                required
+                step="0.01"
+                min="0"
+                inputmode="decimal"
+              />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="margin-top: -20px">
+  <button
+    mat-button
+    color="warn"
+    (click)="closeDialog()"
+    *ngIf="stepper.selectedIndex == 0"
+  >
+    Cancel
+  </button>
+  <button
+    mat-stroked-button
+    (click)="createPackageAddon()"
+    *ngIf="stepper.selectedIndex == 0"
+    [disabled]="infoFormGroup.invalid"
+  >
+    Next
+  </button>
+  <button
+    mat-stroked-button
+    (click)="addCampConfig()"
+    *ngIf="stepper.selectedIndex == 1"
+    [disabled]="configurationFormGroup.invalid"
+  >
+    Next
+  </button>
+  <button
+    mat-stroked-button
+    (click)="done()"
+    *ngIf="stepper.selectedIndex == 2"
+    [disabled]="fixedPriceFormGroup.invalid"
+  >
+    Done
+  </button>
+</mat-dialog-actions>

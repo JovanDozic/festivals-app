@@ -1,0 +1,108 @@
+.full-width {
+  width: 100%;
+}
+
+mat-card-header {
+  margin-bottom: 20px;
+}
+
+.error-message {
+  margin-top: 5px;
+  text-align: center;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+mat-card-actions {
+  margin-top: 5px;
+}
+
+h2,
+mat-dialog-title {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif !important;
+}
+
+.form-fields {
+  display: flex;
+  justify-content: left;
+  gap: 10px;
+}
+
+.form-field-two {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.form-field-two mat-form-field {
+  width: auto;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-fields p {
+  font-size: large;
+  margin-top: 0px;
+}
+
+.form-fields p b {
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.error-message {
+  margin-top: 5px;
+  text-align: center;
+}
+
+h1,
+strong {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif;
+}
+
+.price-form {
+  height: 300px;
+}
+
+.toggle-form-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin: 5px 0 0 0 !important;
+}
+
+.configuration-step {
+  overflow: hidden;
+  overflow-y: scroll;
+  height: 485px;
+  margin-bottom: -20px !important;
+}
+
+.configuration-step::-webkit-scrollbar {
+  width: 8px;
+}
+
+.configuration-step::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.configuration-step::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.remove-equipment-button {
+  margin-top: 11px;
+}

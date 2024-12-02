@@ -5,19 +5,16 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import {
-  FormArray,
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import {
   AddTransportConfigRequest,
   CreateItemPriceRequest,
   CreateItemRequest,
-  VariablePrice,
 } from '../../../../models/festival/festival.model';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -33,7 +30,6 @@ import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ItemService } from '../../../../services/festival/item.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { forkJoin, Observable } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { CityRequest } from '../../../../models/common/address.model';
@@ -133,10 +129,6 @@ export class CreateTransportPackageAddonComponent {
     this.fixedPriceFormGroup = this.fb.group({
       fixedPriceCtrl: ['', [Validators.required, Validators.min(0)]],
     });
-  }
-
-  isValid(fieldName: string) {
-    return this.infoFormGroup.get(fieldName)?.valid || false;
   }
 
   closeDialog() {
@@ -249,12 +241,10 @@ export class CreateTransportPackageAddonComponent {
         returnArrivalTime: returnArrivalDateTimeFormatted,
       };
 
-      console.log('Request: ', request);
-
       this.itemService
         .addTransportConfig(this.data.festivalId, request)
         .subscribe({
-          next: (response) => {
+          next: () => {
             this.snackbarService.show('Transport configuration added');
             this.stepper?.next();
           },
