@@ -18,22 +18,74 @@
     <div class="button-container"></div>
   </div>
 
+  <!-- todo: add chip counts -->
+
   <div class="profile-content">
-    <!-- <mat-card class="profile-card">
-      <mat-card-title>General</mat-card-title>
-      <mat-card-content>
-        <span class="employee-count"> {{ generalCount }}</span>
-      </mat-card-content>
-      <mat-card-actions>
-        <button
-          class="main-card-action"
-          mat-button
-          color="primary"
-          (click)="onViewGeneralAddonsClick()"
-        >
-          View
-        </button>
-      </mat-card-actions>
-    </mat-card> -->
+    <mat-card class="festival-card" *ngFor="let addon of transportAddons">
+      <div class="card-content">
+        <div>
+          <mat-card-header>
+            <mat-card-title>{{ addon.itemName }}</mat-card-title>
+            <mat-card-subtitle>{{ addon.itemDescription }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                calendar_month
+              </mat-icon>
+              {{ festival.startDate | date : "d MMM" }} -
+              {{ festival.endDate | date : "d MMM" }}
+            </span>
+            <span class="icon-property" *ngIf="festival.status == 'PRIVATE'">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                visibility_off</mat-icon
+              >
+              Private
+            </span>
+            <span class="icon-property" *ngIf="festival.status == 'PUBLIC'">
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >visibility</mat-icon
+              >
+              Public
+            </span>
+            <span class="icon-property" *ngIf="festival.status == 'CANCELLED'">
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >cancel</mat-icon
+              >
+              Cancelled
+            </span>
+            <span class="icon-property" *ngIf="festival.status == 'COMPLETED'">
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >done_all</mat-icon
+              >
+              Completed
+            </span>
+            <span
+              class="icon-property"
+              *ngIf="
+                festival.storeStatus == 'OPEN' && festival.status == 'PUBLIC'
+              "
+            >
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >shopping_cart</mat-icon
+              >
+              Store Opened
+            </span>
+            <span
+              class="icon-property"
+              *ngIf="
+                festival.storeStatus == 'CLOSED' && festival.status == 'PUBLIC'
+              "
+            >
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >shopping_cart_off</mat-icon
+              >
+              Store Closed
+            </span>
+          </mat-card-content>
+        </div>
+        <mat-card-actions></mat-card-actions>
+      </div>
+    </mat-card>
   </div>
 </div>

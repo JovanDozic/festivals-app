@@ -126,7 +126,7 @@ export class ItemService {
     );
   }
 
-  getTransportAddons(festivalId: number): Observable<any> {
+  getTransportAddons(festivalId: number): Observable<TransportAddonDTO[]> {
     return this.http.get<TransportAddonDTO[]>(
       `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/transport`
     );

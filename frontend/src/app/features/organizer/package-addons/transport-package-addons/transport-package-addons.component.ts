@@ -1,5 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Festival } from '../../../../models/festival/festival.model';
+import {
+  Festival,
+  TransportAddonDTO,
+} from '../../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FestivalService } from '../../../../services/festival/festival.service';
 import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
@@ -39,7 +42,7 @@ export class TransportPackageAddonsComponent {
   transportCount: number = 0;
   campCount: number = 0;
 
-  transportAddons: any[] = [];
+  transportAddons: TransportAddonDTO[] = [];
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
