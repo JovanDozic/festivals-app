@@ -5,6 +5,7 @@ import {
   CreateItemPriceRequest,
   CreateItemRequest,
   FestivalPropCountResponse,
+  GeneralAddonDTO,
   Item,
   ItemsResponse,
   TransportAddonDTO,
@@ -129,6 +130,12 @@ export class ItemService {
   getTransportAddons(festivalId: number): Observable<TransportAddonDTO[]> {
     return this.http.get<TransportAddonDTO[]>(
       `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/transport`
+    );
+  }
+
+  getGeneralAddons(festivalId: number): Observable<GeneralAddonDTO[]> {
+    return this.http.get<GeneralAddonDTO[]>(
+      `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/general`
     );
   }
 }

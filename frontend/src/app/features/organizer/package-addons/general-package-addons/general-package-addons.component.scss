@@ -1,9 +1,3 @@
-.profile-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0px 20px;
-}
-
 .profile-header {
   display: flex;
   flex-direction: row;
@@ -28,9 +22,9 @@
 
 .profile-content {
   display: flex;
-  flex-direction: row;
-  gap: 20px;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: space-between;
 }
 
 .profile-card {
@@ -41,4 +35,82 @@
 h1 {
   font-weight: 500;
   font-family: "Funnel Display", sans-serif;
+}
+
+.festival-card {
+  flex: 1 1 calc(50% - 20px);
+  max-width: calc(50% - 20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.festival-card-skeleton .card-content {
+  padding-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .festival-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+mat-card-title {
+  font-family: "Funnel Display", sans-serif;
+  font-weight: bold;
+}
+
+mat-card-subtitle {
+  font-size: 14px;
+  color: #777;
+  margin: 0 0 20px 5px;
+}
+
+.card-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+mat-card-actions {
+  margin-top: 5px;
+}
+
+.main-action {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1000;
+  margin: 16px;
+}
+
+.number {
+  font-weight: 500;
+}
+
+.inline-arrow {
+  position: relative;
+  top: 6px !important;
+}
+
+.continued {
+  margin-top: -10px !important;
+}
+
+.continues {
+  margin-bottom: 5px !important;
+}
+
+h3 {
+  margin: 3px 0;
+  font-family: "Funnel Display", sans-serif;
+  font-weight: 500;
+  font-size: large;
+}
+
+.divider {
+  height: 25px;
 }

@@ -18,22 +18,62 @@
     <div class="button-container"></div>
   </div>
 
+  <div class="chip-container">
+    <mat-chip-set>
+      <mat-chip>
+        <span color="primary">{{ generalCount }}</span>
+        {{ generalCount === 1 ? "Addon" : "Addons" }}
+      </mat-chip>
+    </mat-chip-set>
+  </div>
+
   <div class="profile-content">
-    <!-- <mat-card class="profile-card">
-      <mat-card-title>General</mat-card-title>
-      <mat-card-content>
-        <span class="employee-count"> {{ generalCount }}</span>
-      </mat-card-content>
-      <mat-card-actions>
-        <button
-          class="main-card-action"
-          mat-button
-          color="primary"
-          (click)="onViewGeneralAddonsClick()"
-        >
-          View
-        </button>
-      </mat-card-actions>
-    </mat-card> -->
+    <mat-card class="festival-card" *ngFor="let addon of generalAddons">
+      <div class="card-content">
+        <div>
+          <mat-card-header>
+            <mat-card-title>{{ addon.itemName }}</mat-card-title>
+            <mat-card-subtitle>{{ addon.itemDescription }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                attach_money
+              </mat-icon>
+              <span class="number">{{ addon.price }}</span>
+            </span>
+
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                numbers
+              </mat-icon>
+              <span class="number">{{ addon.itemRemainingNumber }}</span>
+              remaining out of
+              <span class="number">{{ addon.itemAvailableNumber }}</span>
+            </span>
+          </mat-card-content>
+        </div>
+        <mat-card-actions>
+          <span class="spacer"></span>
+          <button mat-icon-button [matMenuTriggerFor]="menu" color="primary">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >edit</mat-icon
+              >
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >delete</mat-icon
+              >
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+        </mat-card-actions>
+      </div>
+    </mat-card>
   </div>
 </div>

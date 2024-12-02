@@ -16,6 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
+
 @Component({
   selector: 'app-transport-package-addons',
   imports: [
@@ -35,12 +36,10 @@ import { ItemService } from '../../../../services/festival/item.service';
     '../../../../app.component.scss',
   ],
 })
-export class TransportPackageAddonsComponent {
+export class TransportPackageAddonsComponent implements OnInit {
   isLoading: boolean = true;
   festival: Festival | null = null;
-  generalCount: number = 0;
   transportCount: number = 0;
-  campCount: number = 0;
 
   transportAddons: TransportAddonDTO[] = [];
 
@@ -49,7 +48,6 @@ export class TransportPackageAddonsComponent {
   private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
   private itemService = inject(ItemService);
-  private dialog = inject(MatDialog);
 
   ngOnInit() {
     this.loadFestival();
@@ -63,6 +61,7 @@ export class TransportPackageAddonsComponent {
         next: (response) => {
           console.log(`Transport Addons`, response);
           this.transportAddons = response;
+          this.transportCount = this.transportAddons.length;
         },
         error: (error) => {
           console.log('Error fetching transport addons: ', error);

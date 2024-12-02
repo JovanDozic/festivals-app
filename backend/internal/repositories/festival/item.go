@@ -391,6 +391,7 @@ func (r *itemRepo) GetGeneralAddons(festivalId uint) ([]dtoFestival.GeneralAddon
 		Joins("JOIN items i ON pli.item_id = i.id").
 		Joins("JOIN package_addons pa ON i.id = pa.item_id").
 		Where("i.festival_id = ?", festivalId).
+		Where("pa.category = ?", modelsFestival.PackageAddonGeneral).
 		Scan(&generalAddons).Error
 
 	if err != nil {

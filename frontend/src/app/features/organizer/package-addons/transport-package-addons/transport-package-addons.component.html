@@ -18,7 +18,14 @@
     <div class="button-container"></div>
   </div>
 
-  <!-- todo: add chip counts -->
+  <div class="chip-container">
+    <mat-chip-set>
+      <mat-chip>
+        <span color="primary">{{ transportCount }}</span>
+        {{ transportCount === 1 ? "Addon" : "Addons" }}
+      </mat-chip>
+    </mat-chip-set>
+  </div>
 
   <div class="profile-content">
     <mat-card class="festival-card" *ngFor="let addon of transportAddons">
@@ -171,9 +178,26 @@
             </span>
           </mat-card-content>
         </div>
-        <!-- <mat-card-actions>
-          todo: sometime, add edit button or whatever
-        </mat-card-actions> -->
+        <mat-card-actions>
+          <span class="spacer"></span>
+          <button mat-icon-button [matMenuTriggerFor]="menu" color="primary">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >edit</mat-icon
+              >
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >delete</mat-icon
+              >
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+        </mat-card-actions>
       </div>
     </mat-card>
   </div>

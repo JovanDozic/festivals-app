@@ -189,3 +189,19 @@ export interface TransportAddonDTO {
   arrivalCountryISO: string;
   arrivalCountryNiceName: string;
 }
+
+export interface GeneralAddonDTO {
+  priceListItemId: number;
+  priceListId: number;
+  itemId: number;
+  itemName: string;
+  itemDescription: string;
+  itemType: string;
+  itemAvailableNumber: number;
+  itemRemainingNumber: number;
+  dateFrom: Date | null;
+  dateTo: Date | null;
+  isFixed: boolean;
+  price: number;
+  packageAddonCategory: string;
+}
