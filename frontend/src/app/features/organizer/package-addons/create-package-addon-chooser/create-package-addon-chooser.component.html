@@ -1,6 +1,27 @@
 <h2 mat-dialog-title>Create Package Addon</h2>
 
 <mat-dialog-content>
+  <mat-radio-group [(ngModel)]="selectedCategory" class="cat-group">
+    @for (category of categories; track category) {
+    <mat-radio-button
+      [value]="category.value"
+      class="cat-radio"
+      color="primary"
+    >
+      <mat-card class="cat-card">
+        <mat-card-header>
+          <mat-card-title>
+            {{ category.viewValue
+            }}<span> - {{ category.description }}</span></mat-card-title
+          >
+        </mat-card-header>
+      </mat-card>
+    </mat-radio-button>
+    }
+  </mat-radio-group>
+</mat-dialog-content>
+
+<!-- <mat-dialog-content>
   <form>
     <div class="form-field">
       <mat-form-field appearance="outline">
@@ -16,7 +37,7 @@
       </mat-form-field>
     </div>
   </form>
-</mat-dialog-content>
+</mat-dialog-content> -->
 
 <mat-dialog-actions align="end">
   <button mat-button color="warn" (click)="closeDialog()">Cancel</button>

@@ -138,7 +138,7 @@ const organizerRoutes: Routes = [
           import(
             './features/organizer/package-addons/transport-package-addons/transport-package-addons.component'
           ).then((c) => c.TransportPackageAddonsComponent),
-        title: 'Transport Addons',
+        title: 'Travel Addons',
       },
       {
         path: 'organizer/my-festivals/:id/package-addons/camp',

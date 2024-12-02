@@ -34,10 +34,12 @@ import { ItemService } from '../../../../services/festival/item.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { forkJoin } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
 
 interface Category {
   value: string;
   viewValue: string;
+  description: string;
 }
 
 @Component({
@@ -58,6 +60,7 @@ interface Category {
     MatSlideToggleModule,
     MatDialogModule,
     MatSelectModule,
+    MatRadioModule,
   ],
   templateUrl: './create-package-addon-chooser.component.html',
   styleUrls: [
@@ -70,9 +73,21 @@ export class CreatePackageAddonChooserComponent implements OnInit {
   private data: { festivalId: number } = inject(MAT_DIALOG_DATA);
 
   categories: Category[] = [
-    { value: 'GENERAL', viewValue: 'General' },
-    { value: 'TRANSPORT', viewValue: 'Transport' },
-    { value: 'CAMP', viewValue: 'Camp' },
+    {
+      value: 'GENERAL',
+      viewValue: 'General',
+      description: 'Enchase The Festival Experience',
+    },
+    {
+      value: 'TRANSPORT',
+      viewValue: 'Travel',
+      description: 'Help Attendees arrive to The Festival Grounds',
+    },
+    {
+      value: 'CAMP',
+      viewValue: 'Camp',
+      description: 'Provide Attendees with a place to stay',
+    },
   ];
 
   selectedCategory: any | null = this.categories[1].value;

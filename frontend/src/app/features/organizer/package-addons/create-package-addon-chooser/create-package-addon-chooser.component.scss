@@ -62,3 +62,44 @@ mat-form-field {
   width: 100%;
   margin: 5px 0 0 0 !important;
 }
+
+.cat-group {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  overflow: hidden;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.cat-radio {
+  width: 100%;
+  z-index: 9999;
+  position: relative;
+}
+
+.cat-card {
+  width: 504px;
+  z-index: -1;
+  position: relative;
+  left: -50px;
+  padding-left: 45px;
+  vertical-align: middle;
+}
+
+.cat-card mat-card-header {
+  height: 100%;
+  margin: 0;
+}
+
+mat-card-title {
+  margin-left: -10px !important;
+}
+
+mat-card-title span {
+  color: #555;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+}
