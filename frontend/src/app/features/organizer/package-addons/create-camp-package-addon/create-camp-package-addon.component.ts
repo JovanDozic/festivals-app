@@ -98,7 +98,6 @@ export class CreateCampPackageAddonComponent {
 
     this.configurationFormGroup = this.fb.group({
       campNameCtrl: ['', Validators.required],
-      imageURLCtrl: ['', Validators.required],
       equipmentFormArray: this.fb.array([this.createEquipmentFormGroup()]),
     });
 
@@ -173,7 +172,7 @@ export class CreateCampPackageAddonComponent {
   }
 
   addCampConfig() {
-    if (this.configurationFormGroup.valid && this.itemId) {
+    if (this.configurationFormGroup.valid && this.itemId && this.selectedFile) {
       const equipmentList: EquipmentRequest[] = [];
       this.equipmentFormArray.controls.forEach((control) => {
         const equipmentName = control.get('equipmentNameCtrl')?.value;
@@ -185,11 +184,31 @@ export class CreateCampPackageAddonComponent {
       const request: AddCampConfigRequest = {
         itemId: this.itemId,
         campName: this.configurationFormGroup.get('campNameCtrl')?.value,
-        imageURL: this.configurationFormGroup.get('imageURLCtrl')?.value,
+        imageURL: '',
         equipmentList: equipmentList,
       };
 
       console.log('Add Camp Config Request: ', request);
+
+      this.imageService.uploadImageAndGetURL(this.selectedFile).subscribe({
+        next: (response) => {
+          console.log('Image uploaded successfully', response);
+          request.imageURL = response.imageURL;
+
+          this.itemService
+            .addCampConfig(this.data.festivalId, request)
+            .subscribe({
+              next: () => {
+                this.snackbarService.show('Camp Config created');
+                this.stepper?.next();
+              },
+              error: (error) => {
+                console.log('Error creating Camp Config: ', error);
+                this.snackbarService.show('Error creating Camp Config');
+              },
+            });
+        },
+      });
     }
   }
 

@@ -25,6 +25,7 @@ type ItemHandler interface {
 	GetCurrentPackageAddons(w http.ResponseWriter, r *http.Request)
 	GetPackageAddonsCount(w http.ResponseWriter, r *http.Request)
 	CreateTransportPackageAddon(w http.ResponseWriter, r *http.Request)
+	CreateCampPackageAddon(w http.ResponseWriter, r *http.Request)
 }
 
 type itemHandler struct {
@@ -409,4 +410,34 @@ func (h *itemHandler) CreateTransportPackageAddon(w http.ResponseWriter, r *http
 
 	utils.WriteJSON(w, http.StatusCreated, nil, nil)
 	log.Println("transport package addon created for item ID", input.ItemID)
+}
+
+func (h *itemHandler) CreateCampPackageAddon(w http.ResponseWriter, r *http.Request) {
+
+	_, ok := h.authorizeOrganizerForFestival(w, r)
+	if !ok {
+		return
+	}
+
+	var input dtoFestival.CreateCampPackageAddonRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := h.itemService.CreateCampPackageAddon(input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusCreated, nil, nil)
+	log.Println("camp package addon created for item ID", input.ItemID)
 }

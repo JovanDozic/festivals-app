@@ -2,7 +2,7 @@
 
 <mat-dialog-content>
   <mat-stepper [linear]="true" #stepper>
-    <!-- <mat-step [stepControl]="infoFormGroup" [editable]="false">
+    <mat-step [stepControl]="infoFormGroup" [editable]="false">
       <form [formGroup]="infoFormGroup">
         <ng-template matStepLabel>Info</ng-template>
         <div class="form-fields">
@@ -34,7 +34,7 @@
           </mat-form-field>
         </div>
       </form>
-    </mat-step> -->
+    </mat-step>
 
     <mat-step [stepControl]="configurationFormGroup" [editable]="false">
       <ng-template matStepLabel>Configuration</ng-template>
@@ -213,7 +213,7 @@
     mat-stroked-button
     (click)="addCampConfig()"
     *ngIf="stepper.selectedIndex == 1"
-    [disabled]="configurationFormGroup.invalid"
+    [disabled]="configurationFormGroup.invalid || !selectedFile"
   >
     Next
   </button>

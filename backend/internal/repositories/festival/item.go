@@ -26,6 +26,9 @@ type ItemRepo interface {
 	DeleteTicketType(itemID uint) error
 	GetCurrentPackageAddons(festivalId uint, category string) ([]modelsFestival.PriceListItem, error)
 	CreateTransportPackageAddon(transportAddon *modelsFestival.TransportAddon) error
+	CreateCampPackageAddon(campAddon *modelsFestival.CampAddon) error
+	CreateCampEquipment(campEquipment *modelsFestival.CampEquipment) error
+	CreatePackageAddonImage(packageAddonImage *modelsFestival.PackageAddonImage) error
 }
 
 type itemRepo struct {
@@ -294,4 +297,16 @@ func (r *itemRepo) DeleteTicketType(itemID uint) error {
 
 func (r *itemRepo) CreateTransportPackageAddon(transportAddon *modelsFestival.TransportAddon) error {
 	return r.db.Create(transportAddon).Error
+}
+
+func (r *itemRepo) CreateCampPackageAddon(campAddon *modelsFestival.CampAddon) error {
+	return r.db.Create(campAddon).Error
+}
+
+func (r *itemRepo) CreateCampEquipment(campEquipment *modelsFestival.CampEquipment) error {
+	return r.db.Create(campEquipment).Error
+}
+
+func (r *itemRepo) CreatePackageAddonImage(packageAddonImage *modelsFestival.PackageAddonImage) error {
+	return r.db.Create(packageAddonImage).Error
 }

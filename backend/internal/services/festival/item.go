@@ -5,6 +5,7 @@ import (
 	dto "backend/internal/dto/festival"
 	modelsCommon "backend/internal/models/common"
 	modelsFestival "backend/internal/models/festival"
+	reposCommon "backend/internal/repositories/common"
 	reposFestival "backend/internal/repositories/festival"
 	services "backend/internal/services/common"
 	"backend/internal/utils"
@@ -25,23 +26,27 @@ type ItemService interface {
 	DeleteTicketType(itemId uint) error
 	GetCurrentPackageAddons(festivalId uint, category string) ([]modelsFestival.PriceListItem, error)
 	CreateTransportPackageAddon(request dto.CreateTransportPackageAddonRequest) error
+	CreateCampPackageAddon(request dto.CreateCampPackageAddonRequest) error
 }
 
 type itemService struct {
 	config          *config.Config
 	itemRepo        reposFestival.ItemRepo
 	locationService services.LocationService
+	imageRepo       reposCommon.ImageRepo
 }
 
 func NewItemService(
 	config *config.Config,
 	itemRepo reposFestival.ItemRepo,
 	locationService services.LocationService,
+	imageRepo reposCommon.ImageRepo,
 ) ItemService {
 	return &itemService{
 		config:          config,
 		itemRepo:        itemRepo,
 		locationService: locationService,
+		imageRepo:       imageRepo,
 	}
 }
 
@@ -258,6 +263,59 @@ func (s *itemService) CreateTransportPackageAddon(request dto.CreateTransportPac
 	err = s.itemRepo.CreateTransportPackageAddon(transportAddon)
 	if err != nil {
 		log.Println("error creating transport package addon:", err)
+		return err
+	}
+
+	return nil
+}
+
+func (s *itemService) CreateCampPackageAddon(request dto.CreateCampPackageAddonRequest) error {
+
+	// we need to create camp package addon
+	campAddon := &modelsFestival.CampAddon{
+		ItemID:   request.ItemID,
+		CampName: request.CampName,
+	}
+
+	err := s.itemRepo.CreateCampPackageAddon(campAddon)
+	if err != nil {
+		log.Println("error creating camp package addon:", err)
+		return err
+	}
+
+	// then we need to add equipment list items
+	for _, equipment := range request.EquipmentList {
+		campEquipment := &modelsFestival.CampEquipment{
+			ItemID: campAddon.ItemID,
+			Name:   equipment.Name,
+		}
+
+		err := s.itemRepo.CreateCampEquipment(campEquipment)
+		if err != nil {
+			log.Println("error creating camp equipment:", err)
+			continue
+		}
+	}
+
+	// then we need to save image
+	image := &modelsCommon.Image{
+		URL: request.ImageURL,
+	}
+
+	err = s.imageRepo.Create(image)
+	if err != nil {
+		log.Println("error creating image:", err)
+		return err
+	}
+
+	packageAddonImage := &modelsFestival.PackageAddonImage{
+		ItemID:  campAddon.ItemID,
+		ImageID: image.ID,
+	}
+
+	err = s.itemRepo.CreatePackageAddonImage(packageAddonImage)
+	if err != nil {
+		log.Println("error creating package addon image:", err)
 		return err
 	}
 

@@ -14,6 +14,7 @@ export class ImageService {
 
   constructor(private http: HttpClient) {}
 
+  // this ain't used
   getPresignedURL(request: GetUploadURIRequest) {
     return this.http.post<GetUploadURIResponse>(
       `${this.apiUrl}/image/upload`,
@@ -21,7 +22,7 @@ export class ImageService {
     );
   }
 
-  uploadProfilePhoto(file: File): Observable<any> {
+  uploadImageAndGetURL(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -45,11 +46,11 @@ export class ImageService {
             })
             .pipe(
               map(() => {
-                console.log('Profile photo uploaded successfully', imageURL);
+                console.log('Image uploaded successfully', imageURL);
                 return { imageURL };
               }),
               catchError((error) => {
-                console.error('Error uploading profile photo:', error);
+                console.error('Error uploading image:', error);
                 throw error;
               })
             );

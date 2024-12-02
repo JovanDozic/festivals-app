@@ -100,3 +100,19 @@ func (f *CreateTransportPackageAddonRequest) Validate() error {
 	}
 	return nil
 }
+
+func (f *CreateCampPackageAddonRequest) Validate() error {
+	if f.ItemID == 0 {
+		return models.ErrMissingFields
+	}
+	if f.CampName == "" {
+		return models.ErrMissingFields
+	}
+	if f.ImageURL == "" {
+		return models.ErrMissingFields
+	}
+	if len(f.EquipmentList) == 0 {
+		return models.ErrMissingFields
+	}
+	return nil
+}

@@ -84,3 +84,14 @@ type CreateTransportPackageAddonRequest struct {
 	ReturnDepartureTime string `json:"returnDepartureTime"`
 	ReturnArrivalTime   string `json:"returnArrivalTime"`
 }
+
+type CreateCampPackageAddonRequest struct {
+	ItemID        uint               `json:"itemId"`
+	CampName      string             `json:"campName"`
+	ImageURL      string             `json:"imageUrl"`
+	EquipmentList []EquipmentRequest `json:"equipmentList"`
+}
+
+type EquipmentRequest struct {
+	Name string `json:"name"`
+}

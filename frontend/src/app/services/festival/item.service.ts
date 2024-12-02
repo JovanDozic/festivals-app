@@ -111,10 +111,17 @@ export class ItemService {
     );
   }
 
-  addTransportConfig(festivalId: number, config: any): Observable<any> {
+  addTransportConfig(festivalId: number, request: any): Observable<any> {
     return this.http.post(
       `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/transport`,
-      config
+      request
+    );
+  }
+
+  addCampConfig(festivalId: number, request: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/camp`,
+      request
     );
   }
 }
