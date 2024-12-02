@@ -76,4 +76,8 @@
       </div>
     </mat-card>
   </div>
+
+  <div class="empty-list" *ngIf="!isLoading && generalCount == 0">
+    <p>You do not have any General Package Addons.</p>
+  </div>
 </div>

@@ -96,4 +96,8 @@
       </div>
     </mat-card>
   </div>
+
+  <div class="empty-list" *ngIf="!isLoading && campCount == 0">
+    <p>You do not have any General Package Addons.</p>
+  </div>
 </div>

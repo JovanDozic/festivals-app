@@ -201,4 +201,8 @@
       </div>
     </mat-card>
   </div>
+
+  <div class="empty-list" *ngIf="!isLoading && transportCount == 0">
+    <p>You do not have any Travel Package Addons.</p>
+  </div>
 </div>

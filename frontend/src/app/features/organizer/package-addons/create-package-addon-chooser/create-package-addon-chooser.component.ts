@@ -68,7 +68,7 @@ export class CreatePackageAddonChooserComponent {
     },
   ];
 
-  selectedCategory: any | null = null;
+  selectedCategory: any | null = this.categories[0].value;
 
   closeDialog() {
     this.dialogRef.close(false);
