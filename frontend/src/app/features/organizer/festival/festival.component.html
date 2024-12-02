@@ -239,23 +239,6 @@
         >
           View
         </button>
-        <!-- <span class="spacer"></span>
-        <button
-          mat-icon-button
-          [matMenuTriggerFor]="menu"
-          color="primary"
-          class="card-menu-actions"
-        >
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item>
-            <mat-icon class="material-symbols-outlined" color="primary">
-              add
-            </mat-icon>
-            <span>Add Employee</span>
-          </button>
-        </mat-menu> -->
       </mat-card-actions>
     </mat-card>
     <mat-card class="profile-card">
@@ -284,7 +267,7 @@
     <mat-card class="profile-card">
       <mat-card-title>Package Addons</mat-card-title>
       <mat-card-content>
-        <span class="employee-count">x</span>
+        <span class="employee-count">{{ packageAddonsCount }}</span>
       </mat-card-content>
       <mat-card-actions>
         <button

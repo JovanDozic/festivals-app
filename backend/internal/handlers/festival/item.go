@@ -24,6 +24,7 @@ type ItemHandler interface {
 	DeleteTicketType(w http.ResponseWriter, r *http.Request)
 	GetCurrentPackageAddons(w http.ResponseWriter, r *http.Request)
 	GetPackageAddonsCount(w http.ResponseWriter, r *http.Request)
+	GetAllPackageAddonsCount(w http.ResponseWriter, r *http.Request)
 	CreateTransportPackageAddon(w http.ResponseWriter, r *http.Request)
 	CreateCampPackageAddon(w http.ResponseWriter, r *http.Request)
 	GetTransportAddons(w http.ResponseWriter, r *http.Request)
@@ -372,6 +373,29 @@ func (h *itemHandler) GetPackageAddonsCount(w http.ResponseWriter, r *http.Reque
 	}
 
 	count, err := h.itemService.GetPackageAddonsCount(festivalId, category)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, dtoFestival.FestivalPropCountResponse{
+		FestivalId: festivalId,
+		Count:      count,
+	}, nil)
+	log.Println("package addon count retrieved successfully for festival:", festivalId)
+}
+
+func (h *itemHandler) GetAllPackageAddonsCount(w http.ResponseWriter, r *http.Request) {
+
+	festivalId, err := getFestivalIDFromRequest(r)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	count, err := h.itemService.GetAllPackageAddonsCount(festivalId)
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

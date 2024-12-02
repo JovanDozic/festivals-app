@@ -21,6 +21,7 @@ type ItemService interface {
 	GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.PriceListItem, error)
 	GetTicketTypesCount(festivalId uint) (int, error)
 	GetPackageAddonsCount(festivalId uint, category string) (int, error)
+	GetAllPackageAddonsCount(festivalId uint) (int, error)
 	GetTicketTypes(itemId uint) (*dto.GetItemResponse, error)
 	UpdateItemAndPrices(request dto.UpdateItemRequest) error
 	DeleteTicketType(itemId uint) error
@@ -125,6 +126,19 @@ func (s *itemService) GetPackageAddonsCount(festivalId uint, category string) (i
 	}
 
 	return s.itemRepo.GetPackageAddonsCount(festivalId, strings.ToUpper(category))
+}
+
+func (s *itemService) GetAllPackageAddonsCount(festivalId uint) (int, error) {
+	sum := 0
+	for _, category := range []string{modelsFestival.PackageAddonGeneral, modelsFestival.PackageAddonCamp, modelsFestival.PackageAddonTransport} {
+		count, err := s.itemRepo.GetPackageAddonsCount(festivalId, strings.ToUpper(category))
+		if err != nil {
+			return -1, err
+		}
+		sum += count
+	}
+
+	return sum, nil
 }
 
 func (s *itemService) GetTicketTypes(itemId uint) (*dto.GetItemResponse, error) {

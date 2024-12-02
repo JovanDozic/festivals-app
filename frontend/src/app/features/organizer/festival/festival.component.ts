@@ -55,6 +55,7 @@ export class FestivalComponent implements OnInit {
   previousImageIndex: number = 0;
   employeeCount: number = 0;
   ticketTypesCount: number = 0;
+  packageAddonsCount: number = 0;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -67,6 +68,7 @@ export class FestivalComponent implements OnInit {
     this.loadFestival();
     this.loadEmployeeCount();
     this.loadTicketTypesCount();
+    this.loadPackageAddonsCount();
   }
 
   goBack() {
@@ -141,6 +143,22 @@ export class FestivalComponent implements OnInit {
           console.log('Error fetching ticket types count: ', error);
           this.snackbarService.show('Error getting ticket types count');
           this.ticketTypesCount = 0;
+        },
+      });
+    }
+  }
+
+  loadPackageAddonsCount() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.itemService.getAllPackageAddonsCount(Number(id)).subscribe({
+        next: (count) => {
+          this.packageAddonsCount = count;
+        },
+        error: (error) => {
+          console.log('Error fetching package addons count: ', error);
+          this.snackbarService.show('Error getting package addons count');
+          this.packageAddonsCount = 0;
         },
       });
     }

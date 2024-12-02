@@ -86,6 +86,7 @@ func (h *festivalHandler) authorizeOrganizerForFestival(w http.ResponseWriter, r
 
 func (h *itemHandler) authorizeOrganizerForFestival(w http.ResponseWriter, r *http.Request) (uint, bool) {
 	if !utils.AuthOrganizerRole(r.Context()) {
+		log.Println("error: unauthorized (user is not an organizer)")
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return 0, false
 	}

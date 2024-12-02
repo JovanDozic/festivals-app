@@ -49,6 +49,14 @@ export class ItemService {
       .pipe(map((response) => response.count));
   }
 
+  getAllPackageAddonsCount(festivalId: number): Observable<number> {
+    return this.http
+      .get<FestivalPropCountResponse>(
+        `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/count`
+      )
+      .pipe(map((response) => response.count));
+  }
+
   getTicketType(festivalId: number, itemId: number): Observable<Item> {
     return this.http.get<Item>(
       `${this.apiUrl}/organizer/festival/${festivalId}/item/ticket-type/${itemId}`
