@@ -133,35 +133,41 @@
           </mat-step>
 
           <!-- Step 3: Images -->
-          <mat-step [stepControl]="imagesFormGroup" [editable]="false">
-            <form [formGroup]="imagesFormGroup">
-              <ng-template matStepLabel>Images</ng-template>
-              <div class="form-fields-image">
-                <mat-form-field appearance="outline">
-                  <mat-label>Image URL</mat-label>
-                  <input matInput formControlName="imageUrlCtrl" required />
-                </mat-form-field>
-                <button mat-stroked-button (click)="addImage()" type="button">
-                  <mat-icon>add</mat-icon>
-                  Add Image
-                </button>
-              </div>
-            </form>
+          <mat-step [editable]="false">
+            <ng-template matStepLabel>Images</ng-template>
 
             <!-- Image Preview Grid -->
-            <div class="image-grid" *ngIf="images.length > 0">
-              <h2>Images Preview</h2>
-              <p>Click on any image to remove it.</p>
+            <div class="image-grid">
+              <div class="form-fields-image">
+                <div>
+                  <h2>Images Preview</h2>
+                  <p>Click on any image to remove it.</p>
+                </div>
+                <button
+                  mat-stroked-button
+                  (click)="fileInput.click()"
+                  type="button"
+                >
+                  <mat-icon class="material-symbols-outlined">upload</mat-icon>
+                  Upload Image
+                </button>
+                <input
+                  #fileInput
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  (change)="onFileSelected($event)"
+                  style="display: none"
+                />
+              </div>
               <mat-grid-list cols="3" rowHeight="200px">
                 <mat-grid-tile *ngFor="let image of images">
-                  <button
-                    type="button"
+                  <img
                     class="image-button"
                     (click)="removeImage(image)"
                     aria-label="Remove image"
-                  >
-                    <img [src]="image" alt="Image Preview" />
-                  </button>
+                    [src]="image.previewUrl"
+                  />
                 </mat-grid-tile>
               </mat-grid-list>
             </div>

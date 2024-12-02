@@ -21,6 +21,12 @@ import {
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { Router } from '@angular/router';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { ImageService } from '../../../services/image/image.service';
+
+interface ImagePreview {
+  file: File;
+  previewUrl: string | ArrayBuffer | null;
+}
 
 @Component({
   selector: 'app-create-festival',
@@ -46,15 +52,13 @@ export class CreateFestivalComponent {
   private snackbarService = inject(SnackbarService);
   private festivalService = inject(FestivalService);
   private dialog = inject(MatDialog);
+  private imageService = inject(ImageService);
   router: Router = inject(Router);
 
   @ViewChild('stepper') private stepper: MatStepper | undefined;
 
   festivalId: string | null = null;
-  // todo: remove default images
-  images: string[] = [
-    'https://prismic-assets-cdn.tomorrowland.com/ZqJkiB5LeNNTxfzO_1721400232662_dbb1c34f-229a-46b2-81f3-f498bccf476c.jpg_0_10322487413277135069.jpg',
-  ];
+  images: ImagePreview[] = [];
 
   basicInfoFormGroup = this.fb.group({
     nameCtrl: ['', Validators.required],
@@ -64,18 +68,13 @@ export class CreateFestivalComponent {
     capacityCtrl: ['', [Validators.required, Validators.min(1)]],
   });
 
-  // todo: remove default address
   addressFormGroup = this.fb.group({
-    streetCtrl: ['Unknown', Validators.required],
-    numberCtrl: ['1', Validators.required],
+    streetCtrl: ['', Validators.required],
+    numberCtrl: ['', Validators.required],
     apartmentSuiteCtrl: [''],
-    cityCtrl: ['Koralovo', Validators.required],
-    postalCodeCtrl: ['99999', Validators.required],
-    countryISO3Ctrl: ['SRB', Validators.required],
-  });
-
-  imagesFormGroup = this.fb.group({
-    imageUrlCtrl: [''],
+    cityCtrl: ['', Validators.required],
+    postalCodeCtrl: ['', Validators.required],
+    countryISO3Ctrl: ['', Validators.required],
   });
 
   goBack() {
@@ -127,15 +126,26 @@ export class CreateFestivalComponent {
     }
   }
 
-  addImage() {
-    if (this.imagesFormGroup.valid) {
-      const imageUrl = this.imagesFormGroup.get('imageUrlCtrl')?.value ?? '';
-      this.images.push(imageUrl);
-      this.imagesFormGroup.reset();
+  onFileSelected(event: Event) {
+    const fileInput = event.target as HTMLInputElement;
+
+    if (fileInput.files && fileInput.files.length > 0) {
+      Array.from(fileInput.files).forEach((file) => {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          this.images.push({
+            file: file,
+            previewUrl: reader.result,
+          });
+        };
+
+        reader.readAsDataURL(file);
+      });
     }
   }
 
-  removeImage(url: string) {
+  removeImage(image: ImagePreview) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Remove Image',
@@ -147,7 +157,7 @@ export class CreateFestivalComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirm) {
-        this.images = this.images.filter((image) => image !== url);
+        this.images = this.images.filter((img) => img !== image);
       }
     });
   }
@@ -155,20 +165,37 @@ export class CreateFestivalComponent {
   uploadFestivalImages() {
     if (this.images.length === 0) {
       this.snackbarService.show('Add at least one image');
+      return;
     }
     if (this.festivalId && this.images.length > 0) {
-      const uploadObservables = this.images.map((imageUrl) =>
-        this.http.post(
-          `http://localhost:4000/festival/${this.festivalId}/image`,
-          { imageUrl },
-        ),
+      const uploadObservables = this.images.map((image) =>
+        this.imageService.uploadImageAndGetURL(image.file),
       );
 
       forkJoin(uploadObservables).subscribe({
-        next: () => {
-          this.snackbarService.show('Festival created successfully!');
-          this.stepper?.next();
-          this.router.navigate(['organizer/my-festivals/' + this.festivalId]);
+        next: (responses) => {
+          const imageUrls = responses.map((response) => response.imageURL);
+
+          const addImageObservables = imageUrls.map((imageUrl) =>
+            this.http.post(
+              `http://localhost:4000/festival/${this.festivalId}/image`,
+              { imageUrl },
+            ),
+          );
+
+          forkJoin(addImageObservables).subscribe({
+            next: () => {
+              this.snackbarService.show('Festival created successfully!');
+              this.stepper?.next();
+              this.router.navigate([
+                'organizer/my-festivals/' + this.festivalId,
+              ]);
+            },
+            error: (error) => {
+              console.error('Error adding images to festival:', error);
+              this.snackbarService.show('Error adding images to festival');
+            },
+          });
         },
         error: (error) => {
           console.error('Error uploading images:', error);
