@@ -32,6 +32,8 @@ type ItemRepo interface {
 	CreatePackageAddonImage(packageAddonImage *modelsFestival.PackageAddonImage) error
 	GetTransportAddons(festivalId uint) ([]dtoFestival.TransportAddonDTO, error)
 	GetGeneralAddons(festivalId uint) ([]dtoFestival.GeneralAddonDTO, error)
+	GetCampAddons(festivalId uint) ([]dtoFestival.CampAddonDTO, error)
+	GetCampEquipment(itemId uint) ([]modelsFestival.CampEquipment, error)
 }
 
 type itemRepo struct {
@@ -399,4 +401,58 @@ func (r *itemRepo) GetGeneralAddons(festivalId uint) ([]dtoFestival.GeneralAddon
 	}
 
 	return generalAddons, nil
+}
+
+func (r *itemRepo) GetCampAddons(festivalId uint) ([]dtoFestival.CampAddonDTO, error) {
+	var campAddons []dtoFestival.CampAddonDTO
+
+	err := r.db.
+		Table("price_list_items pli").
+		Select(`
+			pli.id as price_list_item_id,
+			pli.price_list_id,
+			pli.item_id,
+			i.name as item_name,
+			i.description as item_description,
+			i.type as item_type,
+			i.available_number as item_available_number,
+			i.remaining_number as item_remaining_number,
+			pli.date_from as date_from,
+			pli.date_to as date_to,
+			pli.is_fixed as is_fixed,
+			pli.price as price,
+			pa.category as package_addon_category,
+			ca.camp_name as camp_name,
+			im.url as image_url,
+			STRING_AGG(ce.name, ', ') as equipment_names
+		`).
+		Joins("JOIN items i ON pli.item_id = i.id").
+		Joins("JOIN package_addons pa ON i.id = pa.item_id").
+		Joins("JOIN camp_addons ca ON pa.item_id = ca.item_id").
+		Joins("JOIN package_addon_images pai ON pai.item_id = i.id").
+		Joins("JOIN images im ON pai.image_id = im.id").
+		Joins("LEFT JOIN camp_equipments ce ON ce.item_id = i.id").
+		Where("i.festival_id = ?", festivalId).
+		Group("pli.id, pli.price_list_id, pli.item_id, i.name, i.description, i.type, i.available_number, i.remaining_number, pli.date_from, pli.date_to, pli.is_fixed, pli.price, pa.category, ca.camp_name, im.url").
+		Scan(&campAddons).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return campAddons, nil
+}
+
+func (r *itemRepo) GetCampEquipment(itemId uint) ([]modelsFestival.CampEquipment, error) {
+	var campEquipment []modelsFestival.CampEquipment
+
+	err := r.db.
+		Where("item_id = ?", itemId).
+		Find(&campEquipment).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return campEquipment, nil
 }

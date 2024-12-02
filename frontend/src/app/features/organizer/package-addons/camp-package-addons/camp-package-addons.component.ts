@@ -1,5 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Festival } from '../../../../models/festival/festival.model';
+import {
+  CampAddonDTO,
+  Festival,
+} from '../../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FestivalService } from '../../../../services/festival/festival.service';
 import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
@@ -35,9 +38,9 @@ import { ItemService } from '../../../../services/festival/item.service';
 export class CampPackageAddonsComponent {
   isLoading: boolean = true;
   festival: Festival | null = null;
-  generalCount: number = 0;
-  transportCount: number = 0;
   campCount: number = 0;
+
+  campAddons: CampAddonDTO[] = [];
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -48,11 +51,25 @@ export class CampPackageAddonsComponent {
 
   ngOnInit() {
     this.loadFestival();
-    this.loadCounts();
+    this.loadAddons();
   }
 
-  loadCounts() {
-    throw new Error('Method not implemented.');
+  loadAddons() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.itemService.getCampAddons(Number(id)).subscribe({
+        next: (response) => {
+          console.log(`General Addons`, response);
+          this.campAddons = response;
+          this.campCount = this.campAddons.length;
+        },
+        error: (error) => {
+          console.log('Error fetching general addons: ', error);
+          this.snackbarService.show('Error getting General Addons');
+          this.campAddons = [];
+        },
+      });
+    }
   }
 
   goBack() {

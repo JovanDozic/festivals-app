@@ -120,3 +120,26 @@ type GeneralAddonDTO struct {
 	Price                 float64    `json:"price"`
 	PackageAddonCategory  string     `json:"packageAddonCategory"`
 }
+
+type EquipmentResponse struct {
+	Name string `json:"name"`
+}
+
+type CampAddonDTO struct {
+	PriceListItemID       uint       `json:"priceListItemId"`
+	PriceListID           uint       `json:"priceListId"`
+	ItemID                uint       `json:"itemId"`
+	ItemName              string     `json:"itemName"`
+	ItemDescription       string     `json:"itemDescription"`
+	ItemType              string     `json:"itemType"`
+	ItemAvailableNumber   int        `json:"itemAvailableNumber"`
+	ItemRemainingNumber   int        `json:"itemRemainingNumber"`
+	PriceListItemDateFrom *time.Time `json:"dateFrom"`
+	PriceListItemDateTo   *time.Time `json:"dateTo"`
+	PriceListItemIsFixed  bool       `json:"isFixed"`
+	Price                 float64    `json:"price"`
+	PackageAddonCategory  string     `json:"packageAddonCategory"`
+	CampName              string     `json:"campName"`
+	ImageURL              string     `json:"imageUrl"`
+	EquipmentNames        string     `json:"equipmentNames"`
+}

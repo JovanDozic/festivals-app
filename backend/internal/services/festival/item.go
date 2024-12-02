@@ -29,6 +29,7 @@ type ItemService interface {
 	CreateCampPackageAddon(request dto.CreateCampPackageAddonRequest) error
 	GetTransportAddons(festivalId uint) ([]dto.TransportAddonDTO, error)
 	GetGeneralAddons(festivalId uint) ([]dto.GeneralAddonDTO, error)
+	GetCampAddons(festivalId uint) ([]dto.CampAddonDTO, error)
 }
 
 type itemService struct {
@@ -337,5 +338,14 @@ func (s *itemService) GetGeneralAddons(festivalId uint) ([]dto.GeneralAddonDTO, 
 	if err != nil {
 		return nil, err
 	}
+	return campAddons, nil
+}
+
+func (s *itemService) GetCampAddons(festivalId uint) ([]dto.CampAddonDTO, error) {
+	campAddons, err := s.itemRepo.GetCampAddons(festivalId)
+	if err != nil {
+		return nil, err
+	}
+
 	return campAddons, nil
 }

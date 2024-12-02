@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, switchMap } from 'rxjs';
 import {
+  CampAddonDTO,
   CreateItemPriceRequest,
   CreateItemRequest,
   FestivalPropCountResponse,
@@ -136,6 +137,12 @@ export class ItemService {
   getGeneralAddons(festivalId: number): Observable<GeneralAddonDTO[]> {
     return this.http.get<GeneralAddonDTO[]>(
       `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/general`
+    );
+  }
+
+  getCampAddons(festivalId: number): Observable<CampAddonDTO[]> {
+    return this.http.get<CampAddonDTO[]>(
+      `${this.apiUrl}/organizer/festival/${festivalId}/item/package-addon/camp`
     );
   }
 }

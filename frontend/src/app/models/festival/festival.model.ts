@@ -150,10 +150,10 @@ export interface AddCampConfigRequest {
   itemId: number;
   campName: string;
   imageURL: string;
-  equipmentList: EquipmentRequest[];
+  equipmentList: EquipmentDTO[];
 }
 
-export interface EquipmentRequest {
+export interface EquipmentDTO {
   name: string;
 }
 
@@ -204,4 +204,23 @@ export interface GeneralAddonDTO {
   isFixed: boolean;
   price: number;
   packageAddonCategory: string;
+}
+
+export interface CampAddonDTO {
+  priceListItemId: number;
+  priceListId: number;
+  itemId: number;
+  itemName: string;
+  itemDescription: string;
+  itemType: string;
+  itemAvailableNumber: number;
+  itemRemainingNumber: number;
+  dateFrom: Date | null;
+  dateTo: Date | null;
+  isFixed: boolean;
+  price: number;
+  packageAddonCategory: string;
+  campName: string;
+  imageUrl: string;
+  equipmentNames: string;
 }

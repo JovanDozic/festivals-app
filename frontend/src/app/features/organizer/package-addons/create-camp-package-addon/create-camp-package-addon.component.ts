@@ -17,7 +17,7 @@ import {
   AddTransportConfigRequest,
   CreateItemPriceRequest,
   CreateItemRequest,
-  EquipmentRequest,
+  EquipmentDTO,
 } from '../../../../models/festival/festival.model';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -173,7 +173,7 @@ export class CreateCampPackageAddonComponent {
 
   addCampConfig() {
     if (this.configurationFormGroup.valid && this.itemId && this.selectedFile) {
-      const equipmentList: EquipmentRequest[] = [];
+      const equipmentList: EquipmentDTO[] = [];
       this.equipmentFormArray.controls.forEach((control) => {
         const equipmentName = control.get('equipmentNameCtrl')?.value;
         if (equipmentName) {
