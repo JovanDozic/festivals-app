@@ -212,6 +212,7 @@ export class FestivalComponent implements OnInit {
       data: this.festival,
       width: '800px',
       height: '535px',
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe((success) => {
