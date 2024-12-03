@@ -185,6 +185,11 @@ img[mat-card-image] {
   &.selected:hover {
     box-shadow: 0px 0px 10px #bfc2ff;
   }
+
+  &.sold-out {
+    opacity: 0.5;
+    outline: 3px solid #ff5449;
+  }
 }
 
 :host-context([data-theme="light"]) .ai-shadow-card {
@@ -196,6 +201,11 @@ img[mat-card-image] {
   &.selected:hover {
     box-shadow: 0px 0px 10px #4147e4;
   }
+
+  &.sold-out {
+    opacity: 0.5;
+    outline: 3px solid #ff5449;
+  }
 }
 
 :host-context([data-theme="dark"]) .ai-shadow-card:hover {
@@ -204,4 +214,12 @@ img[mat-card-image] {
 
 :host-context([data-theme="light"]) .ai-shadow-card:hover {
   box-shadow: 0px 0px 10px #5d5d6d;
+}
+
+:host-context([data-theme="dark"]) :host ::ng-deep .base-fill-button {
+  background-color: #12131b !important;
+}
+
+:host-context([data-theme="light"]) :host ::ng-deep .base-fill-button {
+  background-color: #fbf8ff !important;
 }

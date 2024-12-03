@@ -18,7 +18,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { MatStepperModule } from '@angular/material/stepper';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
@@ -58,6 +63,8 @@ export class StoreTicketComponent implements OnInit {
   isLoading = false;
 
   infoFormGroup: FormGroup;
+  personalFormGroup: FormGroup;
+  addressFormGroup: FormGroup;
   tickets: ItemCurrentPrice[] = [
     {
       itemId: 1,
@@ -84,35 +91,11 @@ export class StoreTicketComponent implements OnInit {
       priceListItemId: 2,
     },
     {
-      itemId: 2,
-      name: 'VIP Admission',
+      itemId: 3,
+      name: 'Universe',
       description: 'VIP Admission Ticket',
       price: 100.0,
-      remainingNumber: 50,
-      availableNumber: 50,
-      isFixed: true,
-      dateFrom: '2022-06-01',
-      dateTo: '2022-06-30',
-      priceListItemId: 2,
-    },
-    {
-      itemId: 2,
-      name: 'VIP Admission',
-      description: 'VIP Admission Ticket',
-      price: 100.0,
-      remainingNumber: 50,
-      availableNumber: 50,
-      isFixed: true,
-      dateFrom: '2022-06-01',
-      dateTo: '2022-06-30',
-      priceListItemId: 2,
-    },
-    {
-      itemId: 2,
-      name: 'VIP Admission',
-      description: 'VIP Admission Ticket',
-      price: 100.0,
-      remainingNumber: 50,
+      remainingNumber: 0,
       availableNumber: 50,
       isFixed: true,
       dateFrom: '2022-06-01',
@@ -125,6 +108,22 @@ export class StoreTicketComponent implements OnInit {
   constructor() {
     this.infoFormGroup = this.fb.group({
       nameCtrl: [''],
+    });
+
+    this.personalFormGroup = this.fb.group({
+      firstNameCtrl: [''],
+      lastNameCtrl: [''],
+      emailCtrl: [''],
+      phoneCtrl: [''],
+    });
+
+    this.addressFormGroup = this.fb.group({
+      streetCtrl: [''],
+      numberCtrl: [''],
+      apartmentSuiteCtrl: [''],
+      cityCtrl: [''],
+      postalCodeCtrl: [''],
+      countryISO3Ctrl: [''],
     });
   }
 
@@ -159,8 +158,9 @@ export class StoreTicketComponent implements OnInit {
   }
 
   selectTicket(ticket: ItemCurrentPrice) {
+    if (ticket.remainingNumber === 0) {
+      return;
+    }
     this.selectedTicket = ticket;
-    console.log('AAALO', ticket);
-    console.log('AAALO', this.selectedTicket);
   }
 }

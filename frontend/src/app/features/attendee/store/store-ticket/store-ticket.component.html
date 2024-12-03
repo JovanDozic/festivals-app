@@ -38,6 +38,7 @@
               <div
                 class="card-content ai-shadow-card"
                 [ngClass]="{ selected: ticket === selectedTicket }"
+                [ngClass]="{ 'sold-out': ticket.remainingNumber === 0 }"
               >
                 <div>
                   <mat-card-header>
@@ -54,71 +55,201 @@
                       >
                         attach_money
                       </mat-icon>
-                      <span class="number">{{ ticket.price }}</span>
+                      <span class="number" *ngIf="ticket.remainingNumber !== 0">
+                        {{ ticket.price }}
+                      </span>
+                      <span class="number" *ngIf="ticket.remainingNumber === 0">
+                        <span class="line-trough">{{ ticket.price }}</span>
+                        <span class="sold-out-text"> SOLD OUT </span>
+                      </span>
                     </span>
                   </mat-card-content>
                 </div>
-                <mat-card-actions>
-                  <span class="spacer"></span>
-                  <button
-                    mat-icon-button
-                    [matMenuTriggerFor]="menu"
-                    color="primary"
-                  >
-                    <mat-icon>more_vert</mat-icon>
-                  </button>
-                  <mat-menu #menu="matMenu">
-                    <button mat-menu-item>
-                      <mat-icon
-                        class="material-symbols-outlined"
-                        color="primary"
-                        >edit</mat-icon
-                      >
-                      <span>Edit</span>
-                    </button>
-                    <button mat-menu-item>
-                      <mat-icon
-                        class="material-symbols-outlined"
-                        color="primary"
-                        >delete</mat-icon
-                      >
-                      <span>Delete</span>
-                    </button>
-                  </mat-menu>
-                </mat-card-actions>
               </div>
             </mat-card>
           </div>
           <div>
-            <button mat-stroked-button matStepperNext>Next</button>
+            <button mat-stroked-button class="base-fill-button" matStepperNext>
+              Next
+            </button>
           </div>
         </form>
       </mat-step>
       <!-- ! PERSONAL INFORMATION -->
-      <mat-step [stepControl]="infoFormGroup">
-        <form [formGroup]="infoFormGroup">
+      <mat-step [stepControl]="personalFormGroup">
+        <form [formGroup]="personalFormGroup">
           <ng-template matStepLabel> Personal Information </ng-template>
-          <div class="form-fields">step 2</div>
+          <mat-card class="form-card">
+            <mat-card-content>
+              <p class="step-description">
+                Review Personal Information that's saved in your Profile. We
+                will use this info to contact you if needed.
+              </p>
+              <div class="form-fields">
+                <mat-form-field appearance="outline">
+                  <mat-label>First Name</mat-label>
+                  <input matInput formControlName="firstNameCtrl" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Last Name</mat-label>
+                  <input matInput formControlName="lastNameCtrl" />
+                </mat-form-field>
+              </div>
+              <div class="form-fields">
+                <mat-form-field appearance="outline">
+                  <mat-label>Email</mat-label>
+                  <input matInput formControlName="emailCtrl" />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Phone</mat-label>
+                  <input matInput formControlName="phoneCtrl" />
+                </mat-form-field>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </form>
         <div>
-          <button mat-stroked-button matStepperNext>Next</button>
+          <button mat-stroked-button class="base-fill-button" matStepperNext>
+            Next
+          </button>
         </div>
       </mat-step>
       <!-- ! SHIPPING INFORMATION -->
-      <mat-step [stepControl]="infoFormGroup">
-        <form [formGroup]="infoFormGroup">
+      <mat-step [stepControl]="addressFormGroup">
+        <form [formGroup]="addressFormGroup">
           <ng-template matStepLabel> Shipping Information</ng-template>
-          <div class="form-fields">step 3</div>
+          <mat-card class="form-card">
+            <mat-card-content>
+              <p class="step-description">
+                Review Address that's saved in your Profile. Bracelet will be
+                shipped to this address.
+              </p>
+              <div class="form-fields">
+                <mat-form-field appearance="outline">
+                  <mat-label>Street</mat-label>
+                  <input matInput formControlName="streetCtrl" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Number</mat-label>
+                  <input matInput formControlName="numberCtrl" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Apartment / Suite</mat-label>
+                  <input matInput formControlName="apartmentSuiteCtrl" />
+                </mat-form-field>
+              </div>
+
+              <div class="form-fields">
+                <mat-form-field appearance="outline">
+                  <mat-label>City</mat-label>
+                  <input matInput formControlName="cityCtrl" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Postal Code</mat-label>
+                  <input matInput formControlName="postalCodeCtrl" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Country (ISO3)</mat-label>
+                  <input matInput formControlName="countryISO3Ctrl" />
+                </mat-form-field>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </form>
         <div>
-          <button mat-stroked-button matStepperNext>Next</button>
+          <button mat-stroked-button class="base-fill-button" matStepperNext>
+            Next
+          </button>
         </div>
       </mat-step>
       <!-- ! SUMMARY -->
       <mat-step [stepControl]="infoFormGroup">
         <form [formGroup]="infoFormGroup">
           <ng-template matStepLabel>Summary</ng-template>
-          <div class="form-fields">step 4</div>
+          <form [formGroup]="personalFormGroup">
+            <ng-template matStepLabel> Personal Information </ng-template>
+            <mat-card class="form-card">
+              <mat-card-content>
+                <p class="step-description">
+                  Any changes to Personal or Shipping information will be saved
+                  to your Profile.
+                </p>
+
+                <div class="divider"></div>
+
+                <span class="icon-property">
+                  <mat-icon class="material-symbols-outlined" color="primary">
+                    confirmation_number
+                  </mat-icon>
+                  Selected Ticket:
+                  <span class="number-mono">General Admission (W1)</span>
+                </span>
+                <div class="divider"></div>
+
+                <span class="icon-property">
+                  <mat-icon class="material-symbols-outlined" color="primary">
+                    attach_money
+                  </mat-icon>
+                  Total Price:
+                  <span class="number-mono">$999.99</span>
+                </span>
+                <div class="divider"></div>
+
+                <span class="icon-property">
+                  <mat-icon class="material-symbols-outlined" color="primary">
+                    info
+                  </mat-icon>
+                  Personal Information:
+                </span>
+                <span class="icon-property continued">
+                  <mat-icon class="material-symbols-outlined" color="primary">
+                  </mat-icon>
+                  <span class="number-mono">Jovan Dozic</span>
+                </span>
+                <span class="icon-property continued">
+                  <mat-icon class="material-symbols-outlined" color="primary">
+                  </mat-icon>
+                  <span class="number-mono">+381615406666</span>
+                </span>
+                <span class="icon-property continued">
+                  <mat-icon class="material-symbols-outlined" color="primary">
+                  </mat-icon>
+                  <span class="number-mono">jovandozicATgmail.com</span>
+                </span>
+
+                <div class="divider"></div>
+
+                <span class="icon-property">
+                  <mat-icon class="material-symbols-outlined" color="primary">
+                    fitness_tracker
+                  </mat-icon>
+                  Bracelet will be shipped to:
+                </span>
+                <span class="icon-property continued">
+                  <mat-icon class="material-symbols-outlined" color="primary">
+                  </mat-icon>
+                  <span class="number-mono">Ulica Školjki 124</span>
+                </span>
+                <span class="icon-property continued">
+                  <mat-icon class="material-symbols-outlined" color="primary">
+                  </mat-icon>
+                  <span class="number-mono">Koralovo, 21000</span>
+                </span>
+                <span class="icon-property continued">
+                  <mat-icon class="material-symbols-outlined" color="primary">
+                  </mat-icon>
+                  <span class="number-mono">Tihi Okean</span>
+                </span>
+
+                <div class="divider"></div>
+              </mat-card-content>
+            </mat-card>
+          </form>
         </form>
         <div>
           <button

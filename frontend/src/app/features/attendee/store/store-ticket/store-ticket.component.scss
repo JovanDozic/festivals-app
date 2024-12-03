@@ -57,7 +57,7 @@ h3 {
 }
 
 .divider {
-  height: 25px;
+  height: 15px;
 }
 
 .festival-card {
@@ -92,6 +92,7 @@ mat-card-subtitle {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding-bottom: 10px;
 }
 
 mat-card-actions {
@@ -104,4 +105,40 @@ mat-card-actions {
   right: 16px;
   z-index: 1000;
   margin: 16px;
+}
+
+.form-card {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.step-description {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.form-fields {
+  display: flex;
+  justify-content: left;
+  gap: 20px;
+  margin-bottom: 0 !important;
+}
+
+mat-form-field {
+  width: 100%;
+  margin: 5px 0 !important;
+}
+
+.continued {
+  margin-top: -10px !important;
+}
+
+.line-trough {
+  text-decoration: line-through;
+}
+
+.sold-out-text {
+  margin-left: 7px;
+  color: #ff5449;
+  font-weight: 500;
 }
