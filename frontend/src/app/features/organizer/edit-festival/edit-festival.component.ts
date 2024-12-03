@@ -166,7 +166,6 @@ export class EditFestivalComponent implements OnInit {
 
     this.festivalService.updateFestival(updatedFestival).subscribe({
       next: () => {
-        // Proceed to handle images
         this.handleImages();
       },
       error: (error) => {
@@ -184,13 +183,13 @@ export class EditFestivalComponent implements OnInit {
 
     const newImages = this.images.filter((image) => image.isNew && image.file);
 
-    // Delete images marked for deletion
+    // delete images marked for deletion
     const deleteImages$ =
       deleteObservables.length > 0 ? forkJoin(deleteObservables) : of(null);
 
     (deleteImages$ as Observable<null>).subscribe({
       next: () => {
-        // Upload new images
+        // upload new ones
         const uploadObservables = newImages.map((image) =>
           this.imageService
             .uploadImageAndGetURL(image.file!)
@@ -202,7 +201,7 @@ export class EditFestivalComponent implements OnInit {
 
         uploadImages$.subscribe({
           next: (imageUrls) => {
-            // Associate new images with the festival
+            // add new images to the festival
             const addImageObservables = (imageUrls as string[]).map(
               (imageUrl) =>
                 this.festivalService.addFestivalImage(this.data.id, imageUrl),
@@ -278,12 +277,12 @@ export class EditFestivalComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirm) {
         if (image.isNew) {
-          // Remove from images array
+          // just remove from array
           this.images = this.images.filter((img) => img !== image);
         } else if (image.id) {
-          // Add to imagesToDelete
+          // add to imagesToDelete array so it can be removed from the festival
           this.imagesToDelete.push(image.id);
-          // Remove from images array
+          // remove from array
           this.images = this.images.filter((img) => img !== image);
         }
       }
