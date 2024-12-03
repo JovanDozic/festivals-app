@@ -12,15 +12,29 @@ type OrderService interface {
 
 type orderService struct {
 	orderRepo reposFestival.OrderRepo
+	itemRepo  reposFestival.ItemRepo
 }
 
-func NewOrderService(orderRepo reposFestival.OrderRepo) OrderService {
+func NewOrderService(or reposFestival.OrderRepo, ir reposFestival.ItemRepo) OrderService {
 	return &orderService{
-		orderRepo: orderRepo,
+		orderRepo: or,
+		itemRepo:  ir,
 	}
 }
 
 func (s *orderService) CreateFestivalTicket(festivalTicket *models.FestivalTicket) error {
+
+	item, _, err := s.itemRepo.GetItemAndPriceListItemsIDs(festivalTicket.ItemID)
+	if err != nil {
+		return nil
+	}
+
+	item.RemainingNumber -= 1
+
+	if err := s.itemRepo.UpdateItem(item); err != nil {
+		return err
+	}
+
 	return s.orderRepo.CreateFestivalTicket(festivalTicket)
 }
 

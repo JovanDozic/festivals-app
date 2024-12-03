@@ -88,6 +88,17 @@
               </td>
             </ng-container>
 
+            <ng-container matColumnDef="remainingNumber">
+              <th mat-header-cell *matHeaderCellDef style="width: 75px">
+                Remaining
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <span class="semibold number-mono">{{
+                  element.remainingNumber
+                }}</span>
+              </td>
+            </ng-container>
+
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef style="width: 100px"></th>
               <td mat-cell *matCellDef="let element">

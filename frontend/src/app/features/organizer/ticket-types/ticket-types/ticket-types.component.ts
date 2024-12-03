@@ -48,7 +48,15 @@ export class TicketTypesComponent implements OnInit {
   festival: Festival | null = null;
   ticketTypesCount = 0;
   ticketTypes: ItemCurrentPrice[] = [];
-  displayedColumns = ['id', 'name', 'price', 'isFixed', 'dateTo', 'actions'];
+  displayedColumns = [
+    'id',
+    'name',
+    'price',
+    'isFixed',
+    'dateTo',
+    'remainingNumber',
+    'actions',
+  ];
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
