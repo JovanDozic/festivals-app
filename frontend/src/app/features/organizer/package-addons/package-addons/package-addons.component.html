@@ -10,7 +10,7 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
       <h1>
-        {{ festival.name | slice : 0 : 20
+        {{ festival.name | slice: 0 : 20
         }}{{ festival.name.length > 20 ? "..." : "" }}
         <mat-icon color="primary">arrow_forward_ios</mat-icon> Package Addons
       </h1>
@@ -33,7 +33,7 @@
     <mat-card class="profile-card">
       <mat-card-title>General</mat-card-title>
       <mat-card-content>
-        <span class="employee-count"> {{ generalCount }}</span>
+        <span class="big-card-count"> {{ generalCount }}</span>
       </mat-card-content>
       <mat-card-actions>
         <button
@@ -49,7 +49,7 @@
     <mat-card class="profile-card">
       <mat-card-title>Travel</mat-card-title>
       <mat-card-content>
-        <span class="employee-count">{{ transportCount }}</span>
+        <span class="big-card-count">{{ transportCount }}</span>
       </mat-card-content>
       <mat-card-actions>
         <button
@@ -65,7 +65,7 @@
     <mat-card class="profile-card">
       <mat-card-title>Camp</mat-card-title>
       <mat-card-content>
-        <span class="employee-count">{{ campCount }}</span>
+        <span class="big-card-count">{{ campCount }}</span>
       </mat-card-content>
       <mat-card-actions>
         <button

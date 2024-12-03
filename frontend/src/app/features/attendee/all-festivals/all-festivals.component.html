@@ -113,24 +113,6 @@
               {{ festival.startDate | date: "d MMM" }} -
               {{ festival.endDate | date: "d MMM yyyy" }}
             </span>
-            <span class="icon-property" *ngIf="festival.status === 'PRIVATE'">
-              <mat-icon class="material-symbols-outlined" color="primary">
-                visibility_off</mat-icon
-              >
-              Private
-            </span>
-            <span class="icon-property" *ngIf="festival.status === 'PUBLIC'">
-              <mat-icon class="material-symbols-outlined" color="primary"
-                >visibility</mat-icon
-              >
-              Public
-            </span>
-            <span class="icon-property" *ngIf="festival.status === 'CANCELLED'">
-              <mat-icon class="material-symbols-outlined" color="primary"
-                >cancel</mat-icon
-              >
-              Cancelled
-            </span>
             <span class="icon-property" *ngIf="festival.status === 'COMPLETED'">
               <mat-icon class="material-symbols-outlined" color="primary"
                 >done_all</mat-icon

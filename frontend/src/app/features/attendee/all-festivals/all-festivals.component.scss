@@ -43,9 +43,11 @@ mat-card-title {
 }
 
 img[mat-card-image] {
-  max-height: 200px !important;
-  object-fit: cover;
   width: 100%;
+  height: auto; /* Maintain aspect ratio */
+  max-height: 200px; /* Set a maximum height */
+  object-fit: cover; /* Change from 'cover' to 'contain' */
+  image-rendering: optimizeSpeed; /* Let the browser decide the best rendering */
 }
 
 mat-card-title {

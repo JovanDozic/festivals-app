@@ -73,6 +73,14 @@ const attendeeRoutes: Routes = [
           ).then((c) => c.AllFestivalsComponent),
         title: 'Festivals',
       },
+      {
+        path: 'festivals/:id',
+        loadComponent: () =>
+          import('./features/attendee/festival/festival.component').then(
+            (c) => c.FestivalComponent,
+          ),
+        title: 'Festival',
+      },
     ],
   },
 ];
