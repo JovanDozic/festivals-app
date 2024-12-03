@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterModule } from '@angular/router';
 import { MatChipsModule } from '@angular/material/chips';
 import { FormsModule } from '@angular/forms';
+import { FestivalComponent } from '../../organizer/festival/festival.component';
 
 @Component({
   selector: 'app-all-festivals',
@@ -67,5 +68,17 @@ export class AllFestivalsComponent implements OnInit {
 
   onViewClick(festival: Festival): void {
     this.router.navigate(['festivals/', festival.id]);
+  }
+
+  get filteredFestivals(): Festival[] {
+    if (this.selectedChip === 'Upcoming') {
+      return this.festivals.filter((festival) => festival.status === 'PUBLIC');
+    } else if (this.selectedChip === 'Past') {
+      return this.festivals.filter(
+        (festival) => festival.status === 'COMPLETED',
+      );
+    } else {
+      return this.festivals;
+    }
   }
 }

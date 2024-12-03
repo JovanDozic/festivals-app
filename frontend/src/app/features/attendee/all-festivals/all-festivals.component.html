@@ -84,7 +84,7 @@
 
   <div class="profile-content" *ngIf="!isLoading">
     <!-- Festival Cards Section -->
-    <mat-card class="festival-card" *ngFor="let festival of festivals">
+    <mat-card class="festival-card" *ngFor="let festival of filteredFestivals">
       <img
         mat-card-image
         src="{{
