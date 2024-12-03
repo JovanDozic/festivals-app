@@ -68,7 +68,11 @@ func (r *festivalRepo) GetByOrganizer(organizerId uint) ([]models.Festival, erro
 func (r *festivalRepo) GetAll() ([]models.Festival, error) {
 
 	var festivals []models.Festival
-	err := r.db.Find(&festivals).Error
+	err := r.db.
+		Preload("Address").
+		Preload("Address.City").
+		Preload("Address.City.Country").
+		Find(&festivals).Error
 	if err != nil {
 		return nil, err
 	}

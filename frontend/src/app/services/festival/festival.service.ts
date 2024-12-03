@@ -18,6 +18,12 @@ export class FestivalService {
 
   constructor(private http: HttpClient) {}
 
+  getAllFestivals(): Observable<Festival[]> {
+    return this.http
+      .get<{ festivals: Festival[] }>(`${this.apiUrl}/festival`)
+      .pipe(map((response) => response.festivals));
+  }
+
   getMyFestivals(): Observable<Festival[]> {
     return this.http
       .get<{ festivals: Festival[] }>(`${this.apiUrl}/festival/organizer`)

@@ -140,6 +140,7 @@ func (h *festivalHandler) GetByOrganizer(w http.ResponseWriter, r *http.Request)
 func (h *festivalHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 
 	if !utils.AuthAttendeeRole(r.Context()) {
+		log.Println("error:", models.ErrUnauthorized)
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
@@ -151,8 +152,20 @@ func (h *festivalHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: wrong DTO
-	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivals}, nil)
+	festivalsResponse := dtoFestival.FestivalsResponse{
+		Festivals: make([]dtoFestival.FestivalResponse, len(festivals)),
+	}
+
+	for i, festival := range festivals {
+		images, err := h.festivalService.GetImages(festival.ID)
+		if err != nil {
+			log.Println("error:", err)
+			continue
+		}
+		festivalsResponse.Festivals[i] = mapFestivalToResponse(festival, images)
+	}
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivalsResponse.Festivals}, nil)
 	log.Println("all festivals retrieved successfully")
 }
 

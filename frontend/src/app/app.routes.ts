@@ -19,7 +19,7 @@ const publicRoutes: Routes = [
     path: 'login',
     loadComponent: () =>
       import('./features/user/login/login.component').then(
-        (c) => c.LoginComponent
+        (c) => c.LoginComponent,
       ),
     title: 'Login',
     canActivate: [AuthRedirectGuard],
@@ -50,7 +50,7 @@ const authRoutes: Routes = [
         path: 'profile',
         loadComponent: () =>
           import('./features/user/profile/profile.component').then(
-            (c) => c.ProfileComponent
+            (c) => c.ProfileComponent,
           ),
         title: 'Profile',
       },
@@ -65,7 +65,14 @@ const attendeeRoutes: Routes = [
     canActivate: [AuthGuard],
     data: { expectedRoles: ['ATTENDEE'] },
     children: [
-      // ...
+      {
+        path: 'festivals',
+        loadComponent: () =>
+          import(
+            './features/attendee/all-festivals/all-festivals.component'
+          ).then((c) => c.AllFestivalsComponent),
+        title: 'Festivals',
+      },
     ],
   },
 ];
@@ -96,7 +103,7 @@ const organizerRoutes: Routes = [
         path: 'organizer/my-festivals/:id',
         loadComponent: () =>
           import('./features/organizer/festival/festival.component').then(
-            (c) => c.FestivalComponent
+            (c) => c.FestivalComponent,
           ),
         title: 'Festival',
       },

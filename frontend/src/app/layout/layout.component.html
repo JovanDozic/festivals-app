@@ -70,6 +70,17 @@
       >
         My Festivals
       </a>
+
+      <a
+        mat-list-item
+        routerLink="/festivals"
+        *ngIf="visibleForRole('ATTENDEE')"
+        #link="routerLinkActive"
+        routerLinkActive
+        [activated]="link.isActive"
+      >
+        Festivals
+      </a>
     </mat-nav-list>
     <div class="theme-button">
       <button mat-mini-fab color="primary" (click)="toggleTheme()">
@@ -82,14 +93,14 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       @if (isHandset$ | async) {
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-      >
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()"
+        >
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
       }
       <span class="user-role-title" *ngIf="isLoggedIn()">{{
         userRole.charAt(0).toUpperCase() +
