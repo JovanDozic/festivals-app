@@ -18,8 +18,60 @@
     <div class="button-container"></div>
   </div>
 
-  <!-- add  -->
   <div class="profile-content">
-    <mat-card class="profile-card"> </mat-card>
+    <mat-stepper
+      orientation="vertical"
+      [linear]="true"
+      #stepper
+      class="store-stepper"
+    >
+      <mat-step [stepControl]="infoFormGroup">
+        <form [formGroup]="infoFormGroup">
+          <ng-template matStepLabel> Select Ticket </ng-template>
+          <div class="form-fields">step 1</div>
+          <div>
+            <button mat-stroked-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="infoFormGroup">
+        <form [formGroup]="infoFormGroup">
+          <ng-template matStepLabel> Personal Information </ng-template>
+          <div class="form-fields">step 2</div>
+        </form>
+        <div>
+          <button mat-stroked-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="infoFormGroup">
+        <form [formGroup]="infoFormGroup">
+          <ng-template matStepLabel> Shipping Information</ng-template>
+          <div class="form-fields">step 3</div>
+        </form>
+        <div>
+          <button mat-stroked-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="infoFormGroup">
+        <form [formGroup]="infoFormGroup">
+          <ng-template matStepLabel>Summary</ng-template>
+          <div class="form-fields">step 4</div>
+        </form>
+        <div>
+          <button
+            mat-fab
+            extended
+            color="primary"
+            (click)="purchase()"
+            class="ai-shadow"
+          >
+            <mat-icon class="material-symbols-outlined">
+              list_alt_check
+            </mat-icon>
+            Complete Purchase
+          </button>
+        </div>
+      </mat-step>
+    </mat-stepper>
   </div>
 </div>

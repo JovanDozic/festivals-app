@@ -164,3 +164,7 @@ img[mat-card-image] {
 :host-context([data-theme="dark"]) .ai-text-shadow {
   text-shadow: 0 0px 5px #f47cff; // #70
 }
+
+.ai-shadow {
+  box-shadow: 0 0px 10px #f47cff;
+}

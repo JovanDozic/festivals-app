@@ -1,3 +1,5 @@
+@use "@angular/material" as mat;
+
 .profile-container {
   max-width: 800px;
   margin: 0 auto;
@@ -36,4 +38,15 @@
 .profile-card {
   padding: 0;
   width: 100%;
+}
+
+.store-stepper {
+  background: none;
+  width: 100% !important;
+}
+
+:host ::ng-deep .store-stepper .mat-step-label {
+  font-family: "Funnel Display", sans-serif;
+  font-size: x-large;
+  font-weight: 500;
 }

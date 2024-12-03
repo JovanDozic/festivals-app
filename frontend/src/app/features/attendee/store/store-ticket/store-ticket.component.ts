@@ -13,11 +13,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
+import { MatStepperModule } from '@angular/material/stepper';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-store-ticket',
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatTooltipModule,
     MatIconModule,
@@ -27,6 +32,9 @@ import { MatTableModule } from '@angular/material/table';
     MatChipsModule,
     MatMenuModule,
     MatTableModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatStepperModule,
   ],
   templateUrl: './store-ticket.component.html',
   styleUrls: [
@@ -40,9 +48,18 @@ export class StoreTicketComponent implements OnInit {
   private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
   private dialog = inject(MatDialog);
+  private fb = inject(FormBuilder);
 
   festival: Festival | null = null;
   isLoading = false;
+
+  infoFormGroup: FormGroup;
+
+  constructor() {
+    this.infoFormGroup = this.fb.group({
+      nameCtrl: [''],
+    });
+  }
 
   ngOnInit() {
     this.loadFestival();
@@ -68,5 +85,9 @@ export class StoreTicketComponent implements OnInit {
         },
       });
     }
+  }
+
+  purchase() {
+    this.snackbarService.show('Opening Payment Dialog...');
   }
 }
