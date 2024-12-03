@@ -68,6 +68,20 @@
     </mat-card>
   </div>
 
+  <div class="chip-container">
+    <mat-chip-listbox
+      [(ngModel)]="selectedChip"
+      [multiple]="false"
+      [required]="true"
+    >
+      @for (option of filterOptions; track option) {
+        <mat-chip-option selected [selectable]="selectedChip !== option">{{
+          option
+        }}</mat-chip-option>
+      }
+    </mat-chip-listbox>
+  </div>
+
   <div class="profile-content" *ngIf="!isLoading">
     <!-- Festival Cards Section -->
     <mat-card class="festival-card" *ngFor="let festival of festivals">
@@ -97,7 +111,7 @@
                 calendar_month
               </mat-icon>
               {{ festival.startDate | date: "d MMM" }} -
-              {{ festival.endDate | date: "d MMM" }}
+              {{ festival.endDate | date: "d MMM yyyy" }}
             </span>
             <span class="icon-property" *ngIf="festival.status === 'PRIVATE'">
               <mat-icon class="material-symbols-outlined" color="primary">

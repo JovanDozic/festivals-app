@@ -20,16 +20,21 @@ mat-chip {
   padding-top: 2px;
 }
 
-:host-context([data-theme="light"]) mat-chip,
+mat-chip,
+mat-chip-option,
 table {
   background-color: #f5f2ff !important;
 }
 
 :host-context([data-theme="dark"]) mat-chip {
-  background-color: #1b1b24;
+  background-color: #1b1b24 !important;
 }
 
 :host-context([data-theme="dark"]) table {
+  background-color: #1b1b24 !important;
+}
+
+:host-context([data-theme="dark"]) mat-chip-option {
   background-color: #1b1b24 !important;
 }
 

@@ -3,7 +3,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
 }
 
 h1 {
@@ -77,4 +76,8 @@ mat-card-actions {
   right: 16px;
   z-index: 1000;
   margin: 16px;
+}
+
+.chip-container {
+  margin-bottom: 20px;
 }

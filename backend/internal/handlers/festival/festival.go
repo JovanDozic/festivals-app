@@ -145,7 +145,7 @@ func (h *festivalHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	festivals, err := h.festivalService.GetAll()
+	festivals, err := h.festivalService.GetAllPublic()
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

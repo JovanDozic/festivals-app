@@ -10,29 +10,36 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterModule } from '@angular/router';
+import { MatChipsModule } from '@angular/material/chips';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-all-festivals',
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
     NgxSkeletonLoaderModule,
+    MatChipsModule,
   ],
   templateUrl: './all-festivals.component.html',
   styleUrls: ['./all-festivals.component.scss', '../../../app.component.scss'],
 })
 export class AllFestivalsComponent implements OnInit {
-  festivals: Festival[] = [];
-  isLoading = true;
-
   private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
   // private dialog = inject(MatDialog);
   private router = inject(Router);
+
+  festivals: Festival[] = [];
+  isLoading = true;
+
+  filterOptions: string[] = ['All', 'Upcoming', 'Past'];
+  selectedChip = 'All';
 
   ngOnInit(): void {
     this.loadFestivals();

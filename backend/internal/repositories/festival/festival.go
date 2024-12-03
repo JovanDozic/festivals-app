@@ -57,6 +57,7 @@ func (r *festivalRepo) GetByOrganizer(organizerId uint) ([]models.Festival, erro
 		Preload("Address.City.Country").
 		Joins("JOIN festival_organizers ON festivals.id = festival_organizers.festival_id").
 		Where("festival_organizers.user_id = ?", organizerId).
+		Order("festivals.start_date").
 		Find(&festivals).Error
 	if err != nil {
 		return nil, err
@@ -72,6 +73,7 @@ func (r *festivalRepo) GetAll() ([]models.Festival, error) {
 		Preload("Address").
 		Preload("Address.City").
 		Preload("Address.City.Country").
+		Order("CASE WHEN festivals.status = 'PUBLIC' AND festivals.status != 'COMPLETED' THEN 0 WHEN festivals.status != 'PUBLIC' AND festivals.status = 'COMPLETED' THEN 1 ELSE 2 END, festivals.start_date").
 		Find(&festivals).Error
 	if err != nil {
 		return nil, err

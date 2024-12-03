@@ -97,7 +97,7 @@
                 calendar_month
               </mat-icon>
               {{ festival.startDate | date: "d MMM" }} -
-              {{ festival.endDate | date: "d MMM" }}
+              {{ festival.endDate | date: "d MMM yyyy" }}
             </span>
             <span class="icon-property" *ngIf="festival.status === 'PRIVATE'">
               <mat-icon class="material-symbols-outlined" color="primary">

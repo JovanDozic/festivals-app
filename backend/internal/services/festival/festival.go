@@ -16,6 +16,7 @@ type FestivalService interface {
 	Create(festival *modelsFestival.Festival, username string, address *modelsCommon.Address) error
 	GetByOrganizer(username string) ([]modelsFestival.Festival, error)
 	GetAll() ([]modelsFestival.Festival, error)
+	GetAllPublic() ([]modelsFestival.Festival, error)
 	GetById(festivalId uint) (*modelsFestival.Festival, error)
 	Update(festivalId uint, updatedFestival *modelsFestival.Festival) error
 	Delete(festivalId uint) error
@@ -108,6 +109,24 @@ func (s *festivalService) GetByOrganizer(username string) ([]modelsFestival.Fest
 	if err != nil {
 		return nil, err
 	}
+
+	return festivals, nil
+}
+
+func (s *festivalService) GetAllPublic() ([]modelsFestival.Festival, error) {
+
+	festivals, err := s.festivalRepo.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	filteredFestivals := make([]modelsFestival.Festival, 0)
+	for _, festival := range festivals {
+		if festival.Status != "PRIVATE" && festival.Status != "CANCELLED" {
+			filteredFestivals = append(filteredFestivals, festival)
+		}
+	}
+	festivals = filteredFestivals
 
 	return festivals, nil
 }
