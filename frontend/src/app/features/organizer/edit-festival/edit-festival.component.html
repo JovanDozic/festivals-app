@@ -171,12 +171,19 @@
 
 <mat-dialog-actions align="end">
   <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+
   <button
     mat-flat-button
     color="primary"
     (click)="saveChanges()"
-    [disabled]="basicInfoFormGroup.invalid || addressFormGroup.invalid"
+    class="save-changes-button"
+    [disabled]="
+      basicInfoFormGroup.invalid ||
+      addressFormGroup.invalid ||
+      images.length === 0
+    "
   >
-    Save changes
+    <mat-spinner *ngIf="isSaving"></mat-spinner>
+    <span *ngIf="!isSaving">Save changes</span>
   </button>
 </mat-dialog-actions>

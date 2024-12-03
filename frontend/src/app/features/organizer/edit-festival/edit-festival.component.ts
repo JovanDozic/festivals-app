@@ -36,6 +36,7 @@ import {
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { forkJoin, map, Observable, of } from 'rxjs';
 import { ImageService } from '../../../services/image/image.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 interface ImagePreview {
   id?: number;
@@ -63,6 +64,7 @@ interface ImagePreview {
     MatDialogContent,
     MatDialogActions,
     MatTabsModule,
+    MatProgressSpinnerModule,
   ],
   providers: [provideNativeDateAdapter()],
 })
