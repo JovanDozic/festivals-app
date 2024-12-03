@@ -115,4 +115,16 @@ export class FestivalService {
       .get<{ festival: Festival }>(`${this.apiUrl}/festival/${festivalId}`)
       .pipe(map((response) => response.festival));
   }
+
+  deleteFestivalImage(festivalId: number, imageId: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/festival/${festivalId}/image/${imageId}`,
+    );
+  }
+
+  addFestivalImage(festivalId: number, imageUrl: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/festival/${festivalId}/image`, {
+      imageUrl,
+    });
+  }
 }

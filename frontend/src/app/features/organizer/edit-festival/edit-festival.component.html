@@ -135,7 +135,36 @@
     </mat-tab>
 
     <mat-tab label="Images">
-      <!-- todo: implement editing images -->
+      <div class="image-grid">
+        <div class="form-fields-image">
+          <div>
+            <h2>Images Preview</h2>
+            <p>Click on any image to remove it.</p>
+          </div>
+          <button mat-stroked-button (click)="fileInput.click()" type="button">
+            <mat-icon class="material-symbols-outlined">upload</mat-icon>
+            Upload Image
+          </button>
+          <input
+            #fileInput
+            type="file"
+            accept="image/*"
+            multiple
+            (change)="onFileSelected($event)"
+            style="display: none"
+          />
+        </div>
+        <mat-grid-list cols="3" rowHeight="170px">
+          <mat-grid-tile *ngFor="let image of images">
+            <img
+              class="image-button"
+              (click)="removeImage(image)"
+              aria-label="Remove image"
+              [src]="image.previewUrl"
+            />
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
     </mat-tab>
   </mat-tab-group>
 </mat-dialog-content>

@@ -133,7 +133,8 @@ func mapFestivalToResponse(festival modelsFestival.Festival, images []modelsComm
 	imageResponses := make([]dtoCommon.GetImageResponse, len(images))
 	for i, image := range images {
 		imageResponses[i] = dtoCommon.GetImageResponse{
-			Url: image.URL,
+			ID:  image.ID,
+			URL: image.URL,
 		}
 	}
 

@@ -209,15 +209,7 @@ export class FestivalComponent implements OnInit {
 
   onEditClick(): void {
     const dialogRef = this.dialog.open(EditFestivalComponent, {
-      data: {
-        id: this.festival?.id,
-        name: this.festival?.name,
-        description: this.festival?.description,
-        startDate: this.festival?.startDate,
-        endDate: this.festival?.endDate,
-        capacity: this.festival?.capacity,
-        address: this.festival?.address,
-      },
+      data: this.festival,
       width: '800px',
       height: '535px',
     });

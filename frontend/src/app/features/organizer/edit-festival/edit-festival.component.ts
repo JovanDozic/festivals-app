@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
+  MatDialog,
   MatDialogActions,
   MatDialogContent,
   MatDialogRef,
@@ -29,6 +30,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import {
+  ConfirmationDialogComponent,
+  ConfirmationDialogData,
+} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
+import { forkJoin, map, Observable, of } from 'rxjs';
+import { ImageService } from '../../../services/image/image.service';
+
+interface ImagePreview {
+  id?: number;
+  file?: File;
+  previewUrl: string | ArrayBuffer | null;
+  isNew: boolean;
+}
 
 @Component({
   selector: 'app-edit-festival',
@@ -58,11 +72,17 @@ export class EditFestivalComponent implements OnInit {
   private snackbarService = inject(SnackbarService);
   private dialogRef = inject(MatDialogRef<EditFestivalComponent>);
   private data: Festival = inject(MAT_DIALOG_DATA);
+  private dialog = inject(MatDialog);
+  private imageService = inject(ImageService);
 
   isLinear = true;
 
   basicInfoFormGroup: FormGroup;
   addressFormGroup: FormGroup;
+
+  images: ImagePreview[] = [];
+  imagesToDelete: number[] = [];
+  isSaving = false;
 
   constructor() {
     this.basicInfoFormGroup = this.fb.group({
@@ -101,6 +121,15 @@ export class EditFestivalComponent implements OnInit {
         postalCodeCtrl: this.data.address?.postalCode,
         countryISO3Ctrl: this.data.address?.countryISO3,
       });
+
+      console.log('Images:', this.images);
+      console.log('Images:', this.data.images);
+
+      this.images = this.data.images.map((image) => ({
+        id: image.id,
+        previewUrl: image.url,
+        isNew: false,
+      }));
     }
   }
 
@@ -109,6 +138,8 @@ export class EditFestivalComponent implements OnInit {
       this.snackbarService.show('Please complete all required fields.');
       return;
     }
+
+    this.isSaving = true;
 
     const updatedFestival: UpdateFestivalRequest = {
       id: this.data.id,
@@ -133,18 +164,128 @@ export class EditFestivalComponent implements OnInit {
 
     this.festivalService.updateFestival(updatedFestival).subscribe({
       next: () => {
-        this.snackbarService.show('Festival updated successfully!');
-        this.dialogRef.close(true);
+        // Proceed to handle images
+        this.handleImages();
       },
       error: (error) => {
+        this.isSaving = false;
         console.error('Error updating festival:', error);
         this.snackbarService.show('Error updating festival. Please try again.');
       },
     });
   }
 
+  private handleImages() {
+    const deleteObservables = this.imagesToDelete.map((imageId) =>
+      this.festivalService.deleteFestivalImage(this.data.id, imageId),
+    );
+
+    const newImages = this.images.filter((image) => image.isNew && image.file);
+
+    // Delete images marked for deletion
+    const deleteImages$ =
+      deleteObservables.length > 0 ? forkJoin(deleteObservables) : of(null);
+
+    (deleteImages$ as Observable<null>).subscribe({
+      next: () => {
+        // Upload new images
+        const uploadObservables = newImages.map((image) =>
+          this.imageService
+            .uploadImageAndGetURL(image.file!)
+            .pipe(map((response) => response.imageURL)),
+        );
+
+        const uploadImages$ =
+          uploadObservables.length > 0 ? forkJoin(uploadObservables) : of([]);
+
+        uploadImages$.subscribe({
+          next: (imageUrls) => {
+            // Associate new images with the festival
+            const addImageObservables = (imageUrls as string[]).map(
+              (imageUrl) =>
+                this.festivalService.addFestivalImage(this.data.id, imageUrl),
+            );
+
+            const addImages$ =
+              addImageObservables.length > 0
+                ? forkJoin(addImageObservables)
+                : of(null);
+
+            (addImages$ as Observable<null>).subscribe({
+              next: () => {
+                this.isSaving = false;
+                this.snackbarService.show('Festival updated successfully!');
+                this.dialogRef.close(true);
+              },
+              error: (error) => {
+                this.isSaving = false;
+                console.error('Error adding images to festival:', error);
+                this.snackbarService.show('Error adding images to festival');
+              },
+            });
+          },
+          error: (error) => {
+            this.isSaving = false;
+            console.error('Error uploading images:', error);
+            this.snackbarService.show('Error uploading images');
+          },
+        });
+      },
+      error: (error) => {
+        this.isSaving = false;
+        console.error('Error deleting images:', error);
+        this.snackbarService.show('Error deleting images');
+      },
+    });
+  }
+
   closeDialog() {
     this.dialogRef.close(false);
+  }
+
+  onFileSelected(event: Event) {
+    const fileInput = event.target as HTMLInputElement;
+
+    if (fileInput.files && fileInput.files.length > 0) {
+      Array.from(fileInput.files).forEach((file) => {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          this.images.push({
+            file: file,
+            previewUrl: reader.result,
+            isNew: true,
+          });
+        };
+
+        reader.readAsDataURL(file);
+      });
+    }
+  }
+
+  removeImage(image: ImagePreview) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        title: 'Remove Image',
+        message: `Are you sure you want to remove this image?`,
+        confirmButtonText: 'Remove',
+        cancelButtonText: 'Cancel',
+      } as ConfirmationDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirm) {
+        if (image.isNew) {
+          // Remove from images array
+          this.images = this.images.filter((img) => img !== image);
+        } else if (image.id) {
+          // Add to imagesToDelete
+          this.imagesToDelete.push(image.id);
+          // Remove from images array
+          this.images = this.images.filter((img) => img !== image);
+        }
+      }
+    });
   }
 
   private formatDate(date: Date): string {

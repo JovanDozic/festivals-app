@@ -76,19 +76,24 @@ strong {
   font-family: "Funnel Display", sans-serif;
 }
 
+mat-grid-tile {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 mat-grid-tile img {
   border-radius: 8px;
   object-fit: cover;
-  height: 92.5%;
-  width: 92.5%;
-  box-shadow: 0 2px 4px rgba(61, 61, 61, 0.418);
+  height: 150px;
+  width: 150px;
+  box-shadow: 0 2px 4px rgba(61, 61, 61, 0.4);
   transition: all 0.1s ease;
 }
 
 mat-grid-tile img:hover {
-  height: 95%;
-  width: 95%;
-  box-shadow: 0 2px 4px rgba(61, 61, 61, 0.734);
+  height: 155px;
+  width: 155px;
+  box-shadow: 0 2px 4px rgba(61, 61, 61, 0.6);
 }
 
 .image-grid {

@@ -25,8 +25,10 @@ export interface FestivalsResponse {
 }
 
 export interface ImageResponse {
+  id: number;
   url: string;
 }
+
 export interface CreateFestivalRequest {
   name: string;
   description: string;

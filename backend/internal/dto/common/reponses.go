@@ -20,7 +20,8 @@ type GetAddressResponse struct {
 }
 
 type GetImageResponse struct {
-	Url string `json:"url"`
+	ID  uint   `json:"id"`
+	URL string `json:"url"`
 }
 
 type GetPresignedURLResponse struct {
