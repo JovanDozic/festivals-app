@@ -53,12 +53,12 @@ export class StoreChooserComponent {
   types: StoreType[] = [
     {
       value: 'ticket',
-      viewValue: 'Festival Ticket',
+      viewValue: 'Ticket Store',
       description: 'Ticket to access the Festival Grounds',
     },
     {
       value: 'package',
-      viewValue: 'Festival Package',
+      viewValue: 'Package Store',
       description:
         'Choose a custom experience using Package with Travel, Camp and other options with Ticket included',
     },
