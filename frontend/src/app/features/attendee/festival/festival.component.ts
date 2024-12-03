@@ -18,6 +18,7 @@ import {
 import { animate, style, transition, trigger } from '@angular/animations';
 import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../services/festival/item.service';
+import { StoreChooserComponent } from '../store/store-chooser/store-chooser.component';
 
 @Component({
   selector: 'app-festival',
@@ -48,9 +49,6 @@ import { ItemService } from '../../../services/festival/item.service';
   ],
 })
 export class FestivalComponent {
-  onOpenStoreClick() {
-    throw new Error('Method not implemented.');
-  }
   festival: Festival | null = null;
   isLoading = true;
   currentImageIndex = 0;
@@ -63,7 +61,6 @@ export class FestivalComponent {
   private router = inject(Router);
   private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
-  private itemService = inject(ItemService);
   private dialog = inject(MatDialog);
 
   ngOnInit() {
@@ -112,5 +109,20 @@ export class FestivalComponent {
         (this.currentImageIndex - 1 + this.festival.images.length) %
         this.festival.images.length;
     }
+  }
+
+  onOpenStoreClick() {
+    const dialogRef = this.dialog.open(StoreChooserComponent, {
+      data: { festivalId: this.festival?.id },
+      width: '800px',
+      height: 'auto',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.snackbarService.show("You've selected: " + result);
+      }
+    });
   }
 }

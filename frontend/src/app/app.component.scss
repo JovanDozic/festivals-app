@@ -152,3 +152,11 @@ img[mat-card-image] {
 :host-context([data-theme="dark"]) img[mat-card-image] {
   background-color: #494d8aaa;
 }
+
+:host-context([data-theme="light"]) .ai-text-shadow {
+  text-shadow: 0 0px 5px #9ea3ff; // #70
+}
+
+:host-context([data-theme="dark"]) .ai-text-shadow {
+  text-shadow: 0 0px 5px #f47cff; // #70
+}
