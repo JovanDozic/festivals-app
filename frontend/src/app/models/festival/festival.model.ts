@@ -225,3 +225,8 @@ export interface CampAddonDTO {
   imageUrl: string;
   equipmentNames: string;
 }
+
+export interface CreateTicketOrderRequest {
+  ticketTypeId: number;
+  totalPrice: number;
+}

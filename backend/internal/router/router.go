@@ -3,14 +3,14 @@ package router
 import (
 	"backend/internal/config"
 	handlersCommon "backend/internal/handlers/common"
-	handlers "backend/internal/handlers/festival"
+	handlersFestival "backend/internal/handlers/festival"
 	handlersUser "backend/internal/handlers/user"
 	"backend/internal/middlewares"
 	reposCommon "backend/internal/repositories/common"
 	reposFestival "backend/internal/repositories/festival"
 	reposUser "backend/internal/repositories/user"
 	servicesCommon "backend/internal/services/common"
-	services "backend/internal/services/festival"
+	servicesFestival "backend/internal/services/festival"
 	servicesUser "backend/internal/services/user"
 	"backend/internal/utils"
 	"context"
@@ -51,22 +51,25 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	festivalRepo := reposFestival.NewFestivalRepo(db)
 	imageRepo := reposCommon.NewImageRepo(db)
 	itemRepo := reposFestival.NewItemRepo(db)
+	orderRepo := reposFestival.NewOrderRepository(db)
 	// ...
 
 	// Init services
 	locationService := servicesCommon.NewLocationService(addressRepo, cityRepo, countryRepo)
 	userService := servicesUser.NewUserService(config, userRepo, userProfileRepo, locationService, imageRepo)
-	festivalService := services.NewFestivalService(config, festivalRepo, userRepo, locationService, imageRepo)
-	itemService := services.NewItemService(config, itemRepo, locationService, imageRepo)
+	festivalService := servicesFestival.NewFestivalService(config, festivalRepo, userRepo, locationService, imageRepo)
+	itemService := servicesFestival.NewItemService(config, itemRepo, locationService, imageRepo)
 	awsService := servicesCommon.NewAWSService(s3Client, s3Presign, config)
+	orderService := servicesFestival.NewOrderService(orderRepo)
 	// ...
 
 	// Init handlers
 	commonHandler := handlersCommon.NewHealthHandler(config)
 	userHandler := handlersUser.NewUserHandler(userService, locationService)
-	festivalHandler := handlers.NewFestivalHandler(festivalService, locationService)
-	itemHandler := handlers.NewItemHandler(itemService, festivalService)
+	festivalHandler := handlersFestival.NewFestivalHandler(festivalService, locationService)
+	itemHandler := handlersFestival.NewItemHandler(itemService, festivalService)
 	awsHandler := handlersCommon.NewAWSHandler(awsService, festivalService)
+	orderHandler := handlersFestival.NewOrderHandler(orderService, userService)
 	// ...
 
 	r := mux.NewRouter()
@@ -155,6 +158,10 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// ...
 
 	pR.HandleFunc("/image/upload", awsHandler.GetPresignedURL).Methods(http.MethodPost)
+
+	// ...
+
+	pR.HandleFunc("/festival/{festivalId}/order/ticket", orderHandler.CreateOrder).Methods(http.MethodPost)
 
 	return r
 }

@@ -116,3 +116,13 @@ func (f *CreateCampPackageAddonRequest) Validate() error {
 	}
 	return nil
 }
+
+func (f *CreateTicketOrderRequest) Validate() error {
+	if f.TicketTypeId == 0 {
+		return models.ErrMissingFields
+	}
+	if f.TotalPrice == 0 {
+		return models.ErrMissingFields
+	}
+	return nil
+}

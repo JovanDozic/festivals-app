@@ -95,3 +95,8 @@ type CreateCampPackageAddonRequest struct {
 type EquipmentRequest struct {
 	Name string `json:"name"`
 }
+
+type CreateTicketOrderRequest struct {
+	TicketTypeId uint `json:"ticketTypeId"`
+	TotalPrice   int  `json:"totalPrice"`
+}

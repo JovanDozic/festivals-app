@@ -31,8 +31,8 @@ type Order struct {
 	User              modelsUser.Attendee
 	FestivalTicketID  uint
 	FestivalTicket    FestivalTicket
-	FestivalPackageID uint
-	FestivalPackage   FestivalPackage
+	FestivalPackageID *uint
+	FestivalPackage   *FestivalPackage
 }
 
 type Bracelet struct {

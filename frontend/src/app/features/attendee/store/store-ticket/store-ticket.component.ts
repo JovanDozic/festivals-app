@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {
+  CreateTicketOrderRequest,
   Employee,
   Festival,
   ItemCurrentPrice,
@@ -35,6 +36,7 @@ import {
   ConfirmationDialogData,
 } from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { firstValueFrom, Observable, throwError } from 'rxjs';
+import { OrderService } from '../../../../services/festival/order.service';
 
 @Component({
   selector: 'app-store-ticket',
@@ -67,6 +69,7 @@ export class StoreTicketComponent implements OnInit {
   private itemService = inject(ItemService);
   private userService = inject(UserService);
   private snackbarService = inject(SnackbarService);
+  private orderService = inject(OrderService);
   private dialog = inject(MatDialog);
   private fb = inject(FormBuilder);
 
@@ -290,7 +293,19 @@ export class StoreTicketComponent implements OnInit {
   }
 
   createOrder(): Observable<any> {
-    this.snackbarService.show('Order created successfully');
-    return new Observable();
+    if (this.selectedTicket && this.festival && this.festival.id) {
+      const request: CreateTicketOrderRequest = {
+        ticketTypeId: this.selectedTicket.itemId,
+        totalPrice: this.selectedTicket.price,
+      };
+
+      console.log('Request: ', request);
+
+      return this.orderService.createOrder(this.festival.id, request);
+    }
+    return throwError(
+      () =>
+        new Error('No ticket selected or festival or festival ID is missing'),
+    );
   }
 }
