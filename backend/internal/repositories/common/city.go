@@ -45,10 +45,13 @@ func (r *cityRepo) Create(city *modelsCommon.City) error {
 	return r.db.Create(city).Error
 }
 
-func (r *cityRepo) GetByCountryPostalCode(countryId uint, postalCode string) (*modelsCommon.City, error) {
+func (repo *cityRepo) GetByCountryPostalCode(countryID uint, postalCode string) (*modelsCommon.City, error) {
 	var city modelsCommon.City
-	err := r.db.Preload("Country").Joins("JOIN countries ON cities.country_id = countries.id").Where("countries.id = ? AND cities.postal_code = ?", countryId, postalCode).First(&city).Error
-	return &city, err
+	err := repo.db.Where("country_id = ? AND postal_code = ?", countryID, postalCode).First(&city).Error
+	if err != nil {
+		return nil, err
+	}
+	return &city, nil
 }
 
 func (r *cityRepo) Update(city *modelsCommon.City) error {

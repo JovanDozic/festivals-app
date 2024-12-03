@@ -60,6 +60,7 @@ func (s *locationService) GetAddressByID(id uint) (*modelsCommon.Address, error)
 }
 
 func (s *locationService) UpdateAddress(addressId uint, updatedAddress *modelsCommon.Address) error {
+	// Fetch the existing address
 	address, err := s.addressRepo.Get(addressId)
 	if err != nil {
 		log.Println("error getting address from the database:", err)
@@ -71,52 +72,44 @@ func (s *locationService) UpdateAddress(addressId uint, updatedAddress *modelsCo
 	address.Number = updatedAddress.Number
 	address.ApartmentSuite = updatedAddress.ApartmentSuite
 
-	// Ensure the city is correct
-	city, err := s.cityRepo.GetByPostalCode(updatedAddress.City.PostalCode)
+	// Validate the country
+	country, err := s.countryRepo.GetByISO3(updatedAddress.City.Country.ISO3)
+	if err != nil || country == nil {
+		log.Println("country not found:", updatedAddress.City.Country.ISO3)
+		return modelsError.ErrCountryNotFound
+	}
+
+	// Check if the city exists in the specified country
+	city, err := s.cityRepo.GetByCountryPostalCode(country.ID, updatedAddress.City.PostalCode)
 	if err != nil && !strings.Contains(err.Error(), "record not found") {
 		log.Println("error getting city from the database:", err)
 		return err
 	}
 
-	if city == nil || city.ID == 0 || city.Name != updatedAddress.City.Name || city.Country.ID != updatedAddress.City.Country.ID {
-		// Validate the country
-		country, err := s.countryRepo.GetByISO3(updatedAddress.City.Country.ISO3)
+	// Determine if we need to create a new city
+	createNewCity := false
+	if city == nil || city.ID == 0 {
+		createNewCity = true
+	} else if city.Name != updatedAddress.City.Name || city.CountryID != country.ID {
+		// Even if the postal code matches, if the name or country doesn't, we need a new city
+		createNewCity = true
+	}
+
+	if createNewCity {
+		// Create a new city
+		city = &modelsCommon.City{
+			Name:       updatedAddress.City.Name,
+			PostalCode: updatedAddress.City.PostalCode,
+			CountryID:  country.ID,
+		}
+		err = s.cityRepo.Create(city)
 		if err != nil {
-			log.Println("error getting country from the database:", err)
+			log.Println("error creating city:", err)
 			return err
-		}
-
-		if country == nil {
-			log.Println("country not found:", updatedAddress.City.Country.ISO3)
-			return modelsError.ErrCountryNotFound
-		}
-
-		// Create or update the city
-		if city == nil || city.ID == 0 {
-			city = &modelsCommon.City{
-				Name:       updatedAddress.City.Name,
-				PostalCode: updatedAddress.City.PostalCode,
-				CountryID:  country.ID,
-			}
-
-			err = s.cityRepo.Create(city)
-			if err != nil {
-				log.Println("error creating city:", err)
-				return err
-			}
-		} else {
-			city.Name = updatedAddress.City.Name
-			city.CountryID = country.ID
-			city.Country = *country
-			err = s.cityRepo.Update(city)
-			if err != nil {
-				log.Println("error updating city:", err)
-				return err
-			}
 		}
 	}
 
-	// Update address with new city
+	// Update address with the new city
 	address.CityID = city.ID
 	address.City = *city
 
