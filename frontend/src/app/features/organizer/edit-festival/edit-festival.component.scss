@@ -45,10 +45,16 @@ form {
 }
 
 .form-fields-image {
+  padding: 0 15px 0 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  vertical-align: middle;
   gap: 10px;
+}
+
+.form-fields-image button {
+  margin-top: 20px;
 }
 
 .form-fields-image mat-form-field {
@@ -109,4 +115,23 @@ mat-grid-tile img:hover {
 .image-grid p {
   margin-top: 0px;
   color: #666;
+}
+
+.grid-list {
+  height: 230px !important;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.grid-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.grid-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.grid-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
 }
