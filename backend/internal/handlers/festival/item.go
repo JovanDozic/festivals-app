@@ -214,8 +214,10 @@ func (h *itemHandler) GetCurrentTicketTypes(w http.ResponseWriter, r *http.Reque
 
 func (h *itemHandler) GetTicketTypesCount(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
-	if !ok {
+	festivalId, err := getFestivalIDFromRequest(r)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 

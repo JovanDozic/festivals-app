@@ -137,6 +137,10 @@ export class StoreTicketComponent implements OnInit {
         next: (tickets) => {
           this.tickets = tickets;
           this.isLoading = false;
+          if (this.tickets.length === 0) {
+            this.snackbarService.show('Store has no tickets available yet');
+            this.router.navigate([`festivals/${this.festival?.id}`]);
+          }
         },
         error: (error) => {
           console.log('Error fetching tickets information: ', error);

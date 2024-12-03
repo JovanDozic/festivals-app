@@ -108,10 +108,16 @@ export class CreateTransportPackageAddonComponent {
       transportTypeCtrl: ['', Validators.required],
       departureCityNameCtrl: ['', Validators.required],
       departureCityPostalCodeCtrl: ['', Validators.required],
-      departureCountryISO3Ctrl: ['', Validators.required],
+      departureCountryISO3Ctrl: [
+        '',
+        [Validators.required, Validators.maxLength(3)],
+      ],
       arrivalCityNameCtrl: ['', Validators.required],
       arrivalCityPostalCodeCtrl: ['', Validators.required],
-      arrivalCountryISO3Ctrl: ['', Validators.required],
+      arrivalCountryISO3Ctrl: [
+        '',
+        [Validators.required, Validators.maxLength(3)],
+      ],
 
       departureDateCtrl: ['', Validators.required],
       departureTimeCtrl: ['', Validators.required],

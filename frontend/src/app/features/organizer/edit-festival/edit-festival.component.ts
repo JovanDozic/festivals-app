@@ -101,7 +101,7 @@ export class EditFestivalComponent implements OnInit {
       apartmentSuiteCtrl: [''],
       cityCtrl: ['', Validators.required],
       postalCodeCtrl: ['', Validators.required],
-      countryISO3Ctrl: ['', Validators.required],
+      countryISO3Ctrl: ['', [Validators.required, Validators.maxLength(3)]],
     });
   }
 

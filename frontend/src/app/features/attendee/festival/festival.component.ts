@@ -53,7 +53,6 @@ export class FestivalComponent {
   isLoading = true;
   currentImageIndex = 0;
   previousImageIndex = 0;
-  employeeCount = 0;
   ticketTypesCount = 0;
   packageAddonsCount = 0;
 
@@ -61,10 +60,13 @@ export class FestivalComponent {
   private router = inject(Router);
   private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
+  private itemService = inject(ItemService);
   private dialog = inject(MatDialog);
 
   ngOnInit() {
     this.loadFestival();
+    this.loadTicketTypesCount();
+    this.loadPackageAddonsCount();
   }
 
   goBack() {
@@ -94,6 +96,38 @@ export class FestivalComponent {
     }
   }
 
+  loadTicketTypesCount() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.itemService.getTicketTypesCount(Number(id)).subscribe({
+        next: (count) => {
+          this.ticketTypesCount = count;
+        },
+        error: (error) => {
+          console.log('Error fetching ticket types count: ', error);
+          this.snackbarService.show('Error getting ticket types count');
+          this.ticketTypesCount = 0;
+        },
+      });
+    }
+  }
+
+  loadPackageAddonsCount() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.itemService.getAllPackageAddonsCount(Number(id)).subscribe({
+        next: (count) => {
+          this.packageAddonsCount = count;
+        },
+        error: (error) => {
+          console.log('Error fetching package addons count: ', error);
+          this.snackbarService.show('Error getting package addons count');
+          this.packageAddonsCount = 0;
+        },
+      });
+    }
+  }
+
   nextImage() {
     if (this.festival && this.festival.images) {
       this.previousImageIndex = this.currentImageIndex;
@@ -112,6 +146,18 @@ export class FestivalComponent {
   }
 
   onOpenStoreClick() {
+    if (this.ticketTypesCount === 0 && this.packageAddonsCount === 0) {
+      this.snackbarService.show('No items available for sale yet');
+      return;
+    }
+
+    if (this.ticketTypesCount > 0 && this.packageAddonsCount === 0) {
+      this.router.navigate([
+        'festivals/' + this.festival?.id + '/store/ticket',
+      ]);
+      return;
+    }
+
     const dialogRef = this.dialog.open(StoreChooserComponent, {
       data: { festivalId: this.festival?.id },
       width: '800px',

@@ -20,7 +20,7 @@
         extended
         color="primary"
         (click)="onOpenStoreClick()"
-        [disabled]="festival.storeStatus === 'CLOSED'"
+        [disabled]="festival.storeStatus === 'CLOSED' || ticketTypesCount === 0"
         class="ai-shadow"
       >
         <mat-icon class="material-symbols-outlined">shopping_bag</mat-icon>

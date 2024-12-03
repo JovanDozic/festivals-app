@@ -60,7 +60,7 @@ export class RegisterAttendeeComponent {
     apartmentSuiteCtrl: [''],
     cityCtrl: ['', Validators.required],
     postalCodeCtrl: ['', Validators.required],
-    countryISO3Ctrl: ['', Validators.required],
+    countryISO3Ctrl: ['', [Validators.required, Validators.maxLength(3)]],
   });
 
   constructor(private http: HttpClient) {}
