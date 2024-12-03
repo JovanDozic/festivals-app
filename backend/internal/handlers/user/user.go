@@ -6,6 +6,7 @@ import (
 	"backend/internal/models"
 	modelsCommon "backend/internal/models/common"
 	modelsUser "backend/internal/models/user"
+	servicesCommon "backend/internal/services/common"
 	servicesUser "backend/internal/services/user"
 	"backend/internal/utils"
 	"log"
@@ -23,6 +24,7 @@ type UserHandler interface {
 	ChangePassword(w http.ResponseWriter, r *http.Request)
 	UpdateUserProfile(w http.ResponseWriter, r *http.Request)
 	UpdateUserEmail(w http.ResponseWriter, r *http.Request)
+	UpdateUserAddress(w http.ResponseWriter, r *http.Request)
 	CreateEmployee(w http.ResponseWriter, r *http.Request)
 	GetFestivalEmployees(w http.ResponseWriter, r *http.Request)
 	GetEmployeesNotOnFestival(w http.ResponseWriter, r *http.Request)
@@ -32,11 +34,12 @@ type UserHandler interface {
 }
 
 type userHandler struct {
-	userService servicesUser.UserService
+	userService     servicesUser.UserService
+	locationService servicesCommon.LocationService
 }
 
-func NewUserHandler(us servicesUser.UserService) UserHandler {
-	return &userHandler{userService: us}
+func NewUserHandler(us servicesUser.UserService, ls servicesCommon.LocationService) UserHandler {
+	return &userHandler{userService: us, locationService: ls}
 }
 
 func (h *userHandler) RegisterAttendee(w http.ResponseWriter, r *http.Request) {
@@ -312,6 +315,59 @@ func (h *userHandler) UpdateUserEmail(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "email updated successfully"}, nil)
 	log.Println("email updated successfully for user:", username)
+}
+
+func (h *userHandler) UpdateUserAddress(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.Auth((r.Context())) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	var input dtoCommon.UpdateAddressRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	username := utils.GetUsername(r.Context())
+
+	addressId, err := h.userService.GetAddressID(username)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	address := modelsCommon.Address{
+		Street:         input.Street,
+		Number:         input.Number,
+		ApartmentSuite: &input.ApartmentSuite,
+		City: modelsCommon.City{
+			Name:       input.City,
+			PostalCode: input.PostalCode,
+			Country: modelsCommon.Country{
+				ISO3: input.CountryISO3,
+			},
+		},
+	}
+
+	if err := h.locationService.UpdateAddress(addressId, &address); err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrNotFound:
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		case models.ErrCountryNotFound:
+			http.Error(w, err.Error(), http.StatusNotFound)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "user address updated successfully"}, nil)
+	log.Println("user address updated successfully:", utils.GetUsername(r.Context()))
 }
 
 func (h *userHandler) UpdateStaffEmail(w http.ResponseWriter, r *http.Request) {

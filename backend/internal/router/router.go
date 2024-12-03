@@ -63,7 +63,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// Init handlers
 	commonHandler := handlersCommon.NewHealthHandler(config)
-	userHandler := handlersUser.NewUserHandler(userService)
+	userHandler := handlersUser.NewUserHandler(userService, locationService)
 	festivalHandler := handlers.NewFestivalHandler(festivalService, locationService)
 	itemHandler := handlers.NewItemHandler(itemService, festivalService)
 	awsHandler := handlersCommon.NewAWSHandler(awsService, festivalService)
@@ -93,6 +93,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	pR.HandleFunc("/user/change-password", userHandler.ChangePassword).Methods(http.MethodPut)
 	pR.HandleFunc("/user/profile", userHandler.UpdateUserProfile).Methods(http.MethodPut)
 	pR.HandleFunc("/user/email", userHandler.UpdateUserEmail).Methods(http.MethodPut)
+	pR.HandleFunc("/user/profile/address", userHandler.UpdateUserAddress).Methods(http.MethodPut)
 	pR.HandleFunc("/user/profile/photo", userHandler.UpdateProfilePhoto).Methods(http.MethodPut)
 	// ...
 	// todo: should this be like get all future ones, or ones in the attendee's city?

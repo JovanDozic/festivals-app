@@ -34,6 +34,7 @@ import {
   ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
+import { firstValueFrom, Observable, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-store-ticket',
@@ -84,6 +85,7 @@ export class StoreTicketComponent implements OnInit {
       firstNameCtrl: ['', Validators.required],
       lastNameCtrl: ['', Validators.required],
       emailCtrl: ['', [Validators.required, Validators.email]],
+      dateOfBirthCtrl: ['', Validators.required],
       phoneCtrl: ['', Validators.required],
     });
 
@@ -161,12 +163,20 @@ export class StoreTicketComponent implements OnInit {
     });
   }
 
+  selectTicket(ticket: ItemCurrentPrice) {
+    if (ticket.remainingNumber === 0) {
+      return;
+    }
+    this.selectedTicket = ticket;
+  }
+
   fillPersonalFormGroup() {
     if (this.userProfile) {
       this.personalFormGroup.setValue({
         firstNameCtrl: this.userProfile.firstName,
         lastNameCtrl: this.userProfile.lastName,
         emailCtrl: this.userProfile.email,
+        dateOfBirthCtrl: this.userProfile.dateOfBirth,
         phoneCtrl: this.userProfile.phoneNumber,
       });
     }
@@ -207,7 +217,7 @@ export class StoreTicketComponent implements OnInit {
     }
   }
 
-  purchase() {
+  completeOrder() {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Complete Order',
@@ -220,15 +230,67 @@ export class StoreTicketComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirm) {
-        this.snackbarService.show('Order completed');
+        this.sendOrder();
       }
     });
   }
 
-  selectTicket(ticket: ItemCurrentPrice) {
-    if (ticket.remainingNumber === 0) {
-      return;
+  async sendOrder() {
+    try {
+      this.isLoading = true;
+      await firstValueFrom(this.updateProfile());
+      await firstValueFrom(this.updateEmail());
+      await firstValueFrom(this.updateAddress());
+      await firstValueFrom(this.createOrder());
+      this.snackbarService.show('Order created successfully');
+      // this.router.navigate([`/order-confirmation/${orderResponse.id}`]);
+    } catch (error) {
+      console.error('Error completing order:', error);
+      this.snackbarService.show('Error completing order');
+    } finally {
+      this.isLoading = false;
     }
-    this.selectedTicket = ticket;
+  }
+
+  updateProfile(): Observable<any> {
+    if (this.personalFormGroup.valid) {
+      return this.userService.updateUserProfile({
+        firstName: this.personalFormGroup.get('firstNameCtrl')?.value,
+        lastName: this.personalFormGroup.get('lastNameCtrl')?.value,
+        dateOfBirth: new Date(
+          this.personalFormGroup.get('dateOfBirthCtrl')?.value,
+        ),
+        phoneNumber: this.personalFormGroup.get('phoneCtrl')?.value,
+      });
+    }
+    return throwError(() => new Error('Personal form is invalid'));
+  }
+
+  updateEmail(): Observable<any> {
+    if (this.personalFormGroup.valid) {
+      return this.userService.updateUserEmail(
+        this.personalFormGroup.get('emailCtrl')?.value,
+      );
+    }
+    return throwError(() => new Error('Email form is invalid'));
+  }
+
+  updateAddress(): Observable<any> {
+    if (this.addressFormGroup.valid) {
+      return this.userService.updateUserAddress({
+        street: this.addressFormGroup.get('streetCtrl')?.value,
+        number: this.addressFormGroup.get('numberCtrl')?.value,
+        apartmentSuite: this.addressFormGroup.get('apartmentSuiteCtrl')?.value,
+        city: this.addressFormGroup.get('cityCtrl')?.value,
+        postalCode: this.addressFormGroup.get('postalCodeCtrl')?.value,
+        countryISO3: this.addressFormGroup.get('countryISO3Ctrl')?.value,
+      });
+    }
+    return throwError(() => new Error('Address form is invalid'));
+  }
+
+  createOrder(): Observable<any> {
+    this.snackbarService.show('Order created successfully');
+    return new Observable();
   }
 }

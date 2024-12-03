@@ -7,7 +7,10 @@ import {
   UpdateStaffEmailRequest,
   UpdateStaffProfileRequest,
 } from '../../models/user/user-profile-request.model';
-import { CreateAddressRequest } from '../../models/common/create-address-request.model';
+import {
+  CreateAddressRequest,
+  UpdateAddressRequest,
+} from '../../models/common/create-address-request.model';
 import {
   CreateStaffRequest,
   CreateStaffResponse,
@@ -40,6 +43,19 @@ export class UserService {
       dateOfBirth: formatDate(updatedProfile.dateOfBirth),
       phoneNumber: updatedProfile.phoneNumber,
     });
+  }
+
+  updateUserEmail(email: string) {
+    return this.http.put<void>(`${this.apiUrl}/user/email`, {
+      email,
+    });
+  }
+
+  updateUserAddress(updatedAddress: UpdateAddressRequest) {
+    return this.http.put<void>(
+      `${this.apiUrl}/user/profile/address`,
+      updatedAddress,
+    );
   }
 
   createUserProfile(profile: CreateUpdateUserProfileRequest) {
@@ -84,6 +100,7 @@ export class UserService {
 }
 
 function formatDate(date: Date): string {
+  console.log(date);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');

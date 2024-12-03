@@ -28,6 +28,7 @@ type UserService interface {
 	GetFestivalEmployees(festivalId uint) ([]modelsUser.UserProfile, error)
 	GetEmployeesNotOnFestival(festivalId uint) ([]modelsUser.UserProfile, error)
 	UpdateProfilePhoto(username string, image *modelsCommon.Image) error
+	GetAddressID(username string) (uint, error)
 }
 
 type userService struct {
@@ -331,4 +332,18 @@ func (s *userService) UpdateProfilePhoto(username string, image *modelsCommon.Im
 	}
 
 	return nil
+}
+
+func (s *userService) GetAddressID(username string) (uint, error) {
+
+	profile, err := s.profileRepo.GetFullByUsername(username)
+	if err != nil {
+		return 0, err
+	}
+
+	if profile.AddressID == nil {
+		return 0, modelsError.ErrNotFound
+	}
+
+	return *profile.AddressID, nil
 }
