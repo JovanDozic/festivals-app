@@ -39,7 +39,14 @@
                 </mat-form-field>
               </div>
 
-              <button mat-raised-button (click)="createAccount()">Next</button>
+              <button
+                mat-stroked-button
+                (click)="createAccount()"
+                color="primary"
+                [disabled]="accountFormGroup.invalid"
+              >
+                Next
+              </button>
             </form>
           </mat-step>
 
@@ -84,7 +91,12 @@
               </div>
 
               <div>
-                <button mat-raised-button (click)="createUserProfile()">
+                <button
+                  mat-stroked-button
+                  (click)="createUserProfile()"
+                  color="primary"
+                  [disabled]="personalFormGroup.invalid"
+                >
                   Next
                 </button>
               </div>
@@ -130,8 +142,13 @@
                 </mat-form-field>
               </div>
               <div>
-                <button mat-button mat-raised-button (click)="createAddress()">
-                  Submit
+                <button
+                  mat-flat-button
+                  (click)="createAddress()"
+                  color="primary"
+                  [disabled]="addressFormGroup.invalid"
+                >
+                  Register
                 </button>
               </div>
             </form>
