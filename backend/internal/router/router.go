@@ -112,7 +112,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	pR.HandleFunc("/festival/{festivalId}/image", festivalHandler.GetImages).Methods(http.MethodGet)
 	pR.HandleFunc("/festival/{festivalId}/image", festivalHandler.AddImage).Methods(http.MethodPost)
-	// todo: here
+	pR.HandleFunc("/festival/{festivalId}/image/{imageId}", festivalHandler.RemoveImage).Methods(http.MethodDelete)
 
 	pR.HandleFunc("/organizer/employee", userHandler.CreateEmployee).Methods(http.MethodPost)
 	pR.HandleFunc("/organizer/employee", userHandler.UpdateStaffProfile).Methods(http.MethodPut)

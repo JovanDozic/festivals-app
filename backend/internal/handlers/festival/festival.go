@@ -403,12 +403,26 @@ func (h *festivalHandler) AddImage(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) RemoveImage(w http.ResponseWriter, r *http.Request) {
 
-	_, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
 	if !ok {
 		return
 	}
 
-	panic("not implemented yet")
+	imageId, err := getIDParamFromRequest(r, "imageId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := h.festivalService.RemoveImage(festivalId, imageId); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "image removed successfully"}, nil)
+	log.Println("image removed successfully for festival:", festivalId)
 }
 
 func (h *festivalHandler) GetImages(w http.ResponseWriter, r *http.Request) {

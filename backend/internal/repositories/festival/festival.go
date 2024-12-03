@@ -15,6 +15,7 @@ type FestivalRepo interface {
 	Delete(festivalId uint) error
 	IsOrganizer(festivalId uint, organizerId uint) (bool, error)
 	AddImage(festivalId uint, imageId uint) error
+	RemoveImage(festivalId uint, imageId uint) error
 	Employ(festivalId uint, employeeId uint) error
 	GetEmployeeCount(festivalId uint) (int, error)
 	Fire(festivalId uint, employeeId uint) error
@@ -129,6 +130,17 @@ func (r *festivalRepo) AddImage(festivalId uint, imageId uint) error {
 	}
 
 	err := r.db.Create(festivalImage).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *festivalRepo) RemoveImage(festivalId uint, imageId uint) error {
+
+	err := r.db.Where("festival_id = ? AND image_id = ?", festivalId, imageId).
+		Delete(&models.FestivalImage{}).Error
 	if err != nil {
 		return err
 	}

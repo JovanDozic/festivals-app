@@ -52,10 +52,8 @@ export class MyFestivalsComponent implements OnInit {
   loadFestivals(): void {
     this.festivalService.getMyFestivals().subscribe({
       next: (response) => {
-        // setTimeout(() => {
         this.festivals = response;
         this.isLoading = false;
-        // }, 250);
       },
       error: (error) => {
         console.error('Error fetching festivals:', error);
@@ -93,15 +91,7 @@ export class MyFestivalsComponent implements OnInit {
 
   onEditClick(festival: Festival): void {
     const dialogRef = this.dialog.open(EditFestivalComponent, {
-      data: {
-        id: festival.id,
-        name: festival.name,
-        description: festival.description,
-        startDate: festival.startDate,
-        endDate: festival.endDate,
-        capacity: festival.capacity,
-        address: festival.address,
-      },
+      data: festival,
       width: '800px',
       height: '535px',
     });

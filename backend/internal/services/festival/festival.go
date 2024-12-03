@@ -27,6 +27,7 @@ type FestivalService interface {
 	IsOrganizer(username string, festivalId uint) (bool, error)
 	GetImages(festivalId uint) ([]modelsCommon.Image, error)
 	AddImage(festivalId uint, image *modelsCommon.Image) error
+	RemoveImage(festivalId uint, imageId uint) error
 	GetAddressID(festivalId uint) (uint, error)
 	Employ(festivalId uint, employeeId uint) error
 	Fire(festivalId uint, employeeId uint) error
@@ -283,6 +284,15 @@ func (s *festivalService) AddImage(festivalId uint, image *modelsCommon.Image) e
 	}
 
 	if err := s.festivalRepo.AddImage(festivalId, image.ID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *festivalService) RemoveImage(festivalId uint, imageId uint) error {
+
+	if err := s.festivalRepo.RemoveImage(festivalId, imageId); err != nil {
 		return err
 	}
 
