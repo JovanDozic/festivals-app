@@ -1,5 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Employee, Festival } from '../../../../models/festival/festival.model';
+import {
+  Employee,
+  Festival,
+  ItemCurrentPrice,
+} from '../../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FestivalService } from '../../../../services/festival/festival.service';
 import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
@@ -54,6 +58,69 @@ export class StoreTicketComponent implements OnInit {
   isLoading = false;
 
   infoFormGroup: FormGroup;
+  tickets: ItemCurrentPrice[] = [
+    {
+      itemId: 1,
+      name: 'General Admission',
+      description: 'General Admission Ticket',
+      price: 50.0,
+      remainingNumber: 100,
+      availableNumber: 100,
+      isFixed: true,
+      dateFrom: '2022-06-01',
+      dateTo: '2022-06-30',
+      priceListItemId: 1,
+    },
+    {
+      itemId: 2,
+      name: 'VIP Admission',
+      description: 'VIP Admission Ticket',
+      price: 100.0,
+      remainingNumber: 50,
+      availableNumber: 50,
+      isFixed: true,
+      dateFrom: '2022-06-01',
+      dateTo: '2022-06-30',
+      priceListItemId: 2,
+    },
+    {
+      itemId: 2,
+      name: 'VIP Admission',
+      description: 'VIP Admission Ticket',
+      price: 100.0,
+      remainingNumber: 50,
+      availableNumber: 50,
+      isFixed: true,
+      dateFrom: '2022-06-01',
+      dateTo: '2022-06-30',
+      priceListItemId: 2,
+    },
+    {
+      itemId: 2,
+      name: 'VIP Admission',
+      description: 'VIP Admission Ticket',
+      price: 100.0,
+      remainingNumber: 50,
+      availableNumber: 50,
+      isFixed: true,
+      dateFrom: '2022-06-01',
+      dateTo: '2022-06-30',
+      priceListItemId: 2,
+    },
+    {
+      itemId: 2,
+      name: 'VIP Admission',
+      description: 'VIP Admission Ticket',
+      price: 100.0,
+      remainingNumber: 50,
+      availableNumber: 50,
+      isFixed: true,
+      dateFrom: '2022-06-01',
+      dateTo: '2022-06-30',
+      priceListItemId: 2,
+    },
+  ];
+  selectedTicket: ItemCurrentPrice | null = null;
 
   constructor() {
     this.infoFormGroup = this.fb.group({
@@ -89,5 +156,11 @@ export class StoreTicketComponent implements OnInit {
 
   purchase() {
     this.snackbarService.show('Opening Payment Dialog...');
+  }
+
+  selectTicket(ticket: ItemCurrentPrice) {
+    this.selectedTicket = ticket;
+    console.log('AAALO', ticket);
+    console.log('AAALO', this.selectedTicket);
   }
 }

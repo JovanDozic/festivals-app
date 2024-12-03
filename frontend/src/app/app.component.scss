@@ -158,13 +158,50 @@ img[mat-card-image] {
 }
 
 :host-context([data-theme="light"]) .ai-text-shadow {
-  text-shadow: 0 0px 5px #9ea3ff; // #70
+  text-shadow: 0 0px 5px #4147e4; // #70
 }
 
 :host-context([data-theme="dark"]) .ai-text-shadow {
-  text-shadow: 0 0px 5px #f47cff; // #70
+  text-shadow: 0 0px 5px #bfc2ff;
 }
 
 .ai-shadow {
-  box-shadow: 0 0px 10px #f47cff;
+  box-shadow: 0 0px 10px #bfc2ff;
+}
+
+.ai-shadow-card {
+  transition:
+    box-shadow 0.3s ease,
+    outline 0.1s ease;
+  border-radius: 16px;
+}
+
+:host-context([data-theme="dark"]) .ai-shadow-card {
+  &.selected {
+    box-shadow: 0px 0px 10px #bfc2ff;
+    outline: 3px solid #bfc2ff;
+  }
+
+  &.selected:hover {
+    box-shadow: 0px 0px 10px #bfc2ff;
+  }
+}
+
+:host-context([data-theme="light"]) .ai-shadow-card {
+  &.selected {
+    box-shadow: 0px 0px 10px #4147e4;
+    outline: 3px solid #4147e4;
+  }
+
+  &.selected:hover {
+    box-shadow: 0px 0px 10px #4147e4;
+  }
+}
+
+:host-context([data-theme="dark"]) .ai-shadow-card:hover {
+  box-shadow: 0px 0px 10px #fff7fa;
+}
+
+:host-context([data-theme="light"]) .ai-shadow-card:hover {
+  box-shadow: 0px 0px 10px #5d5d6d;
 }

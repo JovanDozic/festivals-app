@@ -1,11 +1,5 @@
 @use "@angular/material" as mat;
 
-.profile-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0px 20px;
-}
-
 .profile-header {
   display: flex;
   flex-direction: row;
@@ -30,13 +24,17 @@
 
 .profile-content {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   gap: 20px;
-  margin-bottom: 20px;
+  justify-content: space-between;
+}
+
+.profile-content-with-cards {
+  padding: 10px 0 40px 0;
 }
 
 .profile-card {
-  padding: 0;
+  padding: 0px;
   width: 100%;
 }
 
@@ -49,4 +47,61 @@
   font-family: "Funnel Display", sans-serif;
   font-size: x-large;
   font-weight: 500;
+}
+
+h3 {
+  margin: 3px 0;
+  font-family: "Funnel Display", sans-serif;
+  font-weight: 500;
+  font-size: large;
+}
+
+.divider {
+  height: 25px;
+}
+
+.festival-card {
+  flex: 1 1 calc(50% - 10px);
+  max-width: calc(50% - 10px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .festival-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+mat-card-title {
+  font-family: "Funnel Display", sans-serif;
+  font-weight: bold;
+}
+
+mat-card-subtitle {
+  font-size: 14px;
+  color: #777;
+  margin: 0 0 20px 5px;
+}
+
+.card-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+mat-card-actions {
+  margin-top: 5px;
+}
+
+.main-action {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1000;
+  margin: 16px;
 }
