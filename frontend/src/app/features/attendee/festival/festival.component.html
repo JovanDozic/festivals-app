@@ -14,7 +14,19 @@
         }}{{ festival.name.length > 40 ? "..." : "" }}
       </h1>
     </div>
-    <div class="button-container"></div>
+    <div class="button-container">
+      <button
+        mat-fab
+        extended
+        color="primary"
+        (click)="onOpenStoreClick()"
+        [disabled]="festival.storeStatus === 'CLOSED'"
+        class="store-button"
+      >
+        <mat-icon class="material-symbols-outlined">shopping_bag</mat-icon>
+        Go to Festival Store
+      </button>
+    </div>
   </div>
 
   <div class="chip-container">

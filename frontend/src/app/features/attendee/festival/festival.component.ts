@@ -48,6 +48,9 @@ import { ItemService } from '../../../services/festival/item.service';
   ],
 })
 export class FestivalComponent {
+  onOpenStoreClick() {
+    throw new Error('Method not implemented.');
+  }
   festival: Festival | null = null;
   isLoading = true;
   currentImageIndex = 0;

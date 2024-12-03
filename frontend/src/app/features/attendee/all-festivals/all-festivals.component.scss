@@ -44,10 +44,18 @@ mat-card-title {
 
 img[mat-card-image] {
   width: 100%;
-  height: auto; /* Maintain aspect ratio */
-  max-height: 200px; /* Set a maximum height */
-  object-fit: cover; /* Change from 'cover' to 'contain' */
-  image-rendering: optimizeSpeed; /* Let the browser decide the best rendering */
+  height: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  image-rendering: optimizeSpeed;
+}
+
+:host-context([data-theme="light"]) img[mat-card-image] {
+  background-color: #e0e0ff;
+}
+
+:host-context([data-theme="dark"]) img[mat-card-image] {
+  background-color: #494d8aaa;
 }
 
 mat-card-title {
