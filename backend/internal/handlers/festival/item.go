@@ -161,8 +161,13 @@ func (h *itemHandler) CreatePriceListItem(w http.ResponseWriter, r *http.Request
 
 func (h *itemHandler) GetCurrentTicketTypes(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
-	if !ok {
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	festivalId, err := getFestivalIDFromRequest(r)
+	if err != nil {
 		return
 	}
 
