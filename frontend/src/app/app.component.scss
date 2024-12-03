@@ -145,6 +145,10 @@ img[mat-card-image] {
   image-rendering: optimizeSpeed;
 }
 
+.mat-card-img-large {
+  max-height: 400px !important;
+}
+
 :host-context([data-theme="light"]) img[mat-card-image] {
   background-color: #e0e0ff;
 }
