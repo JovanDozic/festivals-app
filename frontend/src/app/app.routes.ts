@@ -81,6 +81,22 @@ const attendeeRoutes: Routes = [
           ),
         title: 'Festival',
       },
+      {
+        path: 'festivals/:id/store/ticket',
+        loadComponent: () =>
+          import(
+            './features/attendee/store/store-ticket/store-ticket.component'
+          ).then((c) => c.StoreTicketComponent),
+        title: 'Festival Ticket Store',
+      },
+      {
+        path: 'festivals/:id/store/package',
+        loadComponent: () =>
+          import(
+            './features/attendee/store/store-package/store-package.component'
+          ).then((c) => c.StorePackageComponent),
+        title: 'Festival Package Store',
+      },
     ],
   },
 ];

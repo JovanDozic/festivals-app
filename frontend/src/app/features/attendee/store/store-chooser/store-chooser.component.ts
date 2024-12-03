@@ -50,27 +50,27 @@ interface StoreType {
 export class StoreChooserComponent {
   private dialogRef = inject(MatDialogRef<StoreChooserComponent>);
 
-  categories: StoreType[] = [
+  types: StoreType[] = [
     {
-      value: 'TICKET',
+      value: 'ticket',
       viewValue: 'Festival Ticket',
       description: 'Ticket to access the Festival Grounds',
     },
     {
-      value: 'PACKAGE',
+      value: 'package',
       viewValue: 'Festival Package',
       description:
         'Choose a custom experience using Package with Travel, Camp and other options with Ticket included',
     },
   ];
 
-  selectedCategory: StoreType | null = null;
+  selectedType: StoreType | null = null;
 
   closeDialog() {
     this.dialogRef.close(false);
   }
 
   choose() {
-    this.dialogRef.close(this.selectedCategory);
+    this.dialogRef.close(this.selectedType);
   }
 }

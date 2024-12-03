@@ -121,7 +121,9 @@ export class FestivalComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.snackbarService.show("You've selected: " + result);
+        this.router.navigate([
+          'festivals/' + this.festival?.id + '/store/' + result,
+        ]);
       }
     });
   }
