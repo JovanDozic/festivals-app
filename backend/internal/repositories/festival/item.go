@@ -129,7 +129,7 @@ func (r *itemRepo) GetCurrentTicketTypes(festivalId uint) ([]modelsFestival.Pric
 		Joins("JOIN items ON price_list_items.item_id = items.id").
 		Where("items.type = ?", modelsFestival.ItemTicketType).
 		Where("price_list_id = ?", currentPriceList.ID).
-		Order("items.id").
+		Order("price").
 		Find(&priceListItems).Error
 	if err != nil {
 		return nil, err
