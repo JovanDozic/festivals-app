@@ -97,6 +97,22 @@ const attendeeRoutes: Routes = [
           ).then((c) => c.StorePackageComponent),
         title: 'Festival Package Store',
       },
+      {
+        path: 'my-orders',
+        loadComponent: () =>
+          import(
+            './features/attendee/order/all-orders/all-orders.component'
+          ).then((c) => c.AllOrdersComponent),
+        title: 'My Orders',
+      },
+      {
+        path: 'my-orders/:id',
+        loadComponent: () =>
+          import('./features/attendee/order/order/order.component').then(
+            (c) => c.OrderComponent,
+          ),
+        title: 'View Order',
+      },
     ],
   },
 ];

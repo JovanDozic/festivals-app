@@ -81,6 +81,17 @@
       >
         Festivals
       </a>
+
+      <a
+        mat-list-item
+        routerLink="/my-orders"
+        *ngIf="visibleForRole('ATTENDEE')"
+        #link="routerLinkActive"
+        routerLinkActive
+        [activated]="link.isActive"
+      >
+        My Orders
+      </a>
     </mat-nav-list>
     <div class="theme-button">
       <button mat-mini-fab color="primary" (click)="toggleTheme()">
