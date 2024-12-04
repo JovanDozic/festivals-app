@@ -183,7 +183,7 @@
       images.length === 0
     "
   >
-    <mat-spinner *ngIf="isSaving"></mat-spinner>
-    <span *ngIf="!isSaving">Save changes</span>
+    <mat-spinner *ngIf="isUploading"></mat-spinner>
+    <span *ngIf="!isUploading">Save changes</span>
   </button>
 </mat-dialog-actions>

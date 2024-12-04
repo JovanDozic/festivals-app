@@ -84,7 +84,7 @@ export class EditFestivalComponent implements OnInit {
 
   images: ImagePreview[] = [];
   imagesToDelete: number[] = [];
-  isSaving = false;
+  isUploading = false;
 
   constructor() {
     this.basicInfoFormGroup = this.fb.group({
@@ -141,7 +141,7 @@ export class EditFestivalComponent implements OnInit {
       return;
     }
 
-    this.isSaving = true;
+    this.isUploading = true;
 
     const updatedFestival: UpdateFestivalRequest = {
       id: this.data.id,
@@ -169,7 +169,7 @@ export class EditFestivalComponent implements OnInit {
         this.handleImages();
       },
       error: (error) => {
-        this.isSaving = false;
+        this.isUploading = false;
         console.error('Error updating festival:', error);
         this.snackbarService.show('Error updating festival. Please try again.');
       },
@@ -214,26 +214,26 @@ export class EditFestivalComponent implements OnInit {
 
             (addImages$ as Observable<null>).subscribe({
               next: () => {
-                this.isSaving = false;
+                this.isUploading = false;
                 this.snackbarService.show('Festival updated successfully!');
                 this.dialogRef.close(true);
               },
               error: (error) => {
-                this.isSaving = false;
+                this.isUploading = false;
                 console.error('Error adding images to festival:', error);
                 this.snackbarService.show('Error adding images to festival');
               },
             });
           },
           error: (error) => {
-            this.isSaving = false;
+            this.isUploading = false;
             console.error('Error uploading images:', error);
             this.snackbarService.show('Error uploading images');
           },
         });
       },
       error: (error) => {
-        this.isSaving = false;
+        this.isUploading = false;
         console.error('Error deleting images:', error);
         this.snackbarService.show('Error deleting images');
       },

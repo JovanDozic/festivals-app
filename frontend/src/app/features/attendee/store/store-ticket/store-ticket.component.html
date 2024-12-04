@@ -15,7 +15,16 @@
         <mat-icon color="primary">arrow_forward_ios</mat-icon> Ticket Store
       </h1>
     </div>
-    <div class="button-container"></div>
+    <div class="button-container">
+      <button
+        mat-icon-button
+        matTooltip="Add existing Employee"
+        color="primary"
+        (click)="openPaymentDialog()"
+      >
+        <mat-icon class="material-symbols-outlined">add</mat-icon>
+      </button>
+    </div>
   </div>
 
   <div class="profile-content">
@@ -278,10 +287,11 @@
             (click)="completeOrder()"
             class="ai-shadow"
           >
-            <mat-icon class="material-symbols-outlined">
+            <mat-icon class="material-symbols-outlined" *ngIf="!isLoading">
               list_alt_check
             </mat-icon>
-            Complete Order
+            <mat-spinner class="fab-loader" *ngIf="isLoading"></mat-spinner>
+            <span *ngIf="!isLoading">Complete Order</span>
           </button>
         </div>
       </mat-step>

@@ -37,6 +37,11 @@ import {
 } from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { firstValueFrom, Observable, throwError } from 'rxjs';
 import { OrderService } from '../../../../services/festival/order.service';
+import { StorePaymentDialogComponent } from '../store-payment-dialog/store-payment-dialog.component';
+import {
+  MatProgressSpinner,
+  MatProgressSpinnerModule,
+} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-store-ticket',
@@ -55,6 +60,7 @@ import { OrderService } from '../../../../services/festival/order.service';
     MatInputModule,
     MatFormFieldModule,
     MatStepperModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './store-ticket.component.html',
   styleUrls: [
@@ -225,6 +231,7 @@ export class StoreTicketComponent implements OnInit {
   }
 
   completeOrder() {
+    if (this.isLoading) return;
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Complete Order',
@@ -249,12 +256,10 @@ export class StoreTicketComponent implements OnInit {
       await firstValueFrom(this.updateEmail());
       await firstValueFrom(this.updateAddress());
       await firstValueFrom(this.createOrder());
-      this.snackbarService.show('Order created successfully');
-      // this.router.navigate([`/order-confirmation/${orderResponse.id}`]);
+      this.openPaymentDialog();
     } catch (error) {
       console.error('Error completing order:', error);
       this.snackbarService.show('Error completing order');
-    } finally {
       this.isLoading = false;
     }
   }
@@ -311,5 +316,19 @@ export class StoreTicketComponent implements OnInit {
       () =>
         new Error('No ticket selected or festival or festival ID is missing'),
     );
+  }
+
+  openPaymentDialog() {
+    const dialogRef = this.dialog.open(StorePaymentDialogComponent, {
+      data: { festivalId: this.festival?.id },
+      width: '250px',
+      height: '250px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.isLoading = false;
+      console.log('The dialog was closed');
+    });
   }
 }
