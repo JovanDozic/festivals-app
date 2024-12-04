@@ -12,7 +12,9 @@
       </button>
       <h1>
         My Orders
-        <mat-icon color="primary">arrow_forward_ios</mat-icon> Order #NUMBER
+        <mat-icon color="primary">arrow_forward_ios</mat-icon> Order #{{
+          order.orderId
+        }}
       </h1>
     </div>
     <div class="button-container"></div>
@@ -56,48 +58,155 @@
             confirmation_number
           </mat-icon>
           Ticket:
-          <span class="number-mono"> {{ order.ticket.name }} </span>
+          <span class="number-mono">
+            {{ order.ticket.name }}: {{ order.ticket.description }}
+          </span>
         </span>
       </mat-card-content>
     </mat-card>
     <mat-card class="profile-card" *ngIf="order.orderType === 'PACKAGE'">
-      <mat-card-content>
-        <span class="icon-property" *ngIf="order.transportAddon">
+      <mat-card-content *ngIf="order.transportAddon">
+        <span
+          class="icon-property"
+          *ngIf="order.transportAddon.transportType === 'PLANE'"
+        >
           <mat-icon class="material-symbols-outlined" color="primary">
-            {{
-              order.transportAddon.transportType === "PLANE"
-                ? "flight"
-                : "luggage"
-            }}
-            {{
-              order.transportAddon.transportType === "BUS"
-                ? "directions_bus"
-                : "luggage"
-            }}
-            {{
-              order.transportAddon.transportType === "TRAIN"
-                ? "train"
-                : "luggage"
-            }}
+            flight
           </mat-icon>
-          Travel Option:
-          <span class="number-mono"> {{ order.transportAddon.itemName }} </span>
+          <h3>Flight Package</h3>
         </span>
-        <span class="icon-property continued" *ngIf="order.transportAddon">
+        <span
+          class="icon-property"
+          *ngIf="order.transportAddon.transportType === 'BUS'"
+        >
           <mat-icon class="material-symbols-outlined" color="primary">
+            directions_bus
           </mat-icon>
-          <span class="number-mono">
+          <h3>Bus Package</h3>
+        </span>
+        <span
+          class="icon-property"
+          *ngIf="order.transportAddon.transportType === 'TRAIN'"
+        >
+          <mat-icon class="material-symbols-outlined" color="primary">
+            train
+          </mat-icon>
+          <h3>Train Package</h3>
+        </span>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            home
+          </mat-icon>
+          <h3>Roundtrip:</h3>
+        </span>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined"> more_vert </mat-icon>
+        </span>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            flight_takeoff
+          </mat-icon>
+          <b>
             {{ order.transportAddon.departureCityName }}
+            ({{ order.transportAddon.departureCountryISO3 }})
             <mat-icon
               class="material-symbols-outlined inline-arrow"
               color="primary"
             >
               arrow_right_alt
             </mat-icon>
-            {{ order.transportAddon.arrivalCityName }}
+            {{ order.transportAddon.arrivalCityName }} ({{
+              order.transportAddon.arrivalCountryISO3
+            }})
+          </b>
+        </span>
+
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <span>
+            {{ order.transportAddon.departureTime | date: "yyyy-MM-dd HH:mm" }}
+            <mat-icon
+              class="material-symbols-outlined inline-arrow"
+              color="primary"
+            >
+              arrow_right_alt
+            </mat-icon>
+            {{ order.transportAddon.arrivalTime | date: "yyyy-MM-dd HH:mm" }}
           </span>
         </span>
-        <div class="divider"></div>
+
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined"> more_vert </mat-icon>
+        </span>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            celebration
+          </mat-icon>
+          <h3>{{ order.festival.name }}</h3>
+        </span>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined"> more_vert </mat-icon>
+        </span>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            flight_land
+          </mat-icon>
+          <b>
+            {{ order.transportAddon.arrivalCityName }}
+            ({{ order.transportAddon.arrivalCountryISO3 }})
+            <mat-icon
+              class="material-symbols-outlined inline-arrow"
+              color="primary"
+            >
+              arrow_right_alt
+            </mat-icon>
+            {{ order.transportAddon.departureCityName }} ({{
+              order.transportAddon.departureCountryISO3
+            }})
+          </b>
+        </span>
+
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <span>
+            {{
+              order.transportAddon.returnDepartureTime
+                | date: "yyyy-MM-dd HH:mm"
+            }}
+            <mat-icon
+              class="material-symbols-outlined inline-arrow"
+              color="primary"
+            >
+              arrow_right_alt
+            </mat-icon>
+            {{
+              order.transportAddon.returnArrivalTime | date: "yyyy-MM-dd HH:mm"
+            }}
+          </span>
+        </span>
+
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined"> more_vert </mat-icon>
+        </span>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            home
+          </mat-icon>
+          <h3>End of the Journey</h3>
+        </span>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="profile-card" *ngIf="order.orderType === 'PACKAGE'">
+      <mat-card-content>
         <span class="icon-property" *ngIf="order.campAddon">
           <mat-icon class="material-symbols-outlined" color="primary">
             camping
@@ -105,7 +214,10 @@
           Camp Option:
           <span class="number-mono"> {{ order.campAddon.itemName }} </span>
         </span>
-        <div class="divider"></div>
+        <div
+          class="divider"
+          *ngIf="order.campAddon && order.generalAddons"
+        ></div>
         <span class="icon-property" *ngIf="order.generalAddons">
           <mat-icon class="material-symbols-outlined" color="primary">
             more_vert
