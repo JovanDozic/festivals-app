@@ -407,7 +407,47 @@
       <!-- ! GENERAL ADDON SELECTION -->
       <mat-step *ngIf="generalAddonsCount !== 0">
         <ng-template matStepLabel> Select Additional Options </ng-template>
-        <div class="profile-content profile-content-with-cards"></div>
+        <div class="profile-content profile-content-with-cards">
+          <mat-card
+            class="festival-card"
+            (click)="selectGeneralAddon(addon)"
+            *ngFor="let addon of generalAddons"
+          >
+            <div
+              class="card-content ai-shadow-card"
+              [ngClass]="{
+                selected: isGeneralAddonSelected(addon),
+                'sold-out': addon.itemRemainingNumber === 0,
+              }"
+            >
+              <div>
+                <mat-card-header>
+                  <mat-card-title>{{ addon.itemName }}</mat-card-title>
+                  <mat-card-subtitle>{{
+                    addon.itemDescription
+                  }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <span class="icon-property">
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      attach_money
+                    </mat-icon>
+                    <span class="number">{{ addon.price.toFixed(2) }}</span>
+                  </span>
+
+                  <span class="icon-property">
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      numbers
+                    </mat-icon>
+                    <span class="number">{{ addon.itemRemainingNumber }}</span>
+                    remaining out of
+                    <span class="number">{{ addon.itemAvailableNumber }}</span>
+                  </span>
+                </mat-card-content>
+              </div>
+            </div>
+          </mat-card>
+        </div>
         <div>
           <button mat-stroked-button class="base-fill-button" matStepperNext>
             Next

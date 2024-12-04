@@ -108,8 +108,7 @@ export class StorePackageComponent implements OnInit {
 
   selectedTransportAddon: TransportAddonDTO | null = null;
   selectedCampAddon: CampAddonDTO | null = null;
-  selectedGeneralAddon: GeneralAddonDTO | null = null;
-
+  selectedGeneralAddons: GeneralAddonDTO[] = [];
   userProfile: UserProfileResponse | null = null;
   address: AddressResponse | null = null;
   festival: Festival | null = null;
@@ -312,6 +311,28 @@ export class StorePackageComponent implements OnInit {
       return;
     }
     this.selectedCampAddon = addon;
+  }
+
+  selectGeneralAddon(addon: GeneralAddonDTO) {
+    if (addon.itemRemainingNumber === 0) {
+      return;
+    }
+
+    const index = this.selectedGeneralAddons.findIndex(
+      (selectedAddon) => selectedAddon.itemId === addon.itemId,
+    );
+
+    if (index > -1) {
+      this.selectedGeneralAddons.splice(index, 1);
+    } else {
+      this.selectedGeneralAddons.push(addon);
+    }
+  }
+
+  isGeneralAddonSelected(addon: GeneralAddonDTO): boolean {
+    return this.selectedGeneralAddons.some(
+      (selectedAddon) => selectedAddon.itemId === addon.itemId,
+    );
   }
 
   clearTransportFilters() {
