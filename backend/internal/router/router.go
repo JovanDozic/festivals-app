@@ -60,7 +60,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	festivalService := servicesFestival.NewFestivalService(config, festivalRepo, userRepo, locationService, imageRepo)
 	itemService := servicesFestival.NewItemService(config, itemRepo, locationService, imageRepo)
 	awsService := servicesCommon.NewAWSService(s3Client, s3Presign, config)
-	orderService := servicesFestival.NewOrderService(orderRepo, itemRepo)
+	orderService := servicesFestival.NewOrderService(orderRepo, itemRepo, festivalRepo)
 	// ...
 
 	// Init handlers
@@ -162,6 +162,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// ...
 
+	pR.HandleFunc("/festival/{festivalId}/order/{orderId}", orderHandler.GetOrder).Methods(http.MethodGet)
 	pR.HandleFunc("/festival/{festivalId}/order/ticket", orderHandler.CreateTicketOrder).Methods(http.MethodPost)
 	pR.HandleFunc("/festival/{festivalId}/order/package", orderHandler.CreatePackageOrder).Methods(http.MethodPost)
 

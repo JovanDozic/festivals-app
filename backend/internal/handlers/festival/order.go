@@ -13,6 +13,7 @@ import (
 type OrderHandler interface {
 	CreateTicketOrder(w http.ResponseWriter, r *http.Request)
 	CreatePackageOrder(w http.ResponseWriter, r *http.Request)
+	GetOrder(w http.ResponseWriter, r *http.Request)
 }
 
 type orderHandler struct {
@@ -177,4 +178,31 @@ func (h *orderHandler) CreatePackageOrder(w http.ResponseWriter, r *http.Request
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"orderId": order.ID}, nil)
 	log.Println("order created", order.ID)
+}
+
+func (h *orderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthAttendeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	orderId, err := getIDParamFromRequest(r, "orderId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	order, err := h.orderService.GetOrder(orderId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	// todo: check if logged user is owner of the order
+
+	utils.WriteJSON(w, http.StatusOK, order, nil)
+	log.Println("order fetched", order.OrderID)
 }

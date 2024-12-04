@@ -143,3 +143,16 @@ type CampAddonDTO struct {
 	ImageURL              string     `json:"imageUrl"`
 	EquipmentNames        string     `json:"equipmentNames"`
 }
+
+type OrderDTO struct {
+	OrderID        uint               `json:"orderId"`
+	OrderType      string             `json:"orderType"` // this is like ticket or package
+	Timestamp      time.Time          `json:"timestamp"`
+	TotalPrice     float64            `json:"totalPrice"`
+	BraceletStatus string             `json:"braceletStatus"`
+	Ticket         ItemResponse       `json:"ticket"`
+	TransportAddon *TransportAddonDTO `json:"transportAddon"`
+	CampAddon      *CampAddonDTO      `json:"campAddon"`
+	GeneralAddons  *[]GeneralAddonDTO `json:"generalAddons"`
+	Festival       FestivalResponse   `json:"festival"`
+}
