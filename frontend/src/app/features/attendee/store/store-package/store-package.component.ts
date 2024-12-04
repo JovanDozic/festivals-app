@@ -25,6 +25,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import {
   FormBuilder,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -38,7 +39,7 @@ import {
   ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { firstValueFrom, Observable, throwError } from 'rxjs';
+import { count, firstValueFrom, Observable, throwError } from 'rxjs';
 import { OrderService } from '../../../../services/festival/order.service';
 import { StorePaymentDialogComponent } from '../store-payment-dialog/store-payment-dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -51,6 +52,7 @@ import { MatSelectModule } from '@angular/material/select';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatButtonModule,
     MatTooltipModule,
     MatIconModule,
@@ -87,6 +89,7 @@ export class StorePackageComponent implements OnInit {
   selectedCountry: CountryResponse | null = null;
 
   transportTypes: TransportType[] = [
+    { value: '', viewValue: 'Any' },
     { value: 'BUS', viewValue: 'Bus' },
     { value: 'PLANE', viewValue: 'Plane' },
     { value: 'TRAIN', viewValue: 'Train' },
@@ -100,6 +103,10 @@ export class StorePackageComponent implements OnInit {
   transportAddons: TransportAddonDTO[] = [];
   campAddons: CampAddonDTO[] = [];
   generalAddons: GeneralAddonDTO[] = [];
+
+  selectedTransportAddon: TransportAddonDTO | null = null;
+  selectedCampAddon: CampAddonDTO | null = null;
+  selectedGeneralAddon: GeneralAddonDTO | null = null;
 
   userProfile: UserProfileResponse | null = null;
   address: AddressResponse | null = null;
@@ -128,6 +135,35 @@ export class StorePackageComponent implements OnInit {
       postalCodeCtrl: ['', Validators.required],
       countryISO3Ctrl: ['', [Validators.required, Validators.maxLength(3)]],
     });
+  }
+
+  get filteredTransportAddons(): TransportAddonDTO[] {
+    if (
+      (!this.selectedTransportType || this.selectedTransportType.value == '') &&
+      (!this.selectedCountry || this.selectedCountry.iso3 == 'ANY')
+    ) {
+      return this.transportAddons;
+    } else if (
+      this.selectedTransportType &&
+      (!this.selectedCountry || this.selectedCountry.iso3 == 'ANY')
+    ) {
+      return this.transportAddons.filter(
+        (addon) => addon.transportType == this.selectedTransportType?.value,
+      );
+    } else if (
+      (!this.selectedTransportType || this.selectedTransportType.value == '') &&
+      this.selectedCountry
+    ) {
+      return this.transportAddons.filter(
+        (addon) => addon.departureCountryISO3 == this.selectedCountry?.iso3,
+      );
+    } else {
+      return this.transportAddons.filter(
+        (addon) =>
+          addon.transportType == this.selectedTransportType?.value &&
+          addon.departureCountryISO3 == this.selectedCountry?.iso3,
+      );
+    }
   }
 
   ngOnInit() {
@@ -186,8 +222,8 @@ export class StorePackageComponent implements OnInit {
     if (id) {
       this.itemService.getAvailableDepartureCountries(Number(id)).subscribe({
         next: (countries) => {
-          this.countries = countries;
-          console.log(this.countries);
+          this.countries.push({ iso3: 'ANY', niceName: 'Any', iso: '', id: 0 });
+          this.countries.push(...countries);
         },
         error: (error) => {
           console.log('Error fetching departure countries: ', error);
@@ -260,6 +296,18 @@ export class StorePackageComponent implements OnInit {
       return;
     }
     this.selectedTicket = ticket;
+  }
+
+  selectTransportAddon(addon: TransportAddonDTO) {
+    if (addon.itemRemainingNumber === 0) {
+      return;
+    }
+    this.selectedTransportAddon = addon;
+  }
+
+  clearTransportFilters() {
+    this.selectedCountry = null;
+    this.selectedTransportType = null;
   }
 
   fillPersonalFormGroup() {

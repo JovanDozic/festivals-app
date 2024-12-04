@@ -223,3 +223,8 @@ img[mat-card-image] {
 :host-context([data-theme="light"]) :host ::ng-deep .base-fill-button {
   background-color: #fbf8ff !important;
 }
+
+.inline-arrow {
+  position: relative;
+  top: 6px !important;
+}

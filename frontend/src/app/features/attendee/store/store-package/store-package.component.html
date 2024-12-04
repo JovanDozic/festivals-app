@@ -87,10 +87,10 @@
             <div class="form-fields">
               <mat-form-field appearance="outline">
                 <mat-label>Departure Country</mat-label>
-                <mat-select>
+                <mat-select [(ngModel)]="selectedCountry">
                   <mat-option
                     *ngFor="let country of countries"
-                    [value]="country.iso3"
+                    [value]="country"
                   >
                     {{ country.niceName }}
                   </mat-option>
@@ -98,10 +98,10 @@
               </mat-form-field>
               <mat-form-field appearance="outline">
                 <mat-label>Travel Method</mat-label>
-                <mat-select>
+                <mat-select [(ngModel)]="selectedTransportType">
                   <mat-option
                     *ngFor="let type of transportTypes"
-                    [value]="type.value"
+                    [value]="type"
                   >
                     {{ type.viewValue }}
                   </mat-option>
@@ -114,13 +114,204 @@
           <button mat-stroked-button class="base-fill-button" matStepperNext>
             Next
           </button>
+          <button
+            mat-button
+            (click)="clearTransportFilters()"
+            style="margin-left: 10px"
+          >
+            Clear filters
+          </button>
         </div>
       </mat-step>
 
       <!-- ! TRAVEL ADDON SELECTION -->
       <mat-step *ngIf="transportAddonsCount !== 0">
         <ng-template matStepLabel> Select Travel Option </ng-template>
-        <div class="profile-content profile-content-with-cards"></div>
+        <div class="profile-content profile-content-with-cards">
+          <mat-card
+            class="festival-card"
+            (click)="selectTransportAddon(addon)"
+            *ngFor="let addon of filteredTransportAddons"
+          >
+            <div
+              class="card-content ai-shadow-card"
+              [ngClass]="{ selected: addon === selectedTransportAddon }"
+              [ngClass]="{ 'sold-out': addon.itemRemainingNumber === 0 }"
+            >
+              <div>
+                <mat-card-header>
+                  <mat-card-title>{{ addon.itemName }}</mat-card-title>
+                  <mat-card-subtitle>{{
+                    addon.itemDescription
+                  }}</mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                  <span
+                    class="icon-property"
+                    *ngIf="addon.transportType === 'PLANE'"
+                  >
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      flight
+                    </mat-icon>
+                    <h3>Flight Package</h3>
+                  </span>
+                  <span
+                    class="icon-property"
+                    *ngIf="addon.transportType === 'BUS'"
+                  >
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      directions_bus
+                    </mat-icon>
+                    <h3>Bus Package</h3>
+                  </span>
+                  <span
+                    class="icon-property"
+                    *ngIf="addon.transportType === 'TRAIN'"
+                  >
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      train
+                    </mat-icon>
+                    <h3>Train Package</h3>
+                  </span>
+
+                  <div class="divider"></div>
+
+                  <span class="icon-property">
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      attach_money
+                    </mat-icon>
+                    <span class="number">{{ addon.price.toFixed(2) }}</span>
+                  </span>
+
+                  <span class="icon-property">
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      numbers
+                    </mat-icon>
+                    <span class="number">{{ addon.itemRemainingNumber }}</span>
+                    remaining out of
+                    <span class="number">{{ addon.itemAvailableNumber }}</span>
+                  </span>
+
+                  <div class="divider"></div>
+
+                  <span class="icon-property">
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      home
+                    </mat-icon>
+                    <h3>Roundtrip:</h3>
+                  </span>
+
+                  <span class="icon-property">
+                    <mat-icon class="material-symbols-outlined">
+                      more_vert
+                    </mat-icon>
+                  </span>
+
+                  <span class="icon-property">
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      flight_takeoff
+                    </mat-icon>
+                    <b>
+                      {{ addon.departureCityName }}
+                      ({{ addon.departureCountryISO3 }})
+                      <mat-icon
+                        class="material-symbols-outlined inline-arrow"
+                        color="primary"
+                      >
+                        arrow_right_alt
+                      </mat-icon>
+                      {{ addon.arrivalCityName }} ({{
+                        addon.arrivalCountryISO3
+                      }})
+                    </b>
+                  </span>
+
+                  <span class="icon-property continued">
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                    </mat-icon>
+                    <span>
+                      {{ addon.departureTime | date: "yyyy-MM-dd HH:mm" }}
+                      <mat-icon
+                        class="material-symbols-outlined inline-arrow"
+                        color="primary"
+                      >
+                        arrow_right_alt
+                      </mat-icon>
+                      {{ addon.arrivalTime | date: "yyyy-MM-dd HH:mm" }}
+                    </span>
+                  </span>
+
+                  <span class="icon-property continued">
+                    <mat-icon class="material-symbols-outlined">
+                      more_vert
+                    </mat-icon>
+                  </span>
+
+                  <span class="icon-property">
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      celebration
+                    </mat-icon>
+                    <h3>{{ festival.name }}</h3>
+                  </span>
+
+                  <span class="icon-property">
+                    <mat-icon class="material-symbols-outlined">
+                      more_vert
+                    </mat-icon>
+                  </span>
+
+                  <span class="icon-property">
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      flight_land
+                    </mat-icon>
+                    <b>
+                      {{ addon.arrivalCityName }}
+                      ({{ addon.arrivalCountryISO3 }})
+                      <mat-icon
+                        class="material-symbols-outlined inline-arrow"
+                        color="primary"
+                      >
+                        arrow_right_alt
+                      </mat-icon>
+                      {{ addon.departureCityName }} ({{
+                        addon.departureCountryISO3
+                      }})
+                    </b>
+                  </span>
+
+                  <span class="icon-property continued">
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                    </mat-icon>
+                    <span>
+                      {{ addon.returnDepartureTime | date: "yyyy-MM-dd HH:mm" }}
+                      <mat-icon
+                        class="material-symbols-outlined inline-arrow"
+                        color="primary"
+                      >
+                        arrow_right_alt
+                      </mat-icon>
+                      {{ addon.returnArrivalTime | date: "yyyy-MM-dd HH:mm" }}
+                    </span>
+                  </span>
+
+                  <span class="icon-property continued">
+                    <mat-icon class="material-symbols-outlined">
+                      more_vert
+                    </mat-icon>
+                  </span>
+
+                  <span class="icon-property">
+                    <mat-icon class="material-symbols-outlined" color="primary">
+                      home
+                    </mat-icon>
+                    <h3>End of the Journey</h3>
+                  </span>
+                </mat-card-content>
+              </div>
+            </div>
+          </mat-card>
+        </div>
         <div>
           <button mat-stroked-button class="base-fill-button" matStepperNext>
             Next
@@ -195,6 +386,7 @@
           </button>
         </div>
       </mat-step>
+
       <!-- ! SHIPPING INFORMATION -->
       <mat-step [stepControl]="addressFormGroup">
         <form [formGroup]="addressFormGroup">
@@ -253,6 +445,7 @@
           </button>
         </div>
       </mat-step>
+
       <!-- ! SUMMARY -->
       <mat-step>
         <ng-template matStepLabel>Summary</ng-template>
