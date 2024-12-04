@@ -6,6 +6,7 @@ import {
   GeneralAddonDTO,
   ItemCurrentPrice,
   TransportAddonDTO,
+  TransportType,
 } from '../../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FestivalService } from '../../../../services/festival/festival.service';
@@ -42,6 +43,8 @@ import { OrderService } from '../../../../services/festival/order.service';
 import { StorePaymentDialogComponent } from '../store-payment-dialog/store-payment-dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CountryResponse } from '../../../../models/common/address.model';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-store-package',
@@ -61,6 +64,7 @@ import { CountryResponse } from '../../../../models/common/address.model';
     MatFormFieldModule,
     MatStepperModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
   ],
   templateUrl: './store-package.component.html',
   styleUrls: [
@@ -80,6 +84,14 @@ export class StorePackageComponent implements OnInit {
   private fb = inject(FormBuilder);
 
   countries: CountryResponse[] = [];
+  selectedCountry: CountryResponse | null = null;
+
+  transportTypes: TransportType[] = [
+    { value: 'BUS', viewValue: 'Bus' },
+    { value: 'PLANE', viewValue: 'Plane' },
+    { value: 'TRAIN', viewValue: 'Train' },
+  ];
+  selectedTransportType: TransportType | null = null;
 
   transportAddonsCount: number = 0;
   campAddonsCount: number = 0;

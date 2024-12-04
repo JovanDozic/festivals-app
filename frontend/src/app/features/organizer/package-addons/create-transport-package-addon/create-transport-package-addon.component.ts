@@ -15,6 +15,7 @@ import {
   AddTransportConfigRequest,
   CreateItemPriceRequest,
   CreateItemRequest,
+  TransportType,
 } from '../../../../models/festival/festival.model';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -33,11 +34,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { CityRequest } from '../../../../models/common/address.model';
-
-interface TransportType {
-  value: string;
-  viewValue: string;
-}
 
 @Component({
   selector: 'app-create-transport-package-addon',

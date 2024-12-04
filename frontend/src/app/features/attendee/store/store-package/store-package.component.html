@@ -25,7 +25,7 @@
       #stepper
       class="store-stepper"
     >
-      <!-- ! TICKET SELECTION -->
+      <!-- ! TICKET SELECTION
       <mat-step>
         <ng-template matStepLabel> Select Ticket </ng-template>
         <div class="profile-content profile-content-with-cards">
@@ -71,6 +71,47 @@
             matStepperNext
             [disabled]="!selectedTicket"
           >
+            Next
+          </button>
+        </div>
+      </mat-step> -->
+
+      <!-- ! TRAVEL PREFERENCES -->
+      <mat-step *ngIf="transportAddonsCount !== 0">
+        <ng-template matStepLabel> Country and Travel Method </ng-template>
+        <mat-card class="form-card">
+          <mat-card-content>
+            <p class="step-description">
+              Please select your departure country and preferred travel method.
+            </p>
+            <div class="form-fields">
+              <mat-form-field appearance="outline">
+                <mat-label>Departure Country</mat-label>
+                <mat-select>
+                  <mat-option
+                    *ngFor="let country of countries"
+                    [value]="country.iso3"
+                  >
+                    {{ country.niceName }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Travel Method</mat-label>
+                <mat-select>
+                  <mat-option
+                    *ngFor="let type of transportTypes"
+                    [value]="type.value"
+                  >
+                    {{ type.viewValue }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <div>
+          <button mat-stroked-button class="base-fill-button" matStepperNext>
             Next
           </button>
         </div>

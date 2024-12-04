@@ -230,3 +230,8 @@ export interface CreateTicketOrderRequest {
   ticketTypeId: number;
   totalPrice: number;
 }
+
+export interface TransportType {
+  value: string;
+  viewValue: string;
+}
