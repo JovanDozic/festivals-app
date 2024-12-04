@@ -40,7 +40,7 @@ export class StorePaymentDialogComponent implements OnInit {
       setTimeout(() => {
         // todo: adjust the route with order ID
         this.dialogRef.close();
-        this.router.navigate([`/festivals/${this.data.festivalId}`]);
+        this.router.navigate([`/my-orders/${this.data.orderId}`]);
       }, 1000);
     }, 1000);
   }

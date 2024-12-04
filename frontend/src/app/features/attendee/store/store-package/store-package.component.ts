@@ -436,8 +436,16 @@ export class StorePackageComponent implements OnInit {
       await firstValueFrom(this.updateProfile());
       await firstValueFrom(this.updateEmail());
       await firstValueFrom(this.updateAddress());
-      await firstValueFrom(this.createOrder());
-      this.openPaymentDialog();
+      const orderResponse = await firstValueFrom(this.createOrder());
+
+      const orderId =
+        (orderResponse as any).orderId || (orderResponse as any).data?.orderId;
+
+      if (orderId) {
+        this.openPaymentDialog(orderId);
+      } else {
+        throw new Error('Order ID is missing in the response');
+      }
     } catch (error) {
       console.error('Error completing order:', error);
       this.snackbarService.show('Error completing order');
@@ -500,9 +508,14 @@ export class StorePackageComponent implements OnInit {
         totalPrice: this.totalPrice,
       };
 
-      console.log('Request: ', request);
+      const response = this.orderService.createPackageOrder(
+        this.festival.id,
+        request,
+      );
 
-      return this.orderService.createPackageOrder(this.festival.id, request);
+      console.log(response);
+
+      return response;
     }
     return throwError(
       () =>
@@ -510,9 +523,9 @@ export class StorePackageComponent implements OnInit {
     );
   }
 
-  openPaymentDialog() {
+  openPaymentDialog(orderId: number) {
     const dialogRef = this.dialog.open(StorePaymentDialogComponent, {
-      data: { festivalId: this.festival?.id },
+      data: { orderId: orderId },
       width: '250px',
       height: '250px',
       disableClose: true,

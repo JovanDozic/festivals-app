@@ -114,45 +114,47 @@ func (s *orderService) GetOrder(orderId uint) (*dtoFestival.OrderDTO, error) {
 
 	// * get package
 
-	festivalPackage, err := s.orderRepo.GetFestivalPackage(*order.FestivalPackageID)
-	if err != nil {
-		log.Println("error: ", err)
-		return nil, err
-	}
-
-	packageAddons, err := s.itemRepo.GetAddonsFromPackage(festivalPackage.ID)
-	if err != nil {
-		log.Println("error: ", err)
-		return nil, err
-	}
-
-	for _, addon := range packageAddons {
-
-		if addon.Category == "TRANSPORT" {
-			transportAddon, err := s.itemRepo.GetTransportAddon(addon.ItemID)
-			if err != nil {
-				log.Println("error: ", err)
-				return nil, err
-			}
-			response.TransportAddon = transportAddon
+	if order.FestivalPackage != nil {
+		festivalPackage, err := s.orderRepo.GetFestivalPackage(*order.FestivalPackageID)
+		if err != nil {
+			log.Println("error: ", err)
+			return nil, err
 		}
 
-		if addon.Category == "CAMP" {
-			campAddon, err := s.itemRepo.GetCampAddon(addon.ItemID)
-			if err != nil {
-				log.Println("error: ", err)
-				return nil, err
-			}
-			response.CampAddon = campAddon
+		packageAddons, err := s.itemRepo.GetAddonsFromPackage(festivalPackage.ID)
+		if err != nil {
+			log.Println("error: ", err)
+			return nil, err
 		}
 
-		if addon.Category == "GENERAL" {
-			generalAddon, err := s.itemRepo.GetGeneralAddon(addon.ItemID)
-			if err != nil {
-				log.Println("error: ", err)
-				return nil, err
+		for _, addon := range packageAddons {
+
+			if addon.Category == "TRANSPORT" {
+				transportAddon, err := s.itemRepo.GetTransportAddon(addon.ItemID)
+				if err != nil {
+					log.Println("error: ", err)
+					return nil, err
+				}
+				response.TransportAddon = transportAddon
 			}
-			response.GeneralAddons = append(response.GeneralAddons, *generalAddon)
+
+			if addon.Category == "CAMP" {
+				campAddon, err := s.itemRepo.GetCampAddon(addon.ItemID)
+				if err != nil {
+					log.Println("error: ", err)
+					return nil, err
+				}
+				response.CampAddon = campAddon
+			}
+
+			if addon.Category == "GENERAL" {
+				generalAddon, err := s.itemRepo.GetGeneralAddon(addon.ItemID)
+				if err != nil {
+					log.Println("error: ", err)
+					return nil, err
+				}
+				response.GeneralAddons = append(response.GeneralAddons, *generalAddon)
+			}
 		}
 	}
 
