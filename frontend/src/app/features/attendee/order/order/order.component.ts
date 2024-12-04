@@ -14,6 +14,8 @@ import { ItemService } from '../../../../services/festival/item.service';
 import { UserService } from '../../../../services/user/user.service';
 import { OrderService } from '../../../../services/festival/order.service';
 import { OrderDTO } from '../../../../models/festival/festival.model';
+import { AddressResponse } from '../../../../models/common/address-response.model';
+import { UserProfileResponse } from '../../../../models/user/user-profile-response.model';
 
 @Component({
   selector: 'app-order',
@@ -43,11 +45,14 @@ export class OrderComponent implements OnInit {
   isLoading: boolean = true;
 
   order: OrderDTO | null = null;
+  userProfile: UserProfileResponse | null = null;
+  address: AddressResponse | null = null;
 
   constructor() {}
 
   ngOnInit() {
     this.loadOrder();
+    this.loadUser();
   }
 
   goBack() {
@@ -70,5 +75,21 @@ export class OrderComponent implements OnInit {
         },
       });
     }
+  }
+
+  loadUser() {
+    this.userService.getUserProfile().subscribe({
+      next: (userProfile) => {
+        this.userProfile = userProfile;
+        if (userProfile.address) this.address = userProfile.address;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log('Error fetching user information: ', error);
+        this.snackbarService.show('Error getting user information');
+        this.userProfile = null;
+        this.isLoading = true;
+      },
+    });
   }
 }

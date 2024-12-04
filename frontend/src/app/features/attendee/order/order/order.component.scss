@@ -46,16 +46,12 @@ h3 {
 }
 
 .divider {
-  height: 15px;
+  height: 25px;
 }
 
-.festival-card {
-  flex: 1 1 calc(50% - 10px);
-  max-width: calc(50% - 10px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
+.profile-card {
+  padding: 16px;
+  width: 100%;
 }
 
 @media (max-width: 768px) {

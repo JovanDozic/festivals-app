@@ -1,4 +1,4 @@
-<div class="container mat-elevation-z4" *ngIf="true">
+<div class="container mat-elevation-z4" *ngIf="order">
   <!-- todo: ngIf above -->
   <div class="profile-header">
     <div class="title-container">
@@ -18,5 +18,175 @@
     <div class="button-container"></div>
   </div>
 
-  <div class="profile-content"></div>
+  <div class="profile-content">
+    <mat-card class="profile-card">
+      <mat-card-content>
+        <!-- <p class="step-description">
+          Any changes to Personal or Shipping information will be saved to your
+          Profile.
+        </p> -->
+
+        <span class="icon-property" *ngIf="order.ticket">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            calendar_today
+          </mat-icon>
+          Date and time:
+          <span class="number-mono">
+            {{ order.timestamp | date: "dd MMM yyyy, HH:mm:ss" }}
+          </span>
+        </span>
+        <span class="icon-property" *ngIf="order.orderType === 'TICKET'">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            confirmation_number
+          </mat-icon>
+          <h3>Ticket Order</h3>
+        </span>
+        <span class="icon-property" *ngIf="order.orderType === 'PACKAGE'">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            package_2
+          </mat-icon>
+          <h3>Package Order</h3>
+        </span>
+
+        <div class="divider"></div>
+
+        <span class="icon-property" *ngIf="order.ticket">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            confirmation_number
+          </mat-icon>
+          Ticket:
+          <span class="number-mono"> {{ order.ticket.name }} </span>
+        </span>
+        <div class="divider"></div>
+
+        <span class="icon-property" *ngIf="order.transportAddon">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            {{
+              order.transportAddon.transportType === "PLANE"
+                ? "flight"
+                : "luggage"
+            }}
+            {{
+              order.transportAddon.transportType === "BUS"
+                ? "directions_bus"
+                : "luggage"
+            }}
+            {{
+              order.transportAddon.transportType === "TRAIN"
+                ? "train"
+                : "luggage"
+            }}
+          </mat-icon>
+          Travel Option:
+          <span class="number-mono"> {{ order.transportAddon.itemName }} </span>
+        </span>
+        <span class="icon-property continued" *ngIf="order.transportAddon">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <span class="number-mono">
+            {{ order.transportAddon.departureCityName }}
+            <mat-icon
+              class="material-symbols-outlined inline-arrow"
+              color="primary"
+            >
+              arrow_right_alt
+            </mat-icon>
+            {{ order.transportAddon.arrivalCityName }}
+          </span>
+        </span>
+        <div class="divider" *ngIf="order.transportAddon"></div>
+
+        <span class="icon-property" *ngIf="order.campAddon">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            camping
+          </mat-icon>
+          Camp Option:
+          <span class="number-mono"> {{ order.campAddon.itemName }} </span>
+        </span>
+        <div class="divider" *ngIf="order.transportAddon"></div>
+
+        <span class="icon-property" *ngIf="order.generalAddons">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            more_vert
+          </mat-icon>
+          Additional Options:
+        </span>
+        <span
+          class="icon-property continued"
+          *ngFor="let addon of order.generalAddons"
+        >
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <span class="number-mono"> {{ addon.itemName }} </span>
+        </span>
+        <div class="divider" *ngIf="order.generalAddons"></div>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            attach_money
+          </mat-icon>
+          Total Price:
+          <span class="number-mono"> ${{ order.totalPrice.toFixed(2) }} </span>
+        </span>
+        <div class="divider"></div>
+
+        <span class="icon-property" *ngIf="userProfile">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            info
+          </mat-icon>
+          Personal Information:
+        </span>
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <span class="number-mono" *ngIf="userProfile">
+            {{ userProfile.firstName }} {{ userProfile.lastName }}
+          </span>
+        </span>
+        <span class="icon-property continued" *ngIf="userProfile">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <span class="number-mono">{{ userProfile.email }}</span>
+        </span>
+        <span class="icon-property continued" *ngIf="userProfile">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <span class="number-mono">
+            {{ userProfile.phoneNumber }}
+          </span>
+        </span>
+
+        <div class="divider"></div>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            fitness_tracker
+          </mat-icon>
+          Bracelet will be shipped to:
+        </span>
+        <span class="icon-property continued" *ngIf="address">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <span class="number-mono">
+            {{ address.street }} {{ address.number }}
+            <span *ngIf="address.apartmentSuite">
+              / {{ address.apartmentSuite }}
+            </span>
+          </span>
+        </span>
+        <span class="icon-property continued" *ngIf="address">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <span class="number-mono">
+            {{ address.city }}, {{ address.postalCode }}
+          </span>
+        </span>
+        <span class="icon-property continued" *ngIf="address">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <span class="number-mono"> {{ address.countryISO3 }} </span>
+        </span>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

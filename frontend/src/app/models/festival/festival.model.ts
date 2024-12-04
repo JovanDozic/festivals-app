@@ -245,14 +245,14 @@ export interface CreatePackageOrderRequest {
 }
 
 export interface OrderDTO {
-  OrderId: number;
-  OrderType: string;
-  Timestamp: Date;
-  TotalPrice: number;
-  BraceletStatus: string;
-  Ticket: ItemsResponse;
-  TransportAddon?: TransportAddonDTO;
-  CampAddon?: CampAddonDTO;
-  GeneralAddons: GeneralAddonDTO[];
-  Festival: Festival;
+  orderId: number;
+  orderType: string;
+  timestamp: Date;
+  totalPrice: number;
+  braceletStatus: string;
+  ticket: ItemCurrentPrice;
+  transportAddon?: TransportAddonDTO;
+  campAddon?: CampAddonDTO;
+  generalAddons: GeneralAddonDTO[];
+  festival: Festival;
 }
