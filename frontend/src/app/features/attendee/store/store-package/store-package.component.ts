@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {
   CampAddonDTO,
   CreateTicketOrderRequest,
@@ -21,7 +21,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import {
   FormBuilder,
   FormGroup,
@@ -84,6 +84,8 @@ export class StorePackageComponent implements OnInit {
   private orderService = inject(OrderService);
   private dialog = inject(MatDialog);
   private fb = inject(FormBuilder);
+
+  @ViewChild('stepper') private stepper: MatStepper | undefined;
 
   countries: CountryResponse[] = [];
   selectedCountry: CountryResponse | null = null;

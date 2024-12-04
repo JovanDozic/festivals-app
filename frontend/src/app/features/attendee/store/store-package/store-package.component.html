@@ -25,8 +25,8 @@
       #stepper
       class="store-stepper"
     >
-      <!-- ! TICKET SELECTION
-      <mat-step>
+      <!-- ! TICKET SELECTION -->
+      <mat-step [hasError]="!selectedTicket">
         <ng-template matStepLabel> Select Ticket </ng-template>
         <div class="profile-content profile-content-with-cards">
           <mat-card
@@ -74,11 +74,11 @@
             Next
           </button>
         </div>
-      </mat-step> -->
+      </mat-step>
 
       <!-- ! TRAVEL PREFERENCES -->
       <mat-step *ngIf="transportAddonsCount !== 0">
-        <ng-template matStepLabel> Country and Travel Method </ng-template>
+        <ng-template matStepLabel> Travel Preferences </ng-template>
         <mat-card class="form-card">
           <mat-card-content>
             <p class="step-description">
@@ -112,7 +112,7 @@
         </mat-card>
         <div>
           <button mat-stroked-button class="base-fill-button" matStepperNext>
-            Next
+            View Options
           </button>
           <button
             mat-button
@@ -127,6 +127,15 @@
       <!-- ! TRAVEL ADDON SELECTION -->
       <mat-step *ngIf="transportAddonsCount !== 0">
         <ng-template matStepLabel> Select Travel Option </ng-template>
+
+        <div
+          class="empty-list"
+          *ngIf="filteredTransportAddons.length === 0"
+          style="margin-top: 10px"
+        >
+          <p>There are no travel options for selected preferences.</p>
+        </div>
+
         <div class="profile-content profile-content-with-cards">
           <mat-card
             class="festival-card"
@@ -313,7 +322,15 @@
           </mat-card>
         </div>
         <div>
-          <button mat-stroked-button class="base-fill-button" matStepperNext>
+          <button mat-button matStepperPrevious style="margin-right: 10px">
+            Previous
+          </button>
+          <button
+            mat-stroked-button
+            class="base-fill-button"
+            matStepperNext
+            [disabled]="!selectedTransportAddon"
+          >
             Next
           </button>
         </div>
