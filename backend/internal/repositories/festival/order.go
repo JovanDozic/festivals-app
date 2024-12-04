@@ -13,6 +13,7 @@ type OrderRepo interface {
 	CreateFestivalPackageAddon(festivalPackageAddon *models.FestivalPackageAddon) error
 	GetOrder(orderId uint) (*models.Order, error)
 	GetFestivalTicket(festivalTicketId uint) (*models.FestivalTicket, error)
+	GetFestivalPackage(festivalPackageId uint) (*models.FestivalPackage, error)
 }
 
 type orderRepo struct {
@@ -56,4 +57,10 @@ func (r *orderRepo) GetFestivalTicket(festivalTicketId uint) (*models.FestivalTi
 	festivalTicket := &models.FestivalTicket{}
 	err := r.db.Where("id = ?", festivalTicketId).First(&festivalTicket).Error
 	return festivalTicket, err
+}
+
+func (r *orderRepo) GetFestivalPackage(festivalPackageId uint) (*models.FestivalPackage, error) {
+	festivalPackage := &models.FestivalPackage{}
+	err := r.db.Where("id = ?", festivalPackageId).First(&festivalPackage).Error
+	return festivalPackage, err
 }

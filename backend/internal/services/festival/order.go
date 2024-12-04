@@ -90,6 +90,8 @@ func (s *orderService) GetOrder(orderId uint) (*dtoFestival.OrderDTO, error) {
 		response.OrderType = "PACKAGE"
 	}
 
+	// * get ticket
+
 	festivalTicket, err := s.orderRepo.GetFestivalTicket(order.FestivalTicketID)
 	if err != nil {
 		log.Println("error: ", err)
@@ -110,9 +112,37 @@ func (s *orderService) GetOrder(orderId uint) (*dtoFestival.OrderDTO, error) {
 		Description: ticketItem.Description,
 	}
 
-	// todo: get package
+	// * get package
 
-	// now we get festival
+	festivalPackage, err := s.orderRepo.GetFestivalPackage(*order.FestivalPackageID)
+	if err != nil {
+		log.Println("error: ", err)
+		return nil, err
+	}
+
+	// sad mi treba lista item_id tj lista package_addons koji su u tom paketu iz festival_package_addon
+	packageAddons, err := s.itemRepo.GetAddonsFromPackage(festivalPackage.ID)
+	if err != nil {
+		log.Println("error: ", err)
+		return nil, err
+	}
+
+	for _, addon := range packageAddons {
+
+		if addon.Category == "TRANSPORT" {
+			transportAddon, err := s.itemRepo.GetTransportAddon(addon.ItemID)
+			if err != nil {
+				log.Println("error: ", err)
+				return nil, err
+			}
+			response.TransportAddon = transportAddon
+		}
+
+	}
+
+	// onda mi treba za svaki package_addon da ako je tipa TRANSPORT onda da trazim iz transport_addon tabele itd...
+
+	// * now we get festival
 
 	festival, err := s.festivalRepo.GetById(ticketItem.FestivalID)
 	if err != nil {
