@@ -19,10 +19,9 @@
   </div>
 
   <div class="profile-content">
-    <!-- todo: set linear to true -->
     <mat-stepper
       orientation="vertical"
-      [linear]="false"
+      [linear]="true"
       #stepper
       class="store-stepper"
       (selectionChange)="calculateTotalPrice()"
@@ -600,7 +599,13 @@
                 >{{ selectedTicket.name }} (${{ selectedTicket.price }})</span
               >
             </span>
-            <div class="divider" *ngIf="selectedTicket"></div>
+            <span class="icon-property" *ngIf="!selectedTicket">
+              <mat-icon class="material-symbols-outlined color-error">
+                error
+              </mat-icon>
+              <span class="color-error"><b>Ticket not selected</b></span>
+            </span>
+            <div class="divider"></div>
 
             <span class="icon-property" *ngIf="selectedTransportAddon">
               <mat-icon class="material-symbols-outlined" color="primary">
@@ -644,7 +649,19 @@
                 {{ selectedTransportAddon.arrivalCityName }}
               </span>
             </span>
-            <div class="divider" *ngIf="selectedTransportAddon"></div>
+            <span
+              class="icon-property"
+              *ngIf="!selectedTransportAddon && transportAddonsCount > 0"
+            >
+              <mat-icon class="material-symbols-outlined color-error">
+                error
+              </mat-icon>
+              <span class="color-error"><b>Travel Option not selected</b></span>
+            </span>
+            <div
+              class="divider"
+              *ngIf="!selectedTransportAddon && transportAddonsCount > 0"
+            ></div>
 
             <span class="icon-property" *ngIf="selectedCampAddon">
               <mat-icon class="material-symbols-outlined" color="primary">
@@ -657,14 +674,26 @@
                 }})</span
               >
             </span>
-            <div class="divider" *ngIf="selectedCampAddon"></div>
+            <span
+              class="icon-property"
+              *ngIf="!selectedCampAddon && campAddonsCount > 0"
+            >
+              <mat-icon class="material-symbols-outlined color-error">
+                error
+              </mat-icon>
+              <span class="color-error"><b>Camp Option not selected</b></span>
+            </span>
+            <div
+              class="divider"
+              *ngIf="!selectedCampAddon && campAddonsCount > 0"
+            ></div>
 
             <span
               class="icon-property"
               *ngIf="selectedGeneralAddons.length > 0"
             >
               <mat-icon class="material-symbols-outlined" color="primary">
-                more_horiz
+                more_vert
               </mat-icon>
               Selected Additional Options:
             </span>
