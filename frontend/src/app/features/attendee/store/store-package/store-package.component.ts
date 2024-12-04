@@ -41,6 +41,7 @@ import { firstValueFrom, Observable, throwError } from 'rxjs';
 import { OrderService } from '../../../../services/festival/order.service';
 import { StorePaymentDialogComponent } from '../store-payment-dialog/store-payment-dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CountryResponse } from '../../../../models/common/address.model';
 
 @Component({
   selector: 'app-store-package',
@@ -77,6 +78,8 @@ export class StorePackageComponent implements OnInit {
   private orderService = inject(OrderService);
   private dialog = inject(MatDialog);
   private fb = inject(FormBuilder);
+
+  countries: CountryResponse[] = [];
 
   transportAddonsCount: number = 0;
   campAddonsCount: number = 0;
@@ -169,10 +172,23 @@ export class StorePackageComponent implements OnInit {
   loadPackageAddons() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
+      this.itemService.getAvailableDepartureCountries(Number(id)).subscribe({
+        next: (countries) => {
+          this.countries = countries;
+          console.log(this.countries);
+        },
+        error: (error) => {
+          console.log('Error fetching departure countries: ', error);
+          this.snackbarService.show('Error getting departure countries');
+          this.countries = [];
+        },
+      });
+
       this.itemService.getTransportAddons(Number(id)).subscribe({
         next: (response) => {
           this.transportAddons = response;
-          this.transportAddonsCount = this.transportAddons.length;
+          if (this.transportAddons)
+            this.transportAddonsCount = this.transportAddons.length;
         },
         error: (error) => {
           console.log('Error fetching transport addons: ', error);
@@ -184,7 +200,7 @@ export class StorePackageComponent implements OnInit {
       this.itemService.getCampAddons(Number(id)).subscribe({
         next: (response) => {
           this.campAddons = response;
-          this.campAddonsCount = this.campAddons.length;
+          if (this.campAddons) this.campAddonsCount = this.campAddons.length;
         },
         error: (error) => {
           console.log('Error fetching camp addons: ', error);
@@ -196,7 +212,8 @@ export class StorePackageComponent implements OnInit {
       this.itemService.getGeneralAddons(Number(id)).subscribe({
         next: (response) => {
           this.generalAddons = response;
-          this.generalAddonsCount = this.generalAddons.length;
+          if (this.generalAddons)
+            this.generalAddonsCount = this.generalAddons.length;
         },
         error: (error) => {
           console.log('Error fetching general addons: ', error);

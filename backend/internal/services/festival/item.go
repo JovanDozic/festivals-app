@@ -31,6 +31,7 @@ type ItemService interface {
 	GetTransportAddons(festivalId uint) ([]dto.TransportAddonDTO, error)
 	GetGeneralAddons(festivalId uint) ([]dto.GeneralAddonDTO, error)
 	GetCampAddons(festivalId uint) ([]dto.CampAddonDTO, error)
+	GetAvailableDepartureCountries(festivalId uint) ([]modelsCommon.Country, error)
 }
 
 type itemService struct {
@@ -362,4 +363,8 @@ func (s *itemService) GetCampAddons(festivalId uint) ([]dto.CampAddonDTO, error)
 	}
 
 	return campAddons, nil
+}
+
+func (s *itemService) GetAvailableDepartureCountries(festivalId uint) ([]modelsCommon.Country, error) {
+	return s.itemRepo.GetAvailableDepartureCountries(festivalId)
 }

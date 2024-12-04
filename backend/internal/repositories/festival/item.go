@@ -3,6 +3,7 @@ package repositories
 import (
 	dtoFestival "backend/internal/dto/festival"
 	"backend/internal/models"
+	modelsCommon "backend/internal/models/common"
 	modelsFestival "backend/internal/models/festival"
 	"backend/internal/utils"
 	"errors"
@@ -34,6 +35,7 @@ type ItemRepo interface {
 	GetGeneralAddons(festivalId uint) ([]dtoFestival.GeneralAddonDTO, error)
 	GetCampAddons(festivalId uint) ([]dtoFestival.CampAddonDTO, error)
 	GetCampEquipment(itemId uint) ([]modelsFestival.CampEquipment, error)
+	GetAvailableDepartureCountries(festivalId uint) ([]modelsCommon.Country, error)
 }
 
 type itemRepo struct {
@@ -455,4 +457,23 @@ func (r *itemRepo) GetCampEquipment(itemId uint) ([]modelsFestival.CampEquipment
 	}
 
 	return campEquipment, nil
+}
+
+func (r *itemRepo) GetAvailableDepartureCountries(festivalId uint) ([]modelsCommon.Country, error) {
+	var countries []modelsCommon.Country
+
+	err := r.db.
+		Distinct("ccd.*").
+		Table("countries ccd").
+		Joins("JOIN cities cd ON ccd.id = cd.country_id").
+		Joins("JOIN transport_addons ta ON ta.departure_city_id = cd.id").
+		Joins("JOIN items i ON ta.item_id = i.id").
+		Where("i.festival_id = ?", festivalId).
+		Scan(&countries).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return countries, nil
 }

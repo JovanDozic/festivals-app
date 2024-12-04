@@ -28,3 +28,10 @@ type GetPresignedURLResponse struct {
 	UploadURL string `json:"uploadURL"`
 	ImageURL  string `json:"imageURL"`
 }
+
+type CountryResponse struct {
+	ID       uint   `json:"id"`
+	NiceName string `json:"niceName"`
+	ISO      string `json:"iso"`
+	ISO3     string `json:"iso3"`
+}

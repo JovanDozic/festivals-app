@@ -14,6 +14,7 @@ import {
   ItemsResponse,
   TransportAddonDTO,
 } from '../../models/festival/festival.model';
+import { CountryResponse } from '../../models/common/address.model';
 
 @Injectable({
   providedIn: 'root',
@@ -157,6 +158,14 @@ export class ItemService {
   getCampAddons(festivalId: number): Observable<CampAddonDTO[]> {
     return this.http.get<CampAddonDTO[]>(
       `${this.apiUrl}/festival/${festivalId}/item/package-addon/camp`,
+    );
+  }
+
+  getAvailableDepartureCountries(
+    festivalId: number,
+  ): Observable<CountryResponse[]> {
+    return this.http.get<CountryResponse[]>(
+      `${this.apiUrl}/festival/${festivalId}/item/package-addon/transport/countries`,
     );
   }
 }

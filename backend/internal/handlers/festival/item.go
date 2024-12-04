@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	dto "backend/internal/dto/common"
 	dtoFestival "backend/internal/dto/festival"
 	"backend/internal/models"
 
@@ -30,6 +31,7 @@ type ItemHandler interface {
 	GetTransportAddons(w http.ResponseWriter, r *http.Request)
 	GetGeneralAddons(w http.ResponseWriter, r *http.Request)
 	GetCampAddons(w http.ResponseWriter, r *http.Request)
+	GetAvailableDepartureCountries(w http.ResponseWriter, r *http.Request)
 }
 
 type itemHandler struct {
@@ -543,4 +545,37 @@ func (h *itemHandler) GetCampAddons(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusOK, response, nil)
 	log.Println("camp addons retrieved successfully for festival:", festivalId)
+}
+
+func (h *itemHandler) GetAvailableDepartureCountries(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	festivalId, err := getFestivalIDFromRequest(r)
+	if err != nil {
+		return
+	}
+
+	countries, err := h.itemService.GetAvailableDepartureCountries(festivalId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	response := make([]dto.CountryResponse, len(countries))
+	for i, country := range countries {
+		response[i] = dto.CountryResponse{
+			ID:       country.ID,
+			NiceName: country.NiceName,
+			ISO:      country.ISO,
+			ISO3:     country.ISO3,
+		}
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response, nil)
+	log.Println("available departure countries retrieved successfully for:", festivalId)
 }

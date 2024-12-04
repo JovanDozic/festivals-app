@@ -151,6 +151,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	pR.HandleFunc("/festival/{festivalId}/item/package-addon/transport", itemHandler.GetTransportAddons).Methods(http.MethodGet)
 	pR.HandleFunc("/festival/{festivalId}/item/package-addon/transport", itemHandler.CreateTransportPackageAddon).Methods(http.MethodPost)
+	pR.HandleFunc("/festival/{festivalId}/item/package-addon/transport/countries", itemHandler.GetAvailableDepartureCountries).Methods(http.MethodGet)
 
 	pR.HandleFunc("/festival/{festivalId}/item/package-addon/camp", itemHandler.GetCampAddons).Methods(http.MethodGet)
 	pR.HandleFunc("/festival/{festivalId}/item/package-addon/camp", itemHandler.CreateCampPackageAddon).Methods(http.MethodPost)
