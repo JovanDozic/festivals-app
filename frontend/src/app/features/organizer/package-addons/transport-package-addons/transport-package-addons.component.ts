@@ -61,13 +61,12 @@ export class TransportPackageAddonsComponent implements OnInit {
     if (id) {
       this.itemService.getTransportAddons(Number(id)).subscribe({
         next: (response) => {
-          console.log(`Transport Addons`, response);
           this.transportAddons = response;
           this.transportCount = this.transportAddons.length;
         },
         error: (error) => {
           console.log('Error fetching transport addons: ', error);
-          this.snackbarService.show('Error getting transport addons');
+          this.snackbarService.show('Error getting Travel Addons');
           this.transportAddons = [];
         },
       });
@@ -88,7 +87,7 @@ export class TransportPackageAddonsComponent implements OnInit {
           this.festival = festival;
           this.isLoading = false;
           console.log(
-            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`
+            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`,
           );
         },
         error: (error) => {

@@ -60,13 +60,12 @@ export class CampPackageAddonsComponent implements OnInit {
     if (id) {
       this.itemService.getCampAddons(Number(id)).subscribe({
         next: (response) => {
-          console.log(`General Addons`, response);
           this.campAddons = response;
           this.campCount = this.campAddons.length;
         },
         error: (error) => {
-          console.log('Error fetching general addons: ', error);
-          this.snackbarService.show('Error getting General Addons');
+          console.log('Error fetching camp addons: ', error);
+          this.snackbarService.show('Error getting Camp Addons');
           this.campAddons = [];
         },
       });
@@ -87,7 +86,7 @@ export class CampPackageAddonsComponent implements OnInit {
           this.festival = festival;
           this.isLoading = false;
           console.log(
-            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`
+            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`,
           );
         },
         error: (error) => {

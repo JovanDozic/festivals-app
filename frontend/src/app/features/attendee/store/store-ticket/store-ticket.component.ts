@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {
   CreateTicketOrderRequest,
-  Employee,
   Festival,
   ItemCurrentPrice,
 } from '../../../../models/festival/festival.model';
@@ -38,10 +37,7 @@ import {
 import { firstValueFrom, Observable, throwError } from 'rxjs';
 import { OrderService } from '../../../../services/festival/order.service';
 import { StorePaymentDialogComponent } from '../store-payment-dialog/store-payment-dialog.component';
-import {
-  MatProgressSpinner,
-  MatProgressSpinnerModule,
-} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-store-ticket',

@@ -478,8 +478,13 @@ func (h *itemHandler) CreateCampPackageAddon(w http.ResponseWriter, r *http.Requ
 
 func (h *itemHandler) GetTransportAddons(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
-	if !ok {
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	festivalId, err := getFestivalIDFromRequest(r)
+	if err != nil {
 		return
 	}
 
@@ -496,8 +501,13 @@ func (h *itemHandler) GetTransportAddons(w http.ResponseWriter, r *http.Request)
 
 func (h *itemHandler) GetGeneralAddons(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
-	if !ok {
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	festivalId, err := getFestivalIDFromRequest(r)
+	if err != nil {
 		return
 	}
 
@@ -514,8 +524,13 @@ func (h *itemHandler) GetGeneralAddons(w http.ResponseWriter, r *http.Request) {
 
 func (h *itemHandler) GetCampAddons(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
-	if !ok {
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	festivalId, err := getFestivalIDFromRequest(r)
+	if err != nil {
 		return
 	}
 
