@@ -243,3 +243,16 @@ export interface CreatePackageOrderRequest {
   generalAddonIds: number[];
   totalPrice: number;
 }
+
+export interface OrderDTO {
+  OrderId: number;
+  OrderType: string;
+  Timestamp: Date;
+  TotalPrice: number;
+  BraceletStatus: string;
+  Ticket: ItemsResponse;
+  TransportAddon?: TransportAddonDTO;
+  CampAddon?: CampAddonDTO;
+  GeneralAddons?: GeneralAddonDTO[];
+  Festival: Festival;
+}

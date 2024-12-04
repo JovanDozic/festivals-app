@@ -12,6 +12,7 @@ import {
   Item,
   ItemCurrentPrice,
   ItemsResponse,
+  OrderDTO,
   TransportAddonDTO,
 } from '../../models/festival/festival.model';
 import { CountryResponse } from '../../models/common/address.model';
@@ -167,5 +168,9 @@ export class ItemService {
     return this.http.get<CountryResponse[]>(
       `${this.apiUrl}/festival/${festivalId}/item/package-addon/transport/countries`,
     );
+  }
+
+  getOrder(orderId: number): Observable<OrderDTO> {
+    return this.http.get<OrderDTO>(`${this.apiUrl}/order/${orderId}`);
   }
 }

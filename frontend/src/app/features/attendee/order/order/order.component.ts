@@ -13,6 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
 import { UserService } from '../../../../services/user/user.service';
 import { OrderService } from '../../../../services/festival/order.service';
+import { OrderDTO } from '../../../../models/festival/festival.model';
 
 @Component({
   selector: 'app-order',
@@ -39,15 +40,35 @@ export class OrderComponent implements OnInit {
   private orderService = inject(OrderService);
   private dialog = inject(MatDialog);
 
+  isLoading: boolean = true;
+
+  order: OrderDTO | null = null;
+
   constructor() {}
 
   ngOnInit() {
-    this.loadOrders();
+    this.loadOrder();
   }
 
   goBack() {
     this.router.navigate([`my-orders/`]);
   }
 
-  loadOrders() {}
+  loadOrder() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.itemService.getOrder(parseInt(id)).subscribe(
+        (order) => {
+          console.log('Order: ', order);
+          this.order = order;
+          this.isLoading = false;
+        },
+        (error) => {
+          console.log(error);
+          this.isLoading = false;
+          this.snackbarService.show('Error loading order');
+        },
+      );
+    }
+  }
 }

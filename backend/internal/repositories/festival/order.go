@@ -46,7 +46,7 @@ func (r *orderRepo) CreateFestivalPackageAddon(festivalPackageAddon *models.Fest
 func (r *orderRepo) GetOrder(orderId uint) (*models.Order, error) {
 	order := &models.Order{}
 	err := r.db.
-		Preload("FestivalTickets").
+		Preload("FestivalTicket").
 		Preload("FestivalPackage").
 		First(order, orderId).Error
 	return order, err
@@ -54,6 +54,6 @@ func (r *orderRepo) GetOrder(orderId uint) (*models.Order, error) {
 
 func (r *orderRepo) GetFestivalTicket(festivalTicketId uint) (*models.FestivalTicket, error) {
 	festivalTicket := &models.FestivalTicket{}
-	err := r.db.Where("festival_ticket_id = ?", festivalTicketId).First(&festivalTicket).Error
+	err := r.db.Where("id = ?", festivalTicketId).First(&festivalTicket).Error
 	return festivalTicket, err
 }
