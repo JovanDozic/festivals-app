@@ -235,3 +235,11 @@ export interface TransportType {
   value: string;
   viewValue: string;
 }
+
+export interface CreatePackageOrderRequest {
+  ticketTypeId: number;
+  transportAddonId: number | null;
+  campAddonId: number | null;
+  generalAddonIds: number[];
+  totalPrice: number;
+}

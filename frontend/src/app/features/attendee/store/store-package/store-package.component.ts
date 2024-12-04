@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {
   CampAddonDTO,
+  CreatePackageOrderRequest,
   CreateTicketOrderRequest,
   Festival,
   GeneralAddonDTO,
@@ -424,8 +425,102 @@ export class StorePackageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirm) {
-        // this.sendOrder();
+        this.sendOrder();
       }
+    });
+  }
+
+  async sendOrder() {
+    try {
+      this.isLoading = true;
+      await firstValueFrom(this.updateProfile());
+      await firstValueFrom(this.updateEmail());
+      await firstValueFrom(this.updateAddress());
+      await firstValueFrom(this.createOrder());
+      this.openPaymentDialog();
+    } catch (error) {
+      console.error('Error completing order:', error);
+      this.snackbarService.show('Error completing order');
+      this.isLoading = false;
+    }
+  }
+
+  updateProfile(): Observable<any> {
+    if (this.personalFormGroup.valid) {
+      return this.userService.updateUserProfile({
+        firstName: this.personalFormGroup.get('firstNameCtrl')?.value,
+        lastName: this.personalFormGroup.get('lastNameCtrl')?.value,
+        dateOfBirth: new Date(
+          this.personalFormGroup.get('dateOfBirthCtrl')?.value,
+        ),
+        phoneNumber: this.personalFormGroup.get('phoneCtrl')?.value,
+      });
+    }
+    return throwError(() => new Error('Personal form is invalid'));
+  }
+
+  updateEmail(): Observable<any> {
+    if (this.personalFormGroup.valid) {
+      return this.userService.updateUserEmail(
+        this.personalFormGroup.get('emailCtrl')?.value,
+      );
+    }
+    return throwError(() => new Error('Email form is invalid'));
+  }
+
+  updateAddress(): Observable<any> {
+    if (this.addressFormGroup.valid) {
+      return this.userService.updateUserAddress({
+        street: this.addressFormGroup.get('streetCtrl')?.value,
+        number: this.addressFormGroup.get('numberCtrl')?.value,
+        apartmentSuite: this.addressFormGroup.get('apartmentSuiteCtrl')?.value,
+        city: this.addressFormGroup.get('cityCtrl')?.value,
+        postalCode: this.addressFormGroup.get('postalCodeCtrl')?.value,
+        countryISO3: this.addressFormGroup.get('countryISO3Ctrl')?.value,
+      });
+    }
+    return throwError(() => new Error('Address form is invalid'));
+  }
+
+  createOrder(): Observable<any> {
+    if (
+      this.selectedTicket &&
+      this.festival &&
+      this.festival.id &&
+      this.selectedCampAddon &&
+      this.selectedTransportAddon
+    ) {
+      const request: CreatePackageOrderRequest = {
+        ticketTypeId: this.selectedTicket.itemId,
+        transportAddonId: this.selectedTransportAddon?.itemId ?? null,
+        campAddonId: this.selectedCampAddon?.itemId ?? null,
+        generalAddonIds: this.selectedGeneralAddons.map(
+          (addon) => addon.itemId,
+        ),
+        totalPrice: this.totalPrice,
+      };
+
+      console.log('Request: ', request);
+
+      // return this.orderService.createPackageOrder(this.festival.id, request);
+    }
+    return throwError(
+      () =>
+        new Error('No ticket selected or festival or festival ID is missing'),
+    );
+  }
+
+  openPaymentDialog() {
+    const dialogRef = this.dialog.open(StorePaymentDialogComponent, {
+      data: { festivalId: this.festival?.id },
+      width: '250px',
+      height: '250px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.isLoading = false;
+      console.log('The dialog was closed');
     });
   }
 }

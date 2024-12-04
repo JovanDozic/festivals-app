@@ -306,7 +306,7 @@ export class StoreTicketComponent implements OnInit {
 
       console.log('Request: ', request);
 
-      return this.orderService.createOrder(this.festival.id, request);
+      return this.orderService.createTicketOrder(this.festival.id, request);
     }
     return throwError(
       () =>
