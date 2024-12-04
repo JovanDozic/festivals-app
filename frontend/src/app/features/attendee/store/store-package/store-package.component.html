@@ -25,6 +25,7 @@
       [linear]="false"
       #stepper
       class="store-stepper"
+      (selectionChange)="calculateTotalPrice()"
     >
       <!-- ! TICKET SELECTION -->
       <mat-step [hasError]="!selectedTicket">
@@ -398,7 +399,12 @@
           </mat-card>
         </div>
         <div>
-          <button mat-stroked-button class="base-fill-button" matStepperNext>
+          <button
+            mat-stroked-button
+            class="base-fill-button"
+            matStepperNext
+            [disabled]="!selectedCampAddon"
+          >
             Next
           </button>
         </div>
@@ -449,8 +455,21 @@
           </mat-card>
         </div>
         <div>
-          <button mat-stroked-button class="base-fill-button" matStepperNext>
+          <button
+            mat-stroked-button
+            class="base-fill-button"
+            matStepperNext
+            *ngIf="selectedGeneralAddons.length > 0"
+          >
             Next
+          </button>
+          <button
+            mat-stroked-button
+            class="base-fill-button"
+            matStepperNext
+            *ngIf="selectedGeneralAddons.length === 0"
+          >
+            No, thanks
           </button>
         </div>
       </mat-step>
@@ -572,23 +591,101 @@
 
             <div class="divider"></div>
 
-            <span class="icon-property">
+            <span class="icon-property" *ngIf="selectedTicket">
               <mat-icon class="material-symbols-outlined" color="primary">
                 confirmation_number
               </mat-icon>
               Selected Ticket:
-              <span class="number-mono">{{ selectedTicket?.name }}</span>
+              <span class="number-mono"
+                >{{ selectedTicket.name }} (${{ selectedTicket.price }})</span
+              >
             </span>
-            <div class="divider"></div>
+            <div class="divider" *ngIf="selectedTicket"></div>
+
+            <span class="icon-property" *ngIf="selectedTransportAddon">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                {{
+                  selectedTransportAddon.transportType === "PLANE"
+                    ? "flight"
+                    : "luggage"
+                }}
+                {{
+                  selectedTransportAddon.transportType === "BUS"
+                    ? "directions_bus"
+                    : "luggage"
+                }}
+                {{
+                  selectedTransportAddon.transportType === "TRAIN"
+                    ? "train"
+                    : "luggage"
+                }}
+              </mat-icon>
+              Selected Travel Option:
+              <span class="number-mono"
+                >{{ selectedTransportAddon.itemName }}: (${{
+                  selectedTransportAddon.price
+                }})</span
+              >
+            </span>
+            <span
+              class="icon-property continued"
+              *ngIf="selectedTransportAddon"
+            >
+              <mat-icon class="material-symbols-outlined" color="primary">
+              </mat-icon>
+              <span class="number-mono">
+                {{ selectedTransportAddon.departureCityName }}
+                <mat-icon
+                  class="material-symbols-outlined inline-arrow"
+                  color="primary"
+                >
+                  arrow_right_alt
+                </mat-icon>
+                {{ selectedTransportAddon.arrivalCityName }}
+              </span>
+            </span>
+            <div class="divider" *ngIf="selectedTransportAddon"></div>
+
+            <span class="icon-property" *ngIf="selectedCampAddon">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                camping
+              </mat-icon>
+              Selected Camp Option:
+              <span class="number-mono"
+                >{{ selectedCampAddon.itemName }} (${{
+                  selectedCampAddon.price
+                }})</span
+              >
+            </span>
+            <div class="divider" *ngIf="selectedCampAddon"></div>
+
+            <span
+              class="icon-property"
+              *ngIf="selectedGeneralAddons.length > 0"
+            >
+              <mat-icon class="material-symbols-outlined" color="primary">
+                more_horiz
+              </mat-icon>
+              Selected Additional Options:
+            </span>
+            <span
+              class="icon-property continued"
+              *ngFor="let addon of selectedGeneralAddons"
+            >
+              <mat-icon class="material-symbols-outlined" color="primary">
+              </mat-icon>
+              <span class="number-mono"
+                >{{ addon?.itemName }} (${{ addon?.price }})</span
+              >
+            </span>
+            <div class="divider" *ngIf="selectedGeneralAddons.length > 0"></div>
 
             <span class="icon-property">
               <mat-icon class="material-symbols-outlined" color="primary">
                 attach_money
               </mat-icon>
               Total Price:
-              <span class="number-mono">{{
-                selectedTicket?.price?.toFixed(2)
-              }}</span>
+              <span class="number-mono"> ${{ totalPrice.toFixed(2) }} </span>
             </span>
             <div class="divider"></div>
 

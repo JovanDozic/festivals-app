@@ -119,6 +119,8 @@ export class StorePackageComponent implements OnInit {
   tickets: ItemCurrentPrice[] = [];
   selectedTicket: ItemCurrentPrice | null = null;
 
+  totalPrice: number = 0;
+
   constructor() {
     this.personalFormGroup = this.fb.group({
       firstNameCtrl: ['', Validators.required],
@@ -366,6 +368,7 @@ export class StorePackageComponent implements OnInit {
   }
 
   saveFormToCurrent() {
+    this.calculateTotalPrice();
     if (this.userProfile) {
       this.userProfile.firstName =
         this.personalFormGroup.get('firstNameCtrl')?.value;
@@ -385,6 +388,26 @@ export class StorePackageComponent implements OnInit {
         countryISO2: '',
       };
     }
+  }
+
+  calculateTotalPrice() {
+    this.totalPrice = 0;
+
+    if (this.selectedTicket) {
+      this.totalPrice += this.selectedTicket.price;
+    }
+
+    if (this.selectedTransportAddon) {
+      this.totalPrice += this.selectedTransportAddon.price;
+    }
+
+    if (this.selectedCampAddon) {
+      this.totalPrice += this.selectedCampAddon.price;
+    }
+
+    this.selectedGeneralAddons.forEach((addon) => {
+      this.totalPrice += addon.price;
+    });
   }
 
   completeOrder() {
