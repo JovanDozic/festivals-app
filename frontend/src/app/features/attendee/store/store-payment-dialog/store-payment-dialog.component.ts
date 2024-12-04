@@ -1,26 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogActions,
-  MatDialogContent,
+  MatDialogModule,
   MatDialogRef,
-  MatDialogTitle,
 } from '@angular/material/dialog';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatStepperModule } from '@angular/material/stepper';
-
 import { CommonModule } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatTabsModule } from '@angular/material/tabs';
-
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { Router } from '@angular/router';
@@ -29,19 +14,8 @@ import { Router } from '@angular/router';
   selector: 'app-store-payment-dialog',
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatStepperModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDatepickerModule,
-    MatGridListModule,
+    MatDialogModule,
     MatIconModule,
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatTabsModule,
     MatProgressSpinnerModule,
   ],
   templateUrl: './store-payment-dialog.component.html',
