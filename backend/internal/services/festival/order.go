@@ -138,6 +138,15 @@ func (s *orderService) GetOrder(orderId uint) (*dtoFestival.OrderDTO, error) {
 			response.TransportAddon = transportAddon
 		}
 
+		if addon.Category == "CAMP" {
+			campAddon, err := s.itemRepo.GetCampAddon(addon.ItemID)
+			if err != nil {
+				log.Println("error: ", err)
+				return nil, err
+			}
+			response.CampAddon = campAddon
+		}
+
 	}
 
 	// onda mi treba za svaki package_addon da ako je tipa TRANSPORT onda da trazim iz transport_addon tabele itd...
