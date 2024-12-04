@@ -120,7 +120,6 @@ func (s *orderService) GetOrder(orderId uint) (*dtoFestival.OrderDTO, error) {
 		return nil, err
 	}
 
-	// sad mi treba lista item_id tj lista package_addons koji su u tom paketu iz festival_package_addon
 	packageAddons, err := s.itemRepo.GetAddonsFromPackage(festivalPackage.ID)
 	if err != nil {
 		log.Println("error: ", err)
@@ -147,9 +146,15 @@ func (s *orderService) GetOrder(orderId uint) (*dtoFestival.OrderDTO, error) {
 			response.CampAddon = campAddon
 		}
 
+		if addon.Category == "GENERAL" {
+			generalAddon, err := s.itemRepo.GetGeneralAddon(addon.ItemID)
+			if err != nil {
+				log.Println("error: ", err)
+				return nil, err
+			}
+			response.GeneralAddons = append(response.GeneralAddons, *generalAddon)
+		}
 	}
-
-	// onda mi treba za svaki package_addon da ako je tipa TRANSPORT onda da trazim iz transport_addon tabele itd...
 
 	// * now we get festival
 

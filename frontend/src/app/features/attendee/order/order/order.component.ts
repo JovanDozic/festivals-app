@@ -57,18 +57,18 @@ export class OrderComponent implements OnInit {
   loadOrder() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.itemService.getOrder(parseInt(id)).subscribe(
-        (order) => {
+      this.itemService.getOrder(parseInt(id)).subscribe({
+        next: (order) => {
           console.log('Order: ', order);
           this.order = order;
           this.isLoading = false;
         },
-        (error) => {
+        error: (error) => {
           console.log(error);
           this.isLoading = false;
           this.snackbarService.show('Error loading order');
         },
-      );
+      });
     }
   }
 }

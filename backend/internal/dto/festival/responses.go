@@ -153,6 +153,6 @@ type OrderDTO struct {
 	Ticket         ItemResponse       `json:"ticket"`
 	TransportAddon *TransportAddonDTO `json:"transportAddon"`
 	CampAddon      *CampAddonDTO      `json:"campAddon"`
-	GeneralAddons  *[]GeneralAddonDTO `json:"generalAddons"`
+	GeneralAddons  []GeneralAddonDTO  `json:"generalAddons"`
 	Festival       FestivalResponse   `json:"festival"`
 }

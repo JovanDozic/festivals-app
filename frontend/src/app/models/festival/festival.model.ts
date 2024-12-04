@@ -253,6 +253,6 @@ export interface OrderDTO {
   Ticket: ItemsResponse;
   TransportAddon?: TransportAddonDTO;
   CampAddon?: CampAddonDTO;
-  GeneralAddons?: GeneralAddonDTO[];
+  GeneralAddons: GeneralAddonDTO[];
   Festival: Festival;
 }
