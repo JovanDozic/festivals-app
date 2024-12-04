@@ -97,6 +97,14 @@ type EquipmentRequest struct {
 }
 
 type CreateTicketOrderRequest struct {
-	TicketTypeId uint `json:"ticketTypeId"`
-	TotalPrice   int  `json:"totalPrice"`
+	TicketTypeId uint    `json:"ticketTypeId"`
+	TotalPrice   float64 `json:"totalPrice"`
+}
+
+type CreatePackageOrderRequest struct {
+	TicketTypeId     uint    `json:"ticketTypeId"`
+	TransportAddonId *uint   `json:"transportAddonId"`
+	CampAddonId      *uint   `json:"campAddonId"`
+	GeneralAddonIds  *[]uint `json:"generalAddonIds"`
+	TotalPrice       float64 `json:"totalPrice"`
 }

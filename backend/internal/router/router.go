@@ -162,7 +162,8 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// ...
 
-	pR.HandleFunc("/festival/{festivalId}/order/ticket", orderHandler.CreateOrder).Methods(http.MethodPost)
+	pR.HandleFunc("/festival/{festivalId}/order/ticket", orderHandler.CreateTicketOrder).Methods(http.MethodPost)
+	pR.HandleFunc("/festival/{festivalId}/order/package", orderHandler.CreatePackageOrder).Methods(http.MethodPost)
 
 	return r
 }

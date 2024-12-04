@@ -502,7 +502,7 @@ export class StorePackageComponent implements OnInit {
 
       console.log('Request: ', request);
 
-      // return this.orderService.createPackageOrder(this.festival.id, request);
+      return this.orderService.createPackageOrder(this.festival.id, request);
     }
     return throwError(
       () =>

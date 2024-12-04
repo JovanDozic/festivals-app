@@ -8,6 +8,8 @@ import (
 type OrderService interface {
 	CreateFestivalTicket(festivalTicket *models.FestivalTicket) error
 	CreateOrder(order *models.Order) error
+	CreateFestivalPackage(festivalPackage *models.FestivalPackage) error
+	CreateFestivalPackageAddon(festivalPackageAddon *models.FestivalPackageAddon) error
 }
 
 type orderService struct {
@@ -40,4 +42,24 @@ func (s *orderService) CreateFestivalTicket(festivalTicket *models.FestivalTicke
 
 func (s *orderService) CreateOrder(order *models.Order) error {
 	return s.orderRepo.CreateOrder(order)
+}
+
+func (s *orderService) CreateFestivalPackage(festivalPackage *models.FestivalPackage) error {
+	return s.orderRepo.CreateFestivalPackage(festivalPackage)
+}
+
+func (s *orderService) CreateFestivalPackageAddon(festivalPackageAddon *models.FestivalPackageAddon) error {
+
+	item, _, err := s.itemRepo.GetItemAndPriceListItemsIDs(festivalPackageAddon.ItemID)
+	if err != nil {
+		return nil
+	}
+
+	item.RemainingNumber -= 1
+
+	if err := s.itemRepo.UpdateItem(item); err != nil {
+		return err
+	}
+
+	return s.orderRepo.CreateFestivalPackageAddon(festivalPackageAddon)
 }
