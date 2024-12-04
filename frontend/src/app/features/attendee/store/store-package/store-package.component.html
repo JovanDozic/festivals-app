@@ -658,10 +658,7 @@
               </mat-icon>
               <span class="color-error"><b>Travel Option not selected</b></span>
             </span>
-            <div
-              class="divider"
-              *ngIf="!selectedTransportAddon && transportAddonsCount > 0"
-            ></div>
+            <div class="divider" *ngIf="transportAddonsCount > 0"></div>
 
             <span class="icon-property" *ngIf="selectedCampAddon">
               <mat-icon class="material-symbols-outlined" color="primary">
@@ -683,10 +680,7 @@
               </mat-icon>
               <span class="color-error"><b>Camp Option not selected</b></span>
             </span>
-            <div
-              class="divider"
-              *ngIf="!selectedCampAddon && campAddonsCount > 0"
-            ></div>
+            <div class="divider" *ngIf="campAddonsCount > 0"></div>
 
             <span
               class="icon-property"
