@@ -307,6 +307,13 @@ export class StorePackageComponent implements OnInit {
     this.selectedTransportAddon = addon;
   }
 
+  selectCampAddon(addon: CampAddonDTO) {
+    if (addon.itemRemainingNumber === 0) {
+      return;
+    }
+    this.selectedCampAddon = addon;
+  }
+
   clearTransportFilters() {
     this.selectedCountry = null;
     this.selectedTransportType = null;

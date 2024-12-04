@@ -143,6 +143,7 @@ img[mat-card-image] {
   max-height: 200px;
   object-fit: cover;
   image-rendering: optimizeSpeed;
+  border-radius: 12px !important;
 }
 
 .mat-card-img-large {
@@ -173,7 +174,7 @@ img[mat-card-image] {
   transition:
     box-shadow 0.3s ease,
     outline 0.1s ease;
-  border-radius: 16px;
+  border-radius: 12px;
 }
 
 :host-context([data-theme="dark"]) .ai-shadow-card {
