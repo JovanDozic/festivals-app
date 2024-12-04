@@ -26,15 +26,6 @@
           Profile.
         </p> -->
 
-        <span class="icon-property" *ngIf="order.ticket">
-          <mat-icon class="material-symbols-outlined" color="primary">
-            calendar_today
-          </mat-icon>
-          Date and time:
-          <span class="number-mono">
-            {{ order.timestamp | date: "dd MMM yyyy, HH:mm:ss" }}
-          </span>
-        </span>
         <span class="icon-property" *ngIf="order.orderType === 'TICKET'">
           <mat-icon class="material-symbols-outlined" color="primary">
             confirmation_number
@@ -47,9 +38,19 @@
           </mat-icon>
           <h3>Package Order</h3>
         </span>
-
-        <div class="divider"></div>
-
+        <span class="icon-property" *ngIf="order.ticket">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            calendar_today
+          </mat-icon>
+          Date and time:
+          <span class="number-mono">
+            {{ order.timestamp | date: "dd MMM yyyy, HH:mm:ss" }}
+          </span>
+        </span>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="profile-card">
+      <mat-card-content>
         <span class="icon-property" *ngIf="order.ticket">
           <mat-icon class="material-symbols-outlined" color="primary">
             confirmation_number
@@ -57,8 +58,10 @@
           Ticket:
           <span class="number-mono"> {{ order.ticket.name }} </span>
         </span>
-        <div class="divider"></div>
-
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="profile-card" *ngIf="order.orderType === 'PACKAGE'">
+      <mat-card-content>
         <span class="icon-property" *ngIf="order.transportAddon">
           <mat-icon class="material-symbols-outlined" color="primary">
             {{
@@ -94,8 +97,7 @@
             {{ order.transportAddon.arrivalCityName }}
           </span>
         </span>
-        <div class="divider" *ngIf="order.transportAddon"></div>
-
+        <div class="divider"></div>
         <span class="icon-property" *ngIf="order.campAddon">
           <mat-icon class="material-symbols-outlined" color="primary">
             camping
@@ -103,8 +105,7 @@
           Camp Option:
           <span class="number-mono"> {{ order.campAddon.itemName }} </span>
         </span>
-        <div class="divider" *ngIf="order.transportAddon"></div>
-
+        <div class="divider"></div>
         <span class="icon-property" *ngIf="order.generalAddons">
           <mat-icon class="material-symbols-outlined" color="primary">
             more_vert
@@ -119,8 +120,10 @@
           </mat-icon>
           <span class="number-mono"> {{ addon.itemName }} </span>
         </span>
-        <div class="divider" *ngIf="order.generalAddons"></div>
-
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="profile-card">
+      <mat-card-content>
         <span class="icon-property">
           <mat-icon class="material-symbols-outlined" color="primary">
             attach_money
@@ -128,8 +131,10 @@
           Total Price:
           <span class="number-mono"> ${{ order.totalPrice.toFixed(2) }} </span>
         </span>
-        <div class="divider"></div>
-
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="profile-card">
+      <mat-card-content>
         <span class="icon-property" *ngIf="userProfile">
           <mat-icon class="material-symbols-outlined" color="primary">
             info
@@ -155,9 +160,10 @@
             {{ userProfile.phoneNumber }}
           </span>
         </span>
-
-        <div class="divider"></div>
-
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="profile-card">
+      <mat-card-content>
         <span class="icon-property">
           <mat-icon class="material-symbols-outlined" color="primary">
             fitness_tracker
