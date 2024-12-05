@@ -18,6 +18,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { FormsModule } from '@angular/forms';
 import { ItemService } from '../../../../services/festival/item.service';
 import { FestivalService } from '../../../../services/festival/festival.service';
+import { IssueBraceletComponent } from '../issue-bracelet/issue-bracelet.component';
 
 @Component({
   selector: 'app-festival-orders',
@@ -136,5 +137,21 @@ export class FestivalOrdersComponent implements OnInit {
       'orders',
       order.orderId,
     ]);
+  }
+
+  onIssueBraceletClick() {
+    const dialogRef = this.dialog.open(IssueBraceletComponent, {
+      data: { festivalId: this.festival?.id },
+      width: '800px',
+      height: 'auto',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.snackbarService.show('Bracelet issued successfully');
+        // todo: reload orders
+      }
+    });
   }
 }

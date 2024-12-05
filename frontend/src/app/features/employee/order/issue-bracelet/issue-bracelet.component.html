@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>Create General Package Addon</h2>
+
+<mat-dialog-content>
+  <mat-stepper [linear]="true" #stepper>
+    <mat-step [stepControl]="infoFormGroup" [editable]="false">
+      <form [formGroup]="infoFormGroup">
+        <ng-template matStepLabel>Bracelet Credentials</ng-template>
+        
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Barcode Number</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="barcodeNumberCtrl"
+              required
+            />
+          </mat-form-field>
+        </div>
+        <!-- todo: stavi da bude hidden, i view pin button -->
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>PIN Code</mat-label>
+            <input matInput formControlName="pinCtrl" required />
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [editable]="false">
+      <div class="price-form">
+        <ng-template matStepLabel>Shipping Information</ng-template>
+        ovde ide adresa
+      </div>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="margin-top: -20px">
+  <button
+    mat-button
+    color="warn"
+    (click)="closeDialog()"
+    *ngIf="stepper.selectedIndex === 0"
+  >
+    Cancel
+  </button>
+  <button
+    mat-stroked-button
+    (click)="issueBracelet()"
+    *ngIf="stepper.selectedIndex === 0"
+    [disabled]="infoFormGroup.invalid"
+  >
+    Next
+  </button>
+  <button
+    mat-stroked-button
+    (click)="done()"
+    *ngIf="stepper.selectedIndex === 1"
+  >
+    Done
+  </button>
+</mat-dialog-actions>
