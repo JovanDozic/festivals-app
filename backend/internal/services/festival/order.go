@@ -8,6 +8,7 @@ import (
 	servicesUser "backend/internal/services/user"
 	"errors"
 	"log"
+	"strings"
 )
 
 type OrderService interface {
@@ -288,10 +289,20 @@ func (s *orderService) GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPr
 
 		orderDto.Attendee = attendee
 
+		bracelet, err := s.orderRepo.GetBraceletByTicketId(order.FestivalTicketID)
+		if err != nil && !strings.Contains(err.Error(), "record not found") {
+			log.Println("error: ", err)
+			return nil, err
+		}
+
+		if bracelet != nil {
+			orderDto.BraceletStatus = &bracelet.Status
+		} else {
+			orderDto.BraceletStatus = nil
+		}
+
 		response = append(response, orderDto)
 	}
-
-	// todo: append bracelet status
 
 	return response, nil
 }

@@ -98,10 +98,10 @@
 
   <div class="profile-content" *ngIf="!isLoading">
     <mat-card
-      class="festival-card ai-shadow-card action-required"
+      class="festival-card ai-shadow-card"
       *ngFor="let order of filteredOrders"
+      [ngClass]="{ 'action-required': !order.braceletStatus }"
     >
-      <!-- todo: add [ngModel] for action-required above! -->
       <div class="card-content">
         <div>
           <mat-card-header>
@@ -151,12 +151,17 @@
 
             <div class="divider"></div>
 
-            <!-- ! this should show up if bracelet is not issued -->
-            <span class="icon-property">
-              <mat-icon class="material-symbols-outlined color-error">
+            <span class="icon-property" *ngIf="!order.braceletStatus">
+              <mat-icon class="material-symbols-outlined" color="primary">
                 fitness_tracker
               </mat-icon>
               Bracelet not issued
+            </span>
+            <span class="icon-property" *ngIf="order.braceletStatus">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                fitness_tracker
+              </mat-icon>
+              Bracelet issued
             </span>
           </mat-card-content>
         </div>
@@ -165,11 +170,11 @@
             View
           </button>
           <span class="spacer"></span>
-          <!-- ! show issue bracelet button only if needed -->
           <button
             mat-icon-button
             matTooltip="Issue Bracelet"
             (click)="onIssueBraceletClick(order)"
+            *ngIf="!order.braceletStatus"
           >
             <mat-icon class="material-symbols-outlined" color="primary">
               fitness_tracker

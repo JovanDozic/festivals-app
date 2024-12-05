@@ -17,6 +17,7 @@ type OrderRepo interface {
 	GetFestivalTicket(festivalTicketId uint) (*models.FestivalTicket, error)
 	GetFestivalPackage(festivalPackageId uint) (*models.FestivalPackage, error)
 	CreateBracelet(bracelet *models.Bracelet) error
+	GetBraceletByTicketId(festivalTicketId uint) (*models.Bracelet, error)
 }
 
 type orderRepo struct {
@@ -102,4 +103,10 @@ func (r *orderRepo) GetFestivalPackage(festivalPackageId uint) (*models.Festival
 
 func (r *orderRepo) CreateBracelet(bracelet *models.Bracelet) error {
 	return r.db.Create(bracelet).Error
+}
+
+func (r *orderRepo) GetBraceletByTicketId(festivalTicketId uint) (*models.Bracelet, error) {
+	bracelet := &models.Bracelet{}
+	err := r.db.Where("festival_ticket_id = ?", festivalTicketId).First(&bracelet).Error
+	return bracelet, err
 }

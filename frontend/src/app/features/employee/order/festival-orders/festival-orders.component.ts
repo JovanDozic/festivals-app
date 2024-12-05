@@ -52,7 +52,14 @@ export class FestivalOrdersComponent implements OnInit {
   isLoading: boolean = true;
   orders: OrderPreviewDTO[] = [];
 
-  filterOptions: string[] = ['All', 'Action Required', 'Bracelet Issued'];
+  filterOptions: string[] = [
+    'All',
+    'Pending Issuing',
+    'Pending Activation',
+    'Requested Help',
+    'Activated',
+    'Rejected',
+  ];
   selectedChip: string = 'All'; // todo: change to action required
 
   constructor() {}
@@ -154,7 +161,7 @@ export class FestivalOrdersComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.snackbarService.show('Bracelet issued successfully!');
-        // todo: reload orders
+        this.loadOrders();
       }
     });
   }

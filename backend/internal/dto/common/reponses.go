@@ -9,7 +9,7 @@ type HealthCheckResponse struct {
 }
 
 type GetAddressResponse struct {
-	AddressId      *uint   `	json:"addressId"`
+	AddressId      *uint   `json:"addressId"`
 	Street         string  `json:"street"`
 	Number         string  `json:"number"`
 	ApartmentSuite *string `json:"apartmentSuite"`
