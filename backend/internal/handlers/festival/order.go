@@ -185,9 +185,19 @@ func (h *orderHandler) CreatePackageOrder(w http.ResponseWriter, r *http.Request
 
 func (h *orderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthAttendeeRole(r.Context()) {
+	isAttendee := utils.AuthAttendeeRole(r.Context())
+	isEmployee := utils.AuthEmployeeRole(r.Context())
+
+	if !isAttendee && !isEmployee {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
+	}
+
+	var username string
+	if isAttendee {
+		username = utils.GetUsername(r.Context())
+	} else if isEmployee {
+		username = ""
 	}
 
 	orderId, err := GetIDParamFromRequest(r, "orderId")
@@ -196,8 +206,6 @@ func (h *orderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
-
-	username := utils.GetUsername(r.Context())
 
 	order, err := h.orderService.GetOrder(username, orderId)
 	if err != nil {

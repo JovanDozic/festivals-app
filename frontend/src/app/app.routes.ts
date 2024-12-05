@@ -278,6 +278,14 @@ const employeeRoutes: Routes = [
           ).then((c) => c.FestivalOrdersComponent),
         title: 'Orders',
       },
+      {
+        path: 'employee/my-festivals/:id/orders/:orderId',
+        loadComponent: () =>
+          import('./features/employee/order/order/order.component').then(
+            (c) => c.OrderComponent,
+          ),
+        title: 'Orders',
+      },
     ],
   },
 ];

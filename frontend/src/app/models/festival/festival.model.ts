@@ -255,6 +255,9 @@ export interface OrderDTO {
   campAddon?: CampAddonDTO;
   generalAddons: GeneralAddonDTO[];
   festival: Festival;
+  attendee: UserProfileResponse;
+  braceletStatus?: string;
+  festivalTicketId: number;
 }
 
 export interface OrderPreviewDTO {

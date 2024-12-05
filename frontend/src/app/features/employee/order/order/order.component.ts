@@ -1,17 +1,19 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FestivalService } from '../../../../services/festival/festival.service';
 import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
 import { UserService } from '../../../../services/user/user.service';
-import { OrderDTO } from '../../../../models/festival/festival.model';
+import { OrderService } from '../../../../services/festival/order.service';
+import { Festival, OrderDTO } from '../../../../models/festival/festival.model';
 import { AddressResponse } from '../../../../models/common/address-response.model';
 import { UserProfileResponse } from '../../../../models/user/user-profile-response.model';
 
@@ -33,11 +35,16 @@ import { UserProfileResponse } from '../../../../models/user/user-profile-respon
 export class OrderComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private festivalService = inject(FestivalService);
   private itemService = inject(ItemService);
   private userService = inject(UserService);
   private snackbarService = inject(SnackbarService);
+  private orderService = inject(OrderService);
+  private dialog = inject(MatDialog);
 
   isLoading: boolean = true;
+
+  festival: Festival | null = null;
 
   order: OrderDTO | null = null;
   userProfile: UserProfileResponse | null = null;
@@ -46,16 +53,39 @@ export class OrderComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    this.loadFestival();
+
     this.loadOrder();
     this.loadUser();
   }
 
   goBack() {
-    this.router.navigate([`my-orders/`]);
+    this.router.navigate([`employee/my-festivals/${this.festival?.id}/orders`]);
+  }
+
+  loadFestival() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.festivalService.getFestival(Number(id)).subscribe({
+        next: (festival) => {
+          this.festival = festival;
+          this.isLoading = false;
+          console.log(
+            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`,
+          );
+        },
+        error: (error) => {
+          console.log('Error fetching festival information: ', error);
+          this.snackbarService.show('Error getting festival');
+          this.festival = null;
+          this.isLoading = true;
+        },
+      });
+    }
   }
 
   loadOrder() {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('orderId');
     if (id) {
       this.itemService.getOrder(parseInt(id)).subscribe({
         next: (order) => {

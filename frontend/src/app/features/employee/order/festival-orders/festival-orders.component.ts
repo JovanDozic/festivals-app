@@ -138,10 +138,7 @@ export class FestivalOrdersComponent implements OnInit {
 
   onViewClick(order: OrderPreviewDTO) {
     this.router.navigate([
-      'my-festivals/',
-      order.festival.id,
-      'orders',
-      order.orderId,
+      `employee/my-festivals/${this.festival?.id}/orders/${order.orderId}`,
     ]);
   }
 

@@ -146,16 +146,19 @@ type CampAddonDTO struct {
 }
 
 type OrderDTO struct {
-	OrderID        uint               `json:"orderId"`
-	OrderType      string             `json:"orderType"` // this is like ticket or package
-	Timestamp      time.Time          `json:"timestamp"`
-	TotalPrice     float64            `json:"totalPrice"`
-	Ticket         ItemResponse       `json:"ticket"`
-	TransportAddon *TransportAddonDTO `json:"transportAddon"`
-	CampAddon      *CampAddonDTO      `json:"campAddon"`
-	GeneralAddons  []GeneralAddonDTO  `json:"generalAddons"`
-	Festival       FestivalResponse   `json:"festival"`
-	Username       string             `json:"username"`
+	OrderID          uint                            `json:"orderId"`
+	OrderType        string                          `json:"orderType"` // this is like ticket or package
+	Timestamp        time.Time                       `json:"timestamp"`
+	TotalPrice       float64                         `json:"totalPrice"`
+	Ticket           ItemResponse                    `json:"ticket"`
+	TransportAddon   *TransportAddonDTO              `json:"transportAddon"`
+	CampAddon        *CampAddonDTO                   `json:"campAddon"`
+	GeneralAddons    []GeneralAddonDTO               `json:"generalAddons"`
+	Festival         FestivalResponse                `json:"festival"`
+	Username         string                          `json:"username"`
+	Attendee         *dtoUser.GetUserProfileResponse `json:"attendee"`
+	BraceletStatus   *string                         `json:"braceletStatus"`
+	FestivalTicketId *uint                           `json:"festivalTicketId"`
 }
 
 type OrderPreviewDTO struct {

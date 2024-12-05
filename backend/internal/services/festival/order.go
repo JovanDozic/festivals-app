@@ -86,8 +86,14 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 		return nil, err
 	}
 
-	if order.User.User.Username != username {
+	if username != "" && order.User.User.Username != username {
 		return nil, errors.New("order not found")
+	}
+
+	attendee, err := s.userService.GetUserProfile(order.User.User.Username)
+	if err != nil {
+		log.Println("error: ", err)
+		return nil, err
 	}
 
 	response := &dtoFestival.OrderDTO{
@@ -95,6 +101,7 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 		Timestamp:  order.CreatedAt,
 		TotalPrice: order.TotalAmount,
 		Username:   order.User.User.Username,
+		Attendee:   attendee,
 	}
 
 	if order.FestivalPackage == nil {

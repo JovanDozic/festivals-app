@@ -1,4 +1,4 @@
-<div class="container mat-elevation-z4">
+<div class="container mat-elevation-z4" *ngIf="festival && order">
   <div class="profile-header">
     <div class="title-container">
       <button
@@ -10,7 +10,8 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
       <h1>
-        My Orders
+        {{ festival.name | slice: 0 : 20
+        }}{{ festival.name.length > 20 ? "..." : "" }}
         <mat-icon color="primary">arrow_forward_ios</mat-icon>
         Order {{ order ? "#" + order.orderId : "" }}
       </h1>
