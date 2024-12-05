@@ -175,4 +175,8 @@ export class FestivalComponent implements OnInit {
         this.festival.images.length;
     }
   }
+
+  onViewOrders() {
+    this.router.navigate([`employee/my-festivals/${this.festival?.id}/orders`]);
+  }
 }

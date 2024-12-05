@@ -262,4 +262,5 @@ export interface OrderPreviewDTO {
   timestamp: Date;
   totalPrice: number;
   festival: Festival;
+  braceletStatus?: string;
 }

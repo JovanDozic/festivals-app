@@ -38,4 +38,10 @@ export class OrderService {
   getMyOrders(): Observable<OrderPreviewDTO[]> {
     return this.http.get<OrderPreviewDTO[]>(`${this.apiUrl}/order/attendee`);
   }
+
+  getFestivalOrders(festivalId: number): Observable<OrderPreviewDTO[]> {
+    return this.http.get<OrderPreviewDTO[]>(
+      `${this.apiUrl}/festival/${festivalId}/order`,
+    );
+  }
 }

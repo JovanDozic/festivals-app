@@ -270,6 +270,14 @@ const employeeRoutes: Routes = [
           ).then((c) => c.CampPackageAddonsComponent),
         title: 'Camp Addons',
       },
+      {
+        path: 'employee/my-festivals/:id/orders',
+        loadComponent: () =>
+          import(
+            './features/employee/order/festival-orders/festival-orders.component'
+          ).then((c) => c.FestivalOrdersComponent),
+        title: 'Orders',
+      },
     ],
   },
 ];

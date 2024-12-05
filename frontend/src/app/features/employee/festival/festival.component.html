@@ -14,7 +14,16 @@
         }}{{ festival.name.length > 40 ? "..." : "" }}
       </h1>
     </div>
-    <div class="button-container"></div>
+    <div class="button-container">
+      <button
+        mat-icon-button
+        matTooltip="View Orders"
+        color="primary"
+        (click)="onViewOrders()"
+      >
+        <mat-icon class="material-symbols-outlined">orders</mat-icon>
+      </button>
+    </div>
   </div>
 
   <div class="chip-container">
