@@ -51,7 +51,7 @@ func NewItemHandler(
 
 func (h *itemHandler) CreateItem(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -90,7 +90,7 @@ func (h *itemHandler) CreateItem(w http.ResponseWriter, r *http.Request) {
 
 func (h *itemHandler) CreatePackageAddon(w http.ResponseWriter, r *http.Request) {
 
-	_, ok := h.authorizeOrganizerForFestival(w, r)
+	_, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -125,7 +125,7 @@ func (h *itemHandler) CreatePackageAddon(w http.ResponseWriter, r *http.Request)
 
 func (h *itemHandler) CreatePriceListItem(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -168,7 +168,7 @@ func (h *itemHandler) GetCurrentTicketTypes(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	festivalId, err := getFestivalIDFromRequest(r)
+	festivalId, err := GetIDParamFromRequest(r, "festivalId")
 	if err != nil {
 		return
 	}
@@ -216,7 +216,7 @@ func (h *itemHandler) GetCurrentTicketTypes(w http.ResponseWriter, r *http.Reque
 
 func (h *itemHandler) GetTicketTypesCount(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, err := getFestivalIDFromRequest(r)
+	festivalId, err := GetIDParamFromRequest(r, "festivalId")
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -239,12 +239,12 @@ func (h *itemHandler) GetTicketTypesCount(w http.ResponseWriter, r *http.Request
 
 func (h *itemHandler) GetTicketType(w http.ResponseWriter, r *http.Request) {
 
-	_, ok := h.authorizeOrganizerForFestival(w, r)
+	_, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
 
-	itemId, err := getIDParamFromRequest(r, "itemId")
+	itemId, err := GetIDParamFromRequest(r, "itemId")
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -264,12 +264,12 @@ func (h *itemHandler) GetTicketType(w http.ResponseWriter, r *http.Request) {
 
 func (h *itemHandler) UpdateItem(w http.ResponseWriter, r *http.Request) {
 
-	_, ok := h.authorizeOrganizerForFestival(w, r)
+	_, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
 
-	_, err := getIDParamFromRequest(r, "itemId")
+	_, err := GetIDParamFromRequest(r, "itemId")
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -296,12 +296,12 @@ func (h *itemHandler) UpdateItem(w http.ResponseWriter, r *http.Request) {
 
 func (h *itemHandler) DeleteTicketType(w http.ResponseWriter, r *http.Request) {
 
-	_, ok := h.authorizeOrganizerForFestival(w, r)
+	_, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
 
-	itemId, err := getIDParamFromRequest(r, "itemId")
+	itemId, err := GetIDParamFromRequest(r, "itemId")
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -322,12 +322,12 @@ func (h *itemHandler) DeleteTicketType(w http.ResponseWriter, r *http.Request) {
 // * this one should be able to return all categories of package addons, so in the request or in parameter we should have what we want to get
 func (h *itemHandler) GetCurrentPackageAddons(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
 
-	category, err := getParamFromRequest(r, "category")
+	category, err := GetParamFromRequest(r, "category")
 	if category == "" || err != nil {
 		log.Println("error: category is required")
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -369,12 +369,14 @@ func (h *itemHandler) GetCurrentPackageAddons(w http.ResponseWriter, r *http.Req
 
 func (h *itemHandler) GetPackageAddonsCount(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
-	if !ok {
+	festivalId, err := GetIDParamFromRequest(r, "festivalId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 
-	category, err := getParamFromRequest(r, "category")
+	category, err := GetParamFromRequest(r, "category")
 	if category == "" || err != nil {
 		log.Println("error: category is required")
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -397,7 +399,7 @@ func (h *itemHandler) GetPackageAddonsCount(w http.ResponseWriter, r *http.Reque
 
 func (h *itemHandler) GetAllPackageAddonsCount(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, err := getFestivalIDFromRequest(r)
+	festivalId, err := GetIDParamFromRequest(r, "festivalId")
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -420,7 +422,7 @@ func (h *itemHandler) GetAllPackageAddonsCount(w http.ResponseWriter, r *http.Re
 
 func (h *itemHandler) CreateTransportPackageAddon(w http.ResponseWriter, r *http.Request) {
 
-	_, ok := h.authorizeOrganizerForFestival(w, r)
+	_, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -450,7 +452,7 @@ func (h *itemHandler) CreateTransportPackageAddon(w http.ResponseWriter, r *http
 
 func (h *itemHandler) CreateCampPackageAddon(w http.ResponseWriter, r *http.Request) {
 
-	_, ok := h.authorizeOrganizerForFestival(w, r)
+	_, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -485,7 +487,7 @@ func (h *itemHandler) GetTransportAddons(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	festivalId, err := getFestivalIDFromRequest(r)
+	festivalId, err := GetIDParamFromRequest(r, "festivalId")
 	if err != nil {
 		return
 	}
@@ -508,7 +510,7 @@ func (h *itemHandler) GetGeneralAddons(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	festivalId, err := getFestivalIDFromRequest(r)
+	festivalId, err := GetIDParamFromRequest(r, "festivalId")
 	if err != nil {
 		return
 	}
@@ -531,7 +533,7 @@ func (h *itemHandler) GetCampAddons(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	festivalId, err := getFestivalIDFromRequest(r)
+	festivalId, err := GetIDParamFromRequest(r, "festivalId")
 	if err != nil {
 		return
 	}
@@ -554,7 +556,7 @@ func (h *itemHandler) GetAvailableDepartureCountries(w http.ResponseWriter, r *h
 		return
 	}
 
-	festivalId, err := getFestivalIDFromRequest(r)
+	festivalId, err := GetIDParamFromRequest(r, "festivalId")
 	if err != nil {
 		return
 	}

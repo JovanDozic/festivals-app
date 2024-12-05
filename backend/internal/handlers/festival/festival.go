@@ -131,7 +131,7 @@ func (h *festivalHandler) GetByOrganizer(w http.ResponseWriter, r *http.Request)
 			log.Println("error:", err)
 			continue
 		}
-		festivalsResponse.Festivals[i] = mapFestivalToResponse(festival, images)
+		festivalsResponse.Festivals[i] = MapFestivalToResponse(festival, images)
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivalsResponse.Festivals}, nil)
@@ -163,7 +163,7 @@ func (h *festivalHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 			log.Println("error:", err)
 			continue
 		}
-		festivalsResponse.Festivals[i] = mapFestivalToResponse(festival, images)
+		festivalsResponse.Festivals[i] = MapFestivalToResponse(festival, images)
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivalsResponse.Festivals}, nil)
@@ -204,7 +204,7 @@ func (h *festivalHandler) GetById(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
-	festivalResponse := mapFestivalToResponse(*festival, images)
+	festivalResponse := MapFestivalToResponse(*festival, images)
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festival": festivalResponse}, nil)
 	log.Println("festival retrieved successfully:", festival.Name)
@@ -212,7 +212,7 @@ func (h *festivalHandler) GetById(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) Update(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -290,7 +290,7 @@ func (h *festivalHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) Delete(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -306,7 +306,8 @@ func (h *festivalHandler) Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *festivalHandler) PublishFestival(w http.ResponseWriter, r *http.Request) {
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -323,7 +324,7 @@ func (h *festivalHandler) PublishFestival(w http.ResponseWriter, r *http.Request
 
 func (h *festivalHandler) CancelFestival(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -340,7 +341,7 @@ func (h *festivalHandler) CancelFestival(w http.ResponseWriter, r *http.Request)
 
 func (h *festivalHandler) CompleteFestival(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -357,7 +358,7 @@ func (h *festivalHandler) CompleteFestival(w http.ResponseWriter, r *http.Reques
 
 func (h *festivalHandler) OpenStore(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -374,7 +375,7 @@ func (h *festivalHandler) OpenStore(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) CloseStore(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -391,7 +392,7 @@ func (h *festivalHandler) CloseStore(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) AddImage(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -417,12 +418,12 @@ func (h *festivalHandler) AddImage(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) RemoveImage(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
 
-	imageId, err := getIDParamFromRequest(r, "imageId")
+	imageId, err := GetIDParamFromRequest(r, "imageId")
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -446,16 +447,12 @@ func (h *festivalHandler) GetImages(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	vars := mux.Vars(r)
-	festivalIdString := vars["festivalId"]
-
-	if festivalIdString == "" {
-		log.Println("error:", models.ErrBadRequest)
+	festivalId, err := GetIDParamFromRequest(r, "festivalId")
+	if err != nil {
+		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
-
-	festivalId := utils.ToUint(festivalIdString)
 
 	images, err := h.festivalService.GetImages(festivalId)
 	if err != nil {
@@ -470,27 +467,19 @@ func (h *festivalHandler) GetImages(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) Employ(w http.ResponseWriter, r *http.Request) {
 
-	_, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
 
-	vars := mux.Vars(r)
-	festivalId := vars["festivalId"]
-	if festivalId == "" {
-		log.Println("error:", models.ErrBadRequest)
+	employeeId, err := GetIDParamFromRequest(r, "employeeId")
+	if err != nil {
+		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 
-	employeeId := vars["employeeId"]
-	if employeeId == "" {
-		log.Println("error:", models.ErrBadRequest)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	if err := h.festivalService.Employ(utils.ToUint(festivalId), utils.ToUint(employeeId)); err != nil {
+	if err := h.festivalService.Employ(festivalId, employeeId); err != nil {
 		log.Println("error:", err)
 		switch err {
 		case models.ErrNotFound:
@@ -509,27 +498,19 @@ func (h *festivalHandler) Employ(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) Fire(w http.ResponseWriter, r *http.Request) {
 
-	_, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
 
-	vars := mux.Vars(r)
-	festivalId := vars["festivalId"]
-	if festivalId == "" {
-		log.Println("error:", models.ErrBadRequest)
+	employeeId, err := GetIDParamFromRequest(r, "employeeId")
+	if err != nil {
+		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 
-	employeeId := vars["employeeId"]
-	if employeeId == "" {
-		log.Println("error:", models.ErrBadRequest)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	if err := h.festivalService.Fire(utils.ToUint(festivalId), utils.ToUint(employeeId)); err != nil {
+	if err := h.festivalService.Fire(festivalId, employeeId); err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
@@ -541,7 +522,7 @@ func (h *festivalHandler) Fire(w http.ResponseWriter, r *http.Request) {
 
 func (h *festivalHandler) GetEmployeeCount(w http.ResponseWriter, r *http.Request) {
 
-	festivalId, ok := h.authorizeOrganizerForFestival(w, r)
+	festivalId, ok := AuthOrganizerOrEmployeeForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}
@@ -584,7 +565,7 @@ func (h *festivalHandler) GetByEmployee(w http.ResponseWriter, r *http.Request) 
 			log.Println("error:", err)
 			continue
 		}
-		festivalsResponse.Festivals[i] = mapFestivalToResponse(festival, images)
+		festivalsResponse.Festivals[i] = MapFestivalToResponse(festival, images)
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivalsResponse.Festivals}, nil)

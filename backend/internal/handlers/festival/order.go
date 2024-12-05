@@ -188,7 +188,7 @@ func (h *orderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	orderId, err := getIDParamFromRequest(r, "orderId")
+	orderId, err := GetIDParamFromRequest(r, "orderId")
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
