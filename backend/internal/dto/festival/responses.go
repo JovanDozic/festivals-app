@@ -149,11 +149,19 @@ type OrderDTO struct {
 	OrderType      string             `json:"orderType"` // this is like ticket or package
 	Timestamp      time.Time          `json:"timestamp"`
 	TotalPrice     float64            `json:"totalPrice"`
-	BraceletStatus string             `json:"braceletStatus"`
 	Ticket         ItemResponse       `json:"ticket"`
 	TransportAddon *TransportAddonDTO `json:"transportAddon"`
 	CampAddon      *CampAddonDTO      `json:"campAddon"`
 	GeneralAddons  []GeneralAddonDTO  `json:"generalAddons"`
 	Festival       FestivalResponse   `json:"festival"`
 	Username       string             `json:"username"`
+}
+
+type OrderPreviewDTO struct {
+	OrderID    uint             `json:"orderId"`
+	OrderType  string           `json:"orderType"`
+	Timestamp  time.Time        `json:"timestamp"`
+	TotalPrice float64          `json:"totalPrice"`
+	Festival   FestivalResponse `json:"festival"`
+	Username   string           `json:"username"`
 }

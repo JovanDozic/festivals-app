@@ -249,7 +249,6 @@ export interface OrderDTO {
   orderType: string;
   timestamp: Date;
   totalPrice: number;
-  braceletStatus: string;
   ticket: ItemCurrentPrice;
   transportAddon?: TransportAddonDTO;
   campAddon?: CampAddonDTO;

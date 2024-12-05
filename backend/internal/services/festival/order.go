@@ -15,6 +15,7 @@ type OrderService interface {
 	CreateFestivalPackage(festivalPackage *models.FestivalPackage) error
 	CreateFestivalPackageAddon(festivalPackageAddon *models.FestivalPackageAddon) error
 	GetOrder(username string, orderId uint) (*dtoFestival.OrderDTO, error)
+	GetOrdersAttendee(username string) ([]dtoFestival.OrderPreviewDTO, error)
 }
 
 type orderService struct {
@@ -201,6 +202,41 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 	}
 
 	// todo: get bracelet
+
+	return response, nil
+}
+
+func (s *orderService) GetOrdersAttendee(username string) ([]dtoFestival.OrderPreviewDTO, error) {
+
+	orders, err := s.orderRepo.GetOrdersAttendee(username)
+	if err != nil {
+		log.Println("error: ", err)
+		return nil, err
+	}
+
+	var response []dtoFestival.OrderPreviewDTO
+
+	for _, order := range orders {
+
+		orderDto := dtoFestival.OrderPreviewDTO{
+			OrderID:    order.ID,
+			Timestamp:  order.CreatedAt,
+			TotalPrice: order.TotalAmount,
+			Username:   order.User.User.Username,
+			Festival: dtoFestival.FestivalResponse{
+				ID:   order.FestivalTicket.Item.Item.Festival.ID,
+				Name: order.FestivalTicket.Item.Item.Festival.Name,
+			},
+		}
+
+		if order.FestivalPackage == nil {
+			orderDto.OrderType = "TICKET"
+		} else {
+			orderDto.OrderType = "PACKAGE"
+		}
+
+		response = append(response, orderDto)
+	}
 
 	return response, nil
 }

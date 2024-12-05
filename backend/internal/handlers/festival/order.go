@@ -14,6 +14,7 @@ type OrderHandler interface {
 	CreateTicketOrder(w http.ResponseWriter, r *http.Request)
 	CreatePackageOrder(w http.ResponseWriter, r *http.Request)
 	GetOrder(w http.ResponseWriter, r *http.Request)
+	GetOrdersAttendee(w http.ResponseWriter, r *http.Request)
 }
 
 type orderHandler struct {
@@ -209,4 +210,23 @@ func (h *orderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusOK, order, nil)
 	log.Println("order fetched", order.OrderID)
+}
+
+func (h *orderHandler) GetOrdersAttendee(w http.ResponseWriter, r *http.Request) {
+	if !utils.AuthAttendeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	username := utils.GetUsername(r.Context())
+
+	orders, err := h.orderService.GetOrdersAttendee(username)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, orders, nil)
+	log.Println("orders fetched for user", username)
 }
