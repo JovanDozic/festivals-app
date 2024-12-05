@@ -27,6 +27,7 @@ type FestivalService interface {
 	OpenStore(festivalId uint) error
 	CloseStore(festivalId uint) error
 	IsOrganizer(username string, festivalId uint) (bool, error)
+	IsEmployee(username string, festivalId uint) (bool, error)
 	GetImages(festivalId uint) ([]modelsCommon.Image, error)
 	AddImage(festivalId uint, image *modelsCommon.Image) error
 	RemoveImage(festivalId uint, imageId uint) error
@@ -296,6 +297,21 @@ func (s *festivalService) IsOrganizer(username string, festivalId uint) (bool, e
 	}
 
 	return isOrganizer, nil
+}
+
+func (s *festivalService) IsEmployee(username string, festivalId uint) (bool, error) {
+
+	user, err := s.userRepo.GetByUsername(username)
+	if err != nil {
+		return false, err
+	}
+
+	isEmployee, err := s.festivalRepo.IsEmployee(festivalId, user.ID)
+	if err != nil {
+		return false, err
+	}
+
+	return isEmployee, nil
 }
 
 func (s *festivalService) GetImages(festivalId uint) ([]modelsCommon.Image, error) {

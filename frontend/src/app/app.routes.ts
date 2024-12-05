@@ -214,6 +214,14 @@ const employeeRoutes: Routes = [
           ).then((c) => c.MyFestivalsComponent),
         title: 'My Festivals',
       },
+      {
+        path: 'employee/my-festivals/:id',
+        loadComponent: () =>
+          import('./features/employee/festival/festival.component').then(
+            (c) => c.FestivalComponent,
+          ),
+        title: 'Festival',
+      },
     ],
   },
 ];

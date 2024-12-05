@@ -15,6 +15,7 @@ type FestivalRepo interface {
 	Update(festival *models.Festival) error
 	Delete(festivalId uint) error
 	IsOrganizer(festivalId uint, organizerId uint) (bool, error)
+	IsEmployee(festivalId uint, employeeId uint) (bool, error)
 	AddImage(festivalId uint, imageId uint) error
 	RemoveImage(festivalId uint, imageId uint) error
 	Employ(festivalId uint, employeeId uint) error
@@ -138,6 +139,19 @@ func (r *festivalRepo) IsOrganizer(festivalId uint, organizerId uint) (bool, err
 	var count int64
 	err := r.db.Table("festival_organizers").
 		Where("festival_id = ? AND user_id = ?", festivalId, organizerId).
+		Count(&count).Error
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}
+
+func (r *festivalRepo) IsEmployee(festivalId uint, employeeId uint) (bool, error) {
+
+	var count int64
+	err := r.db.Table("festival_employees").
+		Where("festival_id = ? AND user_id = ?", festivalId, employeeId).
 		Count(&count).Error
 	if err != nil {
 		return false, err

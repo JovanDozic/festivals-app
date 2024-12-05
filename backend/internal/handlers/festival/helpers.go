@@ -151,3 +151,84 @@ func mapFestivalToResponse(festival modelsFestival.Festival, images []modelsComm
 		Images:      imageResponses,
 	}
 }
+
+func (h *festivalHandler) authorizeOrganizerOrEmployeeForFestival(w http.ResponseWriter, r *http.Request) (uint, bool) {
+
+	isOrganizer := utils.AuthOrganizerRole(r.Context())
+	isEmployee := utils.AuthEmployeeRole(r.Context())
+
+	if !isOrganizer && !isEmployee {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return 0, false
+	}
+
+	festivalId, err := getFestivalIDFromRequest(r)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return 0, false
+	}
+
+	var ok bool
+	var roleName string
+	if isOrganizer {
+		roleName = "organizer"
+		ok, err = h.festivalService.IsOrganizer(utils.GetUsername(r.Context()), festivalId)
+	} else if isEmployee {
+		roleName = "employee"
+		ok, err = h.festivalService.IsEmployee(utils.GetUsername(r.Context()), festivalId)
+	}
+
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return 0, false
+	} else if !ok {
+
+		log.Printf("error: %s (%s) is not authorized for festival ID: %d", utils.GetUsername(r.Context()), roleName, festivalId)
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return 0, false
+	}
+
+	return festivalId, true
+}
+
+func (h *itemHandler) authorizeOrganizerOrEmployeeForFestival(w http.ResponseWriter, r *http.Request) (uint, bool) {
+	isOrganizer := utils.AuthOrganizerRole(r.Context())
+	isEmployee := utils.AuthEmployeeRole(r.Context())
+
+	if !isOrganizer && !isEmployee {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return 0, false
+	}
+
+	festivalId, err := getFestivalIDFromRequest(r)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return 0, false
+	}
+
+	var ok bool
+	var roleName string
+	if isOrganizer {
+		roleName = "organizer"
+		ok, err = h.festivalService.IsOrganizer(utils.GetUsername(r.Context()), festivalId)
+	} else if isEmployee {
+		roleName = "employee"
+		ok, err = h.festivalService.IsEmployee(utils.GetUsername(r.Context()), festivalId)
+	}
+
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return 0, false
+	} else if !ok {
+
+		log.Printf("error: %s (%s) is not authorized for festival ID: %d", utils.GetUsername(r.Context()), roleName, festivalId)
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return 0, false
+	}
+
+	return festivalId, true
+}
