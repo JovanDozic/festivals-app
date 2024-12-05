@@ -5,6 +5,7 @@ import (
 	dtoFestival "backend/internal/dto/festival"
 	models "backend/internal/models/festival"
 	reposFestival "backend/internal/repositories/festival"
+	"errors"
 	"log"
 )
 
@@ -13,7 +14,7 @@ type OrderService interface {
 	CreateOrder(order *models.Order) error
 	CreateFestivalPackage(festivalPackage *models.FestivalPackage) error
 	CreateFestivalPackageAddon(festivalPackageAddon *models.FestivalPackageAddon) error
-	GetOrder(orderId uint) (*dtoFestival.OrderDTO, error)
+	GetOrder(username string, orderId uint) (*dtoFestival.OrderDTO, error)
 }
 
 type orderService struct {
@@ -70,7 +71,7 @@ func (s *orderService) CreateFestivalPackageAddon(festivalPackageAddon *models.F
 	return s.orderRepo.CreateFestivalPackageAddon(festivalPackageAddon)
 }
 
-func (s *orderService) GetOrder(orderId uint) (*dtoFestival.OrderDTO, error) {
+func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.OrderDTO, error) {
 
 	order, err := s.orderRepo.GetOrder(orderId)
 	if err != nil {
@@ -78,10 +79,15 @@ func (s *orderService) GetOrder(orderId uint) (*dtoFestival.OrderDTO, error) {
 		return nil, err
 	}
 
+	if order.User.User.Username != username {
+		return nil, errors.New("order not found")
+	}
+
 	response := &dtoFestival.OrderDTO{
 		OrderID:    order.ID,
 		Timestamp:  order.CreatedAt,
 		TotalPrice: order.TotalAmount,
+		Username:   order.User.User.Username,
 	}
 
 	if order.FestivalPackage == nil {

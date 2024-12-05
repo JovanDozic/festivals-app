@@ -194,14 +194,18 @@ func (h *orderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	order, err := h.orderService.GetOrder(orderId)
+	username := utils.GetUsername(r.Context())
+
+	order, err := h.orderService.GetOrder(username, orderId)
 	if err != nil {
 		log.Println("error:", err)
+		if err.Error() == "order not found" || err.Error() == "record not found" {
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+			return
+		}
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
-
-	// todo: check if logged user is owner of the order
 
 	utils.WriteJSON(w, http.StatusOK, order, nil)
 	log.Println("order fetched", order.OrderID)

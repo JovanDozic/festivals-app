@@ -1,5 +1,4 @@
-<div class="container mat-elevation-z4" *ngIf="order">
-  <!-- todo: ngIf above -->
+<div class="container mat-elevation-z4">
   <div class="profile-header">
     <div class="title-container">
       <button
@@ -12,22 +11,20 @@
       </button>
       <h1>
         My Orders
-        <mat-icon color="primary">arrow_forward_ios</mat-icon> Order #{{
-          order.orderId
-        }}
+        <mat-icon color="primary">arrow_forward_ios</mat-icon>
+        Order {{ order ? "#" + order.orderId : "" }}
       </h1>
     </div>
     <div class="button-container"></div>
   </div>
 
-  <div class="profile-content">
+  <div class="empty-list" *ngIf="!isLoading && !order">
+    <p>Order not found.</p>
+  </div>
+
+  <div class="profile-content" *ngIf="order">
     <mat-card class="profile-card">
       <mat-card-content>
-        <!-- <p class="step-description">
-          Any changes to Personal or Shipping information will be saved to your
-          Profile.
-        </p> -->
-
         <span class="icon-property" *ngIf="order.orderType === 'TICKET'">
           <mat-icon class="material-symbols-outlined" color="primary">
             confirmation_number

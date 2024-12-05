@@ -155,4 +155,5 @@ type OrderDTO struct {
 	CampAddon      *CampAddonDTO      `json:"campAddon"`
 	GeneralAddons  []GeneralAddonDTO  `json:"generalAddons"`
 	Festival       FestivalResponse   `json:"festival"`
+	Username       string             `json:"username"`
 }

@@ -64,14 +64,17 @@ export class OrderComponent implements OnInit {
     if (id) {
       this.itemService.getOrder(parseInt(id)).subscribe({
         next: (order) => {
-          console.log('Order: ', order);
           this.order = order;
           this.isLoading = false;
         },
         error: (error) => {
           console.log(error);
           this.isLoading = false;
-          this.snackbarService.show('Error loading order');
+          if (error.status === 404) {
+            this.snackbarService.show('Order not found');
+          } else {
+            this.snackbarService.show('Error loading order');
+          }
         },
       });
     }

@@ -49,6 +49,8 @@ func (r *orderRepo) GetOrder(orderId uint) (*models.Order, error) {
 	err := r.db.
 		Preload("FestivalTicket").
 		Preload("FestivalPackage").
+		Preload("User").
+		Preload("User.User").
 		First(order, orderId).Error
 	return order, err
 }
