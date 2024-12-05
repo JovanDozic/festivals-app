@@ -63,6 +63,7 @@
       [ngClass]="{ 'action-required': !order.braceletStatus }"
     >
       <mat-card-content>
+        <!-- ! BRACELET -->
         <span class="icon-property" *ngIf="order.ticket">
           <mat-icon
             class="material-symbols-outlined"
@@ -74,6 +75,52 @@
           Bracelet status:
           <span class="number-mono">
             {{ order.braceletStatus ?? "PENDING" }}
+          </span>
+        </span>
+        <div *ngIf="order.bracelet">
+          <span class="icon-property continued">
+            <mat-icon
+              class="material-symbols-outlined"
+              color="primary"
+            ></mat-icon>
+            Barcode Number:
+            <span class="number-mono">
+              {{ order.bracelet.barcodeNumber }}
+            </span> </span
+          ><span class="icon-property continued">
+            <mat-icon
+              class="material-symbols-outlined"
+              color="primary"
+            ></mat-icon>
+            Balance:
+            <span class="number-mono">
+              ${{ order.bracelet.balance.toFixed(2) }}
+            </span>
+          </span>
+        </div>
+        <!-- ! ISSUER -->
+        <span
+          class="icon-property"
+          *ngIf="order.bracelet && order.bracelet.employee"
+        >
+          <mat-icon class="material-symbols-outlined" color="primary">
+            account_circle
+          </mat-icon>
+          Issuer:
+          <span class="number-mono">
+            {{ order.bracelet.employee.firstName }}
+            {{ order.bracelet.employee.lastName }}
+          </span>
+        </span>
+        <span
+          class="icon-property continued continued-end"
+          *ngIf="order.bracelet && order.bracelet.employee"
+        >
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <span class="number-mono">
+            {{ order.bracelet.employee.username }}
+            ({{ order.bracelet.employee.email }})
           </span>
         </span>
       </mat-card-content>
