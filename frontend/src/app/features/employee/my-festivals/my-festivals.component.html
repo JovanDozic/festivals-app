@@ -1,1 +1,163 @@
-<p>my-festivals works!</p>
+<div class="container mat-elevation-z4">
+  <div class="profile-header">
+    <h1>My Festivals</h1>
+  </div>
+  <div *ngIf="isLoading" class="profile-content">
+    <mat-card
+      class="festival-card festival-card-skeleton"
+      *ngFor="let _ of [1, 2, 3, 4, 5]"
+    >
+      <ngx-skeleton-loader
+        appearance="circle"
+        [theme]="{
+          backgroundColor: getSkeletonBgColor(),
+          width: '100%',
+          height: '200px',
+          margin: '0 0 16px 0',
+          'border-radius': '8px',
+        }"
+        class="skeleton-image"
+      ></ngx-skeleton-loader>
+      <div class="card-content">
+        <ngx-skeleton-loader
+          appearance="line"
+          [theme]="{
+            backgroundColor: getSkeletonBgColor(),
+            width: '60%',
+            height: '20px',
+            margin: '8px 0',
+            'border-radius': '4px',
+          }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          appearance="line"
+          [theme]="{
+            backgroundColor: getSkeletonBgColor(),
+            width: '80%',
+            height: '16px',
+            margin: '8px 0',
+            'border-radius': '4px',
+          }"
+        ></ngx-skeleton-loader>
+        <div class="skeleton-properties">
+          <ngx-skeleton-loader
+            *ngFor="let _ of [1, 2, 3]"
+            appearance="line"
+            [theme]="{
+              backgroundColor: getSkeletonBgColor(),
+              width: '40%',
+              height: '16px',
+              margin: '8px 16px 8px 0',
+              'border-radius': '4px',
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+        <div class="skeleton-actions">
+          <ngx-skeleton-loader
+            appearance="circle"
+            [theme]="{
+              backgroundColor: getSkeletonBgColor(),
+              width: '80px',
+              height: '32px',
+              margin: '8px 8px 8px 0',
+              'border-radius': '4px',
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="profile-content" *ngIf="!isLoading">
+    <!-- Festival Cards Section -->
+    <mat-card class="festival-card" *ngFor="let festival of festivals">
+      <img
+        mat-card-image
+        src="{{
+          festival.images && festival.images.length > 0
+            ? festival.images[0].url
+            : ''
+        }}"
+        alt="{{ festival.name }}"
+      />
+      <div class="card-content">
+        <mat-card-header>
+          <mat-card-title>{{ festival.name }}</mat-card-title>
+          <mat-card-subtitle
+            >{{ festival.description | slice: 0 : 200
+            }}{{
+              festival.description.length > 200 ? "..." : ""
+            }}</mat-card-subtitle
+          >
+        </mat-card-header>
+        <mat-card-content>
+          <span class="icon-property">
+            <mat-icon class="material-symbols-outlined" color="primary">
+              calendar_month
+            </mat-icon>
+            {{ festival.startDate | date: "d MMM" }} -
+            {{ festival.endDate | date: "d MMM yyyy" }}
+          </span>
+          <span class="icon-property" *ngIf="festival.status === 'PRIVATE'">
+            <mat-icon class="material-symbols-outlined" color="primary">
+              visibility_off</mat-icon
+            >
+            Private
+          </span>
+          <span class="icon-property" *ngIf="festival.status === 'PUBLIC'">
+            <mat-icon class="material-symbols-outlined" color="primary"
+              >visibility</mat-icon
+            >
+            Public
+          </span>
+          <span class="icon-property" *ngIf="festival.status === 'CANCELLED'">
+            <mat-icon class="material-symbols-outlined" color="primary"
+              >cancel</mat-icon
+            >
+            Cancelled
+          </span>
+          <span class="icon-property" *ngIf="festival.status === 'COMPLETED'">
+            <mat-icon class="material-symbols-outlined" color="primary"
+              >done_all</mat-icon
+            >
+            Completed
+          </span>
+          <span
+            class="icon-property"
+            *ngIf="
+              festival.storeStatus === 'OPEN' && festival.status === 'PUBLIC'
+            "
+          >
+            <mat-icon class="material-symbols-outlined" color="primary"
+              >shopping_cart</mat-icon
+            >
+            Store Opened
+          </span>
+          <span
+            class="icon-property"
+            *ngIf="
+              festival.storeStatus === 'CLOSED' && festival.status === 'PUBLIC'
+            "
+          >
+            <mat-icon class="material-symbols-outlined" color="primary"
+              >shopping_cart_off</mat-icon
+            >
+            Store Closed
+          </span>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary" (click)="onViewClick(festival)">
+            View
+          </button>
+        </mat-card-actions>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="empty-list" *ngIf="!isLoading && festivals.length === 0">
+    <p>
+      You are not part of any festivals. Please contact your Organizer to get
+      access.
+    </p>
+  </div>
+</div>
