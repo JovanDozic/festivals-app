@@ -107,6 +107,8 @@ func (r *orderRepo) CreateBracelet(bracelet *models.Bracelet) error {
 
 func (r *orderRepo) GetBraceletByTicketId(festivalTicketId uint) (*models.Bracelet, error) {
 	bracelet := &models.Bracelet{}
-	err := r.db.Where("festival_ticket_id = ?", festivalTicketId).First(&bracelet).Error
+	err := r.db.
+		Where("festival_ticket_id = ?", festivalTicketId).
+		First(&bracelet).Error
 	return bracelet, err
 }

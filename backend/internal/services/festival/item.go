@@ -78,7 +78,7 @@ func (s *itemService) CreatePriceListItem(festivalId, itemId uint, priceListItem
 		return err
 	}
 
-	if priceList == nil {
+	if priceList == nil || priceList.ID == 0 {
 		priceList = &modelsFestival.PriceList{
 			FestivalID: festivalId,
 		}

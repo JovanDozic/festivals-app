@@ -258,6 +258,15 @@ export interface OrderDTO {
   attendee: UserProfileResponse;
   braceletStatus?: string;
   festivalTicketId: number;
+  bracelet?: BraceletDTO;
+}
+
+export interface BraceletDTO {
+  braceletId: number;
+  barcodeNumber: string;
+  balance: number;
+  status: string;
+  employee: UserProfileResponse;
 }
 
 export interface OrderPreviewDTO {

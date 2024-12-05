@@ -10,6 +10,7 @@ type UserRepo interface {
 	Create(user *models.User) error
 	CreateAttendee(user *models.User) error
 	GetByUsername(username string) (*models.User, error)
+	GetById(id uint) (*models.User, error)
 	UpdatePassword(username, password string) error
 	Update(user *models.User) error
 	CreateEmployee(user *models.User) error
@@ -30,6 +31,15 @@ func (r *userRepo) Create(user *models.User) error {
 func (r *userRepo) GetByUsername(username string) (*models.User, error) {
 	var user models.User
 	err := r.db.Where("username = ?", username).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (r *userRepo) GetById(id uint) (*models.User, error) {
+	var user models.User
+	err := r.db.Where("id = ?", id).First(&user).Error
 	if err != nil {
 		return nil, err
 	}

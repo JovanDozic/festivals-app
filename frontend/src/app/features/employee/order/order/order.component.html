@@ -24,6 +24,7 @@
   </div>
 
   <div class="profile-content" *ngIf="order">
+    <!-- ! TYPE, FESTIVAL, TIMESTAMP -->
     <mat-card class="profile-card">
       <mat-card-content>
         <span class="icon-property" *ngIf="order.orderType === 'TICKET'">
@@ -56,6 +57,28 @@
         </span>
       </mat-card-content>
     </mat-card>
+    <!-- ! BRACELET INFORMATION -->
+    <mat-card
+      class="profile-card ai-shadow-card-no-hover"
+      [ngClass]="{ 'action-required': !order.braceletStatus }"
+    >
+      <mat-card-content>
+        <span class="icon-property" *ngIf="order.ticket">
+          <mat-icon
+            class="material-symbols-outlined"
+            color="primary"
+            [ngClass]="{ 'color-error': !order.braceletStatus }"
+          >
+            fitness_tracker
+          </mat-icon>
+          Bracelet status:
+          <span class="number-mono">
+            {{ order.braceletStatus ?? "PENDING" }}
+          </span>
+        </span>
+      </mat-card-content>
+    </mat-card>
+    <!-- ! TICKET -->
     <mat-card class="profile-card">
       <mat-card-content>
         <span class="icon-property" *ngIf="order.ticket">
@@ -69,6 +92,7 @@
         </span>
       </mat-card-content>
     </mat-card>
+    <!-- ! TRANSPORT ADDON -->
     <mat-card class="profile-card" *ngIf="order.orderType === 'PACKAGE'">
       <mat-card-content *ngIf="order.transportAddon">
         <span
@@ -210,6 +234,7 @@
         </span>
       </mat-card-content>
     </mat-card>
+    <!-- ! CAMP AND GENERAL ADDONS -->
     <mat-card class="profile-card" *ngIf="order.orderType === 'PACKAGE'">
       <mat-card-content>
         <span class="icon-property" *ngIf="order.campAddon">
@@ -239,6 +264,7 @@
         </span>
       </mat-card-content>
     </mat-card>
+    <!-- ! PRICE -->
     <mat-card class="profile-card">
       <mat-card-content>
         <span class="icon-property">
@@ -250,6 +276,7 @@
         </span>
       </mat-card-content>
     </mat-card>
+    <!-- ! PERSONAL INFO -->
     <mat-card class="profile-card">
       <mat-card-content>
         <span class="icon-property" *ngIf="userProfile">
@@ -279,6 +306,7 @@
         </span>
       </mat-card-content>
     </mat-card>
+    <!-- ! SHIPPING ADDRESS -->
     <mat-card class="profile-card">
       <mat-card-content>
         <span class="icon-property">
@@ -310,7 +338,7 @@
           <mat-icon class="material-symbols-outlined" color="primary">
           </mat-icon>
           <span class="number-mono">
-            {{ order.attendee.address.countryISO3 }}
+            {{ order.attendee.address.niceName }}
           </span>
         </span>
       </mat-card-content>

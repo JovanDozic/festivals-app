@@ -96,7 +96,7 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 		return nil, err
 	}
 
-	response := &dtoFestival.OrderDTO{
+	orderDto := &dtoFestival.OrderDTO{
 		OrderID:    order.ID,
 		Timestamp:  order.CreatedAt,
 		TotalPrice: order.TotalAmount,
@@ -105,9 +105,9 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 	}
 
 	if order.FestivalPackage == nil {
-		response.OrderType = "TICKET"
+		orderDto.OrderType = "TICKET"
 	} else {
-		response.OrderType = "PACKAGE"
+		orderDto.OrderType = "PACKAGE"
 	}
 
 	// * get ticket
@@ -124,7 +124,7 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 		return nil, err
 	}
 
-	response.Ticket = dtoFestival.ItemResponse{
+	orderDto.Ticket = dtoFestival.ItemResponse{
 		ItemId:      ticketItem.ID,
 		Name:        ticketItem.Name,
 		Price:       0,
@@ -155,7 +155,7 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 					log.Println("error: ", err)
 					return nil, err
 				}
-				response.TransportAddon = transportAddon
+				orderDto.TransportAddon = transportAddon
 			}
 
 			if addon.Category == "CAMP" {
@@ -164,7 +164,7 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 					log.Println("error: ", err)
 					return nil, err
 				}
-				response.CampAddon = campAddon
+				orderDto.CampAddon = campAddon
 			}
 
 			if addon.Category == "GENERAL" {
@@ -173,7 +173,7 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 					log.Println("error: ", err)
 					return nil, err
 				}
-				response.GeneralAddons = append(response.GeneralAddons, *generalAddon)
+				orderDto.GeneralAddons = append(orderDto.GeneralAddons, *generalAddon)
 			}
 		}
 	}
@@ -202,7 +202,7 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 		address = nil
 	}
 
-	response.Festival = dtoFestival.FestivalResponse{
+	orderDto.Festival = dtoFestival.FestivalResponse{
 		ID:          festival.ID,
 		Name:        festival.Name,
 		Description: festival.Description,
@@ -214,9 +214,33 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 		Address:     address,
 	}
 
-	// todo: get bracelet
+	bracelet, err := s.orderRepo.GetBraceletByTicketId(order.FestivalTicketID)
+	if err != nil && !strings.Contains(err.Error(), "record not found") {
+		log.Println("error: ", err)
+		return nil, err
+	}
 
-	return response, nil
+	if bracelet != nil && bracelet.ID != 0 {
+		orderDto.BraceletStatus = &bracelet.Status
+		employee, err := s.userService.GetUserProfileById(bracelet.EmployeeID)
+		if err != nil {
+			log.Println("error: ", err)
+			return nil, err
+		}
+
+		orderDto.Bracelet = &dtoFestival.BraceletDTO{
+			BraceletID:    bracelet.ID,
+			BarcodeNumber: bracelet.BarcodeNumber,
+			Status:        bracelet.Status,
+			Balance:       bracelet.Balance,
+			Employee:      employee,
+		}
+	} else {
+		orderDto.BraceletStatus = nil
+		orderDto.Bracelet = nil
+	}
+
+	return orderDto, nil
 }
 
 func (s *orderService) GetOrdersAttendee(username string) ([]dtoFestival.OrderPreviewDTO, error) {

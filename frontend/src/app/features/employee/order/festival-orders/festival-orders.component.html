@@ -152,7 +152,7 @@
             <div class="divider"></div>
 
             <span class="icon-property" *ngIf="!order.braceletStatus">
-              <mat-icon class="material-symbols-outlined" color="primary">
+              <mat-icon class="material-symbols-outlined color-error">
                 fitness_tracker
               </mat-icon>
               Bracelet not issued
@@ -161,7 +161,10 @@
               <mat-icon class="material-symbols-outlined" color="primary">
                 fitness_tracker
               </mat-icon>
-              Bracelet issued
+              Bracelet status:
+              <span class="number-mono">
+                {{ order.braceletStatus }}
+              </span>
             </span>
           </mat-card-content>
         </div>

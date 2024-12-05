@@ -217,6 +217,38 @@ img[mat-card-image] {
   }
 }
 
+:host-context([data-theme="dark"]) .ai-shadow-card-no-hover {
+  &.selected {
+    box-shadow: 0px 0px 10px #bfc2ff;
+    outline: 3px solid #bfc2ff;
+  }
+
+  &.sold-out {
+    opacity: 0.5;
+    outline: 3px solid #ff5449;
+  }
+
+  &.action-required {
+    outline: 3px solid #ff5449;
+  }
+}
+
+:host-context([data-theme="light"]) .ai-shadow-card-no-hover {
+  &.selected {
+    box-shadow: 0px 0px 10px #4147e4;
+    outline: 3px solid #4147e4;
+  }
+
+  &.sold-out {
+    opacity: 0.5;
+    outline: 3px solid #ff5449;
+  }
+
+  &.action-required {
+    outline: 3px solid #ff5449;
+  }
+}
+
 :host-context([data-theme="dark"]) .ai-shadow-card:hover {
   box-shadow: 0px 0px 10px #fff7fa;
 }

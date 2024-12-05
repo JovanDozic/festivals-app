@@ -89,6 +89,7 @@ export class OrderComponent implements OnInit {
     if (id) {
       this.itemService.getOrder(parseInt(id)).subscribe({
         next: (order) => {
+          console.log(order);
           this.order = order;
           this.isLoading = false;
         },

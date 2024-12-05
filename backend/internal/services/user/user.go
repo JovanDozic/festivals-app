@@ -20,6 +20,7 @@ type UserService interface {
 	CreateUser(user *modelsUser.User) error
 	Login(username string, password string) (string, error)
 	GetUserProfile(username string) (*dto.GetUserProfileResponse, error)
+	GetUserProfileById(userId uint) (*dto.GetUserProfileResponse, error)
 	CreateUserProfile(username string, userProfile *modelsUser.UserProfile) error
 	CreateUserAddress(username string, address *modelsCommon.Address) error
 	ChangePassword(username, oldPassword, newPassword string) error
@@ -98,6 +99,52 @@ func (s *userService) GetUserProfile(username string) (*dto.GetUserProfileRespon
 	}
 
 	userProfile, err := s.profileRepo.GetFullByUsername(username)
+	if err != nil {
+		return nil, modelsError.ErrNotFound
+	}
+
+	response := dto.GetUserProfileResponse{
+		Username:    user.Username,
+		Email:       user.Email,
+		Role:        user.Role,
+		FirstName:   userProfile.FirstName,
+		LastName:    userProfile.LastName,
+		DateOfBirth: userProfile.DateOfBirth.Format("2006-01-02"),
+		PhoneNumber: userProfile.PhoneNumber,
+		Address:     nil,
+		ImageURL:    nil,
+	}
+
+	if userProfile.Image != nil {
+		response.ImageURL = &userProfile.Image.URL
+	}
+
+	if userProfile.Address != nil {
+		response.Address = &dtoCommon.GetAddressResponse{
+			AddressId:      &userProfile.Address.ID,
+			Street:         userProfile.Address.Street,
+			Number:         userProfile.Address.Number,
+			ApartmentSuite: userProfile.Address.ApartmentSuite,
+			City:           userProfile.Address.City.Name,
+			PostalCode:     userProfile.Address.City.PostalCode,
+			Country:        userProfile.Address.City.Country.NiceName,
+			CountryISO3:    userProfile.Address.City.Country.ISO3,
+			CountryISO2:    userProfile.Address.City.Country.ISO,
+			NiceName:       &userProfile.Address.City.Country.NiceName,
+		}
+	}
+
+	return &response, nil
+}
+
+func (s *userService) GetUserProfileById(userId uint) (*dto.GetUserProfileResponse, error) {
+
+	user, err := s.userRepo.GetById(userId)
+	if err != nil {
+		return nil, modelsError.ErrNotFound
+	}
+
+	userProfile, err := s.profileRepo.GetFullByUsername(user.Username)
 	if err != nil {
 		return nil, modelsError.ErrNotFound
 	}
