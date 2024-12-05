@@ -76,6 +76,9 @@ export class MyOrdersComponent implements OnInit {
   }
 
   get filteredOrders(): OrderPreviewDTO[] {
+    if (!this.orders || this.orders.length === 0) {
+      return [];
+    }
     if (this.selectedChip === 'Upcoming Festivals') {
       return this.orders.filter(
         (order) => new Date(order.festival.startDate) > new Date(),
