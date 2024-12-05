@@ -136,3 +136,22 @@ func (f *CreatePackageOrderRequest) Validate() error {
 	}
 	return nil
 }
+
+func (f *IssueBraceletRequest) Validate() error {
+	if f.PIN == "" {
+		return models.ErrMissingFields
+	}
+	if f.BarcodeNumber == "" {
+		return models.ErrMissingFields
+	}
+	if f.AttendeeId == 0 {
+		return models.ErrMissingFields
+	}
+	if f.FestivalTicketId == 0 {
+		return models.ErrMissingFields
+	}
+	if f.OrderId == 0 {
+		return models.ErrMissingFields
+	}
+	return nil
+}

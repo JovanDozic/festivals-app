@@ -7,6 +7,14 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	BraceletStatusPending       = "PENDING"
+	BraceletStatusIssued        = "ISSUED"
+	BraceletStatusActivated     = "ACTIVATED"
+	BraceletStatusHelpRequested = "HELP_REQUESTED"
+	BraceletStatusRejected      = "REJECTED"
+)
+
 type FestivalTicket struct {
 	gorm.Model
 	ItemID uint
@@ -40,13 +48,14 @@ type Bracelet struct {
 	PIN              string
 	BarcodeNumber    string
 	Balance          float64
+	Status           string // Status: PENDING (if not existing), ISSUED, ACTIVATED, HELP_REQUESTED, REJECTED
 	FestivalTicketID uint
 	FestivalTicket   FestivalTicket
 	AttendeeID       uint
 	Attendee         modelsUser.Attendee `gorm:"foreignKey:AttendeeID"`
+	EmployeeID       uint
+	Employee         modelsUser.Employee `gorm:"foreignKey:EmployeeID"`
 	// * this does not need to be nullable because employee is issuing the bracelet to X attendee who has Y ticket, so we have all ot the needed IDs
-	EmployeeID uint
-	Employee   modelsUser.Employee `gorm:"foreignKey:EmployeeID"`
 }
 
 type ActivationHelpRequest struct {

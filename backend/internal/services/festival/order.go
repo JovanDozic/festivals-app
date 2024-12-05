@@ -18,6 +18,7 @@ type OrderService interface {
 	GetOrder(username string, orderId uint) (*dtoFestival.OrderDTO, error)
 	GetOrdersAttendee(username string) ([]dtoFestival.OrderPreviewDTO, error)
 	GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPreviewDTO, error)
+	IssueBracelet(request *models.Bracelet) error
 }
 
 type orderService struct {
@@ -292,4 +293,8 @@ func (s *orderService) GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPr
 	// todo: append bracelet status
 
 	return response, nil
+}
+
+func (s *orderService) IssueBracelet(request *models.Bracelet) error {
+	return s.orderRepo.CreateBracelet(request)
 }

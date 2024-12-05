@@ -16,6 +16,7 @@ type OrderHandler interface {
 	GetOrder(w http.ResponseWriter, r *http.Request)
 	GetOrdersAttendee(w http.ResponseWriter, r *http.Request)
 	GetOrdersEmployee(w http.ResponseWriter, r *http.Request)
+	IssueBracelet(w http.ResponseWriter, r *http.Request)
 }
 
 type orderHandler struct {
@@ -256,4 +257,51 @@ func (h *orderHandler) GetOrdersEmployee(w http.ResponseWriter, r *http.Request)
 
 	utils.WriteJSON(w, http.StatusOK, orders, nil)
 	log.Println("orders fetched for festival", festivalId)
+}
+
+func (h *orderHandler) IssueBracelet(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthEmployeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	var input dtoFestival.IssueBraceletRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	employeeId, err := h.userService.GetUserID(utils.GetUsername(r.Context()))
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	bracelet := models.Bracelet{
+		PIN:              input.PIN,
+		BarcodeNumber:    input.BarcodeNumber,
+		Balance:          0,
+		Status:           models.BraceletStatusIssued,
+		FestivalTicketID: input.FestivalTicketId,
+		AttendeeID:       input.AttendeeId,
+		EmployeeID:       employeeId,
+	}
+
+	if err := h.orderService.IssueBracelet(&bracelet); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"braceletId": bracelet.ID}, nil)
+	log.Println("bracelet issued", bracelet.ID)
 }

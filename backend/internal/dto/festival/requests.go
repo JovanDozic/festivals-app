@@ -108,3 +108,11 @@ type CreatePackageOrderRequest struct {
 	GeneralAddonIds  *[]uint `json:"generalAddonIds"`
 	TotalPrice       float64 `json:"totalPrice"`
 }
+
+type IssueBraceletRequest struct {
+	OrderId          uint   `json:"orderId"`
+	PIN              string `json:"pin"`
+	BarcodeNumber    string `json:"barcodeNumber"`
+	FestivalTicketId uint   `json:"festivalTicketId"`
+	AttendeeId       uint   `json:"attendeeId"`
+}
