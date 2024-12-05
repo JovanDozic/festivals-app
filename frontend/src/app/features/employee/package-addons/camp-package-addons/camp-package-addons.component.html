@@ -12,34 +12,28 @@
       <h1>
         {{ festival.name | slice: 0 : 20
         }}{{ festival.name.length > 20 ? "..." : "" }}
-        <mat-icon color="primary">arrow_forward_ios</mat-icon> General Addons
+        <mat-icon color="primary">arrow_forward_ios</mat-icon> Camp Addons
       </h1>
     </div>
-    <div class="button-container">
-      <button
-        mat-icon-button
-        matTooltip="Add Package Addon"
-        color="primary"
-        (click)="onAddAddonClick()"
-      >
-        <mat-icon class="material-symbols-outlined" color="primary">
-          add
-        </mat-icon>
-      </button>
-    </div>
+    <div class="button-container"></div>
   </div>
 
   <div class="chip-container">
     <mat-chip-set>
       <mat-chip>
-        <span color="primary">{{ generalCount }}</span>
-        {{ generalCount === 1 ? "Addon" : "Addons" }}
+        <span color="primary">{{ campCount }}</span>
+        {{ campCount === 1 ? "Addon" : "Addons" }}
       </mat-chip>
     </mat-chip-set>
   </div>
 
   <div class="profile-content">
-    <mat-card class="festival-card" *ngFor="let addon of generalAddons">
+    <mat-card class="festival-card" *ngFor="let addon of campAddons">
+      <img
+        mat-card-image
+        src="{{ addon.imageUrl }}"
+        alt="{{ addon.itemName }}"
+      />
       <div class="card-content">
         <mat-card-header>
           <mat-card-title>{{ addon.itemName }}</mat-card-title>
@@ -61,32 +55,27 @@
             remaining out of
             <span class="number">{{ addon.itemAvailableNumber }}</span>
           </span>
+
+          <ng-container *ngIf="addon.equipmentNames !== ''">
+            <div class="divider"></div>
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                camping
+              </mat-icon>
+              Included:
+            </span>
+            <span class="icon-property continued">
+              <mat-icon class="material-symbols-outlined" color="primary">
+              </mat-icon>
+              {{ addon.equipmentNames }}
+            </span>
+          </ng-container>
         </mat-card-content>
       </div>
-      <mat-card-actions>
-        <span class="spacer"></span>
-        <button mat-icon-button [matMenuTriggerFor]="menu" color="primary">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item>
-            <mat-icon class="material-symbols-outlined" color="primary"
-              >edit</mat-icon
-            >
-            <span>Edit</span>
-          </button>
-          <button mat-menu-item>
-            <mat-icon class="material-symbols-outlined" color="primary"
-              >delete</mat-icon
-            >
-            <span>Delete</span>
-          </button>
-        </mat-menu>
-      </mat-card-actions>
     </mat-card>
   </div>
 
-  <div class="empty-list" *ngIf="!isLoading && generalCount === 0">
-    <p>This Festival does not have any General Package Addons.</p>
+  <div class="empty-list" *ngIf="!isLoading && campCount === 0">
+    <p>This Festival does not have any Camp Package Addons.</p>
   </div>
 </div>

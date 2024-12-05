@@ -239,7 +239,7 @@ func (h *itemHandler) GetTicketTypesCount(w http.ResponseWriter, r *http.Request
 
 func (h *itemHandler) GetTicketType(w http.ResponseWriter, r *http.Request) {
 
-	_, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
+	_, ok := AuthOrganizerOrEmployeeForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
 	}

@@ -1,8 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  CampAddonDTO,
-  Festival,
-} from '../../../../models/festival/festival.model';
+import { Festival } from '../../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FestivalService } from '../../../../services/festival/festival.service';
 import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
@@ -16,10 +13,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
-import { CreateCampPackageAddonComponent } from '../create-camp-package-addon/create-camp-package-addon.component';
 
 @Component({
-  selector: 'app-camp-package-addons',
+  selector: 'app-package-addons',
   imports: [
     CommonModule,
     MatButtonModule,
@@ -31,18 +27,18 @@ import { CreateCampPackageAddonComponent } from '../create-camp-package-addon/cr
     MatChipsModule,
     MatMenuModule,
   ],
-  templateUrl: './camp-package-addons.component.html',
+  templateUrl: './package-addons.component.html',
   styleUrls: [
-    './camp-package-addons.component.scss',
+    './package-addons.component.scss',
     '../../../../app.component.scss',
   ],
 })
-export class CampPackageAddonsComponent implements OnInit {
+export class PackageAddonsComponent implements OnInit {
   isLoading = true;
   festival: Festival | null = null;
+  generalCount = 0;
+  transportCount = 0;
   campCount = 0;
-
-  campAddons: CampAddonDTO[] = [];
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -53,30 +49,58 @@ export class CampPackageAddonsComponent implements OnInit {
 
   ngOnInit() {
     this.loadFestival();
-    this.loadAddons();
+    this.loadCounts();
   }
 
-  loadAddons() {
+  loadCounts() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.itemService.getCampAddons(Number(id)).subscribe({
-        next: (response) => {
-          this.campAddons = response;
-          this.campCount = this.campAddons.length;
+      this.itemService.getPackageAddonsCount(Number(id), 'general').subscribe({
+        next: (count) => {
+          this.generalCount = count;
         },
         error: (error) => {
-          console.log('Error fetching camp addons: ', error);
-          this.snackbarService.show('Error getting Camp Addons');
-          this.campAddons = [];
+          console.log('Error fetching general package addon count: ', error);
+          this.snackbarService.show(
+            'Error getting general package addon count',
+          );
+          this.generalCount = 0;
+        },
+      });
+
+      this.itemService
+        .getPackageAddonsCount(Number(id), 'transport')
+        .subscribe({
+          next: (count) => {
+            this.transportCount = count;
+          },
+          error: (error) => {
+            console.log(
+              'Error fetching transport package addon count: ',
+              error,
+            );
+            this.snackbarService.show(
+              'Error getting transport package addon count',
+            );
+            this.transportCount = 0;
+          },
+        });
+
+      this.itemService.getPackageAddonsCount(Number(id), 'camp').subscribe({
+        next: (count) => {
+          this.campCount = count;
+        },
+        error: (error) => {
+          console.log('Error fetching camp package addon count: ', error);
+          this.snackbarService.show('Error getting camp package addon count');
+          this.campCount = 0;
         },
       });
     }
   }
 
   goBack() {
-    this.router.navigate([
-      `organizer/my-festivals/${this.festival?.id}/package-addons`,
-    ]);
+    this.router.navigate([`employee/my-festivals/${this.festival?.id}`]);
   }
 
   loadFestival() {
@@ -100,18 +124,21 @@ export class CampPackageAddonsComponent implements OnInit {
     }
   }
 
-  onAddAddonClick() {
-    const dialogRef = this.dialog.open(CreateCampPackageAddonComponent, {
-      data: { festivalId: this.festival?.id, category: 'CAMP' },
-      width: '800px',
-      height: '700px',
-      disableClose: true,
-    });
+  onViewGeneralAddonsClick() {
+    this.router.navigate([
+      `employee/my-festivals/${this.festival?.id}/package-addons/general`,
+    ]);
+  }
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.loadAddons();
-      }
-    });
+  onViewTransportAddonsClick() {
+    this.router.navigate([
+      `employee/my-festivals/${this.festival?.id}/package-addons/transport`,
+    ]);
+  }
+
+  onViewCampAddonsClick() {
+    this.router.navigate([
+      `employee/my-festivals/${this.festival?.id}/package-addons/camp`,
+    ]);
   }
 }

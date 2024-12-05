@@ -15,18 +15,7 @@
         <mat-icon color="primary">arrow_forward_ios</mat-icon> Travel Addons
       </h1>
     </div>
-    <div class="button-container">
-      <button
-        mat-icon-button
-        matTooltip="Add Package Addon"
-        color="primary"
-        (click)="onAddAddonClick()"
-      >
-        <mat-icon class="material-symbols-outlined" color="primary">
-          add
-        </mat-icon>
-      </button>
-    </div>
+    <div class="button-container"></div>
   </div>
 
   <div class="chip-container">
@@ -188,26 +177,6 @@
           </span>
         </mat-card-content>
       </div>
-      <mat-card-actions>
-        <span class="spacer"></span>
-        <button mat-icon-button [matMenuTriggerFor]="menu" color="primary">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item>
-            <mat-icon class="material-symbols-outlined" color="primary"
-              >edit</mat-icon
-            >
-            <span>Edit</span>
-          </button>
-          <button mat-menu-item>
-            <mat-icon class="material-symbols-outlined" color="primary"
-              >delete</mat-icon
-            >
-            <span>Delete</span>
-          </button>
-        </mat-menu>
-      </mat-card-actions>
     </mat-card>
   </div>
 

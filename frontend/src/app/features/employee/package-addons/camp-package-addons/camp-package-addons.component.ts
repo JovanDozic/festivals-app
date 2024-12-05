@@ -16,7 +16,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
-import { CreateCampPackageAddonComponent } from '../create-camp-package-addon/create-camp-package-addon.component';
 
 @Component({
   selector: 'app-camp-package-addons',
@@ -75,7 +74,7 @@ export class CampPackageAddonsComponent implements OnInit {
 
   goBack() {
     this.router.navigate([
-      `organizer/my-festivals/${this.festival?.id}/package-addons`,
+      `employee/my-festivals/${this.festival?.id}/package-addons`,
     ]);
   }
 
@@ -98,20 +97,5 @@ export class CampPackageAddonsComponent implements OnInit {
         },
       });
     }
-  }
-
-  onAddAddonClick() {
-    const dialogRef = this.dialog.open(CreateCampPackageAddonComponent, {
-      data: { festivalId: this.festival?.id, category: 'CAMP' },
-      width: '800px',
-      height: '700px',
-      disableClose: true,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.loadAddons();
-      }
-    });
   }
 }

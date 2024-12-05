@@ -552,7 +552,7 @@ func (h *userHandler) CreateEmployee(w http.ResponseWriter, r *http.Request) {
 
 func (h *userHandler) GetFestivalEmployees(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthOrganizerRole(r.Context()) {
+	if !utils.Auth(r.Context()) {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}

@@ -222,6 +222,54 @@ const employeeRoutes: Routes = [
           ),
         title: 'Festival',
       },
+      {
+        path: 'employee/my-festivals/:id/employees',
+        loadComponent: () =>
+          import(
+            './features/employee/festival-employees/festival-employees.component'
+          ).then((c) => c.FestivalEmployeesComponent),
+        title: 'Festival Employees',
+      },
+      {
+        path: 'employee/my-festivals/:id/ticket-types',
+        loadComponent: () =>
+          import(
+            './features/employee/ticket-types/ticket-types/ticket-types.component'
+          ).then((c) => c.TicketTypesComponent),
+        title: 'Ticket Types',
+      },
+      {
+        path: 'employee/my-festivals/:id/package-addons',
+        loadComponent: () =>
+          import(
+            './features/employee/package-addons/package-addons/package-addons.component'
+          ).then((c) => c.PackageAddonsComponent),
+        title: 'Package Addons',
+      },
+      {
+        path: 'employee/my-festivals/:id/package-addons/general',
+        loadComponent: () =>
+          import(
+            './features/employee/package-addons/general-package-addons/general-package-addons.component'
+          ).then((c) => c.GeneralPackageAddonsComponent),
+        title: 'General Addons',
+      },
+      {
+        path: 'employee/my-festivals/:id/package-addons/transport',
+        loadComponent: () =>
+          import(
+            './features/employee/package-addons/transport-package-addons/transport-package-addons.component'
+          ).then((c) => c.TransportPackageAddonsComponent),
+        title: 'Travel Addons',
+      },
+      {
+        path: 'employee/my-festivals/:id/package-addons/camp',
+        loadComponent: () =>
+          import(
+            './features/employee/package-addons/camp-package-addons/camp-package-addons.component'
+          ).then((c) => c.CampPackageAddonsComponent),
+        title: 'Camp Addons',
+      },
     ],
   },
 ];

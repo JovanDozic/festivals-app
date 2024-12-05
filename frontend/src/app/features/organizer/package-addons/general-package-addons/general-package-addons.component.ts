@@ -17,6 +17,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
 import { CreateGeneralPackageAddonComponent } from '../create-general-package-addon/create-general-package-addon.component';
+
 @Component({
   selector: 'app-general-package-addons',
   imports: [
@@ -87,7 +88,7 @@ export class GeneralPackageAddonsComponent implements OnInit {
           this.festival = festival;
           this.isLoading = false;
           console.log(
-            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`
+            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`,
           );
         },
         error: (error) => {
