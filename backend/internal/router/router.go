@@ -105,6 +105,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	pR.HandleFunc("/festival", festivalHandler.Create).Methods(http.MethodPost)
 	pR.HandleFunc("/festival/attendee", festivalHandler.GetAll).Methods(http.MethodGet)          // get all by organizer
 	pR.HandleFunc("/festival/organizer", festivalHandler.GetByOrganizer).Methods(http.MethodGet) // get all by organizer
+	pR.HandleFunc("/festival/employee", festivalHandler.GetByEmployee).Methods(http.MethodGet)   // get all by employee
 	pR.HandleFunc("/festival/{festivalId}", festivalHandler.GetById).Methods(http.MethodGet)
 	pR.HandleFunc("/festival/{festivalId}", festivalHandler.Update).Methods(http.MethodPut)
 	pR.HandleFunc("/festival/{festivalId}", festivalHandler.Delete).Methods(http.MethodDelete)

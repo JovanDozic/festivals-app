@@ -17,6 +17,7 @@ import (
 type FestivalHandler interface {
 	Create(w http.ResponseWriter, r *http.Request)
 	GetByOrganizer(w http.ResponseWriter, r *http.Request)
+	GetByEmployee(w http.ResponseWriter, r *http.Request)
 	GetAll(w http.ResponseWriter, r *http.Request)
 	GetById(w http.ResponseWriter, r *http.Request)
 	Update(w http.ResponseWriter, r *http.Request)
@@ -134,7 +135,7 @@ func (h *festivalHandler) GetByOrganizer(w http.ResponseWriter, r *http.Request)
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivalsResponse.Festivals}, nil)
-	log.Println("festivals retrieved successfully for", utils.GetUsername(r.Context()))
+	log.Println("festivals retrieved successfully for organizer", utils.GetUsername(r.Context()))
 }
 
 func (h *festivalHandler) GetAll(w http.ResponseWriter, r *http.Request) {
@@ -557,4 +558,35 @@ func (h *festivalHandler) GetEmployeeCount(w http.ResponseWriter, r *http.Reques
 		Count:      count,
 	}, nil)
 	log.Println("employee count retrieved successfully for festival:", festivalId)
+}
+
+func (h *festivalHandler) GetByEmployee(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthEmployeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	festivals, err := h.festivalService.GetByEmployee(utils.GetUsername(r.Context()))
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	festivalsResponse := dtoFestival.FestivalsResponse{
+		Festivals: make([]dtoFestival.FestivalResponse, len(festivals)),
+	}
+
+	for i, festival := range festivals {
+		images, err := h.festivalService.GetImages(festival.ID)
+		if err != nil {
+			log.Println("error:", err)
+			continue
+		}
+		festivalsResponse.Festivals[i] = mapFestivalToResponse(festival, images)
+	}
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivalsResponse.Festivals}, nil)
+	log.Println("festivals retrieved successfully for employee", utils.GetUsername(r.Context()))
 }

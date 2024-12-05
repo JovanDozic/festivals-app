@@ -9,6 +9,7 @@ import (
 type FestivalRepo interface {
 	Create(festival *models.Festival, organizerId uint) error
 	GetByOrganizer(organizerId uint) ([]models.Festival, error)
+	GetByEmployee(employeeId uint) ([]models.Festival, error)
 	GetAll() ([]models.Festival, error)
 	GetById(festivalId uint) (*models.Festival, error)
 	Update(festival *models.Festival) error
@@ -57,6 +58,23 @@ func (r *festivalRepo) GetByOrganizer(organizerId uint) ([]models.Festival, erro
 		Preload("Address.City.Country").
 		Joins("JOIN festival_organizers ON festivals.id = festival_organizers.festival_id").
 		Where("festival_organizers.user_id = ?", organizerId).
+		Order("festivals.start_date").
+		Find(&festivals).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return festivals, nil
+}
+
+func (r *festivalRepo) GetByEmployee(employeeId uint) ([]models.Festival, error) {
+	var festivals []models.Festival
+	err := r.db.
+		Preload("Address").
+		Preload("Address.City").
+		Preload("Address.City.Country").
+		Joins("JOIN festival_employees ON festivals.id = festival_employees.festival_id").
+		Where("festival_employees.user_id = ?", employeeId).
 		Order("festivals.start_date").
 		Find(&festivals).Error
 	if err != nil {

@@ -200,9 +200,28 @@ const organizerRoutes: Routes = [
   },
 ];
 
+const employeeRoutes: Routes = [
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    data: { expectedRoles: ['EMPLOYEE'] },
+    children: [
+      {
+        path: 'employee/my-festivals',
+        loadComponent: () =>
+          import(
+            './features/employee/my-festivals/my-festivals.component'
+          ).then((c) => c.MyFestivalsComponent),
+        title: 'My Festivals',
+      },
+    ],
+  },
+];
+
 export const routes: Routes = [
   ...publicRoutes,
   ...authRoutes,
   ...attendeeRoutes,
   ...organizerRoutes,
+  ...employeeRoutes,
 ];

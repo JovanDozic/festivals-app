@@ -24,9 +24,15 @@ export class FestivalService {
       .pipe(map((response) => response.festivals));
   }
 
-  getMyFestivals(): Observable<Festival[]> {
+  getMyFestivalsOrganizer(): Observable<Festival[]> {
     return this.http
       .get<{ festivals: Festival[] }>(`${this.apiUrl}/festival/organizer`)
+      .pipe(map((response) => response.festivals));
+  }
+
+  getMyFestivalsEmployee(): Observable<Festival[]> {
+    return this.http
+      .get<{ festivals: Festival[] }>(`${this.apiUrl}/festival/employee`)
       .pipe(map((response) => response.festivals));
   }
 

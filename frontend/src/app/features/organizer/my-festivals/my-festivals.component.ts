@@ -50,7 +50,7 @@ export class MyFestivalsComponent implements OnInit {
   }
 
   loadFestivals(): void {
-    this.festivalService.getMyFestivals().subscribe({
+    this.festivalService.getMyFestivalsOrganizer().subscribe({
       next: (response) => {
         this.festivals = response;
         this.isLoading = false;

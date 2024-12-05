@@ -1,0 +1,74 @@
+.profile-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif;
+}
+
+mat-card-title {
+  font-family: "Funnel Display", sans-serif;
+  margin-left: 5px;
+}
+
+.profile-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: space-between;
+}
+
+.festival-card {
+  flex: 1 1 calc(50% - 20px);
+  max-width: calc(50% - 20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.festival-card-skeleton .card-content {
+  padding-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .festival-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+mat-card-title {
+  font-family: "Funnel Display", sans-serif;
+  font-weight: bold;
+}
+
+mat-card-subtitle {
+  font-size: 14px;
+  color: #777;
+  margin: 0 0 20px 0;
+}
+
+.card-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+mat-card-actions {
+  margin-top: 5px;
+}
+
+.main-action {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1000;
+  margin: 16px;
+}
