@@ -159,12 +159,13 @@ type OrderDTO struct {
 }
 
 type OrderPreviewDTO struct {
-	OrderID        uint                            `json:"orderId"`
-	OrderType      string                          `json:"orderType"`
-	Timestamp      time.Time                       `json:"timestamp"`
-	TotalPrice     float64                         `json:"totalPrice"`
-	Festival       FestivalResponse                `json:"festival"`
-	Username       string                          `json:"username"`
-	Attendee       *dtoUser.GetUserProfileResponse `json:"attendee"`
-	BraceletStatus *string                         `json:"braceletStatus"`
+	OrderID          uint                            `json:"orderId"`
+	OrderType        string                          `json:"orderType"`
+	Timestamp        time.Time                       `json:"timestamp"`
+	TotalPrice       float64                         `json:"totalPrice"`
+	Festival         FestivalResponse                `json:"festival"`
+	Username         string                          `json:"username"`
+	Attendee         *dtoUser.GetUserProfileResponse `json:"attendee"`
+	BraceletStatus   *string                         `json:"braceletStatus"`
+	FestivalTicketId *uint                           `json:"festivalTicketId"`
 }

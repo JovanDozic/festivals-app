@@ -1,4 +1,5 @@
 export interface AddressResponse {
+  addressId?: number;
   street: string;
   number: string;
   apartmentSuite: string;
@@ -7,4 +8,5 @@ export interface AddressResponse {
   country: string;
   countryISO3: string;
   countryISO2: string;
+  niceName?: string;
 }

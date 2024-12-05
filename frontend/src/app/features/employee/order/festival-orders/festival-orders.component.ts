@@ -46,7 +46,6 @@ export class FestivalOrdersComponent implements OnInit {
   private snackbarService = inject(SnackbarService);
   private orderService = inject(OrderService);
   private festivalService = inject(FestivalService);
-  private itemService = inject(ItemService);
   private dialog = inject(MatDialog);
 
   festival: Festival | null = null;
@@ -139,9 +138,14 @@ export class FestivalOrdersComponent implements OnInit {
     ]);
   }
 
-  onIssueBraceletClick() {
+  onIssueBraceletClick(order: OrderPreviewDTO) {
     const dialogRef = this.dialog.open(IssueBraceletComponent, {
-      data: { festivalId: this.festival?.id },
+      data: {
+        festivalId: this.festival?.id,
+        orderId: order.orderId,
+        festivalTicketId: order.festivalTicketId,
+        attendeeUsername: order.username,
+      },
       width: '800px',
       height: 'auto',
       disableClose: true,
@@ -149,7 +153,7 @@ export class FestivalOrdersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.snackbarService.show('Bracelet issued successfully');
+        this.snackbarService.show('Bracelet issued successfully!');
         // todo: reload orders
       }
     });

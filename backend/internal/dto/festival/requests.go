@@ -114,5 +114,5 @@ type IssueBraceletRequest struct {
 	PIN              string `json:"pin"`
 	BarcodeNumber    string `json:"barcodeNumber"`
 	FestivalTicketId uint   `json:"festivalTicketId"`
-	AttendeeId       uint   `json:"attendeeId"`
+	AttendeeUsername string `json:"attendeeUsername"`
 }

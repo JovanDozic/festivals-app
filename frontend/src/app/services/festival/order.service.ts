@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import {
   CreatePackageOrderRequest,
   CreateTicketOrderRequest,
+  IssueBraceletRequest,
+  IssueBraceletResponse,
   OrderPreviewDTO,
 } from '../../models/festival/festival.model';
 
@@ -42,6 +44,15 @@ export class OrderService {
   getFestivalOrders(festivalId: number): Observable<OrderPreviewDTO[]> {
     return this.http.get<OrderPreviewDTO[]>(
       `${this.apiUrl}/festival/${festivalId}/order`,
+    );
+  }
+
+  issueBracelet(
+    request: IssueBraceletRequest,
+  ): Observable<IssueBraceletResponse> {
+    return this.http.post<IssueBraceletResponse>(
+      `${this.apiUrl}/bracelet`,
+      request,
     );
   }
 }

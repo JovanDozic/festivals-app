@@ -9,6 +9,7 @@ type HealthCheckResponse struct {
 }
 
 type GetAddressResponse struct {
+	AddressId      *uint   `	json:"addressId"`
 	Street         string  `json:"street"`
 	Number         string  `json:"number"`
 	ApartmentSuite *string `json:"apartmentSuite"`
@@ -17,6 +18,7 @@ type GetAddressResponse struct {
 	Country        string  `json:"country"`
 	CountryISO3    string  `json:"countryISO3"`
 	CountryISO2    string  `json:"countryISO2"`
+	NiceName       *string `json:"niceName"`
 }
 
 type GetImageResponse struct {

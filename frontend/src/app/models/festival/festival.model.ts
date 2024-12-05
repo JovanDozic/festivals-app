@@ -266,4 +266,18 @@ export interface OrderPreviewDTO {
   username: string; // this is attendee's username
   attendee: UserProfileResponse;
   braceletStatus?: string;
+  festivalTicketId: number;
+}
+
+export interface IssueBraceletRequest {
+  orderId: number;
+  pin: string;
+  barcodeNumber: string;
+  festivalTicketId: number;
+  attendeeUsername: string;
+}
+
+export interface IssueBraceletResponse {
+  braceletId: number;
+  shippingAddress: AddressResponse;
 }

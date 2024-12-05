@@ -286,13 +286,27 @@ func (h *orderHandler) IssueBracelet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	attendee, err := h.userService.GetUserProfile(input.AttendeeUsername)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	attendeeId, err := h.userService.GetUserID(input.AttendeeUsername)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
 	bracelet := models.Bracelet{
 		PIN:              input.PIN,
 		BarcodeNumber:    input.BarcodeNumber,
 		Balance:          0,
 		Status:           models.BraceletStatusIssued,
 		FestivalTicketID: input.FestivalTicketId,
-		AttendeeID:       input.AttendeeId,
+		AttendeeID:       attendeeId,
 		EmployeeID:       employeeId,
 	}
 
@@ -302,6 +316,6 @@ func (h *orderHandler) IssueBracelet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"braceletId": bracelet.ID}, nil)
+	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"braceletId": bracelet.ID, "shippingAddress": attendee.Address}, nil)
 	log.Println("bracelet issued", bracelet.ID)
 }

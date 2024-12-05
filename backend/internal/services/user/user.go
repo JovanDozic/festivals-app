@@ -120,6 +120,7 @@ func (s *userService) GetUserProfile(username string) (*dto.GetUserProfileRespon
 
 	if userProfile.Address != nil {
 		response.Address = &dtoCommon.GetAddressResponse{
+			AddressId:      &userProfile.Address.ID,
 			Street:         userProfile.Address.Street,
 			Number:         userProfile.Address.Number,
 			ApartmentSuite: userProfile.Address.ApartmentSuite,
@@ -128,6 +129,7 @@ func (s *userService) GetUserProfile(username string) (*dto.GetUserProfileRespon
 			Country:        userProfile.Address.City.Country.NiceName,
 			CountryISO3:    userProfile.Address.City.Country.ISO3,
 			CountryISO2:    userProfile.Address.City.Country.ISO,
+			NiceName:       &userProfile.Address.City.Country.NiceName,
 		}
 	}
 

@@ -271,6 +271,7 @@ func (s *orderService) GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPr
 				StartDate: order.FestivalTicket.Item.Item.Festival.StartDate,
 				EndDate:   order.FestivalTicket.Item.Item.Festival.EndDate,
 			},
+			FestivalTicketId: &order.FestivalTicketID,
 		}
 
 		if order.FestivalPackage == nil {

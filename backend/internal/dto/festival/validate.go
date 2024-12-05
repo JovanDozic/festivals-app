@@ -144,7 +144,7 @@ func (f *IssueBraceletRequest) Validate() error {
 	if f.BarcodeNumber == "" {
 		return models.ErrMissingFields
 	}
-	if f.AttendeeId == 0 {
+	if f.AttendeeUsername == "" {
 		return models.ErrMissingFields
 	}
 	if f.FestivalTicketId == 0 {
