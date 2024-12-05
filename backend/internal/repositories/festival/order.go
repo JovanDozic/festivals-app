@@ -13,6 +13,7 @@ type OrderRepo interface {
 	CreateFestivalPackageAddon(festivalPackageAddon *models.FestivalPackageAddon) error
 	GetOrder(orderId uint) (*models.Order, error)
 	GetOrdersAttendee(username string) ([]models.Order, error)
+	GetOrdersEmployee(festivalId uint) ([]models.Order, error)
 	GetFestivalTicket(festivalTicketId uint) (*models.FestivalTicket, error)
 	GetFestivalPackage(festivalPackageId uint) (*models.FestivalPackage, error)
 }
@@ -66,6 +67,22 @@ func (r *orderRepo) GetOrdersAttendee(username string) ([]models.Order, error) {
 		Preload("FestivalTicket.Item.Item.Festival").
 		Joins("JOIN users ON orders.user_id = users.id").
 		Where("users.username = ?", username).
+		Find(&orders).Error
+	return orders, err
+}
+
+func (r *orderRepo) GetOrdersEmployee(festivalId uint) ([]models.Order, error) {
+	orders := []models.Order{}
+	err := r.db.
+		Preload("FestivalTicket").
+		Preload("FestivalPackage").
+		Preload("User").
+		Preload("User.User").
+		Preload("FestivalTicket.Item.Item.Festival").
+		Joins("JOIN festival_tickets ON orders.festival_ticket_id = festival_tickets.id").
+		Joins("JOIN items ON festival_tickets.item_id = items.id").
+		Joins("JOIN festivals ON items.festival_id = festivals.id").
+		Where("festivals.id = ?", festivalId).
 		Find(&orders).Error
 	return orders, err
 }

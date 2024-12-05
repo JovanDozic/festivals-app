@@ -97,7 +97,11 @@
   </div>
 
   <div class="profile-content" *ngIf="!isLoading">
-    <mat-card class="festival-card" *ngFor="let order of filteredOrders">
+    <mat-card
+      class="festival-card ai-shadow-card action-required"
+      *ngFor="let order of filteredOrders"
+    >
+      <!-- todo: add [ngModel] for action-required above! -->
       <div class="card-content">
         <div>
           <mat-card-header>
@@ -122,9 +126,15 @@
 
             <span class="icon-property">
               <mat-icon class="material-symbols-outlined" color="primary">
-                celebration
+                account_circle
               </mat-icon>
-              <h3>{{ order.festival.name }}</h3>
+              {{ order.attendee.firstName }}
+              {{ order.attendee.lastName }}
+            </span>
+            <span class="icon-property continued">
+              <mat-icon class="material-symbols-outlined" color="primary">
+              </mat-icon>
+              <span class="number-mono"> {{ order.username }} </span>
             </span>
 
             <div class="divider"></div>
@@ -137,6 +147,16 @@
               <span class="number-mono">
                 ${{ order.totalPrice.toFixed(2) }}
               </span>
+            </span>
+
+            <div class="divider"></div>
+
+            <!-- ! this should show up if bracelet is not issued -->
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined color-error">
+                fitness_tracker
+              </mat-icon>
+              Bracelet not issued
             </span>
           </mat-card-content>
         </div>

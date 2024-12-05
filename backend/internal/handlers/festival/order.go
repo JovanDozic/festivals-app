@@ -15,6 +15,7 @@ type OrderHandler interface {
 	CreatePackageOrder(w http.ResponseWriter, r *http.Request)
 	GetOrder(w http.ResponseWriter, r *http.Request)
 	GetOrdersAttendee(w http.ResponseWriter, r *http.Request)
+	GetOrdersEmployee(w http.ResponseWriter, r *http.Request)
 }
 
 type orderHandler struct {
@@ -213,6 +214,7 @@ func (h *orderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *orderHandler) GetOrdersAttendee(w http.ResponseWriter, r *http.Request) {
+
 	if !utils.AuthAttendeeRole(r.Context()) {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
@@ -229,4 +231,29 @@ func (h *orderHandler) GetOrdersAttendee(w http.ResponseWriter, r *http.Request)
 
 	utils.WriteJSON(w, http.StatusOK, orders, nil)
 	log.Println("orders fetched for user", username)
+}
+
+func (h *orderHandler) GetOrdersEmployee(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthEmployeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	festivalId, err := GetIDParamFromRequest(r, "festivalId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	orders, err := h.orderService.GetOrdersEmployee(festivalId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, orders, nil)
+	log.Println("orders fetched for festival", festivalId)
 }

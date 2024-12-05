@@ -5,6 +5,7 @@ import (
 	dtoFestival "backend/internal/dto/festival"
 	models "backend/internal/models/festival"
 	reposFestival "backend/internal/repositories/festival"
+	servicesUser "backend/internal/services/user"
 	"errors"
 	"log"
 )
@@ -16,19 +17,22 @@ type OrderService interface {
 	CreateFestivalPackageAddon(festivalPackageAddon *models.FestivalPackageAddon) error
 	GetOrder(username string, orderId uint) (*dtoFestival.OrderDTO, error)
 	GetOrdersAttendee(username string) ([]dtoFestival.OrderPreviewDTO, error)
+	GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPreviewDTO, error)
 }
 
 type orderService struct {
 	orderRepo    reposFestival.OrderRepo
 	itemRepo     reposFestival.ItemRepo
 	festivalRepo reposFestival.FestivalRepo
+	userService  servicesUser.UserService
 }
 
-func NewOrderService(or reposFestival.OrderRepo, ir reposFestival.ItemRepo, fr reposFestival.FestivalRepo) OrderService {
+func NewOrderService(or reposFestival.OrderRepo, ir reposFestival.ItemRepo, fr reposFestival.FestivalRepo, us servicesUser.UserService) OrderService {
 	return &orderService{
 		orderRepo:    or,
 		itemRepo:     ir,
 		festivalRepo: fr,
+		userService:  us,
 	}
 }
 
@@ -239,6 +243,53 @@ func (s *orderService) GetOrdersAttendee(username string) ([]dtoFestival.OrderPr
 
 		response = append(response, orderDto)
 	}
+
+	return response, nil
+}
+
+func (s *orderService) GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPreviewDTO, error) {
+
+	orders, err := s.orderRepo.GetOrdersEmployee(festivalId)
+	if err != nil {
+		log.Println("error: ", err)
+		return nil, err
+	}
+
+	var response []dtoFestival.OrderPreviewDTO
+
+	for _, order := range orders {
+
+		orderDto := dtoFestival.OrderPreviewDTO{
+			OrderID:    order.ID,
+			Timestamp:  order.CreatedAt,
+			TotalPrice: order.TotalAmount,
+			Username:   order.User.User.Username,
+			Festival: dtoFestival.FestivalResponse{
+				ID:        order.FestivalTicket.Item.Item.Festival.ID,
+				Name:      order.FestivalTicket.Item.Item.Festival.Name,
+				StartDate: order.FestivalTicket.Item.Item.Festival.StartDate,
+				EndDate:   order.FestivalTicket.Item.Item.Festival.EndDate,
+			},
+		}
+
+		if order.FestivalPackage == nil {
+			orderDto.OrderType = "TICKET"
+		} else {
+			orderDto.OrderType = "PACKAGE"
+		}
+
+		attendee, err := s.userService.GetUserProfile(order.User.User.Username)
+		if err != nil {
+			log.Println("error: ", err)
+			return nil, err
+		}
+
+		orderDto.Attendee = attendee
+
+		response = append(response, orderDto)
+	}
+
+	// todo: append bracelet status
 
 	return response, nil
 }

@@ -5,6 +5,7 @@ import {
   UpdateAddressRequest,
 } from '../common/create-address-request.model';
 import { CreateProfileRequest } from '../user/user-profile-request.model';
+import { UserProfileResponse } from '../user/user-profile-response.model';
 
 export interface Festival {
   id: number;
@@ -262,5 +263,7 @@ export interface OrderPreviewDTO {
   timestamp: Date;
   totalPrice: number;
   festival: Festival;
+  username: string; // this is attendee's username
+  attendee: UserProfileResponse;
   braceletStatus?: string;
 }

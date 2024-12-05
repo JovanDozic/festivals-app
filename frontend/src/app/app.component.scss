@@ -191,6 +191,10 @@ img[mat-card-image] {
     opacity: 0.5;
     outline: 3px solid #ff5449;
   }
+
+  &.action-required {
+    outline: 3px solid #ff5449;
+  }
 }
 
 :host-context([data-theme="light"]) .ai-shadow-card {
@@ -205,6 +209,10 @@ img[mat-card-image] {
 
   &.sold-out {
     opacity: 0.5;
+    outline: 3px solid #ff5449;
+  }
+
+  &.action-required {
     outline: 3px solid #ff5449;
   }
 }
