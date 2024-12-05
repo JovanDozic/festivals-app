@@ -1,0 +1,141 @@
+<div class="container mat-elevation-z4">
+  <div class="profile-header">
+    <h1>My Orders</h1>
+  </div>
+  <div *ngIf="isLoading" class="profile-content">
+    <mat-card
+      class="festival-card festival-card-skeleton"
+      *ngFor="let _ of [1, 2, 3, 4, 5]"
+    >
+      <ngx-skeleton-loader
+        appearance="circle"
+        [theme]="{
+          backgroundColor: getSkeletonBgColor(),
+          width: '100%',
+          height: '200px',
+          margin: '0 0 16px 0',
+          'border-radius': '8px',
+        }"
+        class="skeleton-image"
+      ></ngx-skeleton-loader>
+      <div class="card-content">
+        <ngx-skeleton-loader
+          appearance="line"
+          [theme]="{
+            backgroundColor: getSkeletonBgColor(),
+            width: '60%',
+            height: '20px',
+            margin: '8px 0',
+            'border-radius': '4px',
+          }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          appearance="line"
+          [theme]="{
+            backgroundColor: getSkeletonBgColor(),
+            width: '80%',
+            height: '16px',
+            margin: '8px 0',
+            'border-radius': '4px',
+          }"
+        ></ngx-skeleton-loader>
+        <div class="skeleton-properties">
+          <ngx-skeleton-loader
+            *ngFor="let _ of [1, 2, 3]"
+            appearance="line"
+            [theme]="{
+              backgroundColor: getSkeletonBgColor(),
+              width: '40%',
+              height: '16px',
+              margin: '8px 16px 8px 0',
+              'border-radius': '4px',
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+        <div class="skeleton-actions">
+          <ngx-skeleton-loader
+            appearance="circle"
+            [theme]="{
+              backgroundColor: getSkeletonBgColor(),
+              width: '80px',
+              height: '32px',
+              margin: '8px 8px 8px 0',
+              'border-radius': '4px',
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="chip-container">
+    <mat-chip-listbox
+      [(ngModel)]="selectedChip"
+      [multiple]="false"
+      [required]="true"
+    >
+      @for (option of filterOptions; track option) {
+        <mat-chip-option selected [selectable]="selectedChip !== option">{{
+          option
+        }}</mat-chip-option>
+      }
+    </mat-chip-listbox>
+  </div>
+
+  <div class="profile-content" *ngIf="!isLoading">
+    <mat-card class="festival-card" *ngFor="let order of filteredOrders">
+      <div class="card-content">
+        <div>
+          <mat-card-header>
+            <mat-card-title>Order {{ "#" + order.orderId }}</mat-card-title>
+            <mat-card-subtitle>
+              {{ order.timestamp | date: "dd MMM yyyy, HH:mm:ss" }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <span class="icon-property" *ngIf="order.orderType === 'TICKET'">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                confirmation_number
+              </mat-icon>
+              <h3>Ticket Order</h3>
+            </span>
+            <span class="icon-property" *ngIf="order.orderType === 'PACKAGE'">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                package_2
+              </mat-icon>
+              <h3>Package Order</h3>
+            </span>
+
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                celebration
+              </mat-icon>
+              <h3>{{ order.festival.name }}</h3>
+            </span>
+
+            <div class="divider"></div>
+
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                attach_money
+              </mat-icon>
+              Total Price:
+              <span class="number-mono">
+                ${{ order.totalPrice.toFixed(2) }}
+              </span>
+            </span>
+          </mat-card-content>
+        </div>
+        <mat-card-actions>
+          <button mat-button color="primary" (click)="onViewClick(order)">
+            View
+          </button>
+        </mat-card-actions>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="empty-list" *ngIf="!isLoading && orders.length === 0">
+    <p>You haven't made any orders.</p>
+  </div>
+</div>

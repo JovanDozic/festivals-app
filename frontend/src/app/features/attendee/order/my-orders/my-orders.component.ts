@@ -13,11 +13,15 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
 import { UserService } from '../../../../services/user/user.service';
 import { OrderService } from '../../../../services/festival/order.service';
+import { OrderPreviewDTO } from '../../../../models/festival/festival.model';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-all-orders',
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatTooltipModule,
     MatIconModule,
@@ -25,11 +29,12 @@ import { OrderService } from '../../../../services/festival/order.service';
     MatCardModule,
     MatChipsModule,
     MatMenuModule,
+    NgxSkeletonLoaderModule,
   ],
-  templateUrl: './all-orders.component.html',
-  styleUrls: ['./all-orders.component.scss', '../../../../app.component.scss'],
+  templateUrl: './my-orders.component.html',
+  styleUrls: ['./my-orders.component.scss', '../../../../app.component.scss'],
 })
-export class AllOrdersComponent implements OnInit {
+export class MyOrdersComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private festivalService = inject(FestivalService);
@@ -39,11 +44,52 @@ export class AllOrdersComponent implements OnInit {
   private orderService = inject(OrderService);
   private dialog = inject(MatDialog);
 
+  isLoading: boolean = true;
+  orders: OrderPreviewDTO[] = [];
+
+  filterOptions: string[] = ['All', 'Upcoming Festivals', 'Past Festivals'];
+  selectedChip: string = 'All';
+
   constructor() {}
+
+  getSkeletonBgColor(): string {
+    const isDarkTheme =
+      document.documentElement.getAttribute('data-theme') === 'dark';
+    return isDarkTheme ? '#494d8aaa' : '#e0e0ff';
+  }
 
   ngOnInit() {
     this.loadOrders();
   }
 
-  loadOrders() {}
+  loadOrders() {
+    this.orderService.getMyOrders().subscribe({
+      next: (orders) => {
+        this.orders = orders;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.snackbarService.show('Failed to load orders');
+      },
+    });
+  }
+
+  get filteredOrders(): OrderPreviewDTO[] {
+    if (this.selectedChip === 'Upcoming Festivals') {
+      return this.orders.filter(
+        (order) => new Date(order.festival.startDate) > new Date(),
+      );
+    } else if (this.selectedChip === 'Past Festivals') {
+      return this.orders.filter(
+        (order) => new Date(order.festival.startDate) < new Date(),
+      );
+    } else {
+      return this.orders;
+    }
+  }
+
+  onViewClick(order: OrderPreviewDTO) {
+    this.router.navigate(['my-orders', order.orderId]);
+  }
 }

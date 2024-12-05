@@ -37,6 +37,13 @@
           </mat-icon>
           <h3>Package Order</h3>
         </span>
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            celebration
+          </mat-icon>
+          <h3>{{ order.festival.name }}</h3>
+        </span>
+        <div class="divider-small"></div>
         <span class="icon-property" *ngIf="order.ticket">
           <mat-icon class="material-symbols-outlined" color="primary">
             calendar_today

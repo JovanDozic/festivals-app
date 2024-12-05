@@ -101,8 +101,8 @@ const attendeeRoutes: Routes = [
         path: 'my-orders',
         loadComponent: () =>
           import(
-            './features/attendee/order/all-orders/all-orders.component'
-          ).then((c) => c.AllOrdersComponent),
+            './features/attendee/order/my-orders/my-orders.component'
+          ).then((c) => c.MyOrdersComponent),
         title: 'My Orders',
       },
       {

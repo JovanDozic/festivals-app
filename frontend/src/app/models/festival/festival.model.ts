@@ -255,3 +255,11 @@ export interface OrderDTO {
   generalAddons: GeneralAddonDTO[];
   festival: Festival;
 }
+
+export interface OrderPreviewDTO {
+  orderId: number;
+  orderType: string;
+  timestamp: Date;
+  totalPrice: number;
+  festival: Festival;
+}

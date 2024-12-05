@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {
   CreatePackageOrderRequest,
   CreateTicketOrderRequest,
+  OrderPreviewDTO,
 } from '../../models/festival/festival.model';
 
 @Injectable({
@@ -32,5 +33,9 @@ export class OrderService {
       `${this.apiUrl}/festival/${festivalId}/order/package`,
       request,
     );
+  }
+
+  getMyOrders(): Observable<OrderPreviewDTO[]> {
+    return this.http.get<OrderPreviewDTO[]>(`${this.apiUrl}/order/attendee`);
   }
 }

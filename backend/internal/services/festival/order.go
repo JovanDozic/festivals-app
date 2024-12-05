@@ -224,8 +224,10 @@ func (s *orderService) GetOrdersAttendee(username string) ([]dtoFestival.OrderPr
 			TotalPrice: order.TotalAmount,
 			Username:   order.User.User.Username,
 			Festival: dtoFestival.FestivalResponse{
-				ID:   order.FestivalTicket.Item.Item.Festival.ID,
-				Name: order.FestivalTicket.Item.Item.Festival.Name,
+				ID:        order.FestivalTicket.Item.Item.Festival.ID,
+				Name:      order.FestivalTicket.Item.Item.Festival.Name,
+				StartDate: order.FestivalTicket.Item.Item.Festival.StartDate,
+				EndDate:   order.FestivalTicket.Item.Item.Festival.EndDate,
 			},
 		}
 
