@@ -181,6 +181,7 @@ type BraceletDTO struct {
 	Balance       float64                         `json:"balance"`
 	Status        string                          `json:"status"`
 	Employee      *dtoUser.GetUserProfileResponse `json:"employee"`
+	PIN           *string                         `json:"pin"`
 }
 
 type ActivationHelpRequestDTO struct {

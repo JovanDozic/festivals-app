@@ -533,6 +533,7 @@ func (h *orderHandler) GetHelpRequest(w http.ResponseWriter, r *http.Request) {
 		Status:        helpRequest.Bracelet.Status,
 		Balance:       helpRequest.Bracelet.Balance,
 		Employee:      employeeBracelet,
+		PIN:           &helpRequest.Bracelet.PIN,
 	}
 
 	response := dtoFestival.ActivationHelpRequestDTO{

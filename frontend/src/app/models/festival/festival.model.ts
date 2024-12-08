@@ -267,6 +267,7 @@ export interface BraceletDTO {
   balance: number;
   status: string;
   employee: UserProfileResponse;
+  pin?: string;
 }
 
 export interface OrderPreviewDTO {
