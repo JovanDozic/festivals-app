@@ -123,5 +123,10 @@ export class ReviewHelpRequestComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
-  saveChanges() {}
+  approveRequest() {
+    throw new Error('Method not implemented.');
+  }
+  rejectRequest() {
+    throw new Error('Method not implemented.');
+  }
 }

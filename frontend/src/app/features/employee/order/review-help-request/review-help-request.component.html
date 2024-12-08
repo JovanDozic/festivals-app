@@ -41,6 +41,7 @@
     <mat-card class="festival-card">
       <mat-card-title>Request Data</mat-card-title>
       <mat-card-content>
+        <!-- ! barcode -->
         <span class="icon-property">
           <mat-icon class="material-symbols-outlined" color="primary">
             barcode_scanner
@@ -54,6 +55,7 @@
             {{ helpRequest?.userEnteredBarcode }}
           </b>
         </span>
+        <!-- ! pin -->
         <span class="icon-property">
           <mat-icon class="material-symbols-outlined" color="primary">
             password
@@ -65,6 +67,21 @@
           </mat-icon>
           <b class="number-mono large"> {{ helpRequest?.userEnteredPIN }} </b>
         </span>
+        <!-- ! description -->
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            description
+          </mat-icon>
+          Description:
+        </span>
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <span style="font-style: italic">{{
+            helpRequest?.issueDescription
+          }}</span>
+        </span>
+        <!--! photo -->
         <span class="icon-property">
           <mat-icon class="material-symbols-outlined" color="primary">
             attach_file
@@ -136,7 +153,12 @@
 
 <mat-dialog-actions align="end" style="margin-top: -20px">
   <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
-  <button mat-flat-button color="primary" (click)="saveChanges()">
-    <span>Save Changes</span>
+  <button mat-flat-button color="warn" (click)="rejectRequest()">
+    <mat-icon class="material-symbols-outlined"> cancel </mat-icon>
+    <span>Reject</span>
+  </button>
+  <button mat-flat-button color="primary" (click)="approveRequest()">
+    <mat-icon class="material-symbols-outlined"> check_circle </mat-icon>
+    <span>Approve and Activate</span>
   </button>
 </mat-dialog-actions>
