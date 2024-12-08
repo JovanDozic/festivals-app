@@ -195,4 +195,15 @@
   >
     <p>This festival does not have any orders.</p>
   </div>
+  <div
+    class="empty-list"
+    *ngIf="
+      !isLoading &&
+      orders &&
+      orders.length > 0 &&
+      (!filteredOrders || filteredOrders.length === 0)
+    "
+  >
+    <p>There are no orders that match the selected filter.</p>
+  </div>
 </div>

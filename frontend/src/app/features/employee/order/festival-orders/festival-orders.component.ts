@@ -54,10 +54,10 @@ export class FestivalOrdersComponent implements OnInit {
 
   filterOptions: string[] = [
     'All',
-    'Pending Issuing',
-    'Pending Activation',
-    'Requested Help',
+    'Pending',
+    'Issued',
     'Activated',
+    'Help Requested', // ovo mozda i ne stavljamo ovde jer je tesko to dobaviti u orders
     'Rejected',
   ];
   selectedChip: string = 'All'; // todo: change to action required
@@ -121,16 +121,20 @@ export class FestivalOrdersComponent implements OnInit {
     if (!this.orders || this.orders.length === 0) {
       return [];
     }
-    if (this.selectedChip === 'Action Required') {
-      return this.orders;
-      // return this.orders.filter(
-      //   (order) => new Date(order.festival.startDate) > new Date(),
-      // );
-    } else if (this.selectedChip === 'Bracelet Issued') {
-      return this.orders;
-      // return this.orders.filter(
-      //   (order) => new Date(order.festival.startDate) < new Date(),
-      // );
+    if (this.selectedChip === 'Pending') {
+      return this.orders.filter((order) => !order.braceletStatus);
+    } else if (this.selectedChip === 'Issued') {
+      return this.orders.filter((order) => order.braceletStatus === 'ISSUED');
+    } else if (this.selectedChip === 'Activated') {
+      return this.orders.filter(
+        (order) => order.braceletStatus === 'ACTIVATED',
+      );
+    } else if (this.selectedChip === 'Help Requested') {
+      return this.orders.filter(
+        (order) => order.braceletStatus === 'HELP_REQUESTED',
+      );
+    } else if (this.selectedChip === 'Rejected') {
+      return this.orders.filter((order) => order.braceletStatus === 'REJECTED');
     } else {
       return this.orders;
     }
