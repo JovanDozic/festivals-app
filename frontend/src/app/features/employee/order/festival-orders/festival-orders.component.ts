@@ -177,7 +177,7 @@ export class FestivalOrdersComponent implements OnInit {
         braceletId: order.braceletId,
       },
       width: '800px',
-      height: 'auto',
+      height: '715px',
       disableClose: true,
     });
 

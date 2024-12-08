@@ -4,8 +4,59 @@
   width: 100%;
 }
 
+.profile-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  height: 400px;
+  padding-bottom: 20px;
+}
+
+h1 {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif;
+}
+
+.festival-card {
+  padding: 16px;
+  flex: 1 1 calc(50% - 5px);
+  max-width: calc(50% - 5px);
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  box-sizing: border-box;
+}
+
+.card-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 mat-card-header {
   margin-bottom: 20px;
+}
+
+// override:
+.icon-property {
+  margin-left: -20px;
+}
+
+// override:
+.number-mono {
+  &.large {
+    font-size: large;
+  }
+}
+
+.divider {
+  height: 10px;
+}
+
+.continued {
+  margin-top: -10px !important;
 }
 
 .error-message {
@@ -66,4 +117,21 @@ mat-form-field {
   line-height: 24px;
   margin-top: 10px;
   margin-bottom: 30px;
+}
+
+.dialog-content {
+  margin-bottom: 30px;
+}
+
+.dialog-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dialog-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.dialog-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
 }

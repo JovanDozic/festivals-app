@@ -319,7 +319,7 @@ export interface ActivationHelpRequestDTO {
   userEnteredPIN: string;
   userEnteredBarcode: string;
   issueDescription: string;
-  imageURL: string;
+  imageUrl: string;
   status: string;
   bracelet: BraceletDTO;
   attendee: UserProfileResponse;

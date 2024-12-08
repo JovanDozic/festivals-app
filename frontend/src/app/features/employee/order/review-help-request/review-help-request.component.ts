@@ -30,6 +30,7 @@ import { OrderService } from '../../../../services/festival/order.service';
 import { ImageService } from '../../../../services/image/image.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ItemService } from '../../../../services/festival/item.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-review-help-request',

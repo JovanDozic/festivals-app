@@ -1,10 +1,137 @@
 <h2 mat-dialog-title>Send Activation Help Request</h2>
 
-<mat-dialog-content>
+<mat-dialog-content class="dialog-content">
   <p class="step-description">
     Review Attendee's activation request and make sure it matches with the
     information that's visible in the System and on the provided photo.
   </p>
+
+  <div class="profile-content">
+    <!-- ! system info -->
+    <mat-card class="festival-card">
+      <mat-card-title>System Info</mat-card-title>
+      <mat-card-content>
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            barcode_scanner
+          </mat-icon>
+          Barcode Number:
+        </span>
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <b class="number-mono large">
+            {{ helpRequest?.bracelet?.barcodeNumber }}
+          </b>
+        </span>
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            password
+          </mat-icon>
+          PIN Code:
+        </span>
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <b class="number-mono large"> {{ helpRequest?.bracelet?.pin }} </b>
+        </span>
+      </mat-card-content>
+    </mat-card>
+    <!-- ! request data -->
+    <mat-card class="festival-card">
+      <mat-card-title>Request Data</mat-card-title>
+      <mat-card-content>
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            barcode_scanner
+          </mat-icon>
+          Barcode Number:
+        </span>
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <b class="number-mono large">
+            {{ helpRequest?.userEnteredBarcode }}
+          </b>
+        </span>
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            password
+          </mat-icon>
+          PIN Code:
+        </span>
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <b class="number-mono large"> {{ helpRequest?.userEnteredPIN }} </b>
+        </span>
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            attach_file
+          </mat-icon>
+          <a
+            mat-button
+            style="margin-left: -10px"
+            [href]="helpRequest?.imageUrl"
+            target="_blank"
+          >
+            Attached Proof Photo
+          </a>
+        </span>
+      </mat-card-content>
+    </mat-card>
+    <!-- ! employee info -->
+    <mat-card class="festival-card">
+      <mat-card-title>Issuer</mat-card-title>
+      <mat-card-content>
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            badge
+          </mat-icon>
+          Employee:
+        </span>
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <b class="number-mono">
+            {{ helpRequest?.bracelet?.employee?.username }}
+          </b>
+        </span>
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          {{ helpRequest?.bracelet?.employee?.firstName }}
+          {{ helpRequest?.bracelet?.employee?.lastName }}
+        </span>
+      </mat-card-content>
+    </mat-card>
+    <!-- ! attendee info -->
+    <mat-card class="festival-card">
+      <mat-card-title>Attendee</mat-card-title>
+      <!-- <mat-card-subtitle>Attendee who received the Bracelet</mat-card-subtitle> -->
+      <mat-card-content>
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
+            account_circle
+          </mat-icon>
+          Attendee:
+        </span>
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          <b class="number-mono">
+            {{ helpRequest?.attendee?.username }}
+          </b>
+        </span>
+        <span class="icon-property continued">
+          <mat-icon class="material-symbols-outlined" color="primary">
+          </mat-icon>
+          {{ helpRequest?.attendee?.firstName }}
+          {{ helpRequest?.attendee?.lastName }}
+        </span>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" style="margin-top: -20px">
