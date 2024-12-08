@@ -1,0 +1,137 @@
+<h2 mat-dialog-title>Send Activation Help Request</h2>
+
+<mat-dialog-content>
+  <mat-stepper
+    [linear]="true"
+    #stepper
+    class="stepper-custom"
+    orientation="vertical"
+  >
+    <mat-step [stepControl]="infoFormGroup" [editable]="true">
+      <ng-template matStepLabel>Request Data</ng-template>
+      <p class="step-description">
+        If you're unable to read the barcode number or PIN on your bracelet, or
+        if it doesn't match with the system, you can request bracelet
+        activation.
+        <br />
+        Enter the visible information, upload a photo of the <b>back</b> of your
+        Bracelet, and our team will activate it for you.
+      </p>
+
+      <form [formGroup]="infoFormGroup">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Barcode Number in the System</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="barcodeNumberSystemCtrl"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Barcode Number</mat-label>
+          <input matInput type="text" formControlName="barcodeNumberUserCtrl" />
+          <mat-error
+            *ngIf="
+              infoFormGroup.get('barcodeNumberUserCtrl')?.hasError('maxlength')
+            "
+          >
+            Barcode Number cannot be more than 20 characters long
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>PIN Code</mat-label>
+          <input matInput formControlName="pinUserCtrl" />
+          <mat-error
+            *ngIf="infoFormGroup.get('pinUserCtrl')?.hasError('maxlength')"
+          >
+            PIN Code cannot be more than 20 characters long
+          </mat-error>
+          <mat-error
+            *ngIf="infoFormGroup.get('pinUserCtrl')?.hasError('pattern')"
+          >
+            PIN Code can only contain numbers
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Description of the Issue</mat-label>
+          <input matInput type="text" formControlName="issueDescriptionCtrl" />
+          <mat-error
+            *ngIf="
+              infoFormGroup.get('issueDescriptionCtrl')?.hasError('required')
+            "
+          >
+            Description is required
+          </mat-error>
+          <mat-error
+            *ngIf="
+              infoFormGroup.get('issueDescriptionCtrl')?.hasError('minlength')
+            "
+          >
+            Description cannot be less than 5 characters long
+          </mat-error>
+          <mat-error
+            *ngIf="
+              infoFormGroup.get('issueDescriptionCtrl')?.hasError('maxlength')
+            "
+          >
+            Description cannot be more than 200 characters long
+          </mat-error>
+        </mat-form-field>
+      </form>
+      <button mat-stroked-button matStepperNext>Next</button>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Bracelet Photo</ng-template>
+      <div class="form-field camp-photo-field">
+        <div class="camp-photo-container">
+          <img
+            *ngIf="imagePreviewUrl; else placeholder"
+            [src]="imagePreviewUrl"
+            alt="Camp Photo Preview"
+            class="camp-photo-preview"
+          />
+          <ng-template #placeholder>
+            <div class="placeholder-photo">
+              <mat-icon class="material-symbols-outlined" color="primary"
+                >person</mat-icon
+              >
+            </div>
+          </ng-template>
+        </div>
+        <input
+          #fileInput
+          type="file"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          style="display: none"
+        />
+      </div>
+      <div>
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="fileInput.click()"
+          style="margin-right: 10px"
+        >
+          Choose Photo
+        </button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="margin-top: -20px">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button
+    mat-flat-button
+    (click)="sendRequest()"
+    [disabled]="infoFormGroup.invalid"
+  >
+    Send Request
+  </button>
+</mat-dialog-actions>

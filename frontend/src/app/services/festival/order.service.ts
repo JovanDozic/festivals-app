@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
+  ActivateBraceletHelpRequest,
   ActivateBraceletRequest,
   CreatePackageOrderRequest,
   CreateTicketOrderRequest,
@@ -73,6 +74,13 @@ export class OrderService {
   topUpBracelet(request: TopUpBraceletRequest): Observable<void> {
     return this.http.put<void>(
       `${this.apiUrl}/bracelet/${request.braceletId}/top-up`,
+      request,
+    );
+  }
+
+  sendHelpRequest(request: ActivateBraceletHelpRequest): Observable<void> {
+    return this.http.post<void>(
+      `${this.apiUrl}/bracelet/${request.braceletId}/activate/help`,
       request,
     );
   }

@@ -303,3 +303,11 @@ export interface TopUpBraceletRequest {
   braceletId: number;
   amount: number;
 }
+
+export interface ActivateBraceletHelpRequest {
+  braceletId: number;
+  barcodeNumberUser: string;
+  pinUser: string;
+  issueDescription: string;
+  imageURL: string;
+}

@@ -172,7 +172,23 @@ func (f *TopUpBraceletRequest) Validate() error {
 		return models.ErrMissingFields
 	}
 	if f.Amount < 1 {
-		return errors.New("Amount must be greater than 1")
+		return errors.New("amount must be greater than 1")
+	}
+	return nil
+}
+
+func (f *ActivateBraceletHelpRequest) Validate() error {
+	if f.BraceletId == 0 {
+		return models.ErrMissingFields
+	}
+	if f.BarcodeNumberUser == "" {
+		return models.ErrMissingFields
+	}
+	if f.PINUser == "" {
+		return models.ErrMissingFields
+	}
+	if f.IssueDescription == "" {
+		return models.ErrMissingFields
 	}
 	return nil
 }

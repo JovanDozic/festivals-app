@@ -3,7 +3,9 @@ package services
 import (
 	dtoCommon "backend/internal/dto/common"
 	dtoFestival "backend/internal/dto/festival"
-	models "backend/internal/models/festival"
+	modelsCommon "backend/internal/models/common"
+	modelsFestival "backend/internal/models/festival"
+	reposCommon "backend/internal/repositories/common"
 	reposFestival "backend/internal/repositories/festival"
 	servicesUser "backend/internal/services/user"
 	"errors"
@@ -12,17 +14,18 @@ import (
 )
 
 type OrderService interface {
-	CreateFestivalTicket(festivalTicket *models.FestivalTicket) error
-	CreateOrder(order *models.Order) error
-	CreateFestivalPackage(festivalPackage *models.FestivalPackage) error
-	CreateFestivalPackageAddon(festivalPackageAddon *models.FestivalPackageAddon) error
+	CreateFestivalTicket(festivalTicket *modelsFestival.FestivalTicket) error
+	CreateOrder(order *modelsFestival.Order) error
+	CreateFestivalPackage(festivalPackage *modelsFestival.FestivalPackage) error
+	CreateFestivalPackageAddon(festivalPackageAddon *modelsFestival.FestivalPackageAddon) error
 	GetOrder(username string, orderId uint) (*dtoFestival.OrderDTO, error)
 	GetOrdersAttendee(username string) ([]dtoFestival.OrderPreviewDTO, error)
 	GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPreviewDTO, error)
 	GetBraceletOrdersAttendee(username string) ([]dtoFestival.OrderDTO, error)
-	IssueBracelet(request *models.Bracelet) error
+	IssueBracelet(request *modelsFestival.Bracelet) error
 	ActivateBracelet(username string, braceletId uint, userEnteredPIN string) error
 	TopUpBracelet(username string, braceletId uint, amount float64) error
+	CreateHelpRequest(username string, request dtoFestival.ActivateBraceletHelpRequest) error
 }
 
 type orderService struct {
@@ -30,18 +33,26 @@ type orderService struct {
 	itemRepo     reposFestival.ItemRepo
 	festivalRepo reposFestival.FestivalRepo
 	userService  servicesUser.UserService
+	imageRepo    reposCommon.ImageRepo
 }
 
-func NewOrderService(or reposFestival.OrderRepo, ir reposFestival.ItemRepo, fr reposFestival.FestivalRepo, us servicesUser.UserService) OrderService {
+func NewOrderService(
+	or reposFestival.OrderRepo,
+	ir reposFestival.ItemRepo,
+	fr reposFestival.FestivalRepo,
+	us servicesUser.UserService,
+	imr reposCommon.ImageRepo,
+) OrderService {
 	return &orderService{
 		orderRepo:    or,
 		itemRepo:     ir,
 		festivalRepo: fr,
 		userService:  us,
+		imageRepo:    imr,
 	}
 }
 
-func (s *orderService) CreateFestivalTicket(festivalTicket *models.FestivalTicket) error {
+func (s *orderService) CreateFestivalTicket(festivalTicket *modelsFestival.FestivalTicket) error {
 
 	item, _, err := s.itemRepo.GetItemAndPriceListItemsIDs(festivalTicket.ItemID)
 	if err != nil {
@@ -57,15 +68,15 @@ func (s *orderService) CreateFestivalTicket(festivalTicket *models.FestivalTicke
 	return s.orderRepo.CreateFestivalTicket(festivalTicket)
 }
 
-func (s *orderService) CreateOrder(order *models.Order) error {
+func (s *orderService) CreateOrder(order *modelsFestival.Order) error {
 	return s.orderRepo.CreateOrder(order)
 }
 
-func (s *orderService) CreateFestivalPackage(festivalPackage *models.FestivalPackage) error {
+func (s *orderService) CreateFestivalPackage(festivalPackage *modelsFestival.FestivalPackage) error {
 	return s.orderRepo.CreateFestivalPackage(festivalPackage)
 }
 
-func (s *orderService) CreateFestivalPackageAddon(festivalPackageAddon *models.FestivalPackageAddon) error {
+func (s *orderService) CreateFestivalPackageAddon(festivalPackageAddon *modelsFestival.FestivalPackageAddon) error {
 
 	item, _, err := s.itemRepo.GetItemAndPriceListItemsIDs(festivalPackageAddon.ItemID)
 	if err != nil {
@@ -342,7 +353,7 @@ func (s *orderService) GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPr
 	return response, nil
 }
 
-func (s *orderService) IssueBracelet(request *models.Bracelet) error {
+func (s *orderService) IssueBracelet(request *modelsFestival.Bracelet) error {
 	return s.orderRepo.CreateBracelet(request)
 }
 
@@ -453,4 +464,46 @@ func (s *orderService) TopUpBracelet(username string, braceletId uint, amount fl
 	bracelet.Balance += amount
 
 	return s.orderRepo.UpdateBracelet(bracelet)
+}
+
+func (s *orderService) CreateHelpRequest(username string, request dtoFestival.ActivateBraceletHelpRequest) error {
+
+	attendeeId, err := s.userService.GetUserID(username)
+	if err != nil {
+		return err
+	}
+
+	bracelet, err := s.orderRepo.GetBraceletById(request.BraceletId)
+	if err != nil {
+		return err
+	}
+
+	bracelet.Status = "HELP_REQUESTED"
+
+	if err := s.orderRepo.UpdateBracelet(bracelet); err != nil {
+		return err
+	}
+
+	image := modelsCommon.Image{
+		URL: request.ImageURL,
+	}
+
+	if err := s.imageRepo.Create(&image); err != nil {
+		return err
+	}
+
+	helpRequest := modelsFestival.ActivationHelpRequest{
+		UserEnteredPIN:   request.PINUser,
+		IssueDescription: request.IssueDescription,
+		Status:           "OPEN",
+		BraceletID:       request.BraceletId,
+		AttendeeID:       attendeeId,
+		ProofImageID:     image.ID,
+	}
+
+	if err := s.orderRepo.CreateHelpRequest(&helpRequest); err != nil {
+		return err
+	}
+
+	return nil
 }

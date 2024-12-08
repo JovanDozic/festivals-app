@@ -25,9 +25,10 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
-import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { OrderService } from '../../../../services/festival/order.service';
+import { ActivateHelpRequestComponent } from '../activate-help-request/activate-help-request.component';
 
 @Component({
   selector: 'app-activate-bracelet',
@@ -60,6 +61,7 @@ export class ActivateBraceletComponent {
     order: OrderDTO;
   } = inject(MAT_DIALOG_DATA);
   private orderService = inject(OrderService);
+  private dialog = inject(MatDialog);
 
   infoFormGroup: FormGroup;
 
@@ -113,6 +115,17 @@ export class ActivateBraceletComponent {
   }
 
   requestHelp() {
-    throw new Error('Method not implemented.');
+    const dialogRef = this.dialog.open(ActivateHelpRequestComponent, {
+      data: { order: this.data.order },
+      width: '800px',
+      height: '565px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirm) {
+        this.dialogRef.close(false);
+      }
+    });
   }
 }

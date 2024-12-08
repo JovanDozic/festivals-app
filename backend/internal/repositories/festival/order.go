@@ -20,6 +20,7 @@ type OrderRepo interface {
 	GetBraceletByTicketId(festivalTicketId uint) (*models.Bracelet, error)
 	GetBraceletById(braceletId uint) (*models.Bracelet, error)
 	UpdateBracelet(bracelet *models.Bracelet) error
+	CreateHelpRequest(helpRequest *models.ActivationHelpRequest) error
 }
 
 type orderRepo struct {
@@ -126,4 +127,8 @@ func (r *orderRepo) GetBraceletById(braceletId uint) (*models.Bracelet, error) {
 
 func (r *orderRepo) UpdateBracelet(bracelet *models.Bracelet) error {
 	return r.db.Save(bracelet).Error
+}
+
+func (r *orderRepo) CreateHelpRequest(helpRequest *models.ActivationHelpRequest) error {
+	return r.db.Create(helpRequest).Error
 }

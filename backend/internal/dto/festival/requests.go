@@ -126,3 +126,11 @@ type TopUpBraceletRequest struct {
 	BraceletId uint    `json:"braceletId"`
 	Amount     float64 `json:"amount"`
 }
+
+type ActivateBraceletHelpRequest struct {
+	BraceletId        uint   `json:"braceletId"`
+	BarcodeNumberUser string `json:"barcodeNumberUser"`
+	PINUser           string `json:"pinUser"`
+	IssueDescription  string `json:"issueDescription"`
+	ImageURL          string `json:"imageURL"`
+}
