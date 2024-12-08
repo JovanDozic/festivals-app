@@ -1,0 +1,98 @@
+<div class="container mat-elevation-z4">
+  <div class="profile-header">
+    <h1>My Bracelets</h1>
+  </div>
+
+  <div class="chip-container">
+    <mat-chip-listbox
+      [(ngModel)]="selectedChip"
+      [multiple]="false"
+      [required]="true"
+    >
+      @for (option of filterOptions; track option) {
+        <mat-chip-option selected [selectable]="selectedChip !== option">{{
+          option
+        }}</mat-chip-option>
+      }
+    </mat-chip-listbox>
+  </div>
+
+  <div class="profile-content" *ngIf="!isLoading">
+    <mat-card class="bracelet-card" *ngFor="let bracelet of bracelets">
+      <div class="card-content">
+        <div>
+          <mat-card-header>
+            <div class="bracelet-container">
+              <div
+                class="bracelet-strap left"
+                [ngStyle]="getBraceletStyle(bracelet.name)"
+              ></div>
+              <div
+                class="bracelet-center"
+                [ngStyle]="getBraceletStyle(bracelet.name)"
+              ></div>
+              <div
+                class="bracelet-strap right"
+                [ngStyle]="getBraceletStyle(bracelet.name)"
+              ></div>
+            </div>
+
+            <!-- <mat-card-title>Bracelet</mat-card-title>
+            <mat-card-subtitle> </mat-card-subtitle> -->
+          </mat-card-header>
+          <mat-card-content>
+            <!-- <span class="icon-property" *ngIf="bracelet.orderType === 'TICKET'">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                confirmation_number
+              </mat-icon>
+              <h3>Ticket Order</h3>
+            </span>
+            <span class="icon-property" *ngIf="bracelet.orderType === 'PACKAGE'">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                package_2
+              </mat-icon>
+              <h3>Package Order</h3>
+            </span>
+
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                celebration
+              </mat-icon>
+              <h3>{{ bracelet.festival.name }}</h3>
+            </span>
+
+            <div class="divider"></div>
+
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                attach_money
+              </mat-icon>
+              Total Price:
+              <span class="number-mono">
+                ${{ bracelet.totalPrice.toFixed(2) }}
+              </span>
+            </span> -->
+          </mat-card-content>
+        </div>
+        <mat-card-actions>
+          <button mat-button color="primary" (click)="onViewClick()">
+            View
+          </button>
+          <span class="spacer"></span>
+          <button mat-icon-button matTooltip="View Bracelet Status">
+            <mat-icon class="material-symbols-outlined" color="primary">
+              fitness_tracker
+            </mat-icon>
+          </button>
+        </mat-card-actions>
+      </div>
+    </mat-card>
+  </div>
+
+  <div
+    class="empty-list"
+    *ngIf="!isLoading && (!bracelets || bracelets.length === 0)"
+  >
+    <p>You don't have any bracelets.</p>
+  </div>
+</div>

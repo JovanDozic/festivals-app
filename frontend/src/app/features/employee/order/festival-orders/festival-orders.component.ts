@@ -60,7 +60,7 @@ export class FestivalOrdersComponent implements OnInit {
     'Help Requested', // ovo mozda i ne stavljamo ovde jer je tesko to dobaviti u orders
     'Rejected',
   ];
-  selectedChip: string = 'All'; // todo: change to action required
+  selectedChip: string = 'All'; // todo: change to activated required
 
   constructor() {}
 

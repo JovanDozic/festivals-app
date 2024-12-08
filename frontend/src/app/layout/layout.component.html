@@ -103,6 +103,17 @@
       >
         My Orders
       </a>
+
+      <a
+        mat-list-item
+        routerLink="/my-bracelets"
+        *ngIf="visibleForRole('ATTENDEE')"
+        #link="routerLinkActive"
+        routerLinkActive
+        [activated]="link.isActive"
+      >
+        My Bracelets
+      </a>
     </mat-nav-list>
     <div class="theme-button">
       <button mat-mini-fab color="primary" (click)="toggleTheme()">

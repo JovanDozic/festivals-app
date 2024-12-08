@@ -113,6 +113,14 @@ const attendeeRoutes: Routes = [
           ),
         title: 'View Order',
       },
+      {
+        path: 'my-bracelets',
+        loadComponent: () =>
+          import(
+            './features/attendee/bracelet/my-bracelets/my-bracelets.component'
+          ).then((c) => c.MyBraceletsComponent),
+        title: 'My Bracelets',
+      },
     ],
   },
 ];
