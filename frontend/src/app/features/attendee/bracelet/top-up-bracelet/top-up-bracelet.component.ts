@@ -14,6 +14,7 @@ import {
 import {
   ActivateBraceletRequest,
   OrderDTO,
+  TopUpBraceletRequest,
 } from '../../../../models/festival/festival.model';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -28,6 +29,7 @@ import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { OrderService } from '../../../../services/festival/order.service';
+import { TopUpPaymentDialogComponent } from '../top-up-payment-dialog/top-up-payment-dialog.component';
 
 @Component({
   selector: 'app-top-up-bracelet',
@@ -56,11 +58,13 @@ export class TopUpBraceletComponent {
   private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
   private dialogRef = inject(MatDialogRef<TopUpBraceletComponent>);
+  private dialog = inject(MatDialog);
   private data: {
     order: OrderDTO;
   } = inject(MAT_DIALOG_DATA);
   private orderService = inject(OrderService);
 
+  isLoading = false;
   infoFormGroup: FormGroup;
 
   constructor() {
@@ -73,29 +77,41 @@ export class TopUpBraceletComponent {
     this.dialogRef.close(false);
   }
 
+  openPaymentDialog() {
+    this.isLoading = true;
+    const dialogRef = this.dialog.open(TopUpPaymentDialogComponent, {
+      width: '250px',
+      height: '250px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.topUp();
+      this.isLoading = false;
+      console.log('The dialog was closed');
+    });
+  }
+
   topUp() {
     if (
       this.infoFormGroup.valid &&
       this.data.order &&
       this.data.order.bracelet
     ) {
-      // const request: ActivateBraceletRequest = {
-      //   braceletId: this.data.order.bracelet.braceletId,
-      //   pin: this.infoFormGroup.get('pinCtrl')?.value,
-      // };
-      // this.orderService.activateBracelet(request).subscribe({
-      //   next: () => {
-      //     this.snackbarService.show('Bracelet activated successfully');
-      //     this.dialogRef.close(true);
-      //   },
-      //   error: (error) => {
-      //     if (error.status === 403) {
-      //       this.snackbarService.show('Invalid PIN. Please try again.');
-      //       return;
-      //     }
-      //     this.snackbarService.show('Failed to activate bracelet');
-      //   },
-      // });
+      const request: TopUpBraceletRequest = {
+        braceletId: this.data.order.bracelet.braceletId,
+        amount: this.infoFormGroup.get('amountCtrl')?.value,
+      };
+      this.orderService.topUpBracelet(request).subscribe({
+        next: () => {
+          this.snackbarService.show('Top up successful');
+          this.dialogRef.close(true);
+        },
+        error: (error) => {
+          console.log(error);
+          this.snackbarService.show('Failed to top up bracelet');
+        },
+      });
     }
   }
 }

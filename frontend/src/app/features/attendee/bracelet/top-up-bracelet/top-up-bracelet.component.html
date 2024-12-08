@@ -18,6 +18,7 @@
           step="0.01"
           min="0"
           inputmode="decimal"
+          placeholder="Amount (min. $1.00)"
         />
         <mat-error
           *ngIf="infoFormGroup.get('amountCtrl')?.hasError('required')"
@@ -34,7 +35,11 @@
 
 <mat-dialog-actions align="end" style="margin-top: -20px">
   <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
-  <button mat-flat-button (click)="topUp()" [disabled]="infoFormGroup.invalid">
+  <button
+    mat-flat-button
+    (click)="openPaymentDialog()"
+    [disabled]="infoFormGroup.invalid"
+  >
     Top Up
   </button>
 </mat-dialog-actions>

@@ -9,6 +9,7 @@ import {
   IssueBraceletResponse,
   OrderDTO,
   OrderPreviewDTO,
+  TopUpBraceletRequest,
 } from '../../models/festival/festival.model';
 
 @Injectable({
@@ -65,6 +66,13 @@ export class OrderService {
   activateBracelet(request: ActivateBraceletRequest): Observable<void> {
     return this.http.put<void>(
       `${this.apiUrl}/bracelet/${request.braceletId}/activate`,
+      request,
+    );
+  }
+
+  topUpBracelet(request: TopUpBraceletRequest): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/bracelet/${request.braceletId}/top-up`,
       request,
     );
   }

@@ -101,6 +101,7 @@ export class ActivateBraceletComponent {
           this.dialogRef.close(true);
         },
         error: (error) => {
+          console.log(error);
           if (error.status === 403) {
             this.snackbarService.show('Invalid PIN. Please try again.');
             return;

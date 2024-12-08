@@ -1,0 +1,24 @@
+.form-fields {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+h2 {
+  font-weight: 500;
+}
+
+.spinner {
+  width: auto;
+}
+
+.check {
+  width: auto;
+  height: 100%;
+  font-size: 130px;
+  padding: none !important;
+  margin-bottom: -10px !important;
+}

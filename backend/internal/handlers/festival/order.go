@@ -20,6 +20,7 @@ type OrderHandler interface {
 	IssueBracelet(w http.ResponseWriter, r *http.Request)
 	GetBraceletOrdersAttendee(w http.ResponseWriter, r *http.Request)
 	ActivateBracelet(w http.ResponseWriter, r *http.Request)
+	TopUpBracelet(w http.ResponseWriter, r *http.Request)
 }
 
 type orderHandler struct {
@@ -381,6 +382,53 @@ func (h *orderHandler) ActivateBracelet(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if err := h.orderService.ActivateBracelet(username, braceletId, input.PIN); err != nil {
+		log.Println("error:", err)
+		if strings.Contains(err.Error(), "bracelet not found") {
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+			return
+		} else if strings.Contains(err.Error(), "invalid PIN") {
+			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+			return
+		} else {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+	}
+
+	utils.WriteJSON(w, http.StatusOK, nil, nil)
+	log.Println("bracelet activated", braceletId, "for user", username)
+}
+
+func (h *orderHandler) TopUpBracelet(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthAttendeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	username := utils.GetUsername(r.Context())
+
+	braceletId, err := GetIDParamFromRequest(r, "braceletId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	var input dtoFestival.TopUpBraceletRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := h.orderService.TopUpBracelet(username, braceletId, input.Amount); err != nil {
 		log.Println("error:", err)
 		if strings.Contains(err.Error(), "bracelet not found") {
 			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)

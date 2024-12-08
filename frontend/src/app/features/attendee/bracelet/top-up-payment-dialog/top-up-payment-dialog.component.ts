@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {
-  MAT_DIALOG_DATA,
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
@@ -11,23 +10,21 @@ import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-store-payment-dialog',
+  selector: 'app-top-up-payment-dialog',
   imports: [
     CommonModule,
     MatDialogModule,
     MatIconModule,
     MatProgressSpinnerModule,
   ],
-  templateUrl: './store-payment-dialog.component.html',
+  templateUrl: './top-up-payment-dialog.component.html',
   styleUrls: [
-    './store-payment-dialog.component.scss',
+    './top-up-payment-dialog.component.scss',
     '../../../../app.component.scss',
   ],
 })
-export class StorePaymentDialogComponent implements OnInit {
-  readonly dialogRef = inject(MatDialogRef<StorePaymentDialogComponent>);
-  readonly data = inject(MAT_DIALOG_DATA);
-  private router = inject(Router);
+export class TopUpPaymentDialogComponent implements OnInit {
+  readonly dialogRef = inject(MatDialogRef<TopUpPaymentDialogComponent>);
   private snackbarService = inject(SnackbarService);
 
   isLoading = true;
@@ -36,10 +33,9 @@ export class StorePaymentDialogComponent implements OnInit {
     setTimeout(() => {
       this.isLoading = false;
 
-      this.snackbarService.show('Order created successfully');
+      this.snackbarService.show('Payment successful');
       setTimeout(() => {
         this.dialogRef.close();
-        this.router.navigate([`/my-orders/${this.data.orderId}`]);
       }, 1000);
     }, 1000);
   }

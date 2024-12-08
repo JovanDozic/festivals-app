@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Payment in process...</h2>
+
+<mat-dialog-content class="form-fields">
+  <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>
+  <mat-icon
+    *ngIf="!isLoading"
+    class="material-symbols-outlined check"
+    color="primary"
+  >
+    check_circle
+  </mat-icon>
+</mat-dialog-content>

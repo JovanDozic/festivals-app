@@ -153,7 +153,6 @@ export class MyBraceletsComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.snackbarService.show('Bracelet activated successfully!');
         this.loadBracelets();
       }
     });
@@ -171,7 +170,6 @@ export class MyBraceletsComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.snackbarService.show('Top Up successful!');
         this.loadBracelets();
       }
     });

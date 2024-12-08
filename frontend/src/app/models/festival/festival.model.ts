@@ -298,3 +298,8 @@ export interface ActivateBraceletRequest {
   braceletId: number;
   pin: string;
 }
+
+export interface TopUpBraceletRequest {
+  braceletId: number;
+  amount: number;
+}

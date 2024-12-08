@@ -3,6 +3,7 @@ package dto
 import (
 	"backend/internal/models"
 	modelsFestival "backend/internal/models/festival"
+	"errors"
 )
 
 func (f *CreateFestivalRequest) Validate() error {
@@ -162,6 +163,16 @@ func (f *ActivateBraceletRequest) Validate() error {
 	}
 	if f.PIN == "" {
 		return models.ErrMissingFields
+	}
+	return nil
+}
+
+func (f *TopUpBraceletRequest) Validate() error {
+	if f.BraceletId == 0 {
+		return models.ErrMissingFields
+	}
+	if f.Amount < 1 {
+		return errors.New("Amount must be greater than 1")
 	}
 	return nil
 }
