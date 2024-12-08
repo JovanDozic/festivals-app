@@ -126,7 +126,18 @@ export class MyBraceletsComponent {
   }
 
   getBraceletStatusText(status: string): string {
-    return status === 'ISSUED' ? 'Issued and Shipped' : status;
+    switch (status) {
+      case 'ISSUED':
+        return 'Issued and Shipped';
+      case 'ACTIVATED':
+        return 'Activated';
+      case 'HELP_REQUESTED':
+        return 'Help Requested';
+      case 'REJECTED':
+        return 'Rejected';
+      default:
+        return 'Not Issued';
+    }
   }
 
   activateBracelet(order: OrderDTO) {

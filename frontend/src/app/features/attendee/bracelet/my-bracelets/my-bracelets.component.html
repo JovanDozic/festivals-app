@@ -106,7 +106,7 @@
               <span
                 class="icon-property continued"
                 *ngIf="
-                  order.braceletStatus && order.braceletStatus === 'ACTIVE'
+                  order.braceletStatus && order.braceletStatus === 'ACTIVATED'
                 "
               >
                 <mat-icon
@@ -140,7 +140,7 @@
                 (click)="activateBracelet(order)"
                 color="primary"
                 *ngIf="
-                  order.braceletStatus && order.braceletStatus !== 'ACTIVE'
+                  order.braceletStatus && order.braceletStatus !== 'ACTIVATED'
                 "
               >
                 <mat-icon class="material-symbols-outlined">
@@ -150,15 +150,15 @@
               </button>
 
               <button
-                mat-flat-button
+                mat-stroked-button
                 (click)="topUpBracelet()"
                 color="primary"
                 *ngIf="
-                  order.braceletStatus && order.braceletStatus === 'ACTIVE'
+                  order.braceletStatus && order.braceletStatus === 'ACTIVATED'
                 "
               >
                 <mat-icon class="material-symbols-outlined">
-                  verified
+                  add_card
                 </mat-icon>
                 Top Up Bracelet
               </button>
