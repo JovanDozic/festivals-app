@@ -19,6 +19,7 @@ type OrderService interface {
 	GetOrder(username string, orderId uint) (*dtoFestival.OrderDTO, error)
 	GetOrdersAttendee(username string) ([]dtoFestival.OrderPreviewDTO, error)
 	GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPreviewDTO, error)
+	GetBraceletOrdersAttendee(username string) ([]dtoFestival.OrderDTO, error)
 	IssueBracelet(request *models.Bracelet) error
 }
 
@@ -341,4 +342,67 @@ func (s *orderService) GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPr
 
 func (s *orderService) IssueBracelet(request *models.Bracelet) error {
 	return s.orderRepo.CreateBracelet(request)
+}
+
+func (s *orderService) GetBraceletOrdersAttendee(username string) ([]dtoFestival.OrderDTO, error) {
+
+	orders, err := s.orderRepo.GetOrdersAttendee(username)
+	if err != nil {
+		log.Println("error: ", err)
+		return nil, err
+	}
+
+	var response []dtoFestival.OrderDTO
+
+	for _, order := range orders {
+
+		orderDto := dtoFestival.OrderDTO{
+			OrderID:    order.ID,
+			Timestamp:  order.CreatedAt,
+			TotalPrice: order.TotalAmount,
+			Username:   order.User.User.Username,
+			Festival: dtoFestival.FestivalResponse{
+				ID:        order.FestivalTicket.Item.Item.Festival.ID,
+				Name:      order.FestivalTicket.Item.Item.Festival.Name,
+				StartDate: order.FestivalTicket.Item.Item.Festival.StartDate,
+				EndDate:   order.FestivalTicket.Item.Item.Festival.EndDate,
+			},
+		}
+
+		if order.FestivalPackage == nil {
+			orderDto.OrderType = "TICKET"
+		} else {
+			orderDto.OrderType = "PACKAGE"
+		}
+
+		bracelet, err := s.orderRepo.GetBraceletByTicketId(order.FestivalTicketID)
+		if err != nil && !strings.Contains(err.Error(), "record not found") {
+			log.Println("error: ", err)
+			return nil, err
+		}
+
+		if bracelet != nil && bracelet.ID != 0 {
+			orderDto.BraceletStatus = &bracelet.Status
+			employee, err := s.userService.GetUserProfileById(bracelet.EmployeeID)
+			if err != nil {
+				log.Println("error: ", err)
+				return nil, err
+			}
+
+			orderDto.Bracelet = &dtoFestival.BraceletDTO{
+				BraceletID:    bracelet.ID,
+				BarcodeNumber: bracelet.BarcodeNumber,
+				Status:        bracelet.Status,
+				Balance:       bracelet.Balance,
+				Employee:      employee,
+			}
+		} else {
+			orderDto.BraceletStatus = nil
+			orderDto.Bracelet = nil
+		}
+
+		response = append(response, orderDto)
+	}
+
+	return response, nil
 }

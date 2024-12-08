@@ -117,7 +117,6 @@ export class FestivalOrdersComponent implements OnInit {
   }
 
   get filteredOrders(): OrderPreviewDTO[] {
-    // todo: adjust filters
     if (!this.orders || this.orders.length === 0) {
       return [];
     }

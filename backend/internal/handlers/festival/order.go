@@ -17,6 +17,7 @@ type OrderHandler interface {
 	GetOrdersAttendee(w http.ResponseWriter, r *http.Request)
 	GetOrdersEmployee(w http.ResponseWriter, r *http.Request)
 	IssueBracelet(w http.ResponseWriter, r *http.Request)
+	GetBraceletOrdersAttendee(w http.ResponseWriter, r *http.Request)
 }
 
 type orderHandler struct {
@@ -326,4 +327,24 @@ func (h *orderHandler) IssueBracelet(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"braceletId": bracelet.ID, "shippingAddress": attendee.Address}, nil)
 	log.Println("bracelet issued", bracelet.ID)
+}
+
+func (h *orderHandler) GetBraceletOrdersAttendee(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthAttendeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	username := utils.GetUsername(r.Context())
+
+	orders, err := h.orderService.GetBraceletOrdersAttendee(username)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, orders, nil)
+	log.Println("orders fetched for user", username)
 }

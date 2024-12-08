@@ -18,29 +18,34 @@
   </div>
 
   <div class="profile-content" *ngIf="!isLoading">
-    <mat-card class="bracelet-card" *ngFor="let bracelet of bracelets">
+    <mat-card class="bracelet-card" *ngFor="let order of filteredOrders">
       <div class="card-content">
         <div>
           <mat-card-header>
+            <!-- ! BRACELET ICON -->
             <div class="bracelet-container">
               <div
                 class="bracelet-strap left"
-                [ngStyle]="getBraceletStyle(bracelet.name)"
+                [ngStyle]="getBraceletStyle(order.festival.name)"
               ></div>
               <div
                 class="bracelet-center"
-                [ngStyle]="getBraceletStyle(bracelet.name)"
+                [ngStyle]="getBraceletStyle(order.festival.name)"
               ></div>
               <div
                 class="bracelet-strap right"
-                [ngStyle]="getBraceletStyle(bracelet.name)"
+                [ngStyle]="getBraceletStyle(order.festival.name)"
               ></div>
             </div>
-
-            <!-- <mat-card-title>Bracelet</mat-card-title>
-            <mat-card-subtitle> </mat-card-subtitle> -->
           </mat-card-header>
-          <mat-card-content>
+          <mat-card-content style="margin-top: 45px; margin-left: 0">
+            <mat-card-title>
+              {{ order.festival.name }} Bracelet
+            </mat-card-title>
+            <mat-card-subtitle>
+              {{ order.festival.startDate | date: "mediumDate" }} -
+              {{ order.festival.endDate | date: "mediumDate" }}
+            </mat-card-subtitle>
             <!-- <span class="icon-property" *ngIf="bracelet.orderType === 'TICKET'">
               <mat-icon class="material-symbols-outlined" color="primary">
                 confirmation_number
@@ -72,27 +77,113 @@
                 ${{ bracelet.totalPrice.toFixed(2) }}
               </span>
             </span> -->
+            <div class="divider"></div>
+
+            <span class="icon-property" *ngIf="!order.braceletStatus">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                fitness_tracker
+              </mat-icon>
+              Bracelet not yet issued
+            </span>
+            <span class="icon-property" *ngIf="order.braceletStatus">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                fitness_tracker
+              </mat-icon>
+              Bracelet<b>{{ getBraceletStatusText(order.braceletStatus) }}</b>
+            </span>
+
+            <div *ngIf="order.bracelet">
+              <span class="icon-property continued">
+                <mat-icon
+                  class="material-symbols-outlined"
+                  color="primary"
+                ></mat-icon>
+                Barcode Number:
+                <span class="number-mono">
+                  {{ order.bracelet.barcodeNumber }}
+                </span>
+              </span>
+              <span
+                class="icon-property continued"
+                *ngIf="
+                  order.braceletStatus && order.braceletStatus === 'ACTIVE'
+                "
+              >
+                <mat-icon
+                  class="material-symbols-outlined"
+                  color="primary"
+                ></mat-icon>
+                Balance:
+                <b class="number-mono">
+                  ${{ order.bracelet.balance.toFixed(2) }}
+                </b>
+              </span>
+            </div>
+            <span class="icon-property">
+              <mat-icon class="material-symbols-outlined" color="primary">
+                tag
+              </mat-icon>
+              Linked to
+              <a
+                mat-button
+                [routerLink]="['/my-orders', order.orderId]"
+                style="margin-left: -5px; margin-top: 2px"
+                >{{ "Order #" + order.orderId }}</a
+              >
+
+              <div class="spacer"></div>
+
+              <!-- ! ACTIONS -->
+
+              <button
+                mat-flat-button
+                (click)="activateBracelet()"
+                color="primary"
+                *ngIf="
+                  order.braceletStatus && order.braceletStatus !== 'ACTIVE'
+                "
+              >
+                <mat-icon class="material-symbols-outlined">
+                  verified
+                </mat-icon>
+                Activate Bracelet
+              </button>
+
+              <button
+                mat-flat-button
+                (click)="topUpBracelet()"
+                color="primary"
+                *ngIf="
+                  order.braceletStatus && order.braceletStatus === 'ACTIVE'
+                "
+              >
+                <mat-icon class="material-symbols-outlined">
+                  verified
+                </mat-icon>
+                Top Up Bracelet
+              </button>
+            </span>
           </mat-card-content>
         </div>
-        <mat-card-actions>
-          <button mat-button color="primary" (click)="onViewClick()">
-            View
-          </button>
-          <span class="spacer"></span>
-          <button mat-icon-button matTooltip="View Bracelet Status">
-            <mat-icon class="material-symbols-outlined" color="primary">
-              fitness_tracker
-            </mat-icon>
-          </button>
-        </mat-card-actions>
       </div>
     </mat-card>
   </div>
 
   <div
     class="empty-list"
-    *ngIf="!isLoading && (!bracelets || bracelets.length === 0)"
+    *ngIf="!isLoading && (!orders || orders.length === 0)"
   >
-    <p>You don't have any bracelets.</p>
+    <p>You do not have any bracelets.</p>
+  </div>
+  <div
+    class="empty-list"
+    *ngIf="
+      !isLoading &&
+      orders &&
+      orders.length > 0 &&
+      (!filteredOrders || filteredOrders.length === 0)
+    "
+  >
+    <p>There are no bracelets that match the selected filter.</p>
   </div>
 </div>

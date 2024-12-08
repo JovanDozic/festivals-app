@@ -171,6 +171,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// ...
 
 	pR.HandleFunc("/bracelet", orderHandler.IssueBracelet).Methods(http.MethodPost)
+	pR.HandleFunc("/bracelet/attendee", orderHandler.GetBraceletOrdersAttendee).Methods(http.MethodGet)
 
 	return r
 }

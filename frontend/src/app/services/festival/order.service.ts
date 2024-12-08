@@ -6,6 +6,7 @@ import {
   CreateTicketOrderRequest,
   IssueBraceletRequest,
   IssueBraceletResponse,
+  OrderDTO,
   OrderPreviewDTO,
 } from '../../models/festival/festival.model';
 
@@ -54,5 +55,9 @@ export class OrderService {
       `${this.apiUrl}/bracelet`,
       request,
     );
+  }
+
+  getMyBracelets(): Observable<OrderDTO[]> {
+    return this.http.get<OrderDTO[]>(`${this.apiUrl}/bracelet/attendee`);
   }
 }

@@ -71,6 +71,8 @@ mat-card-subtitle {
 
 mat-card-actions {
   margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
 }
 
 .main-action {
@@ -93,7 +95,15 @@ h3 {
 }
 
 .divider {
-  height: 5px;
+  height: 10px;
+}
+
+.continued {
+  margin-top: -10px !important;
+}
+
+.continued-end {
+  margin-bottom: 0px !important;
 }
 
 .bracelet-container {

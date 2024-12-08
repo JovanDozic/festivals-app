@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { OrderService } from '../../../../services/festival/order.service';
-import { OrderPreviewDTO } from '../../../../models/festival/festival.model';
+import {
+  OrderDTO,
+  OrderPreviewDTO,
+} from '../../../../models/festival/festival.model';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { FormsModule } from '@angular/forms';
 
@@ -18,6 +21,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-my-bracelets',
   imports: [
     CommonModule,
+    RouterLink,
     FormsModule,
     MatButtonModule,
     MatTooltipModule,
@@ -40,39 +44,14 @@ export class MyBraceletsComponent {
   private orderService = inject(OrderService);
 
   isLoading: boolean = true;
-  bracelets: any[] = [
-    {
-      name: 'jovans',
-      status: 'Activated',
-    },
-    {
-      name: 'navojs',
-      status: 'Activated',
-    },
-    {
-      name: 'tomorrowland',
-      status: 'Activated',
-    },
-    {
-      name: 'losercxl',
-      status: 'Activated',
-    },
-    {
-      name: 'oldedwo',
-      status: 'Activated',
-    },
-    {
-      name: 'loovfgerel',
-      status: 'Activated',
-    },
-  ];
+  orders: OrderDTO[] = [];
 
   filterOptions: string[] = [
     'All',
-    'Pending',
-    'Issued',
+    'Not Issued',
+    'Issued and Shipped',
     'Activated',
-    'Help Requested', // ovo mozda i ne stavljamo ovde jer je tesko to dobaviti u orders
+    'Help Requested',
     'Rejected',
   ];
   selectedChip: string = 'All'; // todo: change to activated
@@ -105,38 +84,50 @@ export class MyBraceletsComponent {
   }
 
   loadBracelets() {
-    this.isLoading = false;
-    // throw new Error('Method not implemented.');
-    // this.orderService.getMyOrders().subscribe({
-    //   next: (orders) => {
-    //     this.orders = orders;
-    //     this.isLoading = false;
-    //   },
-    //   error: (error) => {
-    //     console.log(error);
-    //     this.snackbarService.show('Failed to load orders');
-    //   },
-    // });
+    this.orderService.getMyBracelets().subscribe({
+      next: (orders) => {
+        this.orders = orders;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.snackbarService.show('Failed to load bracelets');
+      },
+    });
   }
 
-  // get filteredBracelets(): OrderPreviewDTO[] {
-  //   if (!this.orders || this.orders.length === 0) {
-  //     return [];
-  //   }
-  //   if (this.selectedChip === 'Upcoming Festivals') {
-  //     return this.orders.filter(
-  //       (order) => new Date(order.festival.startDate) > new Date(),
-  //     );
-  //   } else if (this.selectedChip === 'Past Festivals') {
-  //     return this.orders.filter(
-  //       (order) => new Date(order.festival.startDate) < new Date(),
-  //     );
-  //   } else {
-  //     return this.orders;
-  //   }
-  // }
+  get filteredOrders(): OrderDTO[] {
+    if (!this.orders || this.orders.length === 0) {
+      return [];
+    }
+    if (this.selectedChip === 'Not Issued') {
+      return this.orders.filter((order) => !order.braceletStatus);
+    } else if (this.selectedChip === 'Issued and Shipped') {
+      return this.orders.filter((order) => order.braceletStatus === 'ISSUED');
+    } else if (this.selectedChip === 'Activated') {
+      return this.orders.filter(
+        (order) => order.braceletStatus === 'ACTIVATED',
+      );
+    } else if (this.selectedChip === 'Help Requested') {
+      return this.orders.filter(
+        (order) => order.braceletStatus === 'HELP_REQUESTED',
+      );
+    } else if (this.selectedChip === 'Rejected') {
+      return this.orders.filter((order) => order.braceletStatus === 'REJECTED');
+    } else {
+      return this.orders;
+    }
+  }
 
   onViewClick() {
     // this.router.navigate(['my-orders', order.orderId]);
   }
+
+  getBraceletStatusText(status: string): string {
+    return status === 'ISSUED' ? 'Issued and Shipped' : status;
+  }
+
+  activateBracelet() {}
+
+  topUpBracelet() {}
 }
