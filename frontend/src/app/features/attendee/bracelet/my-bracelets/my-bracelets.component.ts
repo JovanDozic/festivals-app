@@ -53,11 +53,11 @@ export class MyBraceletsComponent {
     'All',
     'Not Issued',
     'Issued and Shipped',
-    'Activated',
+    'Active',
     'Help Requested',
     'Rejected',
   ];
-  selectedChip: string = 'All'; // todo: change to activated
+  selectedChip: string = 'Active';
 
   constructor() {}
 
@@ -107,7 +107,7 @@ export class MyBraceletsComponent {
       return this.orders.filter((order) => !order.braceletStatus);
     } else if (this.selectedChip === 'Issued and Shipped') {
       return this.orders.filter((order) => order.braceletStatus === 'ISSUED');
-    } else if (this.selectedChip === 'Activated') {
+    } else if (this.selectedChip === 'Active') {
       return this.orders.filter(
         (order) => order.braceletStatus === 'ACTIVATED',
       );
