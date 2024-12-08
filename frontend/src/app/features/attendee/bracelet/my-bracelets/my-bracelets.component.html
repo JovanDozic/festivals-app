@@ -137,7 +137,7 @@
 
               <button
                 mat-flat-button
-                (click)="activateBracelet()"
+                (click)="activateBracelet(order)"
                 color="primary"
                 *ngIf="
                   order.braceletStatus && order.braceletStatus !== 'ACTIVE'

@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
@@ -16,6 +16,7 @@ import {
 } from '../../../../models/festival/festival.model';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { FormsModule } from '@angular/forms';
+import { ActivateBraceletComponent } from '../activate-bracelet/activate-bracelet.component';
 
 @Component({
   selector: 'app-my-bracelets',
@@ -42,6 +43,7 @@ export class MyBraceletsComponent {
   private router = inject(Router);
   private snackbarService = inject(SnackbarService);
   private orderService = inject(OrderService);
+  private dialog = inject(MatDialog);
 
   isLoading: boolean = true;
   orders: OrderDTO[] = [];
@@ -127,7 +129,23 @@ export class MyBraceletsComponent {
     return status === 'ISSUED' ? 'Issued and Shipped' : status;
   }
 
-  activateBracelet() {}
+  activateBracelet(order: OrderDTO) {
+    const dialogRef = this.dialog.open(ActivateBraceletComponent, {
+      data: {
+        order: order,
+      },
+      width: '800px',
+      height: '425px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.snackbarService.show('Bracelet activated successfully!');
+        this.loadBracelets();
+      }
+    });
+  }
 
   topUpBracelet() {}
 }

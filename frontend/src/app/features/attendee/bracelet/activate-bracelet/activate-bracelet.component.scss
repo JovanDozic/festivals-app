@@ -1,0 +1,81 @@
+.full-width {
+  width: 100%;
+}
+
+mat-card-header {
+  margin-bottom: 20px;
+}
+
+.error-message {
+  margin-top: 5px;
+  text-align: center;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+mat-card-actions {
+  margin-top: 5px;
+}
+
+h2,
+mat-dialog-title {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif !important;
+}
+
+.form-fields {
+  display: flex;
+  justify-content: left;
+  gap: 10px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.error-message {
+  margin-top: 5px;
+  text-align: center;
+}
+
+h1,
+strong {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif;
+}
+
+.toggle-form-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin: 5px 0 0 0 !important;
+}
+
+.step-description {
+  font-size: 16px;
+  line-height: 24px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.mat-form-field-disabled {
+  opacity: 1 !important;
+
+  .mat-form-field-label,
+  .mat-form-field-wrapper .mat-input-element {
+    color: rgba(0, 0, 0, 0.87) !important;
+  }
+
+  .mat-form-field-outline,
+  .mat-form-field-outline-thick {
+    border-color: rgba(0, 0, 0, 0.38) !important;
+  }
+}

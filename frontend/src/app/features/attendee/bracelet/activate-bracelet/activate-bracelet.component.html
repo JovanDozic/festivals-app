@@ -1,1 +1,44 @@
-<p>activate-bracelet works!</p>
+<h2 mat-dialog-title>Activate Bracelet</h2>
+
+<mat-dialog-content>
+  <p class="step-description">
+    Please check back side of your Bracelet. Check if Barcode Number matches the
+    one below. Then, enter the PIN code to activate the Bracelet.
+  </p>
+  <form [formGroup]="infoFormGroup">
+    <div class="form-field">
+      <mat-form-field appearance="outline">
+        <mat-label>Barcode Number</mat-label>
+        <input matInput type="text" formControlName="barcodeNumberCtrl" />
+      </mat-form-field>
+    </div>
+    <div class="form-fields">
+      <mat-form-field appearance="outline">
+        <mat-label>PIN Code</mat-label>
+        <input matInput formControlName="pinCtrl" required />
+        <mat-error *ngIf="infoFormGroup.get('pinCtrl')?.hasError('required')">
+          PIN Code is required
+        </mat-error>
+        <mat-error *ngIf="infoFormGroup.get('pinCtrl')?.hasError('minlength')">
+          PIN Code must be at least 4 characters long
+        </mat-error>
+        <mat-error *ngIf="infoFormGroup.get('pinCtrl')?.hasError('maxlength')">
+          PIN Code cannot be more than 20 characters long
+        </mat-error>
+        <mat-error *ngIf="infoFormGroup.get('pinCtrl')?.hasError('pattern')">
+          PIN Code can only contain numbers
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="margin-top: -20px">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button mat-button (click)="requestHelp()">
+    I have a problem with the Bracelet
+  </button>
+  <button mat-flat-button (click)="done()" [disabled]="infoFormGroup.invalid">
+    Activate
+  </button>
+</mat-dialog-actions>
