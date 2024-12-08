@@ -129,9 +129,12 @@
   <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
   <button
     mat-flat-button
+    color="primary"
     (click)="sendRequest()"
-    [disabled]="infoFormGroup.invalid"
+    class="save-changes-button"
+    [disabled]="infoFormGroup.invalid || !selectedFile"
   >
-    Send Request
+    <mat-spinner *ngIf="isUploading"></mat-spinner>
+    <span *ngIf="!isUploading">Send Request</span>
   </button>
 </mat-dialog-actions>

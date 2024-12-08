@@ -1,3 +1,5 @@
+@use "@angular/material" as mat;
+
 .full-width {
   width: 100%;
 }
@@ -118,4 +120,22 @@ mat-form-field {
 
 .stepper-custom::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.save-changes-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.save-changes-button mat-spinner {
+  height: 25px !important;
+}
+
+.save-changes-button {
+  @include mat.progress-spinner-overrides(
+    (
+      active-indicator-color: #fff,
+    )
+  );
 }

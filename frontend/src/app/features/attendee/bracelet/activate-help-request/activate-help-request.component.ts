@@ -30,6 +30,7 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { OrderService } from '../../../../services/festival/order.service';
 import { ImageService } from '../../../../services/image/image.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-activate-help-request',
@@ -47,6 +48,7 @@ import { ImageService } from '../../../../services/image/image.service';
     MatStepperModule,
     MatSlideToggleModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './activate-help-request.component.html',
   styleUrls: [
@@ -67,6 +69,7 @@ export class ActivateHelpRequestComponent {
   infoFormGroup: FormGroup;
   selectedFile: File | null = null;
   imagePreviewUrl: string | ArrayBuffer | null = null;
+  isUploading = false;
 
   constructor() {
     this.infoFormGroup = this.fb.group({
@@ -120,6 +123,7 @@ export class ActivateHelpRequestComponent {
       this.selectedFile &&
       this.data.order.bracelet
     ) {
+      this.isUploading = true;
       const request: ActivateBraceletHelpRequest = {
         braceletId: this.data.order.bracelet.braceletId,
         pinUser: this.infoFormGroup.get('pinUserCtrl')?.value,
@@ -137,11 +141,13 @@ export class ActivateHelpRequestComponent {
           this.orderService.sendHelpRequest(request).subscribe({
             next: () => {
               this.snackbarService.show('Help Request sent successfully');
+              this.isUploading = false;
               this.dialogRef.close(true);
             },
             error: (error) => {
               console.log('Error sending Help Request: ', error);
               this.snackbarService.show('Error sending Help Request');
+              this.isUploading = false;
             },
           });
         },
