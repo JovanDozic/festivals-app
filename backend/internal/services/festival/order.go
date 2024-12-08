@@ -131,6 +131,7 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 		Type:        ticketItem.Type,
 		Description: ticketItem.Description,
 	}
+	orderDto.FestivalTicketId = &festivalTicket.ID
 
 	// * get package
 

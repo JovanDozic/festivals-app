@@ -67,8 +67,7 @@
         <span class="icon-property" *ngIf="order.ticket">
           <mat-icon
             class="material-symbols-outlined"
-            color="primary"
-            [ngClass]="{ 'color-error': !order.braceletStatus }"
+            color="{{ order.braceletStatus ? 'primary' : 'warn' }}"
           >
             fitness_tracker
           </mat-icon>
@@ -76,6 +75,18 @@
           <span class="number-mono">
             {{ order.braceletStatus ?? "PENDING" }}
           </span>
+          <div class="spacer"></div>
+          <button
+            mat-stroked-button
+            *ngIf="!order.braceletStatus"
+            color="warn"
+            (click)="onIssueBraceletClick()"
+          >
+            <mat-icon class="material-symbols-outlined">
+              fitness_tracker
+            </mat-icon>
+            Issue Bracelet
+          </button>
         </span>
         <div *ngIf="order.bracelet">
           <span class="icon-property continued">

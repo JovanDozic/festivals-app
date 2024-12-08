@@ -152,7 +152,7 @@
             <div class="divider"></div>
 
             <span class="icon-property" *ngIf="!order.braceletStatus">
-              <mat-icon class="material-symbols-outlined color-error">
+              <mat-icon class="material-symbols-outlined" color="warn">
                 fitness_tracker
               </mat-icon>
               Bracelet not issued
@@ -174,14 +174,15 @@
           </button>
           <span class="spacer"></span>
           <button
-            mat-icon-button
-            matTooltip="Issue Bracelet"
+            mat-button
             (click)="onIssueBraceletClick(order)"
             *ngIf="!order.braceletStatus"
+            color="warn"
           >
-            <mat-icon class="material-symbols-outlined" color="primary">
+            <mat-icon class="material-symbols-outlined">
               fitness_tracker
             </mat-icon>
+            Issue Bracelet
           </button>
         </mat-card-actions>
       </div>

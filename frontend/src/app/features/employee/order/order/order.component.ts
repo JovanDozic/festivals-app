@@ -13,9 +13,14 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
 import { UserService } from '../../../../services/user/user.service';
 import { OrderService } from '../../../../services/festival/order.service';
-import { Festival, OrderDTO } from '../../../../models/festival/festival.model';
+import {
+  Festival,
+  OrderDTO,
+  OrderPreviewDTO,
+} from '../../../../models/festival/festival.model';
 import { AddressResponse } from '../../../../models/common/address-response.model';
 import { UserProfileResponse } from '../../../../models/user/user-profile-response.model';
+import { IssueBraceletComponent } from '../issue-bracelet/issue-bracelet.component';
 
 @Component({
   selector: 'app-order',
@@ -120,5 +125,29 @@ export class OrderComponent implements OnInit {
         this.isLoading = true;
       },
     });
+  }
+
+  onIssueBraceletClick() {
+    console.log('alloo');
+    if (this.order) {
+      const dialogRef = this.dialog.open(IssueBraceletComponent, {
+        data: {
+          festivalId: this.festival?.id,
+          orderId: this.order.orderId,
+          festivalTicketId: this.order.festivalTicketId,
+          attendeeUsername: this.order.attendee.username,
+        },
+        width: '800px',
+        height: 'auto',
+        disableClose: true,
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.snackbarService.show('Bracelet issued successfully!');
+          this.loadOrder();
+        }
+      });
+    }
   }
 }
