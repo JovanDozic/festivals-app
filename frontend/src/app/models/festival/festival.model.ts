@@ -278,6 +278,7 @@ export interface OrderPreviewDTO {
   username: string; // this is attendee's username
   attendee: UserProfileResponse;
   braceletStatus?: string;
+  braceletId?: number;
   festivalTicketId: number;
 }
 
@@ -310,4 +311,16 @@ export interface ActivateBraceletHelpRequest {
   pinUser: string;
   issueDescription: string;
   imageURL: string;
+}
+
+export interface ActivationHelpRequestDTO {
+  activationHelpRequestId: number;
+  userEnteredPIN: string;
+  userEnteredBarcode: string;
+  issueDescription: string;
+  imageURL: string;
+  status: string;
+  bracelet: BraceletDTO;
+  attendee: UserProfileResponse;
+  employee: UserProfileResponse;
 }

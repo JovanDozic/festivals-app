@@ -26,6 +26,7 @@ type OrderService interface {
 	ActivateBracelet(username string, braceletId uint, userEnteredPIN string) error
 	TopUpBracelet(username string, braceletId uint, amount float64) error
 	CreateHelpRequest(username string, request dtoFestival.ActivateBraceletHelpRequest) error
+	GetHelpRequest(braceletId uint) (*modelsFestival.ActivationHelpRequest, error)
 }
 
 type orderService struct {
@@ -343,6 +344,7 @@ func (s *orderService) GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPr
 
 		if bracelet != nil {
 			orderDto.BraceletStatus = &bracelet.Status
+			orderDto.BraceletID = &bracelet.ID
 		} else {
 			orderDto.BraceletStatus = nil
 		}
@@ -493,12 +495,13 @@ func (s *orderService) CreateHelpRequest(username string, request dtoFestival.Ac
 	}
 
 	helpRequest := modelsFestival.ActivationHelpRequest{
-		UserEnteredPIN:   request.PINUser,
-		IssueDescription: request.IssueDescription,
-		Status:           "OPEN",
-		BraceletID:       request.BraceletId,
-		AttendeeID:       attendeeId,
-		ProofImageID:     image.ID,
+		UserEnteredPIN:     request.PINUser,
+		UserEnteredBarcode: request.BarcodeNumberUser,
+		IssueDescription:   request.IssueDescription,
+		Status:             "OPEN",
+		BraceletID:         request.BraceletId,
+		AttendeeID:         attendeeId,
+		ProofImageID:       image.ID,
 	}
 
 	if err := s.orderRepo.CreateHelpRequest(&helpRequest); err != nil {
@@ -506,4 +509,8 @@ func (s *orderService) CreateHelpRequest(username string, request dtoFestival.Ac
 	}
 
 	return nil
+}
+
+func (s *orderService) GetHelpRequest(braceletId uint) (*modelsFestival.ActivationHelpRequest, error) {
+	return s.orderRepo.GetHelpRequest(braceletId)
 }

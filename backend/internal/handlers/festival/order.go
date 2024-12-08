@@ -22,6 +22,7 @@ type OrderHandler interface {
 	ActivateBracelet(w http.ResponseWriter, r *http.Request)
 	TopUpBracelet(w http.ResponseWriter, r *http.Request)
 	SendActivateBraceletHelpRequest(w http.ResponseWriter, r *http.Request)
+	GetHelpRequest(w http.ResponseWriter, r *http.Request)
 }
 
 type orderHandler struct {
@@ -489,4 +490,63 @@ func (h *orderHandler) SendActivateBraceletHelpRequest(w http.ResponseWriter, r 
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
 	log.Println("bracelet activation help request for", braceletId, "created by user", username)
+}
+
+func (h *orderHandler) GetHelpRequest(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthEmployeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	braceletId, err := GetIDParamFromRequest(r, "braceletId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	helpRequest, err := h.orderService.GetHelpRequest(braceletId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	employeeBracelet, err := h.userService.GetUserProfileById(helpRequest.Bracelet.EmployeeID)
+	if err != nil {
+		log.Println("error: ", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	attendee, err := h.userService.GetUserProfileById(helpRequest.Bracelet.AttendeeID)
+	if err != nil {
+		log.Println("error: ", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	bracelet := dtoFestival.BraceletDTO{
+		BraceletID:    helpRequest.Bracelet.ID,
+		BarcodeNumber: helpRequest.Bracelet.BarcodeNumber,
+		Status:        helpRequest.Bracelet.Status,
+		Balance:       helpRequest.Bracelet.Balance,
+		Employee:      employeeBracelet,
+	}
+
+	response := dtoFestival.ActivationHelpRequestDTO{
+		ActivationHelpRequestID: helpRequest.ID,
+		UserEnteredPIN:          helpRequest.UserEnteredPIN,
+		UserEnteredBarcode:      helpRequest.UserEnteredBarcode,
+		IssueDescription:        helpRequest.IssueDescription,
+		ImageURL:                helpRequest.ProofImage.URL,
+		Status:                  helpRequest.Status,
+		Bracelet:                bracelet,
+		Attendee:                *attendee,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response, nil)
+	log.Println("help request fetched for bracelet", braceletId)
+
 }

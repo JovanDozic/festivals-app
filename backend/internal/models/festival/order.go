@@ -60,15 +60,16 @@ type Bracelet struct {
 
 type ActivationHelpRequest struct {
 	gorm.Model
-	UserEnteredPIN   string
-	IssueDescription string
-	ProofImageID     uint
-	ProofImage       modelsCommon.Image `gorm:"foreignKey:ProofImageID"`
-	Status           string             // Status: OPEN, ACCEPTED, REJECTED
-	BraceletID       uint
-	Bracelet         Bracelet
-	AttendeeID       uint
-	Attendee         modelsUser.Attendee `gorm:"foreignKey:AttendeeID"`
-	EmployeeID       *uint
-	Employee         *modelsUser.Employee `gorm:"foreignKey:EmployeeID"`
+	UserEnteredPIN     string
+	UserEnteredBarcode string
+	IssueDescription   string
+	ProofImageID       uint
+	ProofImage         modelsCommon.Image `gorm:"foreignKey:ProofImageID"`
+	Status             string             // Status: OPEN, ACCEPTED, REJECTED
+	BraceletID         uint
+	Bracelet           Bracelet
+	AttendeeID         uint
+	Attendee           modelsUser.Attendee `gorm:"foreignKey:AttendeeID"`
+	EmployeeID         *uint
+	Employee           *modelsUser.Employee `gorm:"foreignKey:EmployeeID"`
 }

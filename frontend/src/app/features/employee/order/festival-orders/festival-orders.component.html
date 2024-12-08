@@ -180,7 +180,7 @@
           <button
             mat-button
             (click)="onIssueBraceletClick(order)"
-            *ngIf="order.braceletStatus === 'ISSUED'"
+            *ngIf="!order.braceletStatus"
             color="warn"
           >
             <mat-icon class="material-symbols-outlined">

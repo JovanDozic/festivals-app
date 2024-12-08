@@ -171,6 +171,7 @@ type OrderPreviewDTO struct {
 	Username         string                          `json:"username"`
 	Attendee         *dtoUser.GetUserProfileResponse `json:"attendee"`
 	BraceletStatus   *string                         `json:"braceletStatus"`
+	BraceletID       *uint                           `json:"braceletId"`
 	FestivalTicketId *uint                           `json:"festivalTicketId"`
 }
 
@@ -180,4 +181,16 @@ type BraceletDTO struct {
 	Balance       float64                         `json:"balance"`
 	Status        string                          `json:"status"`
 	Employee      *dtoUser.GetUserProfileResponse `json:"employee"`
+}
+
+type ActivationHelpRequestDTO struct {
+	ActivationHelpRequestID uint                           `json:"activationHelpRequestId"`
+	UserEnteredPIN          string                         `json:"userEnteredPIN"`
+	UserEnteredBarcode      string                         `json:"userEnteredBarcode"`
+	IssueDescription        string                         `json:"issueDescription"`
+	ImageURL                string                         `json:"imageUrl"`
+	Status                  string                         `json:"status"`
+	Bracelet                BraceletDTO                    `json:"bracelet"`
+	Attendee                dtoUser.GetUserProfileResponse `json:"attendee"`
+	Employee                dtoUser.GetUserProfileResponse `json:"employee"`
 }

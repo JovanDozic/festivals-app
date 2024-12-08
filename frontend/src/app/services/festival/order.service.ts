@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {
   ActivateBraceletHelpRequest,
   ActivateBraceletRequest,
+  ActivationHelpRequestDTO,
   CreatePackageOrderRequest,
   CreateTicketOrderRequest,
   IssueBraceletRequest,
@@ -82,6 +83,12 @@ export class OrderService {
     return this.http.post<void>(
       `${this.apiUrl}/bracelet/${request.braceletId}/activate/help`,
       request,
+    );
+  }
+
+  getHelpRequest(braceletId: number): Observable<ActivationHelpRequestDTO> {
+    return this.http.get<ActivationHelpRequestDTO>(
+      `${this.apiUrl}/bracelet/${braceletId}/activate/help`,
     );
   }
 }

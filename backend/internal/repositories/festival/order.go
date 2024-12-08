@@ -21,6 +21,7 @@ type OrderRepo interface {
 	GetBraceletById(braceletId uint) (*models.Bracelet, error)
 	UpdateBracelet(bracelet *models.Bracelet) error
 	CreateHelpRequest(helpRequest *models.ActivationHelpRequest) error
+	GetHelpRequest(braceletId uint) (*models.ActivationHelpRequest, error)
 }
 
 type orderRepo struct {
@@ -131,4 +132,17 @@ func (r *orderRepo) UpdateBracelet(bracelet *models.Bracelet) error {
 
 func (r *orderRepo) CreateHelpRequest(helpRequest *models.ActivationHelpRequest) error {
 	return r.db.Create(helpRequest).Error
+}
+
+func (r *orderRepo) GetHelpRequest(braceletId uint) (*models.ActivationHelpRequest, error) {
+	helpRequest := &models.ActivationHelpRequest{}
+	err := r.db.
+		Preload("Bracelet").
+		Preload("Bracelet.Employee").
+		Preload("ProofImage").
+		Preload("Attendee.User").
+		Preload("Employee.User").
+		Where("bracelet_id = ?", braceletId).
+		First(&helpRequest).Error
+	return helpRequest, err
 }

@@ -174,6 +174,7 @@ export class FestivalOrdersComponent implements OnInit {
         orderId: order.orderId,
         festivalTicketId: order.festivalTicketId,
         attendeeUsername: order.username,
+        braceletId: order.braceletId,
       },
       width: '800px',
       height: 'auto',

@@ -1,7 +1,6 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
-  MatDialog,
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
@@ -13,7 +12,6 @@ import {
 } from '@angular/forms';
 import {
   ActivateBraceletHelpRequest,
-  ActivateBraceletRequest,
   OrderDTO,
 } from '../../../../models/festival/festival.model';
 import { CommonModule } from '@angular/common';
