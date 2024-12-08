@@ -88,6 +88,7 @@
       [multiple]="false"
       [required]="true"
     >
+      <mat-chip-option [selectable]="false"> Bracelet Status: </mat-chip-option>
       @for (option of filterOptions; track option) {
         <mat-chip-option selected [selectable]="selectedChip !== option">{{
           option
