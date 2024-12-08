@@ -128,7 +128,6 @@ export class OrderComponent implements OnInit {
   }
 
   onIssueBraceletClick() {
-    console.log('alloo');
     if (this.order) {
       const dialogRef = this.dialog.open(IssueBraceletComponent, {
         data: {
@@ -149,5 +148,9 @@ export class OrderComponent implements OnInit {
         }
       });
     }
+  }
+
+  onPrintShippingLabelClick() {
+    this.snackbarService.show('Printing shipping label...');
   }
 }
