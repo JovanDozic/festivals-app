@@ -38,7 +38,11 @@
   <button mat-button (click)="requestHelp()">
     I have a problem with the Bracelet
   </button>
-  <button mat-flat-button (click)="done()" [disabled]="infoFormGroup.invalid">
+  <button
+    mat-flat-button
+    (click)="activateBracelet()"
+    [disabled]="infoFormGroup.invalid"
+  >
     Activate
   </button>
 </mat-dialog-actions>

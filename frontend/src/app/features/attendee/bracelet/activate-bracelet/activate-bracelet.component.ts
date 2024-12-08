@@ -12,6 +12,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {
+  ActivateBraceletRequest,
   CreateItemPriceRequest,
   CreateItemRequest,
   IssueBraceletRequest,
@@ -96,20 +97,44 @@ export class ActivateBraceletComponent {
     this.dialogRef.close(false);
   }
 
-  done() {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
-        title: 'Are you sure?',
-        message: `Are you sure you want to complete Bracelet issuing? Don't forget to print the shipping label.`,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No',
-      },
-    });
+  activateBracelet() {
+    if (
+      this.infoFormGroup.valid &&
+      this.data.order &&
+      this.data.order.bracelet
+    ) {
+      const request: ActivateBraceletRequest = {
+        braceletId: this.data.order.bracelet.braceletId,
+        pin: this.infoFormGroup.get('pinCtrl')?.value,
+      };
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result?.confirm) {
-        this.dialogRef.close(true);
-      }
-    });
+      this.orderService.activateBracelet(request).subscribe({
+        next: () => {
+          this.snackbarService.show('Bracelet activated successfully');
+          this.dialogRef.close(true);
+        },
+        error: (error) => {
+          if (error.status === 403) {
+            this.snackbarService.show('Invalid PIN. Please try again.');
+            return;
+          }
+          this.snackbarService.show('Failed to activate bracelet');
+        },
+      });
+    }
+    //   const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    //     data: {
+    //       title: 'Are you sure?',
+    //       message: `Are you sure you want to complete Bracelet issuing? Don't forget to print the shipping label.`,
+    //       confirmButtonText: 'Yes',
+    //       cancelButtonText: 'No',
+    //     },
+    //   });
+    //   dialogRef.afterClosed().subscribe((result) => {
+    //     if (result?.confirm) {
+    //       this.dialogRef.close(true);
+    //     }
+    //   });
+    // }
   }
 }

@@ -155,3 +155,13 @@ func (f *IssueBraceletRequest) Validate() error {
 	}
 	return nil
 }
+
+func (f *ActivateBraceletRequest) Validate() error {
+	if f.BraceletId == 0 {
+		return models.ErrMissingFields
+	}
+	if f.PIN == "" {
+		return models.ErrMissingFields
+	}
+	return nil
+}

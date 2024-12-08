@@ -21,6 +21,7 @@ type OrderService interface {
 	GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPreviewDTO, error)
 	GetBraceletOrdersAttendee(username string) ([]dtoFestival.OrderDTO, error)
 	IssueBracelet(request *models.Bracelet) error
+	ActivateBracelet(username string, braceletId uint, userEnteredPIN string) error
 }
 
 type orderService struct {
@@ -405,4 +406,29 @@ func (s *orderService) GetBraceletOrdersAttendee(username string) ([]dtoFestival
 	}
 
 	return response, nil
+}
+
+func (s *orderService) ActivateBracelet(username string, braceletId uint, userEnteredPIN string) error {
+
+	bracelet, err := s.orderRepo.GetBraceletById(braceletId)
+	if err != nil {
+		return err
+	}
+
+	if bracelet.Attendee.User.Username != username {
+		return errors.New("bracelet not found or it does not belong to logged in user")
+	}
+
+	// only activate if it is issued
+	if bracelet.Status != "ISSUED" {
+		return errors.New("bracelet is not issued (status: " + bracelet.Status + ")")
+	}
+
+	if bracelet.PIN != userEnteredPIN {
+		return errors.New("invalid PIN")
+	}
+
+	bracelet.Status = "ACTIVATED"
+
+	return s.orderRepo.UpdateBracelet(bracelet)
 }

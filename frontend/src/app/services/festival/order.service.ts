@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
+  ActivateBraceletRequest,
   CreatePackageOrderRequest,
   CreateTicketOrderRequest,
   IssueBraceletRequest,
@@ -59,5 +60,12 @@ export class OrderService {
 
   getMyBracelets(): Observable<OrderDTO[]> {
     return this.http.get<OrderDTO[]>(`${this.apiUrl}/bracelet/attendee`);
+  }
+
+  activateBracelet(request: ActivateBraceletRequest): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/bracelet/${request.braceletId}/activate`,
+      request,
+    );
   }
 }

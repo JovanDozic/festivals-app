@@ -293,3 +293,8 @@ export interface IssueBraceletResponse {
   braceletId: number;
   shippingAddress: AddressResponse;
 }
+
+export interface ActivateBraceletRequest {
+  braceletId: number;
+  pin: string;
+}

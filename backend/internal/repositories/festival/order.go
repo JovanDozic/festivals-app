@@ -18,6 +18,8 @@ type OrderRepo interface {
 	GetFestivalPackage(festivalPackageId uint) (*models.FestivalPackage, error)
 	CreateBracelet(bracelet *models.Bracelet) error
 	GetBraceletByTicketId(festivalTicketId uint) (*models.Bracelet, error)
+	GetBraceletById(braceletId uint) (*models.Bracelet, error)
+	UpdateBracelet(bracelet *models.Bracelet) error
 }
 
 type orderRepo struct {
@@ -111,4 +113,17 @@ func (r *orderRepo) GetBraceletByTicketId(festivalTicketId uint) (*models.Bracel
 		Where("festival_ticket_id = ?", festivalTicketId).
 		First(&bracelet).Error
 	return bracelet, err
+}
+
+func (r *orderRepo) GetBraceletById(braceletId uint) (*models.Bracelet, error) {
+	bracelet := &models.Bracelet{}
+	err := r.db.
+		Preload("Attendee.User").
+		Where("id = ?", braceletId).
+		First(&bracelet).Error
+	return bracelet, err
+}
+
+func (r *orderRepo) UpdateBracelet(bracelet *models.Bracelet) error {
+	return r.db.Save(bracelet).Error
 }

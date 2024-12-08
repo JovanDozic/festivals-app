@@ -13,11 +13,14 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   intercept(
     request: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     const authToken = this.authService.getToken();
 
@@ -31,16 +34,13 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       catchError((error) => {
-        if (
-          error instanceof HttpErrorResponse &&
-          (error.status === 401 || error.status === 403)
-        ) {
+        if (error instanceof HttpErrorResponse && error.status === 401) {
           this.authService.logout();
           this.router.navigate(['/login']);
         }
 
         return throwError(() => error);
-      })
+      }),
     );
   }
 }
