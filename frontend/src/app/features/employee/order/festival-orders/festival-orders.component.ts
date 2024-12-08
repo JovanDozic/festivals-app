@@ -165,4 +165,6 @@ export class FestivalOrdersComponent implements OnInit {
       }
     });
   }
+
+  reviewHelpRequest(order: OrderPreviewDTO) {}
 }

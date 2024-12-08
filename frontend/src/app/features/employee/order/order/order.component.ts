@@ -153,4 +153,6 @@ export class OrderComponent implements OnInit {
   onPrintShippingLabelClick() {
     this.snackbarService.show('Printing shipping label...');
   }
+
+  reviewHelpRequest(order: OrderDTO) {}
 }

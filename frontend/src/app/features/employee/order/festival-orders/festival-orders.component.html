@@ -99,9 +99,12 @@
 
   <div class="profile-content" *ngIf="!isLoading">
     <mat-card
-      class="festival-card ai-shadow-card"
+      class="festival-card ai-shadow-card-no-hover"
       *ngFor="let order of filteredOrders"
-      [ngClass]="{ 'action-required': !order.braceletStatus }"
+      [ngClass]="{
+        'action-required': !order.braceletStatus,
+        warning: order.braceletStatus === 'HELP_REQUESTED',
+      }"
     >
       <div class="card-content">
         <div>
@@ -177,13 +180,21 @@
           <button
             mat-button
             (click)="onIssueBraceletClick(order)"
-            *ngIf="!order.braceletStatus"
+            *ngIf="order.braceletStatus === 'ISSUED'"
             color="warn"
           >
             <mat-icon class="material-symbols-outlined">
               fitness_tracker
             </mat-icon>
             Issue Bracelet
+          </button>
+          <button
+            mat-button
+            (click)="reviewHelpRequest(order)"
+            *ngIf="order.braceletStatus === 'HELP_REQUESTED'"
+          >
+            <mat-icon class="material-symbols-outlined"> rate_review </mat-icon>
+            Review Help Request
           </button>
         </mat-card-actions>
       </div>

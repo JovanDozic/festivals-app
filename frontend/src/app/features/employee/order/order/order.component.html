@@ -60,7 +60,10 @@
     <!-- ! BRACELET INFORMATION -->
     <mat-card
       class="profile-card ai-shadow-card-no-hover"
-      [ngClass]="{ 'action-required': !order.braceletStatus }"
+      [ngClass]="{
+        'action-required': !order.braceletStatus,
+        warning: order.braceletStatus === 'HELP_REQUESTED',
+      }"
     >
       <mat-card-content>
         <!-- ! BRACELET -->
@@ -81,11 +84,21 @@
             *ngIf="!order.braceletStatus"
             color="warn"
             (click)="onIssueBraceletClick()"
+            style="margin-top: 0px"
           >
             <mat-icon class="material-symbols-outlined">
               fitness_tracker
             </mat-icon>
             Issue Bracelet
+          </button>
+          <button
+            mat-button
+            *ngIf="order.braceletStatus === 'HELP_REQUESTED'"
+            (click)="reviewHelpRequest(order)"
+            style="margin-top: -10px"
+          >
+            <mat-icon class="material-symbols-outlined"> rate_review </mat-icon>
+            Review Help Request
           </button>
         </span>
         <div *ngIf="order.bracelet">
