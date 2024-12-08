@@ -448,7 +448,9 @@ export class StorePackageComponent implements OnInit {
       }
     } catch (error) {
       console.error('Error completing order:', error);
-      this.snackbarService.show('Error completing order');
+      if ((error as Error).message === 'selection missing')
+        this.snackbarService.show('Please select all of the required items');
+      else this.snackbarService.show('Failed completing order');
       this.isLoading = false;
     }
   }
@@ -495,8 +497,8 @@ export class StorePackageComponent implements OnInit {
       this.selectedTicket &&
       this.festival &&
       this.festival.id &&
-      this.selectedCampAddon &&
-      this.selectedTransportAddon
+      (this.campAddonsCount === 0 || this.selectedCampAddon) &&
+      (this.transportAddonsCount === 0 || this.selectedTransportAddon)
     ) {
       const request: CreatePackageOrderRequest = {
         ticketTypeId: this.selectedTicket.itemId,
@@ -517,10 +519,7 @@ export class StorePackageComponent implements OnInit {
 
       return response;
     }
-    return throwError(
-      () =>
-        new Error('No ticket selected or festival or festival ID is missing'),
-    );
+    return throwError(() => new Error('selections missing'));
   }
 
   openPaymentDialog(orderId: number) {
