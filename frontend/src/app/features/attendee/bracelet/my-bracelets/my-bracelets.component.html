@@ -18,7 +18,11 @@
   </div>
 
   <div class="profile-content" *ngIf="!isLoading">
-    <mat-card class="bracelet-card" *ngFor="let order of filteredOrders">
+    <mat-card
+      class="bracelet-card ai-shadow-card-no-hover"
+      *ngFor="let order of filteredOrders"
+      [ngClass]="{ active: order.braceletStatus === 'ACTIVATED' }"
+    >
       <div class="card-content">
         <div>
           <mat-card-header>
@@ -46,37 +50,7 @@
               {{ order.festival.startDate | date: "mediumDate" }} -
               {{ order.festival.endDate | date: "mediumDate" }}
             </mat-card-subtitle>
-            <!-- <span class="icon-property" *ngIf="bracelet.orderType === 'TICKET'">
-              <mat-icon class="material-symbols-outlined" color="primary">
-                confirmation_number
-              </mat-icon>
-              <h3>Ticket Order</h3>
-            </span>
-            <span class="icon-property" *ngIf="bracelet.orderType === 'PACKAGE'">
-              <mat-icon class="material-symbols-outlined" color="primary">
-                package_2
-              </mat-icon>
-              <h3>Package Order</h3>
-            </span>
 
-            <span class="icon-property">
-              <mat-icon class="material-symbols-outlined" color="primary">
-                celebration
-              </mat-icon>
-              <h3>{{ bracelet.festival.name }}</h3>
-            </span>
-
-            <div class="divider"></div>
-
-            <span class="icon-property">
-              <mat-icon class="material-symbols-outlined" color="primary">
-                attach_money
-              </mat-icon>
-              Total Price:
-              <span class="number-mono">
-                ${{ bracelet.totalPrice.toFixed(2) }}
-              </span>
-            </span> -->
             <div class="divider"></div>
 
             <span class="icon-property" *ngIf="!order.braceletStatus">
@@ -140,7 +114,7 @@
                 (click)="activateBracelet(order)"
                 color="primary"
                 *ngIf="
-                  order.braceletStatus && order.braceletStatus !== 'ACTIVATED'
+                  order.braceletStatus && order.braceletStatus === 'ISSUED'
                 "
               >
                 <mat-icon class="material-symbols-outlined">

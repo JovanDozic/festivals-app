@@ -195,6 +195,10 @@ img[mat-card-image] {
   &.action-required {
     outline: 3px solid #ff5449;
   }
+
+  &.active {
+    outline: 3px solid #31f491;
+  }
 }
 
 :host-context([data-theme="light"]) .ai-shadow-card {
@@ -215,6 +219,10 @@ img[mat-card-image] {
   &.action-required {
     outline: 3px solid #ff5449;
   }
+
+  &.active {
+    outline: 3px solid #31f491;
+  }
 }
 
 :host-context([data-theme="dark"]) .ai-shadow-card-no-hover {
@@ -231,6 +239,10 @@ img[mat-card-image] {
   &.action-required {
     outline: 3px solid #ff5449;
   }
+
+  &.active {
+    outline: 3px solid #31f491;
+  }
 }
 
 :host-context([data-theme="light"]) .ai-shadow-card-no-hover {
@@ -246,6 +258,10 @@ img[mat-card-image] {
 
   &.action-required {
     outline: 3px solid #ff5449;
+  }
+
+  &.active {
+    outline: 3px solid #1ec951;
   }
 }
 
