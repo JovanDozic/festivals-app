@@ -19,6 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { ItemService } from '../../../../services/festival/item.service';
 import { FestivalService } from '../../../../services/festival/festival.service';
 import { IssueBraceletComponent } from '../issue-bracelet/issue-bracelet.component';
+import { ReviewHelpRequestComponent } from '../review-help-request/review-help-request.component';
 
 @Component({
   selector: 'app-festival-orders',
@@ -160,11 +161,32 @@ export class FestivalOrdersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.snackbarService.show('Bracelet issued successfully!');
+        this.snackbarService.show('Bracelet issued successfully');
         this.loadOrders();
       }
     });
   }
 
-  reviewHelpRequest(order: OrderPreviewDTO) {}
+  reviewHelpRequest(order: OrderPreviewDTO) {
+    const dialogRef = this.dialog.open(ReviewHelpRequestComponent, {
+      data: {
+        festivalId: this.festival?.id,
+        orderId: order.orderId,
+        festivalTicketId: order.festivalTicketId,
+        attendeeUsername: order.username,
+      },
+      width: '800px',
+      height: 'auto',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.snackbarService.show(
+          'Activation help request reviewed successfully',
+        );
+        this.loadOrders();
+      }
+    });
+  }
 }

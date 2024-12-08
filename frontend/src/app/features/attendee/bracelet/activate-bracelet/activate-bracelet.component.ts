@@ -28,7 +28,7 @@ import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { OrderService } from '../../../../services/festival/order.service';
-import { ActivateHelpRequestComponent } from '../activate-help-request/activate-help-request.component';
+import { SendHelpRequestComponent } from '../send-help-request/send-help-request.component';
 
 @Component({
   selector: 'app-activate-bracelet',
@@ -115,7 +115,7 @@ export class ActivateBraceletComponent {
   }
 
   requestHelp() {
-    const dialogRef = this.dialog.open(ActivateHelpRequestComponent, {
+    const dialogRef = this.dialog.open(SendHelpRequestComponent, {
       data: { order: this.data.order },
       width: '800px',
       height: '565px',

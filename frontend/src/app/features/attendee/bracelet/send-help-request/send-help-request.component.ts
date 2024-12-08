@@ -33,7 +33,7 @@ import { ImageService } from '../../../../services/image/image.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'app-activate-help-request',
+  selector: 'app-send-help-request',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -50,16 +50,16 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatDialogModule,
     MatProgressSpinnerModule,
   ],
-  templateUrl: './activate-help-request.component.html',
+  templateUrl: './send-help-request.component.html',
   styleUrls: [
-    './activate-help-request.component.scss',
+    './send-help-request.component.scss',
     '../../../../app.component.scss',
   ],
 })
-export class ActivateHelpRequestComponent {
+export class SendHelpRequestComponent {
   private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
-  private dialogRef = inject(MatDialogRef<ActivateHelpRequestComponent>);
+  private dialogRef = inject(MatDialogRef<SendHelpRequestComponent>);
   private data: {
     order: OrderDTO;
   } = inject(MAT_DIALOG_DATA);

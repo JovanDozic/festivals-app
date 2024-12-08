@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Send Activation Help Request</h2>
+
+<mat-dialog-content>
+  <p class="step-description">
+    Review Attendee's activation request and make sure it matches with the
+    information that's visible in the System and on the provided photo.
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="margin-top: -20px">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="saveChanges()">
+    <span>Save Changes</span>
+  </button>
+</mat-dialog-actions>
