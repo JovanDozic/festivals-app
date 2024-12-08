@@ -151,7 +151,7 @@
 
               <button
                 mat-stroked-button
-                (click)="topUpBracelet()"
+                (click)="topUpBracelet(order)"
                 color="primary"
                 *ngIf="
                   order.braceletStatus && order.braceletStatus === 'ACTIVATED'

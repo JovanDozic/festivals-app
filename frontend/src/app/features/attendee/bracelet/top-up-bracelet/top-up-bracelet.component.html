@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Top Up Bracelet</h2>
+
+<mat-dialog-content>
+  <p class="step-description">
+    Enter amount of USD dollars that you want to top up your bracelet with. You
+    will be forwarded to the payment provider to complete the transaction.
+  </p>
+  <form [formGroup]="infoFormGroup">
+    <div class="form-fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Amount</mat-label>
+        <span matTextPrefix>$ &nbsp;&nbsp;</span>
+        <input
+          matInput
+          type="number"
+          formControlName="amountCtrl"
+          required
+          step="0.01"
+          min="0"
+          inputmode="decimal"
+        />
+        <mat-error
+          *ngIf="infoFormGroup.get('amountCtrl')?.hasError('required')"
+        >
+          Amount is required
+        </mat-error>
+        <mat-error *ngIf="infoFormGroup.get('amountCtrl')?.hasError('pattern')">
+          Amount can only contain numbers
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="margin-top: -20px">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button mat-flat-button (click)="topUp()" [disabled]="infoFormGroup.invalid">
+    Top Up
+  </button>
+</mat-dialog-actions>

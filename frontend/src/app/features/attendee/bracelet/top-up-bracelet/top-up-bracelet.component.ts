@@ -30,7 +30,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { OrderService } from '../../../../services/festival/order.service';
 
 @Component({
-  selector: 'app-activate-bracelet',
+  selector: 'app-top-up-bracelet',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -46,16 +46,16 @@ import { OrderService } from '../../../../services/festival/order.service';
     MatSlideToggleModule,
     MatDialogModule,
   ],
-  templateUrl: './activate-bracelet.component.html',
+  templateUrl: './top-up-bracelet.component.html',
   styleUrls: [
-    './activate-bracelet.component.scss',
+    './top-up-bracelet.component.scss',
     '../../../../app.component.scss',
   ],
 })
-export class ActivateBraceletComponent {
+export class TopUpBraceletComponent {
   private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
-  private dialogRef = inject(MatDialogRef<ActivateBraceletComponent>);
+  private dialogRef = inject(MatDialogRef<TopUpBraceletComponent>);
   private data: {
     order: OrderDTO;
   } = inject(MAT_DIALOG_DATA);
@@ -65,53 +65,37 @@ export class ActivateBraceletComponent {
 
   constructor() {
     this.infoFormGroup = this.fb.group({
-      pinCtrl: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(20),
-          Validators.pattern('^[0-9]+$'),
-        ],
-      ],
-      barcodeNumberCtrl: this.data.order.bracelet?.barcodeNumber,
+      amountCtrl: ['', [Validators.required]],
     });
-
-    this.infoFormGroup.get('barcodeNumberCtrl')?.disable();
   }
 
   closeDialog() {
     this.dialogRef.close(false);
   }
 
-  activateBracelet() {
+  topUp() {
     if (
       this.infoFormGroup.valid &&
       this.data.order &&
       this.data.order.bracelet
     ) {
-      const request: ActivateBraceletRequest = {
-        braceletId: this.data.order.bracelet.braceletId,
-        pin: this.infoFormGroup.get('pinCtrl')?.value,
-      };
-
-      this.orderService.activateBracelet(request).subscribe({
-        next: () => {
-          this.snackbarService.show('Bracelet activated successfully');
-          this.dialogRef.close(true);
-        },
-        error: (error) => {
-          if (error.status === 403) {
-            this.snackbarService.show('Invalid PIN. Please try again.');
-            return;
-          }
-          this.snackbarService.show('Failed to activate bracelet');
-        },
-      });
+      // const request: ActivateBraceletRequest = {
+      //   braceletId: this.data.order.bracelet.braceletId,
+      //   pin: this.infoFormGroup.get('pinCtrl')?.value,
+      // };
+      // this.orderService.activateBracelet(request).subscribe({
+      //   next: () => {
+      //     this.snackbarService.show('Bracelet activated successfully');
+      //     this.dialogRef.close(true);
+      //   },
+      //   error: (error) => {
+      //     if (error.status === 403) {
+      //       this.snackbarService.show('Invalid PIN. Please try again.');
+      //       return;
+      //     }
+      //     this.snackbarService.show('Failed to activate bracelet');
+      //   },
+      // });
     }
-  }
-
-  requestHelp() {
-    throw new Error('Method not implemented.');
   }
 }

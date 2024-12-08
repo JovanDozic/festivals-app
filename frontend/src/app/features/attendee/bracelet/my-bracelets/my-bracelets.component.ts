@@ -17,6 +17,7 @@ import {
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { FormsModule } from '@angular/forms';
 import { ActivateBraceletComponent } from '../activate-bracelet/activate-bracelet.component';
+import { TopUpBraceletComponent } from '../top-up-bracelet/top-up-bracelet.component';
 
 @Component({
   selector: 'app-my-bracelets',
@@ -158,5 +159,21 @@ export class MyBraceletsComponent {
     });
   }
 
-  topUpBracelet() {}
+  topUpBracelet(order: OrderDTO) {
+    const dialogRef = this.dialog.open(TopUpBraceletComponent, {
+      data: {
+        order: order,
+      },
+      width: '800px',
+      height: '325px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.snackbarService.show('Top Up successful!');
+        this.loadBracelets();
+      }
+    });
+  }
 }
