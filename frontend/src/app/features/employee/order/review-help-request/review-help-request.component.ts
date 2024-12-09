@@ -139,7 +139,22 @@ export class ReviewHelpRequestComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirm) {
-        // this.sendOrder();
+        this.orderService
+          .handleHelpRequest(status, this.data.braceletId)
+          .subscribe({
+            next: () => {
+              if (status == 'approve') {
+                this.snackbarService.show('Help Request approved');
+              } else if (status == 'reject') {
+                this.snackbarService.show('Help Request rejected');
+              }
+              this.dialogRef.close(true);
+            },
+            error: (error) => {
+              console.log(error);
+              this.snackbarService.show('Error handling Help Request');
+            },
+          });
       }
     });
   }

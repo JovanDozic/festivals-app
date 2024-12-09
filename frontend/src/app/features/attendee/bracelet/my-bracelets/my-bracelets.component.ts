@@ -54,6 +54,7 @@ export class MyBraceletsComponent {
     'Not Issued',
     'Issued and Shipped',
     'Active',
+    'Deactivated',
     'Help Requested',
     'Rejected',
   ];
@@ -111,6 +112,10 @@ export class MyBraceletsComponent {
       return this.orders.filter(
         (order) => order.braceletStatus === 'ACTIVATED',
       );
+    } else if (this.selectedChip === 'Deactivated') {
+      return this.orders.filter(
+        (order) => order.braceletStatus === 'DEACTIVATED',
+      );
     } else if (this.selectedChip === 'Help Requested') {
       return this.orders.filter(
         (order) => order.braceletStatus === 'HELP_REQUESTED',
@@ -134,6 +139,8 @@ export class MyBraceletsComponent {
         return 'Activated';
       case 'HELP_REQUESTED':
         return 'Help Requested';
+      case 'DEACTIVATED':
+        return 'Deactivated';
       case 'REJECTED':
         return 'Rejected';
       default:

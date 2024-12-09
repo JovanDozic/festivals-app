@@ -22,6 +22,7 @@ type OrderRepo interface {
 	UpdateBracelet(bracelet *models.Bracelet) error
 	CreateHelpRequest(helpRequest *models.ActivationHelpRequest) error
 	GetHelpRequest(braceletId uint) (*models.ActivationHelpRequest, error)
+	UpdateHelpRequest(helpRequest *models.ActivationHelpRequest) error
 }
 
 type orderRepo struct {
@@ -145,4 +146,8 @@ func (r *orderRepo) GetHelpRequest(braceletId uint) (*models.ActivationHelpReque
 		Where("bracelet_id = ?", braceletId).
 		First(&helpRequest).Error
 	return helpRequest, err
+}
+
+func (r *orderRepo) UpdateHelpRequest(helpRequest *models.ActivationHelpRequest) error {
+	return r.db.Save(helpRequest).Error
 }

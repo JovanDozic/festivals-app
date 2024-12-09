@@ -91,4 +91,11 @@ export class OrderService {
       `${this.apiUrl}/bracelet/${braceletId}/activate/help`,
     );
   }
+
+  handleHelpRequest(status: string, braceletId: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/bracelet/${braceletId}/activate/help/${status}`,
+      null,
+    );
+  }
 }

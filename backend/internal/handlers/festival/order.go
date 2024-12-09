@@ -23,6 +23,8 @@ type OrderHandler interface {
 	TopUpBracelet(w http.ResponseWriter, r *http.Request)
 	SendActivateBraceletHelpRequest(w http.ResponseWriter, r *http.Request)
 	GetHelpRequest(w http.ResponseWriter, r *http.Request)
+	ApproveHelpRequest(w http.ResponseWriter, r *http.Request)
+	RejectHelpRequest(w http.ResponseWriter, r *http.Request)
 }
 
 type orderHandler struct {
@@ -549,5 +551,52 @@ func (h *orderHandler) GetHelpRequest(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusOK, response, nil)
 	log.Println("help request fetched for bracelet", braceletId)
+}
 
+func (h *orderHandler) ApproveHelpRequest(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthEmployeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	braceletId, err := GetIDParamFromRequest(r, "braceletId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := h.orderService.ApproveHelpRequest(braceletId); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, nil, nil)
+	log.Println("help request approved for bracelet", braceletId)
+}
+
+func (h *orderHandler) RejectHelpRequest(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthEmployeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	braceletId, err := GetIDParamFromRequest(r, "braceletId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := h.orderService.RejectHelpRequest(braceletId); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, nil, nil)
+	log.Println("help request rejected for bracelet", braceletId)
 }

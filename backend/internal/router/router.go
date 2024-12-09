@@ -98,8 +98,9 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	pR.HandleFunc("/user/email", userHandler.UpdateUserEmail).Methods(http.MethodPut)
 	pR.HandleFunc("/user/profile/address", userHandler.UpdateUserAddress).Methods(http.MethodPut)
 	pR.HandleFunc("/user/profile/photo", userHandler.UpdateProfilePhoto).Methods(http.MethodPut)
+
 	// ...
-	// todo: should this be like get all future ones, or ones in the attendee's city?
+
 	pR.HandleFunc("/festival", festivalHandler.GetAll).Methods(http.MethodGet)
 	// ... ORGANIZER ONLY
 	pR.HandleFunc("/festival", festivalHandler.Create).Methods(http.MethodPost)
@@ -162,6 +163,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	pR.HandleFunc("/image/upload", awsHandler.GetPresignedURL).Methods(http.MethodPost)
 
 	// ...
+
 	pR.HandleFunc("/order/attendee", orderHandler.GetOrdersAttendee).Methods(http.MethodGet)
 	pR.HandleFunc("/order/{orderId}", orderHandler.GetOrder).Methods(http.MethodGet)
 	pR.HandleFunc("/festival/{festivalId}/order", orderHandler.GetOrdersEmployee).Methods(http.MethodGet)
@@ -174,6 +176,9 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	pR.HandleFunc("/bracelet/attendee", orderHandler.GetBraceletOrdersAttendee).Methods(http.MethodGet)
 	pR.HandleFunc("/bracelet/{braceletId}/activate/help", orderHandler.GetHelpRequest).Methods(http.MethodGet)
 	pR.HandleFunc("/bracelet/{braceletId}/activate/help", orderHandler.SendActivateBraceletHelpRequest).Methods(http.MethodPost)
+	pR.HandleFunc("/bracelet/{braceletId}/activate/help/approve", orderHandler.ApproveHelpRequest).Methods(http.MethodPut)
+	pR.HandleFunc("/bracelet/{braceletId}/activate/help/reject", orderHandler.RejectHelpRequest).Methods(http.MethodPut)
+
 	pR.HandleFunc("/bracelet/{braceletId}/activate", orderHandler.ActivateBracelet).Methods(http.MethodPut)
 	pR.HandleFunc("/bracelet/{braceletId}/top-up", orderHandler.TopUpBracelet).Methods(http.MethodPut)
 

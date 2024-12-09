@@ -27,6 +27,8 @@ type OrderService interface {
 	TopUpBracelet(username string, braceletId uint, amount float64) error
 	CreateHelpRequest(username string, request dtoFestival.ActivateBraceletHelpRequest) error
 	GetHelpRequest(braceletId uint) (*modelsFestival.ActivationHelpRequest, error)
+	ApproveHelpRequest(braceletId uint) error
+	RejectHelpRequest(braceletId uint) error
 }
 
 type orderService struct {
@@ -513,4 +515,50 @@ func (s *orderService) CreateHelpRequest(username string, request dtoFestival.Ac
 
 func (s *orderService) GetHelpRequest(braceletId uint) (*modelsFestival.ActivationHelpRequest, error) {
 	return s.orderRepo.GetHelpRequest(braceletId)
+}
+
+func (s *orderService) ApproveHelpRequest(braceletId uint) error {
+
+	helpRequest, err := s.orderRepo.GetHelpRequest(braceletId)
+	if err != nil {
+		return err
+	}
+
+	bracelet, err := s.orderRepo.GetBraceletById(braceletId)
+	if err != nil {
+		return err
+	}
+
+	bracelet.Status = "ACTIVATED"
+
+	if err := s.orderRepo.UpdateBracelet(bracelet); err != nil {
+		return err
+	}
+
+	helpRequest.Status = "APPROVED"
+
+	return s.orderRepo.UpdateHelpRequest(helpRequest)
+}
+
+func (s *orderService) RejectHelpRequest(braceletId uint) error {
+
+	helpRequest, err := s.orderRepo.GetHelpRequest(braceletId)
+	if err != nil {
+		return err
+	}
+
+	bracelet, err := s.orderRepo.GetBraceletById(braceletId)
+	if err != nil {
+		return err
+	}
+
+	bracelet.Status = "REJECTED"
+
+	if err := s.orderRepo.UpdateBracelet(bracelet); err != nil {
+		return err
+	}
+
+	helpRequest.Status = "REJECTED"
+
+	return s.orderRepo.UpdateHelpRequest(helpRequest)
 }
