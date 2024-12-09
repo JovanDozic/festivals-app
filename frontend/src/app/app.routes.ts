@@ -203,6 +203,22 @@ const organizerRoutes: Routes = [
           ).then((c) => c.CampPackageAddonsComponent),
         title: 'Camp Addons',
       },
+      {
+        path: 'organizer/my-festivals/:id/orders',
+        loadComponent: () =>
+          import(
+            './features/organizer/order/festival-orders/festival-orders.component'
+          ).then((c) => c.FestivalOrdersComponent),
+        title: 'Orders',
+      },
+      {
+        path: 'organizer/my-festivals/:id/orders/:orderId',
+        loadComponent: () =>
+          import('./features/organizer/order/order/order.component').then(
+            (c) => c.OrderComponent,
+          ),
+        title: 'Orders',
+      },
       // ...
     ],
   },

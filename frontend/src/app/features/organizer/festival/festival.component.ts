@@ -378,4 +378,10 @@ export class FestivalComponent implements OnInit {
       }
     });
   }
+
+  onViewOrders() {
+    this.router.navigate([
+      `organizer/my-festivals/${this.festival?.id}/orders`,
+    ]);
+  }
 }

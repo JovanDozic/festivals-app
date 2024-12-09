@@ -225,9 +225,9 @@ func (h *orderHandler) CreatePackageOrder(w http.ResponseWriter, r *http.Request
 func (h *orderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
 
 	isAttendee := utils.AuthAttendeeRole(r.Context())
-	isEmployee := utils.AuthEmployeeRole(r.Context())
+	isEmployeeOrOrganizer := utils.AuthEmployeeRole(r.Context()) || utils.AuthOrganizerRole(r.Context())
 
-	if !isAttendee && !isEmployee {
+	if !isAttendee && !isEmployeeOrOrganizer {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
@@ -235,7 +235,7 @@ func (h *orderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
 	var username string
 	if isAttendee {
 		username = utils.GetUsername(r.Context())
-	} else if isEmployee {
+	} else if isEmployeeOrOrganizer {
 		username = ""
 	}
 
@@ -283,7 +283,7 @@ func (h *orderHandler) GetOrdersAttendee(w http.ResponseWriter, r *http.Request)
 
 func (h *orderHandler) GetOrdersEmployee(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthEmployeeRole(r.Context()) {
+	if !utils.AuthEmployeeRole(r.Context()) && !utils.AuthOrganizerRole(r.Context()) {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
