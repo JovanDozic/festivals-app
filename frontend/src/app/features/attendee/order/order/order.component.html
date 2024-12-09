@@ -65,7 +65,9 @@
           </mat-icon>
           Ticket:
           <span class="number-mono">
-            {{ order.ticket.name }}: {{ order.ticket.description }}
+            {{ order.ticket.name }}:
+            {{ order.ticket.description | slice: 0 : 40
+            }}{{ order.ticket.description.length > 40 ? "..." : "" }}
           </span>
         </span>
       </mat-card-content>
