@@ -9,6 +9,7 @@ import (
 	reposFestival "backend/internal/repositories/festival"
 	reposUser "backend/internal/repositories/user"
 	servicesCommon "backend/internal/services/common"
+	"log"
 	"strings"
 )
 
@@ -43,21 +44,24 @@ type festivalService struct {
 	userRepo        reposUser.UserRepo
 	locationService servicesCommon.LocationService
 	imageRepo       reposCommon.ImageRepo
+	orderRepo       reposFestival.OrderRepo
 }
 
 func NewFestivalService(
-	config *config.Config,
-	festivalRepo reposFestival.FestivalRepo,
-	userRepo reposUser.UserRepo,
-	locationService servicesCommon.LocationService,
-	imageRepo reposCommon.ImageRepo,
+	cfg *config.Config,
+	fr reposFestival.FestivalRepo,
+	ur reposUser.UserRepo,
+	ls servicesCommon.LocationService,
+	ir reposCommon.ImageRepo,
+	or reposFestival.OrderRepo,
 ) FestivalService {
 	return &festivalService{
-		config:          config,
-		festivalRepo:    festivalRepo,
-		userRepo:        userRepo,
-		locationService: locationService,
-		imageRepo:       imageRepo,
+		config:          cfg,
+		festivalRepo:    fr,
+		userRepo:        ur,
+		locationService: ls,
+		imageRepo:       ir,
+		orderRepo:       or,
 	}
 }
 
@@ -233,6 +237,18 @@ func (s *festivalService) CancelFestival(festivalId uint) error {
 		return err
 	}
 
+	bracelets, err := s.orderRepo.GetBraceletsByFestival(festivalId)
+	if err != nil {
+		log.Println(err)
+	}
+
+	for _, bracelet := range bracelets {
+		bracelet.Status = "DEACTIVATED"
+		if err := s.orderRepo.UpdateBracelet(&bracelet); err != nil {
+			log.Println(err)
+		}
+	}
+
 	return nil
 }
 
@@ -247,6 +263,18 @@ func (s *festivalService) CompleteFestival(festivalId uint) error {
 
 	if err := s.festivalRepo.Update(festival); err != nil {
 		return err
+	}
+
+	bracelets, err := s.orderRepo.GetBraceletsByFestival(festivalId)
+	if err != nil {
+		log.Println(err)
+	}
+
+	for _, bracelet := range bracelets {
+		bracelet.Status = "DEACTIVATED"
+		if err := s.orderRepo.UpdateBracelet(&bracelet); err != nil {
+			log.Println(err)
+		}
 	}
 
 	return nil

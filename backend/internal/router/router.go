@@ -59,7 +59,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	emailService := servicesCommon.NewEmailService(config)
 	locationService := servicesCommon.NewLocationService(addressRepo, cityRepo, countryRepo)
 	userService := servicesUser.NewUserService(config, userRepo, userProfileRepo, locationService, imageRepo)
-	festivalService := servicesFestival.NewFestivalService(config, festivalRepo, userRepo, locationService, imageRepo)
+	festivalService := servicesFestival.NewFestivalService(config, festivalRepo, userRepo, locationService, imageRepo, orderRepo)
 	itemService := servicesFestival.NewItemService(config, itemRepo, locationService, imageRepo)
 	awsService := servicesCommon.NewAWSService(s3Client, s3Presign, config)
 	orderService := servicesFestival.NewOrderService(orderRepo, itemRepo, festivalRepo, userService, imageRepo, locationService, pdfGenerator)

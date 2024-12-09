@@ -24,6 +24,7 @@ type OrderRepo interface {
 	CreateHelpRequest(helpRequest *models.ActivationHelpRequest) error
 	GetHelpRequest(braceletId uint) (*models.ActivationHelpRequest, error)
 	UpdateHelpRequest(helpRequest *models.ActivationHelpRequest) error
+	GetBraceletsByFestival(festivalId uint) ([]models.Bracelet, error)
 }
 
 type orderRepo struct {
@@ -163,4 +164,15 @@ func (r *orderRepo) GetHelpRequest(braceletId uint) (*models.ActivationHelpReque
 
 func (r *orderRepo) UpdateHelpRequest(helpRequest *models.ActivationHelpRequest) error {
 	return r.db.Save(helpRequest).Error
+}
+
+func (r *orderRepo) GetBraceletsByFestival(festivalId uint) ([]models.Bracelet, error) {
+	bracelets := []models.Bracelet{}
+	err := r.db.
+		Preload("FestivalTicket.Item.Item").
+		Joins("JOIN festival_tickets ON bracelets.festival_ticket_id = festival_tickets.id").
+		Joins("JOIN items ON festival_tickets.item_id = items.id").
+		Where("items.festival_id = ?", festivalId).
+		Find(&bracelets).Error
+	return bracelets, err
 }
