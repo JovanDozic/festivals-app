@@ -171,6 +171,19 @@ export class IssueBraceletComponent {
   }
 
   printShippingLabel() {
-    throw new Error('Method not implemented.');
+    if (this.data.orderId) {
+      this.snackbarService.show('Printing shipping label...');
+      this.orderService.printShippingLabel(this.data.orderId).subscribe({
+        next: (blob) => {
+          const url = URL.createObjectURL(blob);
+          window.open(url, '_blank');
+          this.snackbarService.show('Shipping label opened successfully');
+        },
+        error: (error) => {
+          console.log(error);
+          this.snackbarService.show('Error printing shipping label');
+        },
+      });
+    }
   }
 }

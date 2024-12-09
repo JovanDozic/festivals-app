@@ -388,7 +388,7 @@
           <div class="spacer"></div>
           <button
             mat-button
-            *ngIf="!order.braceletStatus"
+            *ngIf="!order.braceletStatus || order.braceletStatus === 'ISSUED'"
             color="primary"
             (click)="onPrintShippingLabelClick()"
           >

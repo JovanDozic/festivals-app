@@ -151,7 +151,20 @@ export class OrderComponent implements OnInit {
   }
 
   onPrintShippingLabelClick() {
-    this.snackbarService.show('Printing shipping label...');
+    if (this.order && this.order.orderId) {
+      this.snackbarService.show('Printing shipping label...');
+      this.orderService.printShippingLabel(this.order.orderId).subscribe({
+        next: (blob) => {
+          const url = URL.createObjectURL(blob);
+          window.open(url, '_blank');
+          this.snackbarService.show('Shipping label opened successfully');
+        },
+        error: (error) => {
+          console.log(error);
+          this.snackbarService.show('Error printing shipping label');
+        },
+      });
+    }
   }
 
   reviewHelpRequest(order: OrderDTO) {}

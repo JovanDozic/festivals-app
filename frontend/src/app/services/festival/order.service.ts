@@ -98,4 +98,10 @@ export class OrderService {
       null,
     );
   }
+
+  printShippingLabel(orderId: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/order/${orderId}/shipping-label`, {
+      responseType: 'blob',
+    });
+  }
 }
