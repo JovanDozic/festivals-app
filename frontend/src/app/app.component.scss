@@ -199,6 +199,10 @@ img[mat-card-image] {
   &.active {
     outline: 3px solid #31f491;
   }
+
+  &.warning {
+    outline: 3px solid #f4b631;
+  }
 }
 
 :host-context([data-theme="light"]) .ai-shadow-card {
@@ -221,7 +225,11 @@ img[mat-card-image] {
   }
 
   &.active {
-    outline: 3px solid #31f491;
+    outline: 3px solid #1ec951;
+  }
+
+  &.warning {
+    outline: 3px solid #d69d22;
   }
 }
 
@@ -238,6 +246,10 @@ img[mat-card-image] {
 
   &.action-required {
     outline: 3px solid #ff5449;
+  }
+
+  &.active {
+    outline: 3px solid #31f491;
   }
 
   &.warning {
