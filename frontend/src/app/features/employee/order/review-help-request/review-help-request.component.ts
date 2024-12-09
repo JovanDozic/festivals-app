@@ -1,15 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
+  MatDialog,
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-import {
-  FormBuilder,
-  FormGroup,
-  NumberValueAccessor,
-  ReactiveFormsModule,
-} from '@angular/forms';
 import {
   ActivationHelpRequestDTO,
   OrderDTO,
@@ -27,16 +22,17 @@ import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { OrderService } from '../../../../services/festival/order.service';
-import { ImageService } from '../../../../services/image/image.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ItemService } from '../../../../services/festival/item.service';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import {
+  ConfirmationDialogComponent,
+  ConfirmationDialogData,
+} from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-review-help-request',
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
@@ -57,9 +53,9 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   ],
 })
 export class ReviewHelpRequestComponent implements OnInit {
-  private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
   private dialogRef = inject(MatDialogRef<ReviewHelpRequestComponent>);
+  private dialog = inject(MatDialog);
   private data: {
     festivalId: number;
     orderId: number;
@@ -69,7 +65,6 @@ export class ReviewHelpRequestComponent implements OnInit {
   } = inject(MAT_DIALOG_DATA);
   private orderService = inject(OrderService);
   private itemService = inject(ItemService);
-  private imageService = inject(ImageService);
 
   order: OrderDTO | null = null;
   helpRequest: ActivationHelpRequestDTO | null = null;
@@ -123,10 +118,29 @@ export class ReviewHelpRequestComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
-  approveRequest() {
-    throw new Error('Method not implemented.');
-  }
-  rejectRequest() {
-    throw new Error('Method not implemented.');
+  handleRequest(status: string) {
+    if (status === '') return;
+
+    let title = '';
+    if (status == 'approve') {
+      title = 'Approve Help Request';
+    } else if (status == 'reject') {
+      title = 'Reject Help Request';
+    }
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        title: title,
+        message: 'Are you sure you want to ' + status + ' this Help Request?',
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+      } as ConfirmationDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirm) {
+        // this.sendOrder();
+      }
+    });
   }
 }

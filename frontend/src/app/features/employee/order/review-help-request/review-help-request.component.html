@@ -153,11 +153,11 @@
 
 <mat-dialog-actions align="end" style="margin-top: -20px">
   <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
-  <button mat-flat-button color="warn" (click)="rejectRequest()">
+  <button mat-flat-button color="warn" (click)="handleRequest('reject')">
     <mat-icon class="material-symbols-outlined"> cancel </mat-icon>
     <span>Reject</span>
   </button>
-  <button mat-flat-button color="primary" (click)="approveRequest()">
+  <button mat-flat-button color="primary" (click)="handleRequest('approve')">
     <mat-icon class="material-symbols-outlined"> check_circle </mat-icon>
     <span>Approve and Activate</span>
   </button>

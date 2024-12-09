@@ -2,7 +2,6 @@ import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {
   CampAddonDTO,
   CreatePackageOrderRequest,
-  CreateTicketOrderRequest,
   Festival,
   GeneralAddonDTO,
   ItemCurrentPrice,
@@ -45,7 +44,6 @@ import { OrderService } from '../../../../services/festival/order.service';
 import { StorePaymentDialogComponent } from '../store-payment-dialog/store-payment-dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CountryResponse } from '../../../../models/common/address.model';
-import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({

@@ -11,10 +11,6 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import {
-  ConfirmationDialogComponent,
-  ConfirmationDialogData,
-} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../services/festival/item.service';
