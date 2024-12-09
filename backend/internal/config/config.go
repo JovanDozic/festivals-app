@@ -25,6 +25,13 @@ type Config struct {
 		Region          string
 		S3BucketName    string
 	}
+	SMTP struct {
+		Host     string
+		Port     int
+		Username string
+		Password string
+		From     string
+	}
 }
 
 func (c *Config) Load() {
@@ -60,6 +67,22 @@ func (c *Config) Load() {
 		os.Getenv("AWS_S3_BUCKET_NAME"),
 		"AWS S3 bucket name")
 
+	flag.StringVar(&c.SMTP.Host, "smtpHost",
+		os.Getenv("SMTP_HOST"),
+		"SMTP host")
+	flag.IntVar(&c.SMTP.Port, "smtpPort",
+		587,
+		"SMTP port")
+	flag.StringVar(&c.SMTP.Username, "smtpUsername",
+		os.Getenv("SMTP_USERNAME"),
+		"SMTP username")
+	flag.StringVar(&c.SMTP.Password, "smtpPassword",
+		os.Getenv("SMTP_PASSWORD"),
+		"SMTP password")
+	flag.StringVar(&c.SMTP.From, "smtpFrom",
+		os.Getenv("SMTP_FROM"),
+		"SMTP from")
+
 	flag.Parse()
 }
 
@@ -94,5 +117,18 @@ func (c Config) Validate() error {
 	if c.AWS.S3BucketName == "" {
 		return errors.New("AWS S3 bucket name is required")
 	}
+	if c.SMTP.Host == "" {
+		return errors.New("SMTP host is required")
+	}
+	if c.SMTP.Username == "" {
+		return errors.New("SMTP username is required")
+	}
+	if c.SMTP.Password == "" {
+		return errors.New("SMTP password is required")
+	}
+	if c.SMTP.From == "" {
+		return errors.New("SMTP from is required")
+	}
+
 	return nil
 }

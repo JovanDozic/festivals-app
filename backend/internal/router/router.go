@@ -56,6 +56,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// Init services
 	pdfGenerator := servicesCommon.NewPDFGenerator()
+	emailService := servicesCommon.NewEmailService(config)
 	locationService := servicesCommon.NewLocationService(addressRepo, cityRepo, countryRepo)
 	userService := servicesUser.NewUserService(config, userRepo, userProfileRepo, locationService, imageRepo)
 	festivalService := servicesFestival.NewFestivalService(config, festivalRepo, userRepo, locationService, imageRepo)
@@ -70,7 +71,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	festivalHandler := handlersFestival.NewFestivalHandler(festivalService, locationService)
 	itemHandler := handlersFestival.NewItemHandler(itemService, festivalService)
 	awsHandler := handlersCommon.NewAWSHandler(awsService, festivalService)
-	orderHandler := handlersFestival.NewOrderHandler(orderService, userService)
+	orderHandler := handlersFestival.NewOrderHandler(orderService, userService, emailService)
 	// ...
 
 	r := mux.NewRouter()

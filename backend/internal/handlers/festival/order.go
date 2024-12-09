@@ -3,9 +3,11 @@ package handlers
 import (
 	dtoFestival "backend/internal/dto/festival"
 	models "backend/internal/models/festival"
+	servicesCommon "backend/internal/services/common"
 	servicesFestival "backend/internal/services/festival"
 	servicesUser "backend/internal/services/user"
 	"backend/internal/utils"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -31,10 +33,19 @@ type OrderHandler interface {
 type orderHandler struct {
 	orderService servicesFestival.OrderService
 	userService  servicesUser.UserService
+	emailService servicesCommon.EmailService
 }
 
-func NewOrderHandler(os servicesFestival.OrderService, us servicesUser.UserService) OrderHandler {
-	return &orderHandler{orderService: os, userService: us}
+func NewOrderHandler(
+	os servicesFestival.OrderService,
+	us servicesUser.UserService,
+	es servicesCommon.EmailService,
+) OrderHandler {
+	return &orderHandler{
+		orderService: os,
+		userService:  us,
+		emailService: es,
+	}
 }
 
 func (h *orderHandler) CreateTicketOrder(w http.ResponseWriter, r *http.Request) {
@@ -84,6 +95,15 @@ func (h *orderHandler) CreateTicketOrder(w http.ResponseWriter, r *http.Request)
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
+	}
+
+	email := h.userService.GetUserEmail(username)
+	if email != "" {
+		if err := h.emailService.SendEmail(email, "Order Created", fmt.Sprintf("Order #%d created successfully!", order.ID)); err != nil {
+			log.Println("error:", err)
+		}
+	} else {
+		log.Println("email not found for user", username)
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"orderId": order.ID}, nil)
@@ -445,6 +465,19 @@ func (h *orderHandler) TopUpBracelet(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
+	}
+
+	email := h.userService.GetUserEmail(username)
+	if email != "" {
+		if err := h.emailService.SendEmail(
+			email,
+			"Bracelet Top Up Receipt",
+			fmt.Sprintf("Payment for Bracelet top up is successful! Top Up amount: $%.2f", input.Amount),
+		); err != nil {
+			log.Println("error:", err)
+		}
+	} else {
+		log.Println("email not found for user", username)
 	}
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)

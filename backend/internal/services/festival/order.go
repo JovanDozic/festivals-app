@@ -41,6 +41,7 @@ type orderService struct {
 	imageRepo       reposCommon.ImageRepo
 	locationService servicesCommon.LocationService
 	pdfGenerator    servicesCommon.PDFGenerator
+	emailService    servicesCommon.EmailService
 }
 
 func NewOrderService(

@@ -31,6 +31,7 @@ type UserService interface {
 	UpdateProfilePhoto(username string, image *modelsCommon.Image) error
 	GetAddressID(username string) (uint, error)
 	GetUserID(username string) (uint, error)
+	GetUserEmail(username string) string
 }
 
 type userService struct {
@@ -43,6 +44,15 @@ type userService struct {
 
 func NewUserService(c *config.Config, r reposUser.UserRepo, p reposUser.UserProfileRepo, l servicesCommon.LocationService, i reposCommon.ImageRepo) UserService {
 	return &userService{userRepo: r, config: c, profileRepo: p, locationService: l, imageRepo: i}
+}
+
+func (s *userService) GetUserEmail(username string) string {
+	user, err := s.userRepo.GetByUsername(username)
+	if err != nil {
+		return ""
+	}
+
+	return user.Email
 }
 
 func (s *userService) Create(user *modelsUser.User) error {
