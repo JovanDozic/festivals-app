@@ -31,6 +31,7 @@ type OrderService interface {
 	ApproveHelpRequest(braceletId uint) error
 	RejectHelpRequest(braceletId uint) error
 	GetShippingLabel(orderId uint) ([]byte, error)
+	GetBraceletById(braceletId uint) (*modelsFestival.Bracelet, error)
 }
 
 type orderService struct {
@@ -599,4 +600,8 @@ func (s *orderService) GetShippingLabel(orderId uint) ([]byte, error) {
 	}
 
 	return pdfBytes, nil
+}
+
+func (s *orderService) GetBraceletById(braceletId uint) (*modelsFestival.Bracelet, error) {
+	return s.orderRepo.GetBraceletById(braceletId)
 }

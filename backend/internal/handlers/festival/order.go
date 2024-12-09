@@ -442,6 +442,19 @@ func (h *orderHandler) ActivateBracelet(w http.ResponseWriter, r *http.Request) 
 		}
 	}
 
+	email := h.userService.GetUserEmail(username)
+	if email != "" {
+		if err := h.emailService.SendEmail(
+			email,
+			"Bracelet Activated",
+			"Bracelet activated successfully!",
+		); err != nil {
+			log.Println("error:", err)
+		}
+	} else {
+		log.Println("email not found for user", username)
+	}
+
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
 	log.Println("bracelet activated", braceletId, "for user", username)
 }
@@ -629,6 +642,19 @@ func (h *orderHandler) ApproveHelpRequest(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	bracelet, err := h.orderService.GetBraceletById(braceletId)
+	if err == nil {
+		if err := h.emailService.SendEmail(
+			bracelet.Attendee.User.Email,
+			"Bracelet Activated (via Help Request)",
+			"Employee approved your activation help request and Bracelet is now activated!",
+		); err != nil {
+			log.Println("error:", err)
+		}
+	} else {
+		log.Println("error:", err)
+	}
+
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
 	log.Println("help request approved for bracelet", braceletId)
 }
@@ -651,6 +677,19 @@ func (h *orderHandler) RejectHelpRequest(w http.ResponseWriter, r *http.Request)
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
+	}
+
+	bracelet, err := h.orderService.GetBraceletById(braceletId)
+	if err == nil {
+		if err := h.emailService.SendEmail(
+			bracelet.Attendee.User.Email,
+			"Bracelet Activation Rejected (via Help Request)",
+			"Employee rejected your activation help request and Bracelet is now in rejected state.",
+		); err != nil {
+			log.Println("error:", err)
+		}
+	} else {
+		log.Println("error:", err)
 	}
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
