@@ -99,7 +99,7 @@ func (h *orderHandler) CreateTicketOrder(w http.ResponseWriter, r *http.Request)
 
 	email := h.userService.GetUserEmail(username)
 	if email != "" {
-		if err := h.emailService.SendEmail(email, "Order Created", fmt.Sprintf("Order #%d created successfully!", order.ID)); err != nil {
+		if err := h.emailService.SendEmail(email, "Order Created", fmt.Sprintf("Ticket Order #%d created successfully!", order.ID)); err != nil {
 			log.Println("error:", err)
 		}
 	} else {
@@ -206,6 +206,15 @@ func (h *orderHandler) CreatePackageOrder(w http.ResponseWriter, r *http.Request
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
+	}
+
+	email := h.userService.GetUserEmail(username)
+	if email != "" {
+		if err := h.emailService.SendEmail(email, "Order Created", fmt.Sprintf("Package Order #%d created successfully!", order.ID)); err != nil {
+			log.Println("error:", err)
+		}
+	} else {
+		log.Println("email not found for user", username)
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"orderId": order.ID}, nil)
@@ -351,6 +360,19 @@ func (h *orderHandler) IssueBracelet(w http.ResponseWriter, r *http.Request) {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
+	}
+
+	email := h.userService.GetUserEmail(attendee.Username)
+	if email != "" {
+		if err := h.emailService.SendEmail(
+			email,
+			"Bracelet Issued",
+			fmt.Sprintf("Bracelet for Order #%d issued and sent to your address!", input.OrderId),
+		); err != nil {
+			log.Println("error:", err)
+		}
+	} else {
+		log.Println("email not found for user", attendee.Username)
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"braceletId": bracelet.ID, "shippingAddress": attendee.Address}, nil)
