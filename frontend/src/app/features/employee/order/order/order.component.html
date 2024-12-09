@@ -164,7 +164,10 @@
       </mat-card-content>
     </mat-card>
     <!-- ! TRANSPORT ADDON -->
-    <mat-card class="profile-card" *ngIf="order.orderType === 'PACKAGE'">
+    <mat-card
+      class="profile-card"
+      *ngIf="order.orderType === 'PACKAGE' && order.transportAddon"
+    >
       <mat-card-content *ngIf="order.transportAddon">
         <span
           class="icon-property"
@@ -306,7 +309,14 @@
       </mat-card-content>
     </mat-card>
     <!-- ! CAMP AND GENERAL ADDONS -->
-    <mat-card class="profile-card" *ngIf="order.orderType === 'PACKAGE'">
+    <mat-card
+      class="profile-card"
+      *ngIf="
+        order.orderType === 'PACKAGE' &&
+        (order.campAddon ||
+          (order.generalAddons && order.generalAddons.length > 0))
+      "
+    >
       <mat-card-content>
         <span class="icon-property" *ngIf="order.campAddon">
           <mat-icon class="material-symbols-outlined" color="primary">
