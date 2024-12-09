@@ -168,7 +168,7 @@ export class ViewTicketTypeComponent implements OnInit {
             this.loadForms();
           },
           error: (error) => {
-            console.log('Error fetching ticket type: ', error);
+            console.log(error);
             this.snackbarService.show('Error getting ticket type');
           },
         });

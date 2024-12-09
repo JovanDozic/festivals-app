@@ -161,7 +161,7 @@ export class CreateCampPackageAddonComponent {
             this.stepper?.next();
           },
           error: (error) => {
-            console.log('Error creating Package Addon: ', error);
+            console.log(error);
             this.snackbarService.show('Error creating Package Addon');
           },
         });
@@ -185,11 +185,8 @@ export class CreateCampPackageAddonComponent {
         equipmentList: equipmentList,
       };
 
-      console.log('Add Camp Config Request: ', request);
-
       this.imageService.uploadImageAndGetURL(this.selectedFile).subscribe({
         next: (response) => {
-          console.log('Image uploaded successfully', response);
           request.imageURL = response.imageURL;
 
           this.itemService
@@ -200,7 +197,7 @@ export class CreateCampPackageAddonComponent {
                 this.stepper?.next();
               },
               error: (error) => {
-                console.log('Error creating Camp Config: ', error);
+                console.log(error);
                 this.snackbarService.show('Error creating Camp Config');
               },
             });
@@ -225,7 +222,7 @@ export class CreateCampPackageAddonComponent {
             this.dialogRef.close(true);
           },
           error: (error) => {
-            console.log('Error creating fixed price: ', error);
+            console.log(error);
             this.snackbarService.show('Error creating Fixed Price');
             this.dialogRef.close(false);
           },

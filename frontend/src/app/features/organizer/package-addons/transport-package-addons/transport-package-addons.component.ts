@@ -65,7 +65,7 @@ export class TransportPackageAddonsComponent implements OnInit {
           this.transportCount = this.transportAddons.length;
         },
         error: (error) => {
-          console.log('Error fetching transport addons: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting Travel Addons');
           this.transportAddons = [];
         },
@@ -86,12 +86,9 @@ export class TransportPackageAddonsComponent implements OnInit {
         next: (festival) => {
           this.festival = festival;
           this.isLoading = false;
-          console.log(
-            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`,
-          );
         },
         error: (error) => {
-          console.log('Error fetching festival information: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting festival');
           this.festival = null;
           this.isLoading = true;

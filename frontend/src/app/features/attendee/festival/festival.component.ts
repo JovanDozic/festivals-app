@@ -78,12 +78,9 @@ export class FestivalComponent {
           this.isLoading = false;
           this.currentImageIndex = 0;
           this.previousImageIndex = 0;
-          console.log(
-            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`,
-          );
         },
         error: (error) => {
-          console.log('Error fetching festival information: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting festival');
           this.festival = null;
           this.isLoading = true;
@@ -100,7 +97,7 @@ export class FestivalComponent {
           this.ticketTypesCount = count;
         },
         error: (error) => {
-          console.log('Error fetching ticket types count: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting ticket types count');
           this.ticketTypesCount = 0;
         },
@@ -116,7 +113,7 @@ export class FestivalComponent {
           this.packageAddonsCount = count;
         },
         error: (error) => {
-          console.log('Error fetching package addons count: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting package addons count');
           this.packageAddonsCount = 0;
         },

@@ -124,9 +124,6 @@ export class EditFestivalComponent implements OnInit {
         countryISO3Ctrl: this.data.address?.countryISO3,
       });
 
-      console.log('Images:', this.images);
-      console.log('Images:', this.data.images);
-
       this.images = this.data.images.map((image) => ({
         id: image.id,
         previewUrl: image.url,

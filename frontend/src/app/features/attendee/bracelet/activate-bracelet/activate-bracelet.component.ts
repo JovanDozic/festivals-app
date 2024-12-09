@@ -123,7 +123,6 @@ export class ActivateBraceletComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('Help dialog closed', result);
       if (result) {
         this.closeDialog(true);
       }

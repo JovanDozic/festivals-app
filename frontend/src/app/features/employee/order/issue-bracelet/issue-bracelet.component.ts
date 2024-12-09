@@ -147,8 +147,6 @@ export class IssueBraceletComponent {
         next: (response) => {
           this.stepper?.next();
           this.snackbarService.show('Bracelet created');
-          console.log(response);
-          console.log(response.shippingAddress);
           if (response.shippingAddress) {
             this.fillAddressForm(response.shippingAddress);
           }

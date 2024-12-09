@@ -83,7 +83,7 @@ export class TicketTypesComponent implements OnInit {
           this.ticketTypesCount = this.ticketTypes.length;
         },
         error: (error) => {
-          console.log('Error fetching ticket types: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting ticket types');
           this.ticketTypes = [];
           this.ticketTypesCount = 0;
@@ -100,7 +100,7 @@ export class TicketTypesComponent implements OnInit {
           this.festival = festival;
         },
         error: (error) => {
-          console.log('Error fetching festival information: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting festival');
           this.festival = null;
         },
@@ -163,7 +163,7 @@ export class TicketTypesComponent implements OnInit {
               this.loadTicketTypes();
             },
             error: (error) => {
-              console.log('Error deleting ticket type: ', error);
+              console.log(error);
               this.snackbarService.show('Error deleting ticket type');
             },
           });

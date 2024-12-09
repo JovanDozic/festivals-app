@@ -60,7 +60,7 @@ export class PackageAddonsComponent implements OnInit {
           this.generalCount = count;
         },
         error: (error) => {
-          console.log('Error fetching general package addon count: ', error);
+          console.log(error);
           this.snackbarService.show(
             'Error getting general package addon count',
           );
@@ -75,10 +75,7 @@ export class PackageAddonsComponent implements OnInit {
             this.transportCount = count;
           },
           error: (error) => {
-            console.log(
-              'Error fetching transport package addon count: ',
-              error,
-            );
+            console.log(error);
             this.snackbarService.show(
               'Error getting transport package addon count',
             );
@@ -91,7 +88,7 @@ export class PackageAddonsComponent implements OnInit {
           this.campCount = count;
         },
         error: (error) => {
-          console.log('Error fetching camp package addon count: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting camp package addon count');
           this.campCount = 0;
         },
@@ -110,12 +107,9 @@ export class PackageAddonsComponent implements OnInit {
         next: (festival) => {
           this.festival = festival;
           this.isLoading = false;
-          console.log(
-            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`,
-          );
         },
         error: (error) => {
-          console.log('Error fetching festival information: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting festival');
           this.festival = null;
           this.isLoading = true;

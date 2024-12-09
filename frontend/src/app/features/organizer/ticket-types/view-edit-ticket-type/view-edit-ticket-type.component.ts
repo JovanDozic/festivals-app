@@ -189,7 +189,7 @@ export class ViewEditTicketTypeComponent implements OnInit {
             this.toggleIsEditing();
           },
           error: (error) => {
-            console.log('Error fetching ticket type: ', error);
+            console.log(error);
             this.snackbarService.show('Error getting ticket type');
           },
         });
@@ -236,7 +236,7 @@ export class ViewEditTicketTypeComponent implements OnInit {
           this.dialogRef.close(true);
         },
         error: (error) => {
-          console.log('Error updating ticket type: ', error);
+          console.log(error);
           this.snackbarService.show('Error updating ticket type');
         },
       });

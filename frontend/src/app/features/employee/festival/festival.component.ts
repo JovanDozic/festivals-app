@@ -100,12 +100,9 @@ export class FestivalComponent implements OnInit {
           this.isLoading = false;
           this.currentImageIndex = 0;
           this.previousImageIndex = 0;
-          console.log(
-            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`,
-          );
         },
         error: (error) => {
-          console.log('Error fetching festival information: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting festival');
           this.festival = null;
           this.isLoading = true;
@@ -122,7 +119,7 @@ export class FestivalComponent implements OnInit {
           this.employeesCount = count;
         },
         error: (error) => {
-          console.log('Error fetching employee count: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting employee count');
           this.employeesCount = 0;
         },
@@ -138,7 +135,7 @@ export class FestivalComponent implements OnInit {
           this.ticketTypesCount = count;
         },
         error: (error) => {
-          console.log('Error fetching ticket types count: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting ticket types count');
           this.ticketTypesCount = 0;
         },
@@ -154,7 +151,7 @@ export class FestivalComponent implements OnInit {
           this.packageAddonsCount = count;
         },
         error: (error) => {
-          console.log('Error fetching package addons count: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting package addons count');
           this.packageAddonsCount = 0;
         },
@@ -164,15 +161,13 @@ export class FestivalComponent implements OnInit {
 
   loadOrdersCount() {
     const id = this.route.snapshot.paramMap.get('id');
-    console.log('id: ', id);
     if (id) {
-      console.log('Alo');
       this.orderService.getOrdersCount(Number(id)).subscribe({
         next: (count) => {
           this.ordersCount = count;
         },
         error: (error) => {
-          console.log('Error fetching orders count: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting orders count');
           this.ordersCount = 0;
         },

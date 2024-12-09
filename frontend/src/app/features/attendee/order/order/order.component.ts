@@ -83,7 +83,7 @@ export class OrderComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.log('Error fetching user information: ', error);
+        console.log(error);
         this.snackbarService.show('Error getting user information');
         this.userProfile = null;
         this.isLoading = true;

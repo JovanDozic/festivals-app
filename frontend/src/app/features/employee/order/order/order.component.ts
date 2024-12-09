@@ -75,12 +75,9 @@ export class OrderComponent implements OnInit {
         next: (festival) => {
           this.festival = festival;
           this.isLoading = false;
-          console.log(
-            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`,
-          );
         },
         error: (error) => {
-          console.log('Error fetching festival information: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting festival');
           this.festival = null;
           this.isLoading = true;
@@ -94,7 +91,6 @@ export class OrderComponent implements OnInit {
     if (id) {
       this.itemService.getOrder(parseInt(id)).subscribe({
         next: (order) => {
-          console.log(order);
           this.order = order;
           this.isLoading = false;
         },
@@ -119,7 +115,7 @@ export class OrderComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.log('Error fetching user information: ', error);
+        console.log(error);
         this.snackbarService.show('Error getting user information');
         this.userProfile = null;
         this.isLoading = true;

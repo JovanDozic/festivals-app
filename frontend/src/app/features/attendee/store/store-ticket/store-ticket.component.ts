@@ -121,7 +121,7 @@ export class StoreTicketComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.log('Error fetching festival information: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting festival');
           this.festival = null;
           this.isLoading = true;
@@ -143,7 +143,7 @@ export class StoreTicketComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.log('Error fetching tickets information: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting tickets');
           this.tickets = [];
           this.isLoading = true;
@@ -162,7 +162,7 @@ export class StoreTicketComponent implements OnInit {
         this.fillAddressFormGroup();
       },
       error: (error) => {
-        console.log('Error fetching user information: ', error);
+        console.log(error);
         this.snackbarService.show('Error getting user information');
         this.userProfile = null;
         this.isLoading = true;
@@ -310,8 +310,6 @@ export class StoreTicketComponent implements OnInit {
         totalPrice: this.selectedTicket.price,
       };
 
-      console.log('Request: ', request);
-
       return this.orderService.createTicketOrder(this.festival.id, request);
     }
     return throwError(
@@ -330,7 +328,6 @@ export class StoreTicketComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(() => {
       this.isLoading = false;
-      console.log('The dialog was closed');
     });
   }
 }

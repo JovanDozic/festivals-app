@@ -113,7 +113,7 @@ export class CreateGeneralPackageAddonComponent {
             this.stepper?.next();
           },
           error: (error) => {
-            console.log('Error creating Package Addon: ', error);
+            console.log(error);
             this.snackbarService.show('Error creating Package Addon');
           },
         });
@@ -136,7 +136,7 @@ export class CreateGeneralPackageAddonComponent {
             this.dialogRef.close(true);
           },
           error: (error) => {
-            console.log('Error creating fixed price: ', error);
+            console.log(error);
             this.snackbarService.show('Error creating Fixed Price');
             this.dialogRef.close(false);
           },

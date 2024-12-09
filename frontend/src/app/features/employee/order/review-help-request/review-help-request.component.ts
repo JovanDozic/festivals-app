@@ -80,7 +80,6 @@ export class ReviewHelpRequestComponent implements OnInit {
     if (this.data.braceletId) {
       this.orderService.getHelpRequest(this.data.braceletId).subscribe({
         next: (helpRequest) => {
-          console.log(helpRequest);
           this.helpRequest = helpRequest;
         },
         error: (error) => {
@@ -99,7 +98,6 @@ export class ReviewHelpRequestComponent implements OnInit {
     if (this.data.orderId) {
       this.itemService.getOrder(this.data.orderId).subscribe({
         next: (order) => {
-          console.log(order);
           this.order = order;
         },
         error: (error) => {

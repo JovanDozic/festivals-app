@@ -81,7 +81,7 @@ export class AddExistingEmployeeComponent implements OnInit {
             this.employeeCount = employees.length;
           },
           error: (error) => {
-            console.log('Error fetching employees: ', error);
+            console.log(error);
             this.snackbarService.show('Error getting employees');
             this.employees = [];
           },
@@ -118,7 +118,7 @@ export class AddExistingEmployeeComponent implements OnInit {
             this.loadEmployees();
           },
           error: (error) => {
-            console.log('Error adding employee: ', error);
+            console.log(error);
             this.snackbarService.show('Error adding employee');
           },
         });

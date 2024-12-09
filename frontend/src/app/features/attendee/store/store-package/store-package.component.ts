@@ -188,7 +188,7 @@ export class StorePackageComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.log('Error fetching festival information: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting festival');
           this.festival = null;
           this.isLoading = true;
@@ -210,7 +210,7 @@ export class StorePackageComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.log('Error fetching tickets information: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting tickets');
           this.tickets = [];
           this.isLoading = true;
@@ -228,7 +228,7 @@ export class StorePackageComponent implements OnInit {
           this.countries.push(...countries);
         },
         error: (error) => {
-          console.log('Error fetching departure countries: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting departure countries');
           this.countries = [];
         },
@@ -241,7 +241,7 @@ export class StorePackageComponent implements OnInit {
             this.transportAddonsCount = this.transportAddons.length;
         },
         error: (error) => {
-          console.log('Error fetching transport addons: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting Travel addons');
           this.transportAddons = [];
           this.transportAddonsCount = 0;
@@ -253,7 +253,7 @@ export class StorePackageComponent implements OnInit {
           if (this.campAddons) this.campAddonsCount = this.campAddons.length;
         },
         error: (error) => {
-          console.log('Error fetching camp addons: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting Camp Addons');
           this.campAddons = [];
           this.campAddonsCount = 0;
@@ -266,7 +266,7 @@ export class StorePackageComponent implements OnInit {
             this.generalAddonsCount = this.generalAddons.length;
         },
         error: (error) => {
-          console.log('Error fetching general addons: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting General Addons');
           this.generalAddons = [];
           this.generalAddonsCount = 0;
@@ -285,7 +285,7 @@ export class StorePackageComponent implements OnInit {
         this.fillAddressFormGroup();
       },
       error: (error) => {
-        console.log('Error fetching user information: ', error);
+        console.log(error);
         this.snackbarService.show('Error getting user information');
         this.userProfile = null;
         this.isLoading = true;
@@ -512,9 +512,6 @@ export class StorePackageComponent implements OnInit {
         this.festival.id,
         request,
       );
-
-      console.log(response);
-
       return response;
     }
     return throwError(() => new Error('selections missing'));
@@ -530,7 +527,6 @@ export class StorePackageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(() => {
       this.isLoading = false;
-      console.log('The dialog was closed');
     });
   }
 }

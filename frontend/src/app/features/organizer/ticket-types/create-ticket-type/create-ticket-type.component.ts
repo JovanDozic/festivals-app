@@ -133,7 +133,7 @@ export class CreateTicketTypeComponent {
           this.stepper?.next();
         },
         error: (error) => {
-          console.log('Error creating ticket type: ', error);
+          console.log(error);
           this.snackbarService.show('Error creating Ticket Type');
         },
       });
@@ -194,7 +194,7 @@ export class CreateTicketTypeComponent {
             this.dialogRef.close(true);
           },
           error: (error) => {
-            console.log('Error creating fixed price: ', error);
+            console.log(error);
             this.snackbarService.show('Error creating Fixed Price');
             this.dialogRef.close(false);
           },
@@ -233,7 +233,7 @@ export class CreateTicketTypeComponent {
           this.dialogRef.close(true);
         },
         error: (error) => {
-          console.log('Error creating variable prices: ', error);
+          console.log(error);
           this.snackbarService.show('Error creating Variable Prices');
           this.dialogRef.close(false);
         },

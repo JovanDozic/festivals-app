@@ -88,7 +88,6 @@ export class TopUpBraceletComponent {
     dialogRef.afterClosed().subscribe(() => {
       this.topUp();
       this.isLoading = false;
-      console.log('The dialog was closed');
     });
   }
 

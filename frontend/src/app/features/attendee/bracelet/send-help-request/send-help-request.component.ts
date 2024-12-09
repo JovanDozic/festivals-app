@@ -133,9 +133,7 @@ export class SendHelpRequestComponent {
 
       this.imageService.uploadImageAndGetURL(this.selectedFile).subscribe({
         next: (response) => {
-          console.log('Image uploaded successfully', response);
           request.imageURL = response.imageURL;
-          console.log('Add Camp Config Request: ', request);
           this.orderService.sendHelpRequest(request).subscribe({
             next: () => {
               this.snackbarService.show('Help Request sent successfully');
@@ -143,7 +141,7 @@ export class SendHelpRequestComponent {
               this.dialogRef.close(true);
             },
             error: (error) => {
-              console.log('Error sending Help Request: ', error);
+              console.log(error);
               this.snackbarService.show('Error sending Help Request');
               this.isUploading = false;
             },

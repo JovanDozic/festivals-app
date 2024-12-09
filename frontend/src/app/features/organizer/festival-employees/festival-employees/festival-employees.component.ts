@@ -73,7 +73,7 @@ export class FestivalEmployeesComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.log('Error fetching festival information: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting festival');
           this.festival = null;
           this.isLoading = true;
@@ -90,7 +90,7 @@ export class FestivalEmployeesComponent implements OnInit {
           this.employeeCount = count;
         },
         error: (error) => {
-          console.log('Error fetching employee count: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting employee count');
           this.employeeCount = 0;
         },
@@ -106,7 +106,7 @@ export class FestivalEmployeesComponent implements OnInit {
           this.employees = employees;
         },
         error: (error) => {
-          console.log('Error fetching employees: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting employees');
           this.employees = [];
         },
@@ -193,7 +193,7 @@ export class FestivalEmployeesComponent implements OnInit {
             this.loadEmployees();
           },
           error: (error) => {
-            console.log('Error firing employee: ', error);
+            console.log(error);
             this.snackbarService.show('Error firing employee');
           },
         });

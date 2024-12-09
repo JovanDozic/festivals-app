@@ -46,7 +46,6 @@ export class ImageService {
             })
             .pipe(
               map(() => {
-                console.log('Image uploaded successfully', imageURL);
                 return { imageURL };
               }),
               catchError((error) => {

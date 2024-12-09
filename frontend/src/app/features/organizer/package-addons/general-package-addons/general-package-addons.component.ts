@@ -61,12 +61,11 @@ export class GeneralPackageAddonsComponent implements OnInit {
     if (id) {
       this.itemService.getGeneralAddons(Number(id)).subscribe({
         next: (response) => {
-          console.log(`General Addons`, response);
           this.generalAddons = response;
           this.generalCount = this.generalAddons.length;
         },
         error: (error) => {
-          console.log('Error fetching general addons: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting General Addons');
           this.generalAddons = [];
         },
@@ -87,12 +86,9 @@ export class GeneralPackageAddonsComponent implements OnInit {
         next: (festival) => {
           this.festival = festival;
           this.isLoading = false;
-          console.log(
-            `Festival ID: <${this.festival?.id}> - ${this.festival?.name}`,
-          );
         },
         error: (error) => {
-          console.log('Error fetching festival information: ', error);
+          console.log(error);
           this.snackbarService.show('Error getting festival');
           this.festival = null;
           this.isLoading = true;
