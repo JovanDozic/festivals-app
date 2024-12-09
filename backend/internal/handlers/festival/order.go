@@ -25,6 +25,7 @@ type OrderHandler interface {
 	GetHelpRequest(w http.ResponseWriter, r *http.Request)
 	ApproveHelpRequest(w http.ResponseWriter, r *http.Request)
 	RejectHelpRequest(w http.ResponseWriter, r *http.Request)
+	GetShippingLabel(w http.ResponseWriter, r *http.Request)
 }
 
 type orderHandler struct {
@@ -599,4 +600,32 @@ func (h *orderHandler) RejectHelpRequest(w http.ResponseWriter, r *http.Request)
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
 	log.Println("help request rejected for bracelet", braceletId)
+}
+
+func (h *orderHandler) GetShippingLabel(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthEmployeeRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	orderId, err := GetIDParamFromRequest(r, "orderId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	pdfBytes, err := h.orderService.GetShippingLabel(orderId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/pdf")
+	w.Header().Set("Content-Disposition", "inline; filename=shipping_label.pdf")
+	w.WriteHeader(http.StatusOK)
+	w.Write(pdfBytes)
+	log.Println("shipping label fetched for order", orderId)
 }

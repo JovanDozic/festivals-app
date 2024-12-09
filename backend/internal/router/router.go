@@ -55,12 +55,13 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// ...
 
 	// Init services
+	pdfGenerator := servicesCommon.NewPDFGenerator()
 	locationService := servicesCommon.NewLocationService(addressRepo, cityRepo, countryRepo)
 	userService := servicesUser.NewUserService(config, userRepo, userProfileRepo, locationService, imageRepo)
 	festivalService := servicesFestival.NewFestivalService(config, festivalRepo, userRepo, locationService, imageRepo)
 	itemService := servicesFestival.NewItemService(config, itemRepo, locationService, imageRepo)
 	awsService := servicesCommon.NewAWSService(s3Client, s3Presign, config)
-	orderService := servicesFestival.NewOrderService(orderRepo, itemRepo, festivalRepo, userService, imageRepo)
+	orderService := servicesFestival.NewOrderService(orderRepo, itemRepo, festivalRepo, userService, imageRepo, locationService, pdfGenerator)
 	// ...
 
 	// Init handlers
@@ -166,6 +167,8 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	pR.HandleFunc("/order/attendee", orderHandler.GetOrdersAttendee).Methods(http.MethodGet)
 	pR.HandleFunc("/order/{orderId}", orderHandler.GetOrder).Methods(http.MethodGet)
+	pR.HandleFunc("/order/{orderId}/shipping-label", orderHandler.GetShippingLabel).Methods(http.MethodGet)
+
 	pR.HandleFunc("/festival/{festivalId}/order", orderHandler.GetOrdersEmployee).Methods(http.MethodGet)
 	pR.HandleFunc("/festival/{festivalId}/order/ticket", orderHandler.CreateTicketOrder).Methods(http.MethodPost)
 	pR.HandleFunc("/festival/{festivalId}/order/package", orderHandler.CreatePackageOrder).Methods(http.MethodPost)

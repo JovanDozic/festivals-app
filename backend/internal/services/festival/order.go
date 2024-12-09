@@ -7,6 +7,7 @@ import (
 	modelsFestival "backend/internal/models/festival"
 	reposCommon "backend/internal/repositories/common"
 	reposFestival "backend/internal/repositories/festival"
+	servicesCommon "backend/internal/services/common"
 	servicesUser "backend/internal/services/user"
 	"errors"
 	"log"
@@ -29,14 +30,17 @@ type OrderService interface {
 	GetHelpRequest(braceletId uint) (*modelsFestival.ActivationHelpRequest, error)
 	ApproveHelpRequest(braceletId uint) error
 	RejectHelpRequest(braceletId uint) error
+	GetShippingLabel(orderId uint) ([]byte, error)
 }
 
 type orderService struct {
-	orderRepo    reposFestival.OrderRepo
-	itemRepo     reposFestival.ItemRepo
-	festivalRepo reposFestival.FestivalRepo
-	userService  servicesUser.UserService
-	imageRepo    reposCommon.ImageRepo
+	orderRepo       reposFestival.OrderRepo
+	itemRepo        reposFestival.ItemRepo
+	festivalRepo    reposFestival.FestivalRepo
+	userService     servicesUser.UserService
+	imageRepo       reposCommon.ImageRepo
+	locationService servicesCommon.LocationService
+	pdfGenerator    servicesCommon.PDFGenerator
 }
 
 func NewOrderService(
@@ -45,13 +49,17 @@ func NewOrderService(
 	fr reposFestival.FestivalRepo,
 	us servicesUser.UserService,
 	imr reposCommon.ImageRepo,
+	ls servicesCommon.LocationService,
+	pg servicesCommon.PDFGenerator,
 ) OrderService {
 	return &orderService{
-		orderRepo:    or,
-		itemRepo:     ir,
-		festivalRepo: fr,
-		userService:  us,
-		imageRepo:    imr,
+		orderRepo:       or,
+		itemRepo:        ir,
+		festivalRepo:    fr,
+		userService:     us,
+		imageRepo:       imr,
+		locationService: ls,
+		pdfGenerator:    pg,
 	}
 }
 
@@ -207,6 +215,7 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 	var address *dtoCommon.GetAddressResponse
 	if festival.Address != nil {
 		address = &dtoCommon.GetAddressResponse{
+			AddressId:      &festival.Address.ID,
 			Street:         festival.Address.Street,
 			Number:         festival.Address.Number,
 			ApartmentSuite: festival.Address.ApartmentSuite,
@@ -561,4 +570,32 @@ func (s *orderService) RejectHelpRequest(braceletId uint) error {
 	helpRequest.Status = "REJECTED"
 
 	return s.orderRepo.UpdateHelpRequest(helpRequest)
+}
+
+func (s *orderService) GetShippingLabel(orderId uint) ([]byte, error) {
+
+	order, err := s.GetOrder("", orderId)
+	if err != nil {
+		return nil, err
+	}
+
+	attendee := order.Attendee
+	festival := order.Festival
+
+	attendeeAddress, err := s.locationService.GetAddressByID(*attendee.Address.AddressId)
+	if err != nil {
+		return nil, err
+	}
+
+	festivalAddressId, err := s.locationService.GetAddressByID(*festival.Address.AddressId)
+	if err != nil {
+		return nil, err
+	}
+
+	pdfBytes, err := s.pdfGenerator.CreateShippingLabel(festivalAddressId, attendeeAddress, &festival, *attendee)
+	if err != nil {
+		return nil, err
+	}
+
+	return pdfBytes, nil
 }
