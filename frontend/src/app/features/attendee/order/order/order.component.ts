@@ -37,7 +37,7 @@ export class OrderComponent implements OnInit {
   private userService = inject(UserService);
   private snackbarService = inject(SnackbarService);
 
-  isLoading: boolean = true;
+  isLoading = true;
 
   order: OrderDTO | null = null;
   userProfile: UserProfileResponse | null = null;

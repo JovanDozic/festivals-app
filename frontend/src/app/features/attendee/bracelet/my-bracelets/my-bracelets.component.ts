@@ -40,13 +40,13 @@ import { TopUpBraceletComponent } from '../top-up-bracelet/top-up-bracelet.compo
     '../../../../app.component.scss',
   ],
 })
-export class MyBraceletsComponent {
+export class MyBraceletsComponent implements OnInit {
   private router = inject(Router);
   private snackbarService = inject(SnackbarService);
   private orderService = inject(OrderService);
   private dialog = inject(MatDialog);
 
-  isLoading: boolean = true;
+  isLoading = true;
   orders: OrderDTO[] = [];
 
   filterOptions: string[] = [
@@ -58,7 +58,7 @@ export class MyBraceletsComponent {
     'Help Requested',
     'Rejected',
   ];
-  selectedChip: string = 'Active';
+  selectedChip = 'Active';
 
   constructor() {}
 

@@ -50,7 +50,7 @@ export class FestivalOrdersComponent implements OnInit {
   private dialog = inject(MatDialog);
 
   festival: Festival | null = null;
-  isLoading: boolean = true;
+  isLoading = true;
   orders: OrderPreviewDTO[] = [];
 
   filterOptions: string[] = [
@@ -61,7 +61,7 @@ export class FestivalOrdersComponent implements OnInit {
     'Help Requested', // ovo mozda i ne stavljamo ovde jer je tesko to dobaviti u orders
     'Rejected',
   ];
-  selectedChip: string = 'All'; // todo: change to activated required
+  selectedChip = 'All'; // todo: change to activated required
 
   constructor() {}
 

@@ -44,7 +44,7 @@ import { StoreChooserComponent } from '../store/store-chooser/store-chooser.comp
     ]),
   ],
 })
-export class FestivalComponent {
+export class FestivalComponent implements OnInit {
   festival: Festival | null = null;
   isLoading = true;
   currentImageIndex = 0;

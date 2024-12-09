@@ -36,11 +36,11 @@ export class MyOrdersComponent implements OnInit {
   private snackbarService = inject(SnackbarService);
   private orderService = inject(OrderService);
 
-  isLoading: boolean = true;
+  isLoading = true;
   orders: OrderPreviewDTO[] = [];
 
   filterOptions: string[] = ['All', 'Upcoming Festivals', 'Past Festivals'];
-  selectedChip: string = 'All';
+  selectedChip = 'All';
 
   constructor() {}
 

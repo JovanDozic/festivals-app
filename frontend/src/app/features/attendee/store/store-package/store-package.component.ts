@@ -97,9 +97,9 @@ export class StorePackageComponent implements OnInit {
   ];
   selectedTransportType: TransportType | null = null;
 
-  transportAddonsCount: number = 0;
-  campAddonsCount: number = 0;
-  generalAddonsCount: number = 0;
+  transportAddonsCount = 0;
+  campAddonsCount = 0;
+  generalAddonsCount = 0;
 
   transportAddons: TransportAddonDTO[] = [];
   campAddons: CampAddonDTO[] = [];
@@ -118,7 +118,7 @@ export class StorePackageComponent implements OnInit {
   tickets: ItemCurrentPrice[] = [];
   selectedTicket: ItemCurrentPrice | null = null;
 
-  totalPrice: number = 0;
+  totalPrice = 0;
 
   constructor() {
     this.personalFormGroup = this.fb.group({

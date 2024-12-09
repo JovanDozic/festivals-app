@@ -47,7 +47,7 @@ export class OrderComponent implements OnInit {
   private orderService = inject(OrderService);
   private dialog = inject(MatDialog);
 
-  isLoading: boolean = true;
+  isLoading = true;
 
   festival: Festival | null = null;
 

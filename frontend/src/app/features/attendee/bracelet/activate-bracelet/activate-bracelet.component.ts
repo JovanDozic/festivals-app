@@ -82,7 +82,7 @@ export class ActivateBraceletComponent {
     this.infoFormGroup.get('barcodeNumberCtrl')?.disable();
   }
 
-  closeDialog(success: boolean = false) {
+  closeDialog(success = false) {
     this.dialogRef.close(success);
   }
 
