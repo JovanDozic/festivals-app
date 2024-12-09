@@ -19,6 +19,7 @@ type OrderHandler interface {
 	GetOrder(w http.ResponseWriter, r *http.Request)
 	GetOrdersAttendee(w http.ResponseWriter, r *http.Request)
 	GetOrdersEmployee(w http.ResponseWriter, r *http.Request)
+	GetOrdersCount(w http.ResponseWriter, r *http.Request)
 	IssueBracelet(w http.ResponseWriter, r *http.Request)
 	GetBraceletOrdersAttendee(w http.ResponseWriter, r *http.Request)
 	ActivateBracelet(w http.ResponseWriter, r *http.Request)
@@ -303,6 +304,34 @@ func (h *orderHandler) GetOrdersEmployee(w http.ResponseWriter, r *http.Request)
 
 	utils.WriteJSON(w, http.StatusOK, orders, nil)
 	log.Println("orders fetched for festival", festivalId)
+}
+
+func (h *orderHandler) GetOrdersCount(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	festivalId, err := GetIDParamFromRequest(r, "festivalId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	count, err := h.orderService.GetOrdersCount(festivalId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, dtoFestival.FestivalPropCountResponse{
+		FestivalId: festivalId,
+		Count:      int(count),
+	}, nil)
+	log.Println("order count retrieved successfully for festival:", festivalId)
 }
 
 func (h *orderHandler) IssueBracelet(w http.ResponseWriter, r *http.Request) {

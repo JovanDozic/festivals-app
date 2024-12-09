@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   ActivateBraceletHelpRequest,
   ActivateBraceletRequest,
   ActivationHelpRequestDTO,
   CreatePackageOrderRequest,
   CreateTicketOrderRequest,
+  FestivalPropCountResponse,
   IssueBraceletRequest,
   IssueBraceletResponse,
   OrderDTO,
@@ -103,5 +104,13 @@ export class OrderService {
     return this.http.get(`${this.apiUrl}/order/${orderId}/shipping-label`, {
       responseType: 'blob',
     });
+  }
+
+  getOrdersCount(festivalId: number): Observable<number> {
+    return this.http
+      .get<FestivalPropCountResponse>(
+        `${this.apiUrl}/festival/${festivalId}/order/count`,
+      )
+      .pipe(map((response) => response.count));
   }
 }

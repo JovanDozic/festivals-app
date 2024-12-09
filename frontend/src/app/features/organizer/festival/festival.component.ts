@@ -19,6 +19,7 @@ import { EditFestivalComponent } from '../edit-festival/edit-festival.component'
 import { animate, style, transition, trigger } from '@angular/animations';
 import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../services/festival/item.service';
+import { OrderService } from '../../../services/festival/order.service';
 
 @Component({
   selector: 'app-festival',
@@ -53,22 +54,25 @@ export class FestivalComponent implements OnInit {
   isLoading = true;
   currentImageIndex = 0;
   previousImageIndex = 0;
-  employeeCount = 0;
+  employeesCount = 0;
   ticketTypesCount = 0;
   packageAddonsCount = 0;
+  ordersCount = 0;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private festivalService = inject(FestivalService);
   private snackbarService = inject(SnackbarService);
   private itemService = inject(ItemService);
+  private orderService = inject(OrderService);
   private dialog = inject(MatDialog);
 
   ngOnInit() {
     this.loadFestival();
-    this.loadEmployeeCount();
+    this.loadEmployeesCount();
     this.loadTicketTypesCount();
     this.loadPackageAddonsCount();
+    this.loadOrdersCount();
   }
 
   goBack() {
@@ -116,17 +120,17 @@ export class FestivalComponent implements OnInit {
     }
   }
 
-  loadEmployeeCount() {
+  loadEmployeesCount() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.festivalService.getEmployeeCount(Number(id)).subscribe({
         next: (count) => {
-          this.employeeCount = count;
+          this.employeesCount = count;
         },
         error: (error) => {
           console.log('Error fetching employee count: ', error);
           this.snackbarService.show('Error getting employee count');
-          this.employeeCount = 0;
+          this.employeesCount = 0;
         },
       });
     }
@@ -159,6 +163,22 @@ export class FestivalComponent implements OnInit {
           console.log('Error fetching package addons count: ', error);
           this.snackbarService.show('Error getting package addons count');
           this.packageAddonsCount = 0;
+        },
+      });
+    }
+  }
+
+  loadOrdersCount() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.orderService.getOrdersCount(Number(id)).subscribe({
+        next: (count) => {
+          this.ordersCount = count;
+        },
+        error: (error) => {
+          console.log('Error fetching orders count: ', error);
+          this.snackbarService.show('Error getting orders count');
+          this.ordersCount = 0;
         },
       });
     }

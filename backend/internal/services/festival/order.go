@@ -22,6 +22,7 @@ type OrderService interface {
 	GetOrder(username string, orderId uint) (*dtoFestival.OrderDTO, error)
 	GetOrdersAttendee(username string) ([]dtoFestival.OrderPreviewDTO, error)
 	GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPreviewDTO, error)
+	GetOrdersCount(festivalId uint) (int64, error)
 	GetBraceletOrdersAttendee(username string) ([]dtoFestival.OrderDTO, error)
 	IssueBracelet(request *modelsFestival.Bracelet) error
 	ActivateBracelet(username string, braceletId uint, userEnteredPIN string) error
@@ -307,6 +308,10 @@ func (s *orderService) GetOrdersAttendee(username string) ([]dtoFestival.OrderPr
 	}
 
 	return response, nil
+}
+
+func (s *orderService) GetOrdersCount(festivalId uint) (int64, error) {
+	return s.orderRepo.GetOrdersCount(festivalId)
 }
 
 func (s *orderService) GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPreviewDTO, error) {

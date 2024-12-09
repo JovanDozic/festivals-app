@@ -14,6 +14,7 @@ type OrderRepo interface {
 	GetOrder(orderId uint) (*models.Order, error)
 	GetOrdersAttendee(username string) ([]models.Order, error)
 	GetOrdersEmployee(festivalId uint) ([]models.Order, error)
+	GetOrdersCount(festivalId uint) (int64, error)
 	GetFestivalTicket(festivalTicketId uint) (*models.FestivalTicket, error)
 	GetFestivalPackage(festivalPackageId uint) (*models.FestivalPackage, error)
 	CreateBracelet(bracelet *models.Bracelet) error
@@ -92,6 +93,18 @@ func (r *orderRepo) GetOrdersEmployee(festivalId uint) ([]models.Order, error) {
 		Where("festivals.id = ?", festivalId).
 		Find(&orders).Error
 	return orders, err
+}
+
+func (r *orderRepo) GetOrdersCount(festivalId uint) (int64, error) {
+	var count int64
+	err := r.db.
+		Model(&models.Order{}).
+		Joins("JOIN festival_tickets ON orders.festival_ticket_id = festival_tickets.id").
+		Joins("JOIN items ON festival_tickets.item_id = items.id").
+		Joins("JOIN festivals ON items.festival_id = festivals.id").
+		Where("festivals.id = ?", festivalId).
+		Count(&count).Error
+	return count, err
 }
 
 func (r *orderRepo) GetFestivalTicket(festivalTicketId uint) (*models.FestivalTicket, error) {
