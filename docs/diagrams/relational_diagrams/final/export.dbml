@@ -1,0 +1,442 @@
+Table "activation_help_requests" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "user_entered_pin" TEXT
+  "user_entered_barcode" TEXT
+  "issue_description" TEXT
+  "proof_image_id" BIGINT
+  "status" TEXT
+  "bracelet_id" BIGINT
+  "attendee_id" BIGINT
+  "employee_id" BIGINT
+
+  Indexes {
+    id [pk, name: "activation_help_requests_pkey"]
+  }
+}
+
+Table "addresses" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "street" TEXT
+  "number" TEXT
+  "apartment_suite" TEXT
+  "city_id" BIGINT
+
+  Indexes {
+    id [pk, name: "addresses_pkey"]
+  }
+}
+
+Table "administrators" {
+  "user_id" bigserial [not null, increment]
+
+  Indexes {
+    user_id [pk, name: "administrators_pkey"]
+  }
+}
+
+Table "attendees" {
+  "user_id" bigserial [not null, increment]
+
+  Indexes {
+    user_id [pk, name: "attendees_pkey"]
+  }
+}
+
+Table "bracelets" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "pin" TEXT
+  "barcode_number" TEXT
+  "balance" NUMERIC
+  "status" TEXT
+  "festival_ticket_id" BIGINT
+  "attendee_id" BIGINT
+  "employee_id" BIGINT
+
+  Indexes {
+    id [pk, name: "bracelets_pkey"]
+  }
+}
+
+Table "camp_addons" {
+  "item_id" bigserial [not null, increment]
+  "camp_name" TEXT
+
+  Indexes {
+    item_id [pk, name: "camp_addons_pkey"]
+  }
+}
+
+Table "camp_equipments" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "item_id" BIGINT
+  "NAME" TEXT
+
+  Indexes {
+    id [pk, name: "camp_equipments_pkey"]
+  }
+}
+
+Table "cities" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "NAME" TEXT
+  "postal_code" TEXT
+  "country_id" BIGINT
+
+  Indexes {
+    id [pk, name: "cities_pkey"]
+  }
+}
+
+Table "countries" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "NAME" TEXT
+  "nice_name" TEXT
+  "iso" TEXT
+  "iso3" TEXT
+  "num_code" BIGINT
+  "phone_code" BIGINT
+
+  Indexes {
+    id [pk, name: "countries_pkey"]
+  }
+}
+
+Table "employees" {
+  "user_id" bigserial [not null, increment]
+
+  Indexes {
+    user_id [pk, name: "employees_pkey"]
+  }
+}
+
+Table "festival_employees" {
+  "festival_id" BIGINT
+  "user_id" BIGINT
+}
+
+Table "festival_images" {
+  "festival_id" BIGINT
+  "image_id" BIGINT
+}
+
+Table "festival_organizers" {
+  "festival_id" BIGINT
+  "user_id" BIGINT
+}
+
+Table "festival_package_addons" {
+  "festival_package_id" BIGINT
+  "item_id" BIGINT
+}
+
+Table "festival_packages" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+
+  Indexes {
+    id [pk, name: "festival_packages_pkey"]
+  }
+}
+
+Table "festival_tickets" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "item_id" BIGINT
+
+  Indexes {
+    id [pk, name: "festival_tickets_pkey"]
+  }
+}
+
+Table "festivals" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "NAME" TEXT
+  "description" TEXT
+  "start_date" TIMESTAMP
+  "end_date" TIMESTAMP
+  "capacity" BIGINT
+  "status" TEXT
+  "store_status" TEXT
+  "address_id" BIGINT
+
+  Indexes {
+    id [pk, name: "festivals_pkey"]
+  }
+}
+
+Table "images" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "url" TEXT
+
+  Indexes {
+    id [pk, name: "images_pkey"]
+  }
+}
+
+Table "items" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "festival_id" BIGINT
+  "NAME" TEXT
+  "TYPE" TEXT
+  "description" TEXT
+  "available_number" BIGINT
+  "remaining_number" BIGINT
+
+  Indexes {
+    id [pk, name: "items_pkey"]
+  }
+}
+
+Table "logs" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "TYPE" TEXT
+  "description" TEXT
+  "DATA" jsonb
+  "user_id" BIGINT
+
+  Indexes {
+    id [pk, name: "logs_pkey"]
+  }
+}
+
+Table "orders" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "total_amount" NUMERIC
+  "user_id" BIGINT
+  "festival_ticket_id" BIGINT
+  "festival_package_id" BIGINT
+
+  Indexes {
+    id [pk, name: "orders_pkey"]
+  }
+}
+
+Table "organizers" {
+  "user_id" bigserial [not null, increment]
+
+  Indexes {
+    user_id [pk, name: "organizers_pkey"]
+  }
+}
+
+Table "package_addon_images" {
+  "item_id" BIGINT
+  "image_id" BIGINT
+}
+
+Table "package_addons" {
+  "item_id" bigserial [not null, increment]
+  "category" TEXT
+
+  Indexes {
+    item_id [pk, name: "package_addons_pkey"]
+  }
+}
+
+Table "price_list_items" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "price_list_id" BIGINT
+  "item_id" BIGINT
+  "date_from" TIMESTAMP
+  "date_to" TIMESTAMP
+  "is_fixed" BOOLEAN
+  "price" NUMERIC
+
+  Indexes {
+    id [pk, name: "price_list_items_pkey"]
+  }
+}
+
+Table "price_lists" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "festival_id" BIGINT
+
+  Indexes {
+    id [pk, name: "price_lists_pkey"]
+  }
+}
+
+Table "ticket_types" {
+  "item_id" bigserial [not null, increment]
+
+  Indexes {
+    item_id [pk, name: "ticket_types_pkey"]
+  }
+}
+
+Table "transport_addons" {
+  "item_id" bigserial [not null, increment]
+  "transport_type" TEXT
+  "departure_time" TIMESTAMP
+  "arrival_time" TIMESTAMP
+  "return_departure_time" TIMESTAMP
+  "return_arrival_time" TIMESTAMP
+  "departure_city_id" BIGINT
+  "arrival_city_id" BIGINT
+
+  Indexes {
+    item_id [pk, name: "transport_addons_pkey"]
+  }
+}
+
+Table "user_profiles" {
+  "id" bigserial [not null, increment]
+  "first_name" TEXT
+  "last_name" TEXT
+  "date_of_birth" TIMESTAMP
+  "phone_number" TEXT
+  "user_id" BIGINT
+  "address_id" BIGINT
+  "image_id" BIGINT
+
+  Indexes {
+    id [pk, name: "user_profiles_pkey"]
+    user_id [unique, name: "uni_user_profiles_user_id"]
+  }
+}
+
+Table "users" {
+  "id" bigserial [not null, increment]
+  "created_at" TIMESTAMP
+  "updated_at" TIMESTAMP
+  "deleted_at" TIMESTAMP
+  "username" TEXT
+  "email" TEXT
+  "PASSWORD" TEXT
+  "ROLE" TEXT
+
+  Indexes {
+    id [pk, name: "users_pkey"]
+    email [unique, name: "uni_users_email"]
+    username [unique, name: "uni_users_username"]
+  }
+}
+
+Ref "fk_activation_help_requests_attendee":"attendees"."user_id" < "activation_help_requests"."attendee_id"
+
+Ref "fk_activation_help_requests_bracelet":"bracelets"."id" < "activation_help_requests"."bracelet_id"
+
+Ref "fk_activation_help_requests_employee":"employees"."user_id" < "activation_help_requests"."employee_id"
+
+Ref "fk_activation_help_requests_proof_image":"images"."id" < "activation_help_requests"."proof_image_id"
+
+Ref "fk_addresses_city":"cities"."id" < "addresses"."city_id"
+
+Ref "fk_administrators_user":"users"."id" < "administrators"."user_id"
+
+Ref "fk_attendees_user":"users"."id" < "attendees"."user_id"
+
+Ref "fk_bracelets_attendee":"attendees"."user_id" < "bracelets"."attendee_id"
+
+Ref "fk_bracelets_employee":"employees"."user_id" < "bracelets"."employee_id"
+
+Ref "fk_bracelets_festival_ticket":"festival_tickets"."id" < "bracelets"."festival_ticket_id"
+
+Ref "fk_camp_addons_item":"package_addons"."item_id" < "camp_addons"."item_id"
+
+Ref "fk_camp_equipments_item":"camp_addons"."item_id" < "camp_equipments"."item_id"
+
+Ref "fk_cities_country":"countries"."id" < "cities"."country_id"
+
+Ref "fk_employees_user":"users"."id" < "employees"."user_id"
+
+Ref "fk_festival_employees_festival":"festivals"."id" < "festival_employees"."festival_id"
+
+Ref "fk_festival_employees_user":"employees"."user_id" < "festival_employees"."user_id"
+
+Ref "fk_festival_images_festival":"festivals"."id" < "festival_images"."festival_id"
+
+Ref "fk_festival_images_image":"images"."id" < "festival_images"."image_id"
+
+Ref "fk_festival_organizers_festival":"festivals"."id" < "festival_organizers"."festival_id"
+
+Ref "fk_festival_organizers_user":"organizers"."user_id" < "festival_organizers"."user_id"
+
+Ref "fk_festival_package_addons_festival_package":"festival_packages"."id" < "festival_package_addons"."festival_package_id"
+
+Ref "fk_festival_package_addons_item":"package_addons"."item_id" < "festival_package_addons"."item_id"
+
+Ref "fk_festival_tickets_item":"ticket_types"."item_id" < "festival_tickets"."item_id"
+
+Ref "fk_festivals_address":"addresses"."id" < "festivals"."address_id"
+
+Ref "fk_items_festival":"festivals"."id" < "items"."festival_id"
+
+Ref "fk_logs_user":"users"."id" < "logs"."user_id"
+
+Ref "fk_orders_festival_package":"festival_packages"."id" < "orders"."festival_package_id"
+
+Ref "fk_orders_festival_ticket":"festival_tickets"."id" < "orders"."festival_ticket_id"
+
+Ref "fk_orders_user":"attendees"."user_id" < "orders"."user_id"
+
+Ref "fk_organizers_user":"users"."id" < "organizers"."user_id"
+
+Ref "fk_package_addon_images_image":"images"."id" < "package_addon_images"."image_id"
+
+Ref "fk_package_addon_images_item":"package_addons"."item_id" < "package_addon_images"."item_id"
+
+Ref "fk_package_addons_item":"items"."id" < "package_addons"."item_id"
+
+Ref "fk_price_list_items_item":"items"."id" < "price_list_items"."item_id"
+
+Ref "fk_price_list_items_price_list":"price_lists"."id" < "price_list_items"."price_list_id"
+
+Ref "fk_price_lists_festival":"festivals"."id" < "price_lists"."festival_id"
+
+Ref "fk_ticket_types_item":"items"."id" < "ticket_types"."item_id"
+
+Ref "fk_transport_addons_arrival_city":"cities"."id" < "transport_addons"."arrival_city_id"
+
+Ref "fk_transport_addons_departure_city":"cities"."id" < "transport_addons"."departure_city_id"
+
+Ref "fk_transport_addons_item":"package_addons"."item_id" < "transport_addons"."item_id"
+
+Ref "fk_user_profiles_address":"addresses"."id" < "user_profiles"."address_id"
+
+Ref "fk_user_profiles_image":"images"."id" < "user_profiles"."image_id"
+
+Ref "fk_user_profiles_user":"users"."id" < "user_profiles"."user_id"
