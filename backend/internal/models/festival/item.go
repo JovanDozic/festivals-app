@@ -91,8 +91,3 @@ type TransportAddon struct {
 	ArrivalCityID   uint
 	ArrivalCity     modelsCommon.City `gorm:"foreignKey:ArrivalCityID"`
 }
-
-type CustomAddon struct {
-	ItemID uint `gorm:"primaryKey"`
-	Item   PackageAddon
-}
