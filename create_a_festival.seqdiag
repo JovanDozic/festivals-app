@@ -1,0 +1,122 @@
+actor Organizator
+
+
+participant FE
+
+participant BE
+
+participant BE Mux Router
+participant Festival Handler
+participant JWT Handler
+participant Festival Service
+participant Location Service
+participant Country Repo
+participant Address Repo
+participant User Repo
+participant Festival Repo
+participant DB
+
+// korak: 1
+
+Organizator->FE: Unos osnovnih podataka o festivalu
+
+FE->FE: Validacija podataka
+
+Organizator->FE: Unos podataka o adresi
+
+FE->FE: Validacija podataka
+
+FE->BE Mux Router: POST /festival
+
+BE Mux Router->Festival Handler: Create(ResponseWriter, Request)
+
+Festival Handler->JWT Handler: Autorizacija korisnika
+JWT Handler->Festival Handler: JWT i uloga validni
+
+// ovde moze error ako nije validan
+
+
+Festival Handler->Festival Handler: Citanje i validacija request-a
+// error
+
+Festival Handler->Festival Handler: Mapiranje request-a na Festival i Address model
+
+Festival Handler->JWT Handler: Dobavljanje korisnickog imena
+JWT Handler->Festival Handler: Korisnicko ime
+
+Festival Handler->Festival Service: Create(Festival)
+Festival Service->Location Service: CreateAddress(Festival.Address)
+
+Location Service->Country Repo: Validiraj drzavu grada iz adrese
+Country Repo->DB: Dobavi drzavu po ISO3
+DB->Country Repo: Drzava
+Country Repo->Location Service: Drzava
+Location Service->Address Repo: Create(Address)
+Address Repo->DB: Save(Address)
+
+Festival Service->User Repo: GetByUsername(username)
+User Repo->Festival Service: Korisnik
+
+
+Festival Service->Festival Service: Postavi ID adrese, status festivala i prodavnice
+
+Festival Service->Festival Repo: Create(Festival, User)
+
+Festival Repo->DB: Save(Festival)
+Festival Repo->DB: Save(FestivalOrganizer)
+// errors: duplicate key, foreign key?
+
+
+Festival Repo->Festival Service: error: nil
+Festival Service->Festival Handler: error: nil
+
+Festival Handler->Festival Handler: Upisi "201 Status Created" u response
+Festival Handler->BE Mux Router: 201 Status Created
+BE Mux Router->FE: 201 Status Created
+
+FE->Organizator: 201 Status Created
+
+Organizator->FE: Selektuje slike
+Organizator->FE: Sacuvaj
+
+// per every image
+
+
+loop Za svaku seletovanu sliku
+
+FE->BE Mux Router: POST /image/upload
+BE Mux Router->AWS Handler: GetPresignedURL()
+// todo: sta sad????
+AWS Handler->AWS Service: GetPresignedURL(FileName, FileType)
+AWS Service->AWS S3: PUT request
+AWS S3->AWS Service: Presigned upload URL
+AWS Service->AWS Handler: Presigned upload URL
+AWS Handler->BE Mux Router: Presigned upload linkom
+BE Mux Router->FE: 201 Presigned upload URL
+
+FE->AWS S3: PUT /upload
+AWS S3->FE: 201 Status Created
+
+FE->BE Mux Router: POST /festival/id/image
+BE Mux Router->Festival Handler: AddImage(ResponseWriter, Request)
+
+Festival Handler->JWT Handler: Autorizacija organizatora i prava menjanja festivala
+JWT Handler->Festival Handler: Korisnik ima pristup
+
+Festival Handler->Festival Handler: Citanje i validacija request body-ja
+Festival Handler->Festival Handler: Mapiranje request-a na Image model
+
+Festival Handler->Festival Service: AddImage(Festival, Image)
+Festival Service->Image Repo: Create(Image)
+Image Repo->DB: Save(Image)
+Festival Service->Festival Repo: AddImage(FestivalID, ImageID)
+Festival Repo->DB: Save(FestivalImage)
+
+Festival Service->Festival Handler: 201 Status Created
+Festival Handler->BE Mux Router: 201 Status Created
+BE Mux Router->FE: 201 Status Created
+
+FE->Organizator: Prikaz Festivala
+
+
+end
