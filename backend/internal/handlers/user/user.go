@@ -17,6 +17,7 @@ import (
 
 type UserHandler interface {
 	GetUsers(w http.ResponseWriter, r *http.Request)
+	GetUser(w http.ResponseWriter, r *http.Request)
 	RegisterAttendee(w http.ResponseWriter, r *http.Request)
 	Login(w http.ResponseWriter, r *http.Request)
 	GetUserProfile(w http.ResponseWriter, r *http.Request)
@@ -60,7 +61,7 @@ func (h *userHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	response := make([]dtoUser.UserListResponse, len(users))
 	for i, user := range users {
 		response[i] = dtoUser.UserListResponse{
-			ID:        user.ID,
+			ID:        user.User.ID,
 			Username:  user.User.Username,
 			FirstName: user.FirstName,
 			LastName:  user.LastName,
@@ -70,6 +71,36 @@ func (h *userHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusCreated, response, nil)
 	log.Println("fetched users for admin:", utils.GetUsername(r.Context()))
+}
+
+func (h *userHandler) GetUser(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthAdminRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	userId, err := GetIDParamFromRequest(r, "userId")
+	if err != nil {
+		log.Println("error:", models.ErrBadRequest)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	response, err := h.userService.GetUserProfileById(userId)
+	if err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrNotFound:
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response, nil)
+	log.Println("fetched user:", userId)
 }
 
 func (h *userHandler) RegisterAttendee(w http.ResponseWriter, r *http.Request) {

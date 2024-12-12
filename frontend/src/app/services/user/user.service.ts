@@ -104,6 +104,10 @@ export class UserService {
   getAllUsers(): Observable<UserListResponse[]> {
     return this.http.get<UserListResponse[]>(`${this.apiUrl}/user`);
   }
+
+  getUserById(userId: number): Observable<UserProfileResponse> {
+    return this.http.get<UserProfileResponse>(`${this.apiUrl}/user/${userId}`);
+  }
 }
 
 function formatDate(date: Date): string {

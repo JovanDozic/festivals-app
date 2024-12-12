@@ -328,6 +328,14 @@ const adminRoutes: Routes = [
           ),
         title: 'All Accounts',
       },
+      {
+        path: 'admin/accounts/:id',
+        loadComponent: () =>
+          import('./features/admin/account/account.component').then(
+            (c) => c.AccountComponent,
+          ),
+        title: 'Accounts',
+      },
     ],
   },
 ];

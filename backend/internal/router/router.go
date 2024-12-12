@@ -102,6 +102,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	pR.HandleFunc("/user/email", userHandler.UpdateUserEmail).Methods(http.MethodPut)
 	pR.HandleFunc("/user/profile/address", userHandler.UpdateUserAddress).Methods(http.MethodPut)
 	pR.HandleFunc("/user/profile/photo", userHandler.UpdateProfilePhoto).Methods(http.MethodPut)
+	pR.HandleFunc("/user/{userId}", userHandler.GetUser).Methods(http.MethodGet)
 
 	// ...
 

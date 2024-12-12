@@ -1,0 +1,61 @@
+.profile-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-header .button-container {
+  display: flex;
+  gap: 10px;
+}
+
+.profile-header .title-container {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  justify-content: space-between;
+}
+
+.profile-card {
+  padding: 16px;
+  width: 100%;
+}
+
+h1 {
+  font-weight: 500;
+  font-family: "Funnel Display", sans-serif;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-container img {
+  height: 50px;
+  width: 50px;
+  margin-right: 15px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(61, 61, 61, 0.5);
+}
+
+.profile-missing-photo {
+  height: 50px;
+  width: 50px;
+  font-size: 50px;
+  margin-right: 15px;
+}

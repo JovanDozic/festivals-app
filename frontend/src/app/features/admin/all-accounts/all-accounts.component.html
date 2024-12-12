@@ -1,7 +1,10 @@
 <div class="container mat-elevation-z4" *ngIf="users">
   <div class="profile-header">
     <div class="title-container">
-      <h1>{{ filteredUsers.length }} Accounts</h1>
+      <h1>
+        {{ filteredUsers.length }}
+        {{ filteredUsers.length === 1 ? "Account" : "Accounts" }}
+      </h1>
     </div>
     <div class="button-container">
       <button

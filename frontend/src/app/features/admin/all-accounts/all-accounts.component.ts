@@ -40,9 +40,6 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./all-accounts.component.scss', '../../../app.component.scss'],
 })
 export class AllAccountsComponent {
-  onViewClick(arg0: any) {
-    throw new Error('Method not implemented.');
-  }
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private userService = inject(UserService);
@@ -100,6 +97,11 @@ export class AllAccountsComponent {
         (user) => user.role === this.selectedChip.toUpperCase(),
       );
     }
+  }
+
+  onViewClick(userId: number) {
+    console.log(userId);
+    this.router.navigate([`/admin/accounts/${userId}`]);
   }
 
   onRegisterAdmin() {
