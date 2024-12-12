@@ -72,13 +72,18 @@ export class RegisterUserComponent {
     { value: 'ORGANIZER', viewValue: 'Organizer' },
     { value: 'ADMINISTRATOR', viewValue: 'Administrator' },
   ];
+  selectedRole: Role | undefined;
 
   roleFormGroup: FormGroup;
   infoFormGroup: FormGroup;
 
   constructor() {
     this.roleFormGroup = this.fb.group({
-      roleCtrl: ['', Validators.required],
+      roleCtrl: [null, Validators.required],
+    });
+
+    this.roleFormGroup.get('roleCtrl')?.valueChanges.subscribe((role: Role) => {
+      this.selectedRole = role;
     });
 
     this.infoFormGroup = this.fb.group({

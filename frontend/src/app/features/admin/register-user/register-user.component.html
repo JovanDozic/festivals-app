@@ -1,4 +1,7 @@
-<h2 mat-dialog-title>Register New Administrator</h2>
+<h2 mat-dialog-title>
+  Register New
+  {{ selectedRole ? (selectedRole.toString() | titlecase) : "User" }}
+</h2>
 
 <mat-dialog-content>
   <form [formGroup]="roleFormGroup" style="margin-bottom: -20px !important">
@@ -132,6 +135,6 @@
     (click)="register()"
     [disabled]="roleFormGroup.invalid || infoFormGroup.invalid"
   >
-    Register Administrator
+    Register {{ selectedRole ? (selectedRole.toString() | titlecase) : "User" }}
   </button>
 </mat-dialog-actions>
