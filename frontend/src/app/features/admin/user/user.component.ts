@@ -16,7 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-account',
+  selector: 'app-user',
   imports: [
     CommonModule,
     MatButtonModule,
@@ -26,8 +26,8 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatDividerModule,
     MatCardModule,
   ],
-  templateUrl: './account.component.html',
-  styleUrls: ['./account.component.scss', '../../../app.component.scss'],
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss', '../../../app.component.scss'],
 })
 export class AccountComponent {
   private route = inject(ActivatedRoute);
@@ -43,7 +43,7 @@ export class AccountComponent {
   }
 
   goBack() {
-    this.router.navigate([`/admin/accounts`]);
+    this.router.navigate([`/admin/users`]);
   }
 
   getUserProfile() {

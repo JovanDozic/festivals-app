@@ -117,13 +117,13 @@
 
       <a
         mat-list-item
-        routerLink="/admin/accounts"
+        routerLink="/admin/users"
         *ngIf="visibleForRole('ADMINISTRATOR')"
         #link="routerLinkActive"
         routerLinkActive
         [activated]="link.isActive"
       >
-        Accounts
+        Users
       </a>
     </mat-nav-list>
     <div class="theme-button">

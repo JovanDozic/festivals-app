@@ -321,20 +321,20 @@ const adminRoutes: Routes = [
     data: { expectedRoles: ['ADMINISTRATOR'] },
     children: [
       {
-        path: 'admin/accounts',
+        path: 'admin/users',
         loadComponent: () =>
-          import('./features/admin/all-accounts/all-accounts.component').then(
+          import('./features/admin/all-users/all-users.component').then(
             (c) => c.AllAccountsComponent,
           ),
-        title: 'All Accounts',
+        title: 'All Users',
       },
       {
-        path: 'admin/accounts/:id',
+        path: 'admin/users/:id',
         loadComponent: () =>
-          import('./features/admin/account/account.component').then(
+          import('./features/admin/user/user.component').then(
             (c) => c.AccountComponent,
           ),
-        title: 'Accounts',
+        title: 'Users',
       },
     ],
   },

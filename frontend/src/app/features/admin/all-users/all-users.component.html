@@ -3,7 +3,7 @@
     <div class="title-container">
       <h1>
         {{ filteredUsers.length }}
-        {{ filteredUsers.length === 1 ? "Account" : "Accounts" }}
+        {{ filteredUsers.length === 1 ? "User" : "Users" }}
       </h1>
     </div>
     <div class="button-container">
@@ -97,6 +97,6 @@
   </div>
 
   <div class="empty-list" *ngIf="users.length === 0">
-    <p>System does not have any user accounts.</p>
+    <p>System does not have any user users.</p>
   </div>
 </div>

@@ -24,7 +24,7 @@ import { RegisterOrganizerComponent } from '../register-organizer/register-organ
 import { RegisterAdminComponent } from '../register-admin/register-admin.component';
 
 @Component({
-  selector: 'app-all-accounts',
+  selector: 'app-all-users',
   imports: [
     CommonModule,
     FormsModule,
@@ -38,8 +38,8 @@ import { RegisterAdminComponent } from '../register-admin/register-admin.compone
     MatMenuModule,
     MatTableModule,
   ],
-  templateUrl: './all-accounts.component.html',
-  styleUrls: ['./all-accounts.component.scss', '../../../app.component.scss'],
+  templateUrl: './all-users.component.html',
+  styleUrls: ['./all-users.component.scss', '../../../app.component.scss'],
 })
 export class AllAccountsComponent {
   private route = inject(ActivatedRoute);
@@ -102,7 +102,7 @@ export class AllAccountsComponent {
   }
 
   onViewClick(userId: number) {
-    this.router.navigate([`/admin/accounts/${userId}`]);
+    this.router.navigate([`/admin/users/${userId}`]);
   }
 
   onRegisterAdmin() {

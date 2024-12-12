@@ -74,9 +74,7 @@ export class RegisterAttendeeComponent {
       };
       this.authService.registerAttendee(accountData).subscribe({
         next: () => {
-          this.snackbarService.show(
-            'Account created successfully, logging in...',
-          );
+          this.snackbarService.show('User created successfully, logging in...');
 
           this.authService
             .login(
@@ -100,11 +98,11 @@ export class RegisterAttendeeComponent {
             });
         },
         error: (error) => {
-          console.error('Error creating an account:', error);
+          console.error('Error creating an user:', error);
           if (error.status === 409) {
             this.snackbarService.show('Username or email already in use');
           } else {
-            this.snackbarService.show('Error creating an account');
+            this.snackbarService.show('Error creating an user');
           }
         },
       });
@@ -146,7 +144,7 @@ export class RegisterAttendeeComponent {
       };
       this.userService.createAddress(addressData).subscribe({
         next: () => {
-          this.snackbarService.show('Account created successfully');
+          this.snackbarService.show('User created successfully');
           this.stepper?.next();
           setTimeout(() => {
             window.location.reload();
