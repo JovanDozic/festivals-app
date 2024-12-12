@@ -1,0 +1,42 @@
+
+Posetilac->Frontend: Otvara festivalsku prodavnicu
+Frontend->Posetilac: Prikaz dostupnih vrste tiketa
+Posetilac->Frontend: Odabir vrste tiketa
+Frontend->Posetilac: Prikaz ličnih podataka iz profila
+Posetilac->Frontend: Provera ili izmena ličnih podataka
+Frontend->Posetilac: Prikaz adrese iz profila
+Posetilac->Frontend: Provera ili izmena adrese
+Frontend->Posetilac: Prikaz pregleda porudzbine
+
+Posetilac->Frontend: Kreiranje porudzbine
+Frontend->Frontend: Simulirano plaćanje
+
+Frontend->Router: POST /festival/{festivalID}/order/ticket
+Router->Order Handler: CreateTicketOrder()
+Order Handler->Order Handler: Autorizacija korisnika
+Order Handler->Order Handler: Čitanje i validacija request-a
+
+Order Handler->Order Handler: Mapiranje request-a na FestivalTicket model
+Order Handler->Order Service: CreateFestivalTicket(FestivalTicket)
+Order Service->DB: GetItem(FestivalTicket.ItemID)
+DB->Order Service: Item
+Order Service->Order Service: Umanji broj preostalih Item-a
+Order Service->DB: Save(Item)
+Order Service->DB: Save(FestivalTicket)
+
+Order Handler->Order Handler: Dobavljanje korisničkog imena iz tokena
+Order Handler->User Service: GetUserID(username)
+User Service->Order Handler: ID posetioca
+
+Order Handler->Order Handler: Mapiranje request-a na Order model
+Order Handler->Order Service: CreateOrder(Order)
+Order Service->DB: Save(Order)
+
+Order Handler->User Service: GetUserEmail(username)
+User Service->Order Handler: Email posetioca
+Order Handler->Email Service: SendEmail(email) [Nova Go rutina]
+
+Order Handler->Router: 201 Status Created
+Router->Frontend: 201 Status Created
+
+Frontend->Posetilac: Prikaz porudžbine
