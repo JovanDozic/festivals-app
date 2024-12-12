@@ -1,7 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FestivalService } from '../../../services/festival/festival.service';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -12,16 +10,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
-import {
-  ConfirmationDialogComponent,
-  ConfirmationDialogData,
-} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { ItemService } from '../../../services/festival/item.service';
 import { UserListResponse } from '../../../models/user/user-responses';
 import { UserService } from '../../../services/user/user.service';
 import { FormsModule } from '@angular/forms';
-import { RegisterOrganizerComponent } from '../register-organizer/register-organizer.component';
-import { RegisterAdminComponent } from '../register-admin/register-admin.component';
+import { RegisterUserComponent } from '../register-user/register-user.component';
 
 @Component({
   selector: 'app-all-users',
@@ -42,12 +34,8 @@ import { RegisterAdminComponent } from '../register-admin/register-admin.compone
   styleUrls: ['./all-users.component.scss', '../../../app.component.scss'],
 })
 export class AllAccountsComponent {
-  private route = inject(ActivatedRoute);
   private router = inject(Router);
   private userService = inject(UserService);
-  private festivalService = inject(FestivalService);
-  private snackbarService = inject(SnackbarService);
-  private itemService = inject(ItemService);
   private dialog = inject(MatDialog);
 
   attendeeCount: number = 0;
@@ -105,21 +93,8 @@ export class AllAccountsComponent {
     this.router.navigate([`/admin/users/${userId}`]);
   }
 
-  onRegisterAdmin() {
-    const dialogRef = this.dialog.open(RegisterAdminComponent, {
-      width: '800px',
-      height: 'auto',
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.loadUsers();
-      }
-    });
-  }
-
-  onRegisterOrganizer() {
-    const dialogRef = this.dialog.open(RegisterOrganizerComponent, {
+  onRegisterClick() {
+    const dialogRef = this.dialog.open(RegisterUserComponent, {
       width: '800px',
       height: 'auto',
     });

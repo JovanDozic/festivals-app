@@ -9,6 +9,7 @@ import {
   AbstractControl,
   FormBuilder,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   ValidationErrors,
   Validators,
@@ -22,17 +23,27 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import {
+  MatOptionModule,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UserService } from '../../../services/user/user.service';
 import { CreateProfileRequest } from '../../../models/user/user-requests';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { MatSelectModule } from '@angular/material/select';
+
+export interface Role {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
-  selector: 'app-register-organizer',
+  selector: 'app-register-admin',
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
@@ -44,23 +55,32 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
     MatDialogContent,
     MatDialogActions,
     MatTabsModule,
+    MatSelectModule,
+    MatOptionModule,
   ],
-  templateUrl: './register-organizer.component.html',
-  styleUrls: [
-    './register-organizer.component.scss',
-    '../../../app.component.scss',
-  ],
+  templateUrl: './register-user.component.html',
+  styleUrls: ['./register-user.component.scss', '../../../app.component.scss'],
   providers: [provideNativeDateAdapter()],
 })
-export class RegisterOrganizerComponent {
+export class RegisterUserComponent {
   private fb = inject(FormBuilder);
   private snackbarService = inject(SnackbarService);
-  private dialogRef = inject(MatDialogRef<RegisterOrganizerComponent>);
+  private dialogRef = inject(MatDialogRef<RegisterUserComponent>);
   private userService = inject(UserService);
 
+  roles: Role[] = [
+    { value: 'ORGANIZER', viewValue: 'Organizer' },
+    { value: 'ADMINISTRATOR', viewValue: 'Administrator' },
+  ];
+
+  roleFormGroup: FormGroup;
   infoFormGroup: FormGroup;
 
   constructor() {
+    this.roleFormGroup = this.fb.group({
+      roleCtrl: ['', Validators.required],
+    });
+
     this.infoFormGroup = this.fb.group({
       usernameCtrl: ['', Validators.required],
       emailCtrl: ['', Validators.required],
@@ -87,6 +107,48 @@ export class RegisterOrganizerComponent {
   }
 
   register() {
+    if (this.roleFormGroup.valid) {
+      if (this.roleFormGroup.get('roleCtrl')?.value === 'ORGANIZER') {
+        this.registerOrganizer();
+      } else if (
+        this.roleFormGroup.get('roleCtrl')?.value === 'ADMINISTRATOR'
+      ) {
+        this.registerAdmin();
+      }
+    }
+  }
+
+  registerAdmin() {
+    if (this.infoFormGroup.valid) {
+      const profile: CreateProfileRequest = {
+        firstName: this.infoFormGroup.get('firstNameCtrl')?.value,
+        lastName: this.infoFormGroup.get('lastNameCtrl')?.value,
+        phoneNumber: this.infoFormGroup.get('phoneNumberCtrl')?.value,
+        dateOfBirth: this.formatDate(
+          this.infoFormGroup.get('dateOfBirthCtrl')?.value,
+        ),
+      };
+      const request: CreateStaffRequest = {
+        username: this.infoFormGroup.get('usernameCtrl')?.value,
+        password: this.infoFormGroup.get('passwordCtrl')?.value,
+        email: this.infoFormGroup.get('emailCtrl')?.value,
+        userProfile: profile,
+      };
+
+      this.userService.registerAdmin(request).subscribe({
+        next: () => {
+          this.snackbarService.show('Administrator registered');
+          this.dialogRef.close(true);
+        },
+        error: (error) => {
+          console.error('Error registering administrator:', error);
+          this.snackbarService.show('Failed to register administrator');
+        },
+      });
+    }
+  }
+
+  registerOrganizer() {
     if (this.infoFormGroup.valid) {
       const profile: CreateProfileRequest = {
         firstName: this.infoFormGroup.get('firstNameCtrl')?.value,

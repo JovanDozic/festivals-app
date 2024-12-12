@@ -1,6 +1,18 @@
 <h2 mat-dialog-title>Register New Administrator</h2>
 
 <mat-dialog-content>
+  <form [formGroup]="roleFormGroup" style="margin-bottom: -20px !important">
+    <div class="form-fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="roleCtrl" required>
+          <mat-option *ngFor="let type of roles" [value]="type.value">
+            {{ type.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
   <form [formGroup]="infoFormGroup">
     <div class="form-fields">
       <mat-form-field appearance="outline">
@@ -118,7 +130,7 @@
     mat-flat-button
     color="primary"
     (click)="register()"
-    [disabled]="infoFormGroup.invalid"
+    [disabled]="roleFormGroup.invalid || infoFormGroup.invalid"
   >
     Register Administrator
   </button>
