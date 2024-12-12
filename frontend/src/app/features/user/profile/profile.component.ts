@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserService } from '../../../services/user/user.service';
-import { UserProfileResponse } from '../../../models/user/user-profile-response.model';
+import { UserProfileResponse } from '../../../models/user/user-responses';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';

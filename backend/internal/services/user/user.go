@@ -16,6 +16,7 @@ import (
 )
 
 type UserService interface {
+	GetUsers() ([]modelsUser.UserProfile, error)
 	Create(user *modelsUser.User) error
 	CreateUser(user *modelsUser.User) error
 	Login(username string, password string) (string, error)
@@ -44,6 +45,10 @@ type userService struct {
 
 func NewUserService(c *config.Config, r reposUser.UserRepo, p reposUser.UserProfileRepo, l servicesCommon.LocationService, i reposCommon.ImageRepo) UserService {
 	return &userService{userRepo: r, config: c, profileRepo: p, locationService: l, imageRepo: i}
+}
+
+func (s *userService) GetUsers() ([]modelsUser.UserProfile, error) {
+	return s.profileRepo.GetAll()
 }
 
 func (s *userService) GetUserEmail(username string) string {

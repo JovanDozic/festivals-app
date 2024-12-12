@@ -4,8 +4,8 @@ import {
   CreateAddressRequest,
   UpdateAddressRequest,
 } from '../common/create-address-request.model';
-import { CreateProfileRequest } from '../user/user-profile-request.model';
-import { UserProfileResponse } from '../user/user-profile-response.model';
+import { CreateProfileRequest } from '../user/user-requests';
+import { UserProfileResponse } from '../user/user-responses';
 
 export interface Festival {
   id: number;

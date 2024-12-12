@@ -29,7 +29,7 @@ import { Employee } from '../../../../models/festival/festival.model';
 import {
   UpdateStaffEmailRequest,
   UpdateStaffProfileRequest,
-} from '../../../../models/user/user-profile-request.model';
+} from '../../../../models/user/user-requests';
 import { forkJoin } from 'rxjs';
 
 @Component({

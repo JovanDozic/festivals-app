@@ -27,7 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UserService } from '../../../../services/user/user.service';
-import { CreateProfileRequest } from '../../../../models/user/user-profile-request.model';
+import { CreateProfileRequest } from '../../../../models/user/user-requests';
 import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
 
 @Component({

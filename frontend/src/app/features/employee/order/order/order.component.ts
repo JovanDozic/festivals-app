@@ -19,7 +19,7 @@ import {
   OrderPreviewDTO,
 } from '../../../../models/festival/festival.model';
 import { AddressResponse } from '../../../../models/common/address-response.model';
-import { UserProfileResponse } from '../../../../models/user/user-profile-response.model';
+import { UserProfileResponse } from '../../../../models/user/user-responses';
 import { IssueBraceletComponent } from '../issue-bracelet/issue-bracelet.component';
 
 @Component({

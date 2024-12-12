@@ -114,6 +114,17 @@
       >
         My Bracelets
       </a>
+
+      <a
+        mat-list-item
+        routerLink="/admin/accounts"
+        *ngIf="visibleForRole('ADMINISTRATOR')"
+        #link="routerLinkActive"
+        routerLinkActive
+        [activated]="link.isActive"
+      >
+        Accounts
+      </a>
     </mat-nav-list>
     <div class="theme-button">
       <button mat-mini-fab color="primary" (click)="toggleTheme()">

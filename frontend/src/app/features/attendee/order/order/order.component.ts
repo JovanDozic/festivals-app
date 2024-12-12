@@ -13,7 +13,7 @@ import { ItemService } from '../../../../services/festival/item.service';
 import { UserService } from '../../../../services/user/user.service';
 import { OrderDTO } from '../../../../models/festival/festival.model';
 import { AddressResponse } from '../../../../models/common/address-response.model';
-import { UserProfileResponse } from '../../../../models/user/user-profile-response.model';
+import { UserProfileResponse } from '../../../../models/user/user-responses';
 
 @Component({
   selector: 'app-order',

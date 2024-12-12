@@ -314,10 +314,29 @@ const employeeRoutes: Routes = [
   },
 ];
 
+const adminRoutes: Routes = [
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    data: { expectedRoles: ['ADMINISTRATOR'] },
+    children: [
+      {
+        path: 'admin/accounts',
+        loadComponent: () =>
+          import('./features/admin/all-accounts/all-accounts.component').then(
+            (c) => c.AllAccountsComponent,
+          ),
+        title: 'All Accounts',
+      },
+    ],
+  },
+];
+
 export const routes: Routes = [
   ...publicRoutes,
   ...authRoutes,
   ...attendeeRoutes,
   ...organizerRoutes,
   ...employeeRoutes,
+  ...adminRoutes,
 ];

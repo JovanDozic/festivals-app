@@ -11,3 +11,11 @@ export interface UserProfileResponse {
   address?: AddressResponse | null;
   imageURL?: string | null;
 }
+
+export interface UserListResponse {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+}

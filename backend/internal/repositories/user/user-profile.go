@@ -7,6 +7,7 @@ import (
 )
 
 type UserProfileRepo interface {
+	GetAll() ([]models.UserProfile, error)
 	Create(userProfile *models.UserProfile) error
 	GetByUserID(userID uint) (*models.UserProfile, error)
 	GetFullByUsername(username string) (*models.UserProfile, error)
@@ -35,6 +36,17 @@ func (r *userProfileRepo) GetByUserID(userID uint) (*models.UserProfile, error) 
 		return nil, err
 	}
 	return &userProfile, nil
+}
+
+func (r *userProfileRepo) GetAll() ([]models.UserProfile, error) {
+	var userProfiles []models.UserProfile
+	err := r.db.
+		Preload("User").
+		Find(&userProfiles).Error
+	if err != nil {
+		return nil, err
+	}
+	return userProfiles, nil
 }
 
 // Returns user profile object with joined all related data like address, city, country and image

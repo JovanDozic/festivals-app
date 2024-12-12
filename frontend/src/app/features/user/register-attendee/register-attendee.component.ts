@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../../services/auth/auth.service';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 import { UserService } from '../../../services/user/user.service';
-import { CreateUpdateUserProfileRequest } from '../../../models/user/user-profile-request.model';
+import { CreateUpdateUserProfileRequest } from '../../../models/user/user-requests';
 import { CreateAddressRequest } from '../../../models/common/create-address-request.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';

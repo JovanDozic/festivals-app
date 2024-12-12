@@ -16,6 +16,7 @@ import (
 )
 
 type UserHandler interface {
+	GetUsers(w http.ResponseWriter, r *http.Request)
 	RegisterAttendee(w http.ResponseWriter, r *http.Request)
 	Login(w http.ResponseWriter, r *http.Request)
 	GetUserProfile(w http.ResponseWriter, r *http.Request)
@@ -40,6 +41,35 @@ type userHandler struct {
 
 func NewUserHandler(us servicesUser.UserService, ls servicesCommon.LocationService) UserHandler {
 	return &userHandler{userService: us, locationService: ls}
+}
+
+func (h *userHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthAdminRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	users, err := h.userService.GetUsers()
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	response := make([]dtoUser.UserListResponse, len(users))
+	for i, user := range users {
+		response[i] = dtoUser.UserListResponse{
+			ID:        user.ID,
+			Username:  user.User.Username,
+			FirstName: user.FirstName,
+			LastName:  user.LastName,
+			Role:      user.User.Role,
+		}
+	}
+
+	utils.WriteJSON(w, http.StatusCreated, response, nil)
+	log.Println("fetched users for admin:", utils.GetUsername(r.Context()))
 }
 
 func (h *userHandler) RegisterAttendee(w http.ResponseWriter, r *http.Request) {

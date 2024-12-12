@@ -33,7 +33,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ItemService } from '../../../../services/festival/item.service';
 import { UserService } from '../../../../services/user/user.service';
-import { UserProfileResponse } from '../../../../models/user/user-profile-response.model';
+import { UserProfileResponse } from '../../../../models/user/user-responses';
 import { AddressResponse } from '../../../../models/common/address-response.model';
 import {
   ConfirmationDialogComponent,

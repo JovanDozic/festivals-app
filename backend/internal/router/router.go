@@ -91,7 +91,9 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	// Authenticated routes
 	pR.HandleFunc("/secure-health", commonHandler.HealthCheck).Methods(http.MethodGet)
-	r.PathPrefix("").Handler(pR)
+	r.PathPrefix("").Handler(pR) // ??
+
+	pR.HandleFunc("/user", userHandler.GetUsers).Methods(http.MethodGet)
 	pR.HandleFunc("/user/profile", userHandler.CreateUserProfile).Methods(http.MethodPost)
 	pR.HandleFunc("/user/profile/address", userHandler.CreateUserAddress).Methods(http.MethodPost)
 	pR.HandleFunc("/user/profile", userHandler.GetUserProfile).Methods(http.MethodGet)

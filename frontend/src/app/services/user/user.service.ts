@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { UserProfileResponse } from '../../models/user/user-profile-response.model';
+import {
+  UserListResponse,
+  UserProfileResponse,
+} from '../../models/user/user-responses';
 import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {
   CreateUpdateUserProfileRequest,
   UpdateStaffEmailRequest,
   UpdateStaffProfileRequest,
-} from '../../models/user/user-profile-request.model';
+} from '../../models/user/user-requests';
 import {
   CreateAddressRequest,
   UpdateAddressRequest,
@@ -96,6 +99,10 @@ export class UserService {
       `${this.apiUrl}/organizer/employee/email`,
       updatedProfile,
     );
+  }
+
+  getAllUsers(): Observable<UserListResponse[]> {
+    return this.http.get<UserListResponse[]>(`${this.apiUrl}/user`);
   }
 }
 
