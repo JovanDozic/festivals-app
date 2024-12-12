@@ -20,6 +20,8 @@ import { ItemService } from '../../../services/festival/item.service';
 import { UserListResponse } from '../../../models/user/user-responses';
 import { UserService } from '../../../services/user/user.service';
 import { FormsModule } from '@angular/forms';
+import { RegisterOrganizerComponent } from '../register-organizer/register-organizer.component';
+import { RegisterAdminComponent } from '../register-admin/register-admin.component';
 
 @Component({
   selector: 'app-all-accounts',
@@ -104,10 +106,28 @@ export class AllAccountsComponent {
   }
 
   onRegisterAdmin() {
-    throw new Error('Method not implemented.');
+    const dialogRef = this.dialog.open(RegisterAdminComponent, {
+      width: '800px',
+      height: 'auto',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadUsers();
+      }
+    });
   }
 
   onRegisterOrganizer() {
-    throw new Error('Method not implemented.');
+    const dialogRef = this.dialog.open(RegisterOrganizerComponent, {
+      width: '800px',
+      height: 'auto',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadUsers();
+      }
+    });
   }
 }

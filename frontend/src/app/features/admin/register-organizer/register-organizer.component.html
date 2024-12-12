@@ -1,1 +1,125 @@
-<p>register-organizer works!</p>
+<h2 mat-dialog-title>Register New Organzier</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="infoFormGroup">
+    <div class="form-fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input
+          matInput
+          formControlName="usernameCtrl"
+          required
+          autocomplete="off"
+        />
+        <mat-error *ngIf="infoFormGroup.get('usernameCtrl')?.invalid">
+          Username is <strong>required</strong>.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="emailCtrl" required />
+        <mat-error *ngIf="infoFormGroup.get('emailCtrl')?.invalid">
+          Email is <strong>required</strong>.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form-fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          formControlName="passwordCtrl"
+          required
+          type="password"
+          autocomplete="off"
+          autocomplete="new-password"
+        />
+        <mat-error
+          *ngIf="
+            infoFormGroup.get('passwordCtrl')?.invalid &&
+            infoFormGroup.get('passwordCtrl')?.touched
+          "
+        >
+          New password is <strong>required</strong> and must be at least 5
+          characters long.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Confirm Password</mat-label>
+        <input
+          matInput
+          formControlName="confirmPasswordCtrl"
+          required
+          type="password"
+          autocomplete="off"
+        />
+        <mat-error
+          *ngIf="
+            infoFormGroup.get('confirmPasswordCtrl')?.errors?.['mismatch'] ||
+            infoFormGroup.get('confirmPasswordCtrl')?.touched
+          "
+        >
+          Passwords do <strong>not match</strong>.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form-fields">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstNameCtrl" required />
+        <mat-error *ngIf="infoFormGroup.get('firstNameCtrl')?.invalid">
+          First name is <strong>required</strong>.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastNameCtrl" required />
+        <mat-error *ngIf="infoFormGroup.get('lastNameCtrl')?.invalid">
+          Last name is <strong>required</strong>.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form-fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Date of Birth</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pickerEnd"
+          formControlName="dateOfBirthCtrl"
+          required
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="pickerEnd"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #pickerEnd></mat-datepicker>
+        <mat-error *ngIf="infoFormGroup.get('dateOfBirthCtrl')?.invalid">
+          Date of birth is <strong>required</strong>.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="phoneNumberCtrl" required />
+        <mat-error *ngIf="infoFormGroup.get('phoneNumberCtrl')?.invalid">
+          Phone number is <strong>required</strong>.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="register()"
+    [disabled]="infoFormGroup.invalid"
+  >
+    Register Organizer
+  </button>
+</mat-dialog-actions>

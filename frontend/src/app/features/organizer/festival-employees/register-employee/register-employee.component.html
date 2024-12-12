@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Register an Employee</h2>
+<h2 mat-dialog-title>Register new Employee</h2>
 
 <mat-dialog-content>
   <form [formGroup]="infoFormGroup">
@@ -48,7 +48,10 @@
           type="password"
         />
         <mat-error
-          *ngIf="infoFormGroup.get('confirmPasswordCtrl')?.errors?.['mismatch'] || infoFormGroup.get('confirmPasswordCtrl')?.touched"
+          *ngIf="
+            infoFormGroup.get('confirmPasswordCtrl')?.errors?.['mismatch'] ||
+            infoFormGroup.get('confirmPasswordCtrl')?.touched
+          "
         >
           Passwords do <strong>not match</strong>.
         </mat-error>

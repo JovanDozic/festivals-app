@@ -14,6 +14,8 @@ type UserRepo interface {
 	UpdatePassword(username, password string) error
 	Update(user *models.User) error
 	CreateEmployee(user *models.User) error
+	CreateOrganizer(user *models.User) error
+	CreateAdmin(user *models.User) error
 }
 
 type userRepo struct {
@@ -82,6 +84,46 @@ func (r *userRepo) CreateEmployee(user *models.User) error {
 	}
 
 	employee := &models.Employee{
+		UserID: user.ID,
+		User:   *user,
+	}
+
+	err = r.db.Create(employee).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *userRepo) CreateOrganizer(user *models.User) error {
+
+	err := r.db.Create(user).Error
+	if err != nil {
+		return err
+	}
+
+	employee := &models.Organizer{
+		UserID: user.ID,
+		User:   *user,
+	}
+
+	err = r.db.Create(employee).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *userRepo) CreateAdmin(user *models.User) error {
+
+	err := r.db.Create(user).Error
+	if err != nil {
+		return err
+	}
+
+	employee := &models.Administrator{
 		UserID: user.ID,
 		User:   *user,
 	}

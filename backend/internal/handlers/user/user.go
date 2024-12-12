@@ -33,6 +33,8 @@ type UserHandler interface {
 	UpdateStaffEmail(w http.ResponseWriter, r *http.Request)
 	UpdateStaffProfile(w http.ResponseWriter, r *http.Request)
 	UpdateProfilePhoto(w http.ResponseWriter, r *http.Request)
+	CreateOrganizer(w http.ResponseWriter, r *http.Request)
+	CreateAdmin(w http.ResponseWriter, r *http.Request)
 }
 
 type userHandler struct {
@@ -733,4 +735,116 @@ func (h *userHandler) UpdateProfilePhoto(w http.ResponseWriter, r *http.Request)
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "profile photo updated successfully"}, nil)
 	log.Println("profile photo updated successfully for user:", username)
+}
+
+func (h *userHandler) CreateOrganizer(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthAdminRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	var input dtoUser.CreateStaffRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	user := modelsUser.User{
+		Username: input.Username,
+		Password: input.Password,
+		Email:    input.Email,
+		Role:     string(modelsUser.RoleOrganizer),
+	}
+
+	if err := h.userService.CreateUser(&user); err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrDuplicateUser:
+			http.Error(w, err.Error(), http.StatusConflict)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	if err := h.userService.CreateUserProfile(input.Username, &modelsUser.UserProfile{
+		FirstName:   input.UserProfile.FirstName,
+		LastName:    input.UserProfile.LastName,
+		DateOfBirth: utils.ParseDate(input.UserProfile.DateOfBirth),
+		PhoneNumber: input.UserProfile.PhoneNumber,
+	}); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"organizer": dtoUser.CreateStaffResponse{
+		Username: user.Username,
+		UserId:   user.ID,
+	}}, nil)
+	log.Println("organizer created:", input.Username)
+}
+
+func (h *userHandler) CreateAdmin(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthAdminRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	var input dtoUser.CreateStaffRequest
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	user := modelsUser.User{
+		Username: input.Username,
+		Password: input.Password,
+		Email:    input.Email,
+		Role:     string(modelsUser.RoleAdmin),
+	}
+
+	if err := h.userService.CreateUser(&user); err != nil {
+		log.Println("error:", err)
+		switch err {
+		case models.ErrDuplicateUser:
+			http.Error(w, err.Error(), http.StatusConflict)
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	if err := h.userService.CreateUserProfile(input.Username, &modelsUser.UserProfile{
+		FirstName:   input.UserProfile.FirstName,
+		LastName:    input.UserProfile.LastName,
+		DateOfBirth: utils.ParseDate(input.UserProfile.DateOfBirth),
+		PhoneNumber: input.UserProfile.PhoneNumber,
+	}); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"admin": dtoUser.CreateStaffResponse{
+		Username: user.Username,
+		UserId:   user.ID,
+	}}, nil)
+	log.Println("admin created:", input.Username)
 }

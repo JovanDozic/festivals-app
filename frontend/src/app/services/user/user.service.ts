@@ -84,6 +84,24 @@ export class UserService {
       .pipe(map((response) => response.employee));
   }
 
+  registerOrganizer(
+    organizer: CreateStaffRequest,
+  ): Observable<CreateStaffResponse> {
+    return this.http
+      .post<{
+        organizer: CreateStaffResponse;
+      }>(`${this.apiUrl}/admin/organizer`, organizer)
+      .pipe(map((response) => response.organizer));
+  }
+
+  registerAdmin(admin: CreateStaffRequest): Observable<CreateStaffResponse> {
+    return this.http
+      .post<{
+        admin: CreateStaffResponse;
+      }>(`${this.apiUrl}/admin/admin`, admin)
+      .pipe(map((response) => response.admin));
+  }
+
   updateStaffProfile(updatedProfile: UpdateStaffProfileRequest) {
     return this.http.put<void>(`${this.apiUrl}/organizer/employee`, {
       username: updatedProfile.username,

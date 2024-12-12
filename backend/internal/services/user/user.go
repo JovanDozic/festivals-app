@@ -347,7 +347,10 @@ func (s *userService) CreateUser(user *modelsUser.User) error {
 		err = s.userRepo.CreateAttendee(user)
 	case string(modelsUser.RoleEmployee):
 		err = s.userRepo.CreateEmployee(user)
-	// todo: add other roles
+	case string(modelsUser.RoleOrganizer):
+		err = s.userRepo.CreateOrganizer(user)
+	case string(modelsUser.RoleAdmin):
+		err = s.userRepo.CreateAdmin(user)
 	default:
 		return modelsError.ErrRoleNotFound
 	}
