@@ -71,7 +71,7 @@ func (j *JWTUtil) ValidateToken(tokenString string) (*Claims, error) {
 		log.Println("provided token is expired")
 		return nil, errors.New("token expired")
 	}
-	if claims.Role == "" || (claims.Role != "ADMIN" && claims.Role != "EMPLOYEE" && claims.Role != "ATTENDEE" && claims.Role != "ORGANIZER") {
+	if claims.Role == "" || (claims.Role != "ADMINISTRATOR" && claims.Role != "EMPLOYEE" && claims.Role != "ATTENDEE" && claims.Role != "ORGANIZER") {
 		log.Println("role not found in claims")
 		return nil, errors.New("role not found in claims")
 	}
