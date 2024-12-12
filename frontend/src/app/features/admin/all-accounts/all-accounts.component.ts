@@ -100,7 +100,6 @@ export class AllAccountsComponent {
   }
 
   onViewClick(userId: number) {
-    console.log(userId);
     this.router.navigate([`/admin/accounts/${userId}`]);
   }
 
