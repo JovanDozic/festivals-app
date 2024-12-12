@@ -1,0 +1,63 @@
+sequenceDiagram
+
+  Organizator->Frontend: Unos osnovnih podataka o festivalu
+  Organizator->Frontend: Unos podataka o adresi festivala
+
+  Frontend->Router: POST /festival
+
+  Router->Festival Handler: Create()
+
+  Festival Handler->Festival Handler: Autorizacija tokena
+  Festival Handler->Festival Handler: Citanje i validacija request-a
+  Festival Handler->Festival Handler: Mapiranje request-a na Festival i Address model
+  Festival Handler->Festival Handler: Dobavljanje korisnickog imena iz tokena
+
+  Festival Handler->Festival Service: Create(Festival)
+  Festival Service->Location Service: CreateAddress(Festival.Address)
+
+  Location Service->DB: Save(Address)
+  Festival Service->DB: Save(Festival)
+
+  Location Service->Festival Service: error: nil
+  Festival Service->Festival Handler: error: nil
+
+  Festival Handler->Router: 201 Status Created: festival ID
+  Router->Frontend: 201 Status Created: festival ID
+
+
+
+  Organizator->Frontend: Selektuje slike
+
+  loop Za svaki fajl slike
+
+  Frontend->Router: POST /image/upload
+  Router->AWS Handler: GetPresignedURL()
+  AWS Handler->AWS Handler: Citanje i validacija request-a
+  AWS Handler->AWS Service: GetPresignedURL(FileName, FileType)
+  AWS Service->AWS S3: PUT request
+  AWS S3->AWS Service: Presigned upload i image URL
+  AWS Service->AWS Handler: Presigned upload i image URL
+  AWS Handler->Router: Presigned upload i image URL
+  Router->Frontend: 201 Status Created: presigned upload i image URL
+
+  Frontend->AWS S3: PUT /upload
+  AWS S3->Frontend: 201 Status Created
+
+  Frontend->Router: POST /festival/{festivalID}/image
+  Router->Festival Handler: AddImage()
+
+  Festival Handler->Festival Handler: Autorizacija tokena i prava menjanja festivala
+  Festival Handler->Festival Handler: Citanje i validacija request-a
+  Festival Handler->Festival Handler: Mapiranje request-a na Image model
+
+  Festival Handler->Festival Service: AddImage(Festival, Image)
+  Festival Service->DB: Save(Image)
+  Festival Service->DB: Save(FestivalImage)
+
+  Festival Service->Festival Handler: 201 Status Created
+  Festival Handler->Router: 201 Status Created
+  Router->Frontend: 201 Status Created
+
+  end
+
+  Frontend->Organizator: Prikaz Festivala

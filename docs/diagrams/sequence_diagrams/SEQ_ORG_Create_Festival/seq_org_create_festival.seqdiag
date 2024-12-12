@@ -1,8 +1,5 @@
 actor Organizator
-
-
 participant Frontend
-
 participant Router
 participant Festival Handler
 participant JWT Handler
@@ -11,7 +8,7 @@ participant Location Service
 participant User Repo
 participant DB
 
-// info i adresa
+
 
 Organizator->Frontend: Unos osnovnih podataka o festivalu
 Organizator->Frontend: Unos podataka o adresi festivala
@@ -37,7 +34,7 @@ Festival Service->Festival Handler: error: nil
 Festival Handler->Router: 201 Status Created: festival ID
 Router->Frontend: 201 Status Created: festival ID
 
-// slike
+
 
 Organizator->Frontend: Selektuje slike
 
