@@ -19,11 +19,13 @@ import {
 import { ItemService } from '../../../services/festival/item.service';
 import { UserListResponse } from '../../../models/user/user-responses';
 import { UserService } from '../../../services/user/user.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-all-accounts',
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatTooltipModule,
     MatIconModule,
@@ -38,15 +40,9 @@ import { UserService } from '../../../services/user/user.service';
   styleUrls: ['./all-accounts.component.scss', '../../../app.component.scss'],
 })
 export class AllAccountsComponent {
-  organizerCount: number = 0;
-  employeeCount: number = 0;
-  ogranizerCount: number = 0;
-  adminCount: number = 0;
-
-  displayColumns = ['id', 'username', 'name', 'role'];
-
-  users: UserListResponse[] = [];
-
+  onViewClick(arg0: any) {
+    throw new Error('Method not implemented.');
+  }
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private userService = inject(UserService);
@@ -55,23 +51,62 @@ export class AllAccountsComponent {
   private itemService = inject(ItemService);
   private dialog = inject(MatDialog);
 
+  attendeeCount: number = 0;
+  organizerCount: number = 0;
+  employeeCount: number = 0;
+  ogranizerCount: number = 0;
+  adminCount: number = 0;
+
+  displayColumns = ['id', 'username', 'name', 'role', 'actions'];
+
+  users: UserListResponse[] = [];
+
+  filterOptions: string[] = [
+    'All Roles',
+    'Administrator',
+    'Organizer',
+    'Employee',
+    'Attendee',
+  ];
+  selectedChip = 'All Roles';
+
   ngOnInit() {
     this.loadUsers();
   }
 
   loadUsers() {
     this.userService.getAllUsers().subscribe((response) => {
-      console.log(response);
       this.users = response;
+      this.attendeeCount = this.users.filter(
+        (user) => user.role === 'ATTENDEE',
+      ).length;
       this.organizerCount = this.users.filter(
-        (user) => user.role === 'organizer',
+        (user) => user.role === 'ORGANIZER',
       ).length;
       this.employeeCount = this.users.filter(
-        (user) => user.role === 'employee',
+        (user) => user.role === 'EMPLOYEE',
       ).length;
       this.adminCount = this.users.filter(
-        (user) => user.role === 'admin',
+        (user) => user.role === 'ADMINISTRATOR',
       ).length;
     });
+  }
+
+  get filteredUsers(): UserListResponse[] {
+    if (this.selectedChip === 'All Roles') {
+      return this.users;
+    } else {
+      return this.users.filter(
+        (user) => user.role === this.selectedChip.toUpperCase(),
+      );
+    }
+  }
+
+  onRegisterAdmin() {
+    throw new Error('Method not implemented.');
+  }
+
+  onRegisterOrganizer() {
+    throw new Error('Method not implemented.');
   }
 }
