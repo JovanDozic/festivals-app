@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,16 +33,16 @@ import { RegisterUserComponent } from '../register-user/register-user.component'
   templateUrl: './all-users.component.html',
   styleUrls: ['./all-users.component.scss', '../../../app.component.scss'],
 })
-export class AllAccountsComponent {
+export class AllAccountsComponent implements OnInit {
   private router = inject(Router);
   private userService = inject(UserService);
   private dialog = inject(MatDialog);
 
-  attendeeCount: number = 0;
-  organizerCount: number = 0;
-  employeeCount: number = 0;
-  ogranizerCount: number = 0;
-  adminCount: number = 0;
+  attendeeCount = 0;
+  organizerCount = 0;
+  employeeCount = 0;
+  ogranizerCount = 0;
+  adminCount = 0;
 
   displayColumns = ['id', 'username', 'name', 'role', 'actions'];
 

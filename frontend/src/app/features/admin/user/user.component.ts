@@ -29,7 +29,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss', '../../../app.component.scss'],
 })
-export class AccountComponent {
+export class AccountComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private authService = inject(AuthService);
