@@ -4,6 +4,8 @@ import (
 	modelsCommon "backend/internal/models/common"
 	modelsFestival "backend/internal/models/festival"
 	modelsUser "backend/internal/models/user"
+	"log"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -19,6 +21,14 @@ func Init(dbConfig struct{ ConnectionString string }) (*gorm.DB, error) {
 	migrateCommonModels(db)
 	migrateUserModels(db)
 	migrateFestivalModels(db)
+
+	if isTableEmpty(db, "countries") {
+		err := runSQLScript(db, "countries.sql")
+		if err != nil {
+			log.Println("error running countries.sql:", err)
+			return nil, err
+		}
+	}
 
 	return db, nil
 }
@@ -68,4 +78,25 @@ func migrateFestivalModels(db *gorm.DB) {
 
 	db.AutoMigrate(&modelsFestival.Bracelet{})
 	db.AutoMigrate(&modelsFestival.ActivationHelpRequest{})
+}
+
+func isTableEmpty(db *gorm.DB, tableName string) bool {
+	var count int64
+	db.Table(tableName).Count(&count)
+	return count == 0
+}
+
+func runSQLScript(db *gorm.DB, filePath string) error {
+	sqlBytes, err := os.ReadFile(filePath)
+	if err != nil {
+		log.Println("error running SQL script:", err)
+		return err
+	}
+
+	if err := db.Exec(string(sqlBytes)).Error; err != nil {
+		log.Println("failed to execute SQL script: %w", err)
+		return err
+	}
+
+	return nil
 }
