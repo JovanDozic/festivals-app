@@ -82,6 +82,9 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	r.HandleFunc("/health", commonHandler.HealthCheck).Methods(http.MethodGet)
 	r.HandleFunc("/user/login", userHandler.Login).Methods(http.MethodPost)
 	r.HandleFunc("/user/register-attendee", userHandler.RegisterAttendee).Methods(http.MethodPost)
+	r.HandleFunc("/festival/count", festivalHandler.GetFestivalCount).Methods(http.MethodGet)
+	r.HandleFunc("/festival/attendee/count", festivalHandler.GetAttendeeCount).Methods(http.MethodGet)
+
 	// ...
 
 	pR := mux.NewRouter()

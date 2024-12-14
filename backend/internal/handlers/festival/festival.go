@@ -33,6 +33,8 @@ type FestivalHandler interface {
 	Employ(w http.ResponseWriter, r *http.Request)
 	Fire(w http.ResponseWriter, r *http.Request)
 	GetEmployeeCount(w http.ResponseWriter, r *http.Request)
+	GetFestivalCount(w http.ResponseWriter, r *http.Request)
+	GetAttendeeCount(w http.ResponseWriter, r *http.Request)
 }
 
 type festivalHandler struct {
@@ -570,4 +572,34 @@ func (h *festivalHandler) GetByEmployee(w http.ResponseWriter, r *http.Request) 
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivalsResponse.Festivals}, nil)
 	log.Println("festivals retrieved successfully for employee", utils.GetUsername(r.Context()))
+}
+
+func (h *festivalHandler) GetFestivalCount(w http.ResponseWriter, r *http.Request) {
+
+	count, err := h.festivalService.GetFestivalCount()
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, dtoFestival.FestivalPropCountResponse{
+		Count: count,
+	}, nil)
+	log.Println("festival count retrieved")
+}
+
+func (h *festivalHandler) GetAttendeeCount(w http.ResponseWriter, r *http.Request) {
+
+	count, err := h.festivalService.GetAttendeeCount()
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, dtoFestival.FestivalPropCountResponse{
+		Count: count,
+	}, nil)
+	log.Println("attendee count retrieved")
 }

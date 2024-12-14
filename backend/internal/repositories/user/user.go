@@ -16,6 +16,7 @@ type UserRepo interface {
 	CreateEmployee(user *models.User) error
 	CreateOrganizer(user *models.User) error
 	CreateAdmin(user *models.User) error
+	GetAttendeeCount() (int, error)
 }
 
 type userRepo struct {
@@ -134,4 +135,13 @@ func (r *userRepo) CreateAdmin(user *models.User) error {
 	}
 
 	return nil
+}
+
+func (r *userRepo) GetAttendeeCount() (int, error) {
+	var count int64
+	err := r.db.Model(&models.Attendee{}).Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+	return int(count), nil
 }

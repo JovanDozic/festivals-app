@@ -21,6 +21,7 @@ type FestivalRepo interface {
 	Employ(festivalId uint, employeeId uint) error
 	GetEmployeeCount(festivalId uint) (int, error)
 	Fire(festivalId uint, employeeId uint) error
+	GetFestivalCount() (int, error)
 }
 
 type festivalRepo struct {
@@ -217,6 +218,17 @@ func (r *festivalRepo) GetEmployeeCount(festivalId uint) (int, error) {
 	err := r.db.Table("festival_employees").
 		Where("festival_id = ?", festivalId).
 		Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+
+	return int(count), nil
+}
+
+func (r *festivalRepo) GetFestivalCount() (int, error) {
+
+	var count int64
+	err := r.db.Table("festivals").Count(&count).Error
 	if err != nil {
 		return 0, err
 	}

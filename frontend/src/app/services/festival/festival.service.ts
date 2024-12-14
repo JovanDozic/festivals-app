@@ -139,4 +139,16 @@ export class FestivalService {
       imageUrl,
     });
   }
+
+  getFestivalsCount(): Observable<number> {
+    return this.http
+      .get<FestivalPropCountResponse>(`${this.apiUrl}/festival/count`)
+      .pipe(map((response) => response.count));
+  }
+
+  getAttendeesCount(): Observable<number> {
+    return this.http
+      .get<FestivalPropCountResponse>(`${this.apiUrl}/festival/attendee/count`)
+      .pipe(map((response) => response.count));
+  }
 }

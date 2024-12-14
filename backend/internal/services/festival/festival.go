@@ -36,6 +36,8 @@ type FestivalService interface {
 	Employ(festivalId uint, employeeId uint) error
 	Fire(festivalId uint, employeeId uint) error
 	GetEmployeeCount(festivalId uint) (int, error)
+	GetAttendeeCount() (int, error)
+	GetFestivalCount() (int, error)
 }
 
 type festivalService struct {
@@ -432,6 +434,26 @@ func (s *festivalService) Fire(festivalId uint, employeeId uint) error {
 func (s *festivalService) GetEmployeeCount(festivalId uint) (int, error) {
 
 	count, err := s.festivalRepo.GetEmployeeCount(festivalId)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
+func (s *festivalService) GetAttendeeCount() (int, error) {
+
+	count, err := s.userRepo.GetAttendeeCount()
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
+func (s *festivalService) GetFestivalCount() (int, error) {
+
+	count, err := s.festivalRepo.GetFestivalCount()
 	if err != nil {
 		return 0, err
 	}

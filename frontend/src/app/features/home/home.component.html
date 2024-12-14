@@ -1,5 +1,27 @@
-<p>home works!</p>
+<div class="container mat-elevation-z4">
+  <!-- Background Video -->
+  <video
+    class="background-video"
+    src="home-video.mp4"
+    autoplay
+    [muted]="true"
+    loop
+    playsinline
+  ></video>
 
-<p>is logged in? {{ isLoggedIn() ? "yes" : "no" }}</p>
-
-<p>role: {{ userRole }}</p>
+  <!-- New Welcome Section -->
+  <div class="welcome-section">
+    <h1>Welcome</h1>
+    <p>Enjoy Festivals the right way.</p>
+    <div class="stats-buttons">
+      <button class="stat-button" (click)="onClick()">
+        {{ festivalCount }}
+        {{ festivalCount === 1 ? "Festival" : "Festivals" }}
+      </button>
+      <button class="stat-button" (click)="onClick()">
+        {{ attendeesCount }}
+        {{ attendeesCount === 1 ? "Attendee" : "Attendees" }}
+      </button>
+    </div>
+  </div>
+</div>

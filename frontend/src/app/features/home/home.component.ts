@@ -1,24 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
+import { MatCardModule } from '@angular/material/card';
+import { FestivalService } from '../../services/festival/festival.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  styleUrls: ['./home.component.scss'],
   standalone: true,
+  imports: [MatCardModule],
 })
 export class HomeComponent implements OnInit {
-  isLoggedInStatus = false;
-  userRole: string | null = null;
+  private festivalService = inject(FestivalService);
+  private router = inject(Router);
 
-  constructor(private authService: AuthService) {}
+  festivalCount: number = 0;
+  attendeesCount: number = 0;
 
-  ngOnInit() {
-    this.isLoggedInStatus = this.authService.isLoggedIn();
-    this.userRole = this.authService.getUserRole();
+  ngOnInit(): void {
+    this.festivalService.getFestivalsCount().subscribe((response) => {
+      this.festivalCount = response;
+    });
+
+    this.festivalService.getAttendeesCount().subscribe((response) => {
+      this.attendeesCount = response;
+    });
   }
 
-  isLoggedIn() {
-    return this.isLoggedInStatus;
+  async onClick() {
+    if (!(await this.router.navigate(['login']))) {
+      if (!(await this.router.navigate(['festivals']))) {
+        if (!(await this.router.navigate(['organizer/my-festivals']))) {
+          if (!(await this.router.navigate(['employee/my-festivals']))) {
+            this.router.navigate(['admin/users']);
+          }
+        }
+      }
+    }
   }
 }
