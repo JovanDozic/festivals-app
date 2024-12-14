@@ -1,0 +1,227 @@
+Table user {
+  user_id int [pk, not null]
+  username varchar(255) [not null, unique]
+  email varchar(255) [not null, unique]
+  password varchar(255) [not null]
+  role varchar(50) [not null]
+  created_at timestamp [not null]
+}
+
+Table user_profile {
+  user_profile_id int [pk, not null]
+  first_name varchar(255) [not null]
+  last_name varchar(255) [not null]
+  date_of_birth date [not null]
+  phone_number varchar(20) [unique]
+  user_id int [not null, unique, ref: > user.user_id]
+  address_id int [ref: > address.address_id]
+  image_id int [ref: > image.image_id]
+}
+
+Table attendee {
+  user_id int [pk, not null, ref: > user.user_id]
+}
+
+Table employee {
+  user_id int [pk, not null, ref: > user.user_id]
+}
+
+Table organizer {
+  user_id int [pk, not null, ref: > user.user_id]
+}
+
+Table administrator {
+  user_id int [pk, not null, ref: > user.user_id]
+}
+
+Table image {
+  image_id int [pk, not null]
+  url varchar(255) [not null]
+}
+
+Table log {
+  log_id int [pk, not null]
+  type varchar(100) [not null]
+  created_at timestamp [not null]
+  description text
+  data jsonb
+  user_id int [ref: > user.user_id]
+}
+
+Table country {
+  country_id int [pk, not null]
+  name varchar(100) [not null]
+  nice_name varchar(100) [not null]
+  iso varchar(2) [not null]
+  iso3 varchar(3) [not null]
+}
+
+Table city {
+  city_id int [pk, not null]
+  name varchar(100) [not null]
+  postal_code varchar(20) [not null]
+  country_id int [not null, ref: > country.country_id]
+}
+
+Table address {
+  address_id int [pk, not null]
+  street varchar(255) [not null]
+  number varchar(20) [not null]
+  apartment_suite varchar(100)
+  city_id int [not null, ref: > city.city_id]
+}
+
+Table festival {
+  festival_id int [pk, not null]
+  name varchar(255) [not null]
+  description text [not null]
+  start_date date [not null]
+  end_date date [not null]
+  capacity int [not null]
+  status varchar(50) [not null, note: "active, inactive, private..."]
+  store_status varchar(50) [not null, note: "open, closed"]
+  address_id int [not null, ref: > address.address_id]
+}
+
+Table festival_image {
+  festival_id int [not null, ref: > festival.festival_id]
+  image_id int [not null, ref: > image.image_id]
+
+  Indexes {
+    (festival_id, image_id) [pk]
+  }
+}
+
+Table festival_employee {
+  user_id int [not null, ref: > employee.user_id]
+  festival_id int [not null, ref: > festival.festival_id]
+
+  Indexes {
+    (user_id, festival_id) [pk]
+  }
+}
+
+Table festival_organizer {
+  user_id int [not null, ref: > organizer.user_id]
+  festival_id int [not null, ref: > festival.festival_id]
+
+  Indexes {
+    (user_id, festival_id) [pk]
+  }
+}
+
+Table price_list {
+  price_list_id int [pk, not null]
+  festival_id int [not null, ref: > festival.festival_id]
+}
+
+Table price_list_item {
+  price_list_item_id int [pk, not null]
+  price float [not null]
+  date_from date
+  date_to date
+  is_fixed boolean [not null]
+  price_list_id int [not null, ref: > price_list.price_list_id]
+  item_id int [not null, ref: > item.item_id]
+}
+
+Table item {
+  item_id int [pk, not null]
+  name varchar(255) [not null]
+  description text [not null]
+  available_number int [not null]
+  remaining_number int [not null]
+  type varchar(100) [not null, note: "ticket, addon..."]
+  festival_id int [not null, ref: > festival.festival_id]
+}
+
+Table ticket_type {
+  item_id int [pk, not null, ref: > item.item_id]
+}
+
+Table package_addon {
+  item_id int [pk, not null, ref: > item.item_id]
+  category varchar(100) [not null, note: "camp, transport, general"]
+}
+
+Table package_addon_image {
+  item_id int [not null, ref: > package_addon.item_id]
+  image_id int [not null, ref: > image.image_id]
+
+  Indexes {
+    (item_id, image_id) [pk]
+  }
+}
+
+Table camp_addon {
+  item_id int [pk, not null, ref: > package_addon.item_id]
+  camp_name varchar(255) [not null]
+}
+
+Table camp_equipment {
+  camp_equipment_id int [pk, not null]
+  name varchar(255) [not null]
+  item_id int [not null, ref: > camp_addon.item_id]
+}
+
+Table transport_addon {
+  item_id int [pk, not null, ref: > package_addon.item_id]
+  transport_type varchar(100) [not null, note: "bus, train, plane..."]
+  departure_time timestamp [not null]
+  arrival_time timestamp [not null]
+  return_departure_time timestamp [not null]
+  return_arrival_time timestamp [not null]
+  departure_city_id int [not null, ref: > city.city_id, note: "departure city"]
+  arrive_city_id int [not null, ref: > city.city_id, note: "destination city"]
+}
+
+Table order {
+  order_id int [pk, not null]
+  timestamp timestamp [not null]
+  total_amount float [not null]
+  user_id int [not null, ref: > attendee.user_id]
+  festival_ticket_id int [not null, ref: > festival_ticket.festival_ticket_id]
+  festival_package_id int [ref: > festival_package.festival_package_id]
+}
+
+Table festival_ticket {
+  festival_ticket_id int [pk, not null]
+  item_id int [not null, ref: > ticket_type.item_id]
+}
+
+Table festival_package {
+  festival_package_id int [pk, not null]
+}
+
+Table festival_package_addon {
+  festival_package_id int [not null, ref: > festival_package.festival_package_id]
+  item_id int [not null, ref: > package_addon.item_id]
+
+  Indexes {
+    (festival_package_id, item_id) [pk]
+  }
+}
+
+Table bracelet {
+  bracelet_id int [pk, not null]
+  pin varchar(20) [not null]
+  barcode_number varchar(50) [not null, unique]
+  balance float [not null, default: 0.00]
+  status varchar(20) [not null]
+  festival_ticket_id int [not null, ref: > festival_ticket.festival_ticket_id]
+  attendee_id int [not null, ref: > attendee.user_id, note: "belongs to the Attendee"]
+  employee_id int [ref: > employee.user_id, note: "Employee issued the Bracelet"]
+}
+
+Table activation_help_request {
+  activation_help_request_id int [pk, not null]
+  user_entered_barcode varchar(50)
+  user_entered_pin varchar(20)
+  issue_description text [not null]
+  timestamp timestamp [not null]
+  proof_image_id int [not null, ref: > image.image_id]
+  status varchar(50) [not null, note: "open, accepted, rejected"]
+  bracelet_id int [not null, ref: > bracelet.bracelet_id]
+  attendee_id int [not null, ref: > attendee.user_id]
+  employee_id int [ref: > employee.user_id]
+}
