@@ -17,6 +17,7 @@ type UserRepo interface {
 	CreateOrganizer(user *models.User) error
 	CreateAdmin(user *models.User) error
 	GetAttendeeCount() (int, error)
+	GetIdByUsername(username string) (uint, error)
 }
 
 type userRepo struct {
@@ -144,4 +145,13 @@ func (r *userRepo) GetAttendeeCount() (int, error) {
 		return 0, err
 	}
 	return int(count), nil
+}
+
+func (r *userRepo) GetIdByUsername(username string) (uint, error) {
+	var user models.User
+	err := r.db.Where("username = ?", username).First(&user).Error
+	if err != nil {
+		return 0, err
+	}
+	return user.ID, nil
 }

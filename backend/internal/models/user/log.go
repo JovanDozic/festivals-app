@@ -9,7 +9,7 @@ type Log struct {
 	gorm.Model
 	Type        string
 	Description string
-	Data        datatypes.JSON
-	UserID      uint
-	User        User
+	Data        *datatypes.JSON
+	UserID      *uint
+	User        *User
 }

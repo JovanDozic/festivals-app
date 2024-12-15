@@ -38,12 +38,13 @@ type UserHandler interface {
 }
 
 type userHandler struct {
+	log             servicesCommon.LogService
 	userService     servicesUser.UserService
 	locationService servicesCommon.LocationService
 }
 
-func NewUserHandler(us servicesUser.UserService, ls servicesCommon.LocationService) UserHandler {
-	return &userHandler{userService: us, locationService: ls}
+func NewUserHandler(lg servicesCommon.LogService, us servicesUser.UserService, ls servicesCommon.LocationService) UserHandler {
+	return &userHandler{userService: us, locationService: ls, log: lg}
 }
 
 func (h *userHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
@@ -114,7 +115,11 @@ func (h *userHandler) RegisterAttendee(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// todo: validate input
+	if err := input.Validate(); err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
 
 	user := modelsUser.User{
 		Username: input.Username,
@@ -136,7 +141,7 @@ func (h *userHandler) RegisterAttendee(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "attendee registered successfully"}, nil)
-	log.Println("attendee registered:", input.Username)
+	h.log.Info("attendee registered: "+user.Username, r.Context())
 }
 
 func (h *userHandler) Login(w http.ResponseWriter, r *http.Request) {
@@ -168,11 +173,8 @@ func (h *userHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := utils.WriteJSON(w, http.StatusOK, utils.Envelope{"token": token}, nil); err != nil {
-		log.Println("error:", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"token": token}, nil)
+	h.log.Info("user logged in: "+input.Username, r.Context())
 }
 
 func (h *userHandler) GetUserProfile(w http.ResponseWriter, r *http.Request) {
@@ -245,7 +247,7 @@ func (h *userHandler) CreateUserProfile(w http.ResponseWriter, r *http.Request) 
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "profile created successfully"}, nil)
-	log.Println("profile created successfully for user:", username)
+	h.log.Info("profile created", r.Context())
 }
 
 func (h *userHandler) ChangePassword(w http.ResponseWriter, r *http.Request) {
@@ -284,7 +286,7 @@ func (h *userHandler) ChangePassword(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "password changed successfully"}, nil)
-	log.Println("password changed successfully for user:", username)
+	h.log.Info("changed password", r.Context())
 }
 
 func (h *userHandler) CreateUserAddress(w http.ResponseWriter, r *http.Request) {
@@ -377,7 +379,7 @@ func (h *userHandler) UpdateUserEmail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "email updated successfully"}, nil)
-	log.Println("email updated successfully for user:", username)
+	h.log.Info("email updated", r.Context())
 }
 
 func (h *userHandler) UpdateUserAddress(w http.ResponseWriter, r *http.Request) {
@@ -430,7 +432,7 @@ func (h *userHandler) UpdateUserAddress(w http.ResponseWriter, r *http.Request) 
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "user address updated successfully"}, nil)
-	log.Println("user address updated successfully:", utils.GetUsername(r.Context()))
+	h.log.Info("address updated", r.Context())
 }
 
 func (h *userHandler) UpdateStaffEmail(w http.ResponseWriter, r *http.Request) {
@@ -467,12 +469,12 @@ func (h *userHandler) UpdateStaffEmail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "email updated successfully"}, nil)
-	log.Println("email updated successfully for user:", input.Username)
+	h.log.Info("email updated: "+input.Username, r.Context())
 }
 
-// ! This method only allows user that is logged in to change their profile
 func (h *userHandler) UpdateUserProfile(w http.ResponseWriter, r *http.Request) {
 
+	// ! This method only allows user that is logged in to change their profile
 	if !utils.Auth(r.Context()) {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
@@ -512,7 +514,7 @@ func (h *userHandler) UpdateUserProfile(w http.ResponseWriter, r *http.Request) 
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "profile updated successfully"}, nil)
-	log.Println("profile updated successfully for user:", username)
+	h.log.Info("profile updated", r.Context())
 }
 
 func (h *userHandler) UpdateStaffProfile(w http.ResponseWriter, r *http.Request) {
@@ -554,7 +556,7 @@ func (h *userHandler) UpdateStaffProfile(w http.ResponseWriter, r *http.Request)
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "profile updated successfully"}, nil)
-	log.Println("profile updated successfully for user:", input.Username)
+	h.log.Info("profile updated: "+input.Username, r.Context())
 }
 
 func (h *userHandler) CreateEmployee(w http.ResponseWriter, r *http.Request) {
@@ -610,7 +612,7 @@ func (h *userHandler) CreateEmployee(w http.ResponseWriter, r *http.Request) {
 		Username: user.Username,
 		UserId:   user.ID,
 	}}, nil)
-	log.Println("employee created:", input.Username)
+	h.log.Info("employee created: "+input.Username, r.Context())
 }
 
 func (h *userHandler) GetFestivalEmployees(w http.ResponseWriter, r *http.Request) {
@@ -735,6 +737,7 @@ func (h *userHandler) UpdateProfilePhoto(w http.ResponseWriter, r *http.Request)
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "profile photo updated successfully"}, nil)
 	log.Println("profile photo updated successfully for user:", username)
+	h.log.Info("profile photo updated", r.Context())
 }
 
 func (h *userHandler) CreateOrganizer(w http.ResponseWriter, r *http.Request) {
@@ -790,7 +793,7 @@ func (h *userHandler) CreateOrganizer(w http.ResponseWriter, r *http.Request) {
 		Username: user.Username,
 		UserId:   user.ID,
 	}}, nil)
-	log.Println("organizer created:", input.Username)
+	h.log.Info("organizer created", r.Context())
 }
 
 func (h *userHandler) CreateAdmin(w http.ResponseWriter, r *http.Request) {
@@ -846,5 +849,5 @@ func (h *userHandler) CreateAdmin(w http.ResponseWriter, r *http.Request) {
 		Username: user.Username,
 		UserId:   user.ID,
 	}}, nil)
-	log.Println("admin created:", input.Username)
+	h.log.Info("admin created", r.Context())
 }
