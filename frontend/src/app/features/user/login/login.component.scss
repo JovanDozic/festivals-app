@@ -5,7 +5,7 @@
 .login-card {
   width: 400px;
   margin: 100px auto;
-  padding: 20px;
+  padding: 0 5px 20px 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -17,16 +17,30 @@ mat-form-field {
   margin-bottom: 20px;
 }
 
-.error-message {
-  margin-top: 5px;
-  text-align: center;
-}
-
 mat-card-actions {
+  padding: 20px;
+  padding-right: 25px;
   display: flex;
   justify-content: center;
 }
 
-mat-card-actions {
-  margin-top: 5px;
+.profile-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+mat-card-title {
+  font-family: "Funnel Display", sans-serif;
+  margin-top: 15px;
+  margin-bottom: 0 !important;
+  font-weight: bold;
+}
+
+.card-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

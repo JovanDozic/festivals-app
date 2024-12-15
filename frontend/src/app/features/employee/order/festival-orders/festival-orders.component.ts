@@ -53,15 +53,8 @@ export class FestivalOrdersComponent implements OnInit {
   isLoading = true;
   orders: OrderPreviewDTO[] = [];
 
-  filterOptions: string[] = [
-    'All',
-    'Pending',
-    'Issued',
-    'Activated',
-    'Help Requested', // ovo mozda i ne stavljamo ovde jer je tesko to dobaviti u orders
-    'Rejected',
-  ];
-  selectedChip = 'All'; // todo: change to activated required
+  filterOptions: string[] = [];
+  selectedChip = '';
 
   constructor() {}
 
@@ -105,6 +98,34 @@ export class FestivalOrdersComponent implements OnInit {
         next: (orders) => {
           this.orders = orders;
           this.isLoading = false;
+
+          this.filterOptions = [];
+          this.filterOptions.push('All');
+          this.filterOptions.push(
+            'Pending ' + orders.filter((order) => !order.braceletStatus).length,
+          );
+          this.filterOptions.push(
+            'Issued ' +
+              orders.filter((order) => order.braceletStatus === 'ISSUED')
+                .length,
+          );
+          this.filterOptions.push(
+            'Activated ' +
+              orders.filter((order) => order.braceletStatus === 'ACTIVATED')
+                .length,
+          );
+          this.filterOptions.push(
+            'Help Requested ' +
+              orders.filter(
+                (order) => order.braceletStatus === 'HELP_REQUESTED',
+              ).length,
+          );
+          this.filterOptions.push(
+            'Rejected ' +
+              orders.filter((order) => order.braceletStatus === 'REJECTED')
+                .length,
+          );
+          this.selectedChip = 'All';
         },
         error: (error) => {
           console.log(error);
@@ -118,19 +139,19 @@ export class FestivalOrdersComponent implements OnInit {
     if (!this.orders || this.orders.length === 0) {
       return [];
     }
-    if (this.selectedChip === 'Pending') {
+    if (this.selectedChip.includes('Pending')) {
       return this.orders.filter((order) => !order.braceletStatus);
-    } else if (this.selectedChip === 'Issued') {
+    } else if (this.selectedChip.includes('Issued')) {
       return this.orders.filter((order) => order.braceletStatus === 'ISSUED');
-    } else if (this.selectedChip === 'Activated') {
+    } else if (this.selectedChip.includes('Activated')) {
       return this.orders.filter(
         (order) => order.braceletStatus === 'ACTIVATED',
       );
-    } else if (this.selectedChip === 'Help Requested') {
+    } else if (this.selectedChip.includes('Help Requested')) {
       return this.orders.filter(
         (order) => order.braceletStatus === 'HELP_REQUESTED',
       );
-    } else if (this.selectedChip === 'Rejected') {
+    } else if (this.selectedChip.includes('Rejected')) {
       return this.orders.filter((order) => order.braceletStatus === 'REJECTED');
     } else {
       return this.orders;
