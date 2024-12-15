@@ -13,11 +13,17 @@
         "APP_PORT": "4000",
         "APP_ENV": "dev",
         "DB_CONNECTION_STRING": "postgres://USERNAME:PASSWORD@localhost/DATABASE_NAME?sslmode=disable",
+        "ROOT_ADMIN_PASSWORD": "admin",
         "JWT_SECRET": "JWT_SECRET",
         "AWS_ACCESS_KEY_ID": "KEY",
         "AWS_SECRET_ACCESS_KEY": "SECRET_KEY",
         "AWS_REGION": "eu-west-1",
-        "AWS_S3_BUCKET_NAME": "diplomski-rad-2024"
+        "AWS_S3_BUCKET_NAME": "diplomski-rad-2024",
+        "SMTP_HOST": "smtp.gmail.com",
+        "SMTP_PORT": "587",
+        "SMTP_USERNAME": "mail@gmail.com",
+        "SMTP_PASSWORD": "",
+        "SMTP_FROM": "Festivals App"
       }
     }
   ]

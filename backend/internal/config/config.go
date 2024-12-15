@@ -14,7 +14,8 @@ type Config struct {
 		Env        string
 	}
 	DB struct {
-		ConnectionString string
+		ConnectionString  string
+		RootAdminPassword string
 	}
 	JWT struct {
 		Secret string
@@ -51,6 +52,9 @@ func (c *Config) Load() {
 	flag.StringVar(&c.DB.ConnectionString, "dsn",
 		os.Getenv("DB_CONNECTION_STRING"),
 		"PostgreSQL DSN")
+	flag.StringVar(&c.DB.RootAdminPassword, "rootAdminPassword",
+		os.Getenv("ROOT_ADMIN_PASSWORD"),
+		"Root admin password")
 	flag.StringVar(&c.JWT.Secret, "jwt",
 		os.Getenv("JWT_SECRET"),
 		"JWT secret")
@@ -66,7 +70,6 @@ func (c *Config) Load() {
 	flag.StringVar(&c.AWS.S3BucketName, "awsS3BucketName",
 		os.Getenv("AWS_S3_BUCKET_NAME"),
 		"AWS S3 bucket name")
-
 	flag.StringVar(&c.SMTP.Host, "smtpHost",
 		os.Getenv("SMTP_HOST"),
 		"SMTP host")
@@ -101,6 +104,9 @@ func (c Config) Validate() error {
 	}
 	if c.DB.ConnectionString == "" {
 		return errors.New("PostgreSQL DSN is required")
+	}
+	if c.DB.RootAdminPassword == "" {
+		return errors.New("root admin password is required")
 	}
 	if c.JWT.Secret == "" {
 		return errors.New("JWT secret is required")

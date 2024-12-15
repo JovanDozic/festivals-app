@@ -4,14 +4,16 @@ import (
 	modelsCommon "backend/internal/models/common"
 	modelsFestival "backend/internal/models/festival"
 	modelsUser "backend/internal/models/user"
+	"backend/internal/utils"
 	"log"
 	"os"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-func Init(dbConfig struct{ ConnectionString string }) (*gorm.DB, error) {
+func Init(dbConfig struct{ ConnectionString, RootAdminPassword string }) (*gorm.DB, error) {
 
 	db, err := gorm.Open(postgres.Open(dbConfig.ConnectionString), &gorm.Config{})
 	if err != nil {
@@ -29,6 +31,8 @@ func Init(dbConfig struct{ ConnectionString string }) (*gorm.DB, error) {
 			return nil, err
 		}
 	}
+
+	insertAdministrator(db, dbConfig.RootAdminPassword)
 
 	return db, nil
 }
@@ -96,6 +100,54 @@ func runSQLScript(db *gorm.DB, filePath string) error {
 	if err := db.Exec(string(sqlBytes)).Error; err != nil {
 		log.Println("failed to execute SQL script: %w", err)
 		return err
+	}
+
+	return nil
+}
+
+func insertAdministrator(db *gorm.DB, password string) error {
+
+	exists := db.Where("username = ?", "admin").First(&modelsUser.User{}).Error
+	if exists == nil {
+		return nil
+	}
+
+	hashedPassword, _ := utils.HashPassword(password)
+
+	user := modelsUser.User{
+		Username: "admin",
+		Password: hashedPassword,
+		Email:    "admin@mock.com",
+		Role:     string(modelsUser.RoleAdmin),
+	}
+
+	err := db.Create(&user).Error
+	if err != nil {
+		log.Println("error creating admin account:", err)
+	}
+
+	profile := modelsUser.UserProfile{
+		FirstName:   "Admin",
+		LastName:    "Admin",
+		DateOfBirth: time.Now(),
+		PhoneNumber: "",
+		UserID:      user.ID,
+		User:        user,
+	}
+
+	err = db.Create(&profile).Error
+	if err != nil {
+		log.Println("error creating admin:", err)
+	}
+
+	admin := modelsUser.Administrator{
+		UserID: user.ID,
+		User:   user,
+	}
+
+	err = db.Create(&admin).Error
+	if err != nil {
+		log.Println("error creating admin:", err)
 	}
 
 	return nil
