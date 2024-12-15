@@ -114,7 +114,7 @@
           </mat-icon>
           {{ userProfile.address.street }} {{ userProfile.address.number }}
         </span>
-        <span class="icon-property">
+        <span class="icon-property" *ngIf="userProfile.address.apartmentSuite">
           <mat-icon class="material-symbols-outlined" color="primary">
             apartment
           </mat-icon>

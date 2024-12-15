@@ -161,7 +161,7 @@ func (h *userHandler) Login(w http.ResponseWriter, r *http.Request) {
 		case models.ErrNotFound:
 			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 		case models.ErrInvalidPassword:
-			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 		default:
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}

@@ -10,7 +10,7 @@
         appearance="outline"
       >
         <mat-label>Username</mat-label>
-        <input matInput formControlName="username" />
+        <input matInput formControlName="username" (keyup.enter)="login()" />
         <mat-error *ngIf="loginForm.controls['username'].hasError('required')">
           Username is <strong>required</strong>
         </mat-error>
@@ -21,7 +21,12 @@
         class="full-width"
         appearance="outline"
       >
-        <input matInput type="password" formControlName="password" />
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+          (keyup.enter)="login()"
+        />
         <mat-label>Password</mat-label>
         <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
           Password is <strong>required</strong>
