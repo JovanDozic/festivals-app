@@ -8,13 +8,13 @@ import (
 	modelsCommon "backend/internal/models/common"
 )
 
-type UserRoles string
+type UserRole string
 
 const (
-	RoleAttendee  UserRoles = "ATTENDEE"
-	RoleEmployee  UserRoles = "EMPLOYEE"
-	RoleOrganizer UserRoles = "ORGANIZER"
-	RoleAdmin     UserRoles = "ADMINISTRATOR"
+	RoleAttendee  UserRole = "ATTENDEE"
+	RoleEmployee  UserRole = "EMPLOYEE"
+	RoleOrganizer UserRole = "ORGANIZER"
+	RoleAdmin     UserRole = "ADMINISTRATOR"
 )
 
 type User struct {

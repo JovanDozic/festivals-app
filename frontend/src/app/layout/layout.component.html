@@ -125,6 +125,17 @@
       >
         Users
       </a>
+
+      <a
+        mat-list-item
+        routerLink="/admin/logs"
+        *ngIf="visibleForRole('ADMINISTRATOR')"
+        #link="routerLinkActive"
+        routerLinkActive
+        [activated]="link.isActive"
+      >
+        Logs
+      </a>
     </mat-nav-list>
     <div class="theme-button">
       <button mat-mini-fab color="primary" (click)="toggleTheme()">

@@ -8,8 +8,8 @@ import (
 
 type LogRepo interface {
 	CreateLog(log *modelsUser.Log) error
-	GetLogs() ([]modelsUser.Log, error)
-	GetLogsByRole(userRole modelsUser.UserRoles) ([]modelsUser.Log, error)
+	GetAll() ([]modelsUser.Log, error)
+	GetAllByRole(userRole modelsUser.UserRole) ([]modelsUser.Log, error)
 }
 
 type logRepo struct {
@@ -26,7 +26,7 @@ func (r *logRepo) CreateLog(log *modelsUser.Log) error {
 	return r.db.Create(log).Error
 }
 
-func (r *logRepo) GetLogs() ([]modelsUser.Log, error) {
+func (r *logRepo) GetAll() ([]modelsUser.Log, error) {
 	var logs []modelsUser.Log
 	if err := r.db.
 		Preload("User").
@@ -37,7 +37,7 @@ func (r *logRepo) GetLogs() ([]modelsUser.Log, error) {
 	return logs, nil
 }
 
-func (r *logRepo) GetLogsByRole(userRole modelsUser.UserRoles) ([]modelsUser.Log, error) {
+func (r *logRepo) GetAllByRole(userRole modelsUser.UserRole) ([]modelsUser.Log, error) {
 	var logs []modelsUser.Log
 
 	if err := r.db.

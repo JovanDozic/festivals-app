@@ -19,7 +19,7 @@ type logger struct {
 	userRepo repositories.UserRepo
 }
 
-func NewLogService(lr repositoriesCommon.LogRepo, ur repositories.UserRepo) Logger {
+func NewLogger(lr repositoriesCommon.LogRepo, ur repositories.UserRepo) Logger {
 	return &logger{
 		logRepo:  lr,
 		userRepo: ur,

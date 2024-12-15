@@ -1,5 +1,7 @@
 package dto
 
+import "time"
+
 type HealthCheckResponse struct {
 	ServiceName string `json:"service_name"`
 	Status      string `json:"status"`
@@ -36,4 +38,12 @@ type CountryResponse struct {
 	NiceName string `json:"niceName"`
 	ISO      string `json:"iso"`
 	ISO3     string `json:"iso3"`
+}
+
+type LogResponse struct {
+	ID        uint      `json:"id"`
+	Username  *string   `json:"username"`
+	Message   string    `json:"message"`
+	Type      string    `json:"type"`
+	CreatedAt time.Time `json:"createdAt"`
 }

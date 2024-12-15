@@ -336,6 +336,14 @@ const adminRoutes: Routes = [
           ),
         title: 'Users',
       },
+      {
+        path: 'admin/logs',
+        loadComponent: () =>
+          import('./features/admin/all-logs/all-logs.component').then(
+            (c) => c.AllLogsComponent,
+          ),
+        title: 'Logs',
+      },
     ],
   },
 ];

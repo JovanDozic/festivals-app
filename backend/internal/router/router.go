@@ -56,7 +56,8 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// ...
 
 	// Init services
-	logService := servicesCommon.NewLogService(logRepo, userRepo)
+	logger := servicesCommon.NewLogger(logRepo, userRepo)
+	logService := servicesCommon.NewLogService(logRepo)
 	pdfGenerator := servicesCommon.NewPDFGenerator()
 	emailService := servicesCommon.NewEmailService(config)
 	locationService := servicesCommon.NewLocationService(addressRepo, cityRepo, countryRepo)
@@ -68,12 +69,13 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// ...
 
 	// Init handlers
+	logHandler := handlersCommon.NewLogHandler(logService)
 	commonHandler := handlersCommon.NewHealthHandler(config)
-	userHandler := handlersUser.NewUserHandler(logService, userService, locationService)
-	festivalHandler := handlersFestival.NewFestivalHandler(logService, festivalService, locationService)
-	itemHandler := handlersFestival.NewItemHandler(logService, itemService, festivalService)
-	awsHandler := handlersCommon.NewAWSHandler(logService, awsService, festivalService)
-	orderHandler := handlersFestival.NewOrderHandler(logService, orderService, userService, emailService)
+	userHandler := handlersUser.NewUserHandler(logger, userService, locationService)
+	festivalHandler := handlersFestival.NewFestivalHandler(logger, festivalService, locationService)
+	itemHandler := handlersFestival.NewItemHandler(logger, itemService, festivalService)
+	awsHandler := handlersCommon.NewAWSHandler(logger, awsService, festivalService)
+	orderHandler := handlersFestival.NewOrderHandler(logger, orderService, userService, emailService)
 	// ...
 
 	r := mux.NewRouter()
@@ -199,6 +201,11 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 
 	pR.HandleFunc("/admin/organizer", userHandler.CreateOrganizer).Methods(http.MethodPost)
 	pR.HandleFunc("/admin/admin", userHandler.CreateAdmin).Methods(http.MethodPost)
+
+	// ...
+
+	pR.HandleFunc("/log", logHandler.GetAllLogs).Methods(http.MethodGet)
+	pR.HandleFunc("/log/{role}", logHandler.GetLogsByRole).Methods(http.MethodGet)
 
 	return r
 }
