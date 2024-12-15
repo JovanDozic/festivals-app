@@ -5,7 +5,12 @@
     <div class="form-fields">
       <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
-        <input matInput formControlName="usernameCtrl" required />
+        <input
+          matInput
+          formControlName="usernameCtrl"
+          required
+          autocomplete="off"
+        />
         <mat-error *ngIf="infoFormGroup.get('usernameCtrl')?.invalid">
           Username is <strong>required</strong>.
         </mat-error>
@@ -27,6 +32,8 @@
           formControlName="passwordCtrl"
           required
           type="password"
+          autocomplete="off"
+          autocomplete="new-password"
         />
         <mat-error
           *ngIf="
