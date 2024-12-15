@@ -1,7 +1,5 @@
 .container {
   position: relative;
-  margin: 0 auto;
-  padding: 20px;
   height: 100vh;
   overflow: hidden !important;
 }
@@ -25,6 +23,17 @@
   background: #00000033;
 }
 
+.content-wrapper {
+  position: absolute;
+  top: -60px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .background-video {
   position: absolute;
   top: -5px;
@@ -40,7 +49,7 @@ h1 {
   font-family: "Funnel Display", sans-serif;
   color: #fff;
   font-size: 75px;
-  margin-bottom: 0;
+  margin: 0;
 }
 
 p {
@@ -53,7 +62,6 @@ p {
 
 .welcome-section {
   position: relative;
-  margin-top: 175px;
   text-align: center;
   z-index: 10;
   text-shadow: 0 0px 20px #000;

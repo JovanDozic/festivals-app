@@ -8,18 +8,20 @@
     playsinline
   ></video>
 
-  <div class="welcome-section">
-    <h1>Welcome</h1>
-    <p>Enjoy Festivals the right way.</p>
-    <div class="stats-buttons">
-      <button class="stat-button" (click)="onClick()">
-        {{ festivalCount }}
-        {{ festivalCount === 1 ? "Festival" : "Festivals" }}
-      </button>
-      <button class="stat-button" (click)="onClick()">
-        {{ attendeesCount }}
-        {{ attendeesCount === 1 ? "Attendee" : "Attendees" }}
-      </button>
+  <div class="content-wrapper">
+    <div class="welcome-section">
+      <h1>Welcome</h1>
+      <p>Enjoy Festivals the right way.</p>
+      <div class="stats-buttons">
+        <button class="stat-button" (click)="onClick()">
+          {{ festivalCount }}
+          {{ festivalCount === 1 ? "Festival" : "Festivals" }}
+        </button>
+        <button class="stat-button" (click)="onClick()">
+          {{ attendeesCount }}
+          {{ attendeesCount === 1 ? "Attendee" : "Attendees" }}
+        </button>
+      </div>
     </div>
   </div>
 </div>
