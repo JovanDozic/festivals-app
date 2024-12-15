@@ -32,12 +32,14 @@ type OrderHandler interface {
 }
 
 type orderHandler struct {
+	log          servicesCommon.LogService
 	orderService servicesFestival.OrderService
 	userService  servicesUser.UserService
 	emailService servicesCommon.EmailService
 }
 
 func NewOrderHandler(
+	lg servicesCommon.LogService,
 	os servicesFestival.OrderService,
 	us servicesUser.UserService,
 	es servicesCommon.EmailService,
@@ -46,6 +48,7 @@ func NewOrderHandler(
 		orderService: os,
 		userService:  us,
 		emailService: es,
+		log:          lg,
 	}
 }
 
@@ -108,7 +111,7 @@ func (h *orderHandler) CreateTicketOrder(w http.ResponseWriter, r *http.Request)
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"orderId": order.ID}, nil)
-	log.Println("order created", order.ID)
+	h.log.Info("ticket order created: "+fmt.Sprint(order.ID), r.Context())
 }
 
 func (h *orderHandler) CreatePackageOrder(w http.ResponseWriter, r *http.Request) {
@@ -219,7 +222,7 @@ func (h *orderHandler) CreatePackageOrder(w http.ResponseWriter, r *http.Request
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"orderId": order.ID}, nil)
-	log.Println("order created", order.ID)
+	h.log.Info("package order created: "+fmt.Sprint(order.ID), r.Context())
 }
 
 func (h *orderHandler) GetOrder(w http.ResponseWriter, r *http.Request) {
@@ -405,7 +408,7 @@ func (h *orderHandler) IssueBracelet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"braceletId": bracelet.ID, "shippingAddress": attendee.Address}, nil)
-	log.Println("bracelet issued", bracelet.ID)
+	h.log.Info("bracelet issued: "+fmt.Sprint(bracelet.ID), r.Context())
 }
 
 func (h *orderHandler) GetBraceletOrdersAttendee(w http.ResponseWriter, r *http.Request) {
@@ -485,7 +488,7 @@ func (h *orderHandler) ActivateBracelet(w http.ResponseWriter, r *http.Request) 
 	}
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
-	log.Println("bracelet activated", braceletId, "for user", username)
+	h.log.Info("bracelet activated: "+fmt.Sprint(braceletId), r.Context())
 }
 
 func (h *orderHandler) TopUpBracelet(w http.ResponseWriter, r *http.Request) {
@@ -545,7 +548,7 @@ func (h *orderHandler) TopUpBracelet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
-	log.Println("bracelet activated", braceletId, "for user", username)
+	h.log.Info("bracelet top-up: "+fmt.Sprint(braceletId), r.Context())
 }
 
 func (h *orderHandler) SendActivateBraceletHelpRequest(w http.ResponseWriter, r *http.Request) {
@@ -589,7 +592,7 @@ func (h *orderHandler) SendActivateBraceletHelpRequest(w http.ResponseWriter, r 
 	}
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
-	log.Println("bracelet activation help request for", braceletId, "created by user", username)
+	h.log.Info("bracelet activation help requested: "+fmt.Sprint(braceletId), r.Context())
 }
 
 func (h *orderHandler) GetHelpRequest(w http.ResponseWriter, r *http.Request) {
@@ -685,7 +688,7 @@ func (h *orderHandler) ApproveHelpRequest(w http.ResponseWriter, r *http.Request
 	}
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
-	log.Println("help request approved for bracelet", braceletId)
+	h.log.Info("bracelet activation help request approved: "+fmt.Sprint(bracelet.ID), r.Context())
 }
 
 func (h *orderHandler) RejectHelpRequest(w http.ResponseWriter, r *http.Request) {
@@ -722,7 +725,7 @@ func (h *orderHandler) RejectHelpRequest(w http.ResponseWriter, r *http.Request)
 	}
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
-	log.Println("help request rejected for bracelet", braceletId)
+	h.log.Info("bracelet activation help request rejected: "+fmt.Sprint(bracelet.ID), r.Context())
 }
 
 func (h *orderHandler) GetShippingLabel(w http.ResponseWriter, r *http.Request) {

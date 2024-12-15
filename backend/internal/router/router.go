@@ -70,10 +70,10 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// Init handlers
 	commonHandler := handlersCommon.NewHealthHandler(config)
 	userHandler := handlersUser.NewUserHandler(logService, userService, locationService)
-	festivalHandler := handlersFestival.NewFestivalHandler(festivalService, locationService)
-	itemHandler := handlersFestival.NewItemHandler(itemService, festivalService)
-	awsHandler := handlersCommon.NewAWSHandler(awsService, festivalService)
-	orderHandler := handlersFestival.NewOrderHandler(orderService, userService, emailService)
+	festivalHandler := handlersFestival.NewFestivalHandler(logService, festivalService, locationService)
+	itemHandler := handlersFestival.NewItemHandler(logService, itemService, festivalService)
+	awsHandler := handlersCommon.NewAWSHandler(logService, awsService, festivalService)
+	orderHandler := handlersFestival.NewOrderHandler(logService, orderService, userService, emailService)
 	// ...
 
 	r := mux.NewRouter()

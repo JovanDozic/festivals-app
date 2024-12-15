@@ -4,9 +4,11 @@ import (
 	dto "backend/internal/dto/common"
 	dtoFestival "backend/internal/dto/festival"
 	"backend/internal/models"
+	"fmt"
 
 	modelsFestival "backend/internal/models/festival"
 
+	servicesCommon "backend/internal/services/common"
 	servicesFestival "backend/internal/services/festival"
 	"backend/internal/utils"
 	"log"
@@ -35,17 +37,20 @@ type ItemHandler interface {
 }
 
 type itemHandler struct {
+	log             servicesCommon.LogService
 	itemService     servicesFestival.ItemService
 	festivalService servicesFestival.FestivalService
 }
 
 func NewItemHandler(
-	itemService servicesFestival.ItemService,
-	festivalService servicesFestival.FestivalService,
+	lg servicesCommon.LogService,
+	is servicesFestival.ItemService,
+	fs servicesFestival.FestivalService,
 ) ItemHandler {
 	return &itemHandler{
-		itemService:     itemService,
-		festivalService: festivalService,
+		itemService:     is,
+		festivalService: fs,
+		log:             lg,
 	}
 }
 
@@ -85,7 +90,7 @@ func (h *itemHandler) CreateItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"itemId": item.ID}, nil)
-	log.Println("item created:", input.Name)
+	h.log.Info("item created: "+input.Name, r.Context())
 }
 
 func (h *itemHandler) CreatePackageAddon(w http.ResponseWriter, r *http.Request) {
@@ -120,7 +125,7 @@ func (h *itemHandler) CreatePackageAddon(w http.ResponseWriter, r *http.Request)
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"itemId": packageAddon.ItemID}, nil)
-	log.Println("package addon created for item ID", packageAddon.ItemID)
+	h.log.Info("package addon created: "+fmt.Sprint(packageAddon.ItemID), r.Context())
 }
 
 func (h *itemHandler) CreatePriceListItem(w http.ResponseWriter, r *http.Request) {
@@ -158,7 +163,7 @@ func (h *itemHandler) CreatePriceListItem(w http.ResponseWriter, r *http.Request
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"priceListItemId": priceListItem.ID}, nil)
-	log.Println("price list item created:", priceListItem.ID)
+	h.log.Info("price list item created: "+fmt.Sprint(priceListItem.ID), r.Context())
 }
 
 func (h *itemHandler) GetCurrentTicketTypes(w http.ResponseWriter, r *http.Request) {
@@ -291,7 +296,7 @@ func (h *itemHandler) UpdateItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
-	log.Println("item updated:", input.Name)
+	h.log.Info("item updated: "+input.Name, r.Context())
 }
 
 func (h *itemHandler) DeleteTicketType(w http.ResponseWriter, r *http.Request) {
@@ -316,12 +321,12 @@ func (h *itemHandler) DeleteTicketType(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusOK, nil, nil)
-	log.Println("ticket type deleted:", itemId)
+	h.log.Info("ticket type deleted: "+fmt.Sprint(itemId), r.Context())
 }
 
-// * this one should be able to return all categories of package addons, so in the request or in parameter we should have what we want to get
 func (h *itemHandler) GetCurrentPackageAddons(w http.ResponseWriter, r *http.Request) {
 
+	// * this one should be able to return all categories of package addons, so in the request or in parameter we should have what we want to get
 	festivalId, ok := AuthOrganizerForFestival(w, r, &h.festivalService)
 	if !ok {
 		return
@@ -447,7 +452,7 @@ func (h *itemHandler) CreateTransportPackageAddon(w http.ResponseWriter, r *http
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, nil, nil)
-	log.Println("transport package addon created for item ID", input.ItemID)
+	h.log.Info("transport package addon created: "+fmt.Sprint(input.ItemID), r.Context())
 }
 
 func (h *itemHandler) CreateCampPackageAddon(w http.ResponseWriter, r *http.Request) {
@@ -477,7 +482,7 @@ func (h *itemHandler) CreateCampPackageAddon(w http.ResponseWriter, r *http.Requ
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, nil, nil)
-	log.Println("camp package addon created for item ID", input.ItemID)
+	h.log.Info("camp package addon created: "+fmt.Sprint(input.ItemID), r.Context())
 }
 
 func (h *itemHandler) GetTransportAddons(w http.ResponseWriter, r *http.Request) {

@@ -1,11 +1,17 @@
 package handlers
 
 import (
+	"fmt"
+
 	dtoFestival "backend/internal/dto/festival"
 	"backend/internal/models"
+
 	modelsCommon "backend/internal/models/common"
+
 	modelsFestival "backend/internal/models/festival"
+
 	servicesCommon "backend/internal/services/common"
+
 	servicesFestival "backend/internal/services/festival"
 	"backend/internal/utils"
 	"log"
@@ -38,14 +44,20 @@ type FestivalHandler interface {
 }
 
 type festivalHandler struct {
+	log             servicesCommon.LogService
 	festivalService servicesFestival.FestivalService
 	locationService servicesCommon.LocationService
 }
 
-func NewFestivalHandler(festivalService servicesFestival.FestivalService, locationService servicesCommon.LocationService) FestivalHandler {
+func NewFestivalHandler(
+	lg servicesCommon.LogService,
+	fs servicesFestival.FestivalService,
+	ls servicesCommon.LocationService,
+) FestivalHandler {
 	return &festivalHandler{
-		festivalService: festivalService,
-		locationService: locationService,
+		festivalService: fs,
+		locationService: ls,
+		log:             lg,
 	}
 }
 
@@ -106,7 +118,7 @@ func (h *festivalHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "festival created successfully", "id": festival.ID}, nil)
-	log.Println("festival created successfully:", festival.Name, "by", utils.GetUsername(r.Context()))
+	h.log.Info("created festival "+festival.Name, r.Context())
 }
 
 func (h *festivalHandler) GetByOrganizer(w http.ResponseWriter, r *http.Request) {
@@ -287,7 +299,7 @@ func (h *festivalHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "festival updated successfully"}, nil)
-	log.Println("festival updated successfully:", festival.Name, "by", utils.GetUsername(r.Context()))
+	h.log.Info("festival updated: "+festival.Name, r.Context())
 }
 
 func (h *festivalHandler) Delete(w http.ResponseWriter, r *http.Request) {
@@ -305,6 +317,7 @@ func (h *festivalHandler) Delete(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "festival deleted successfully"}, nil)
 	log.Println("festival deleted successfully:", festivalId)
+	h.log.Info("festival deleted: "+fmt.Sprint(festivalId), r.Context())
 }
 
 func (h *festivalHandler) PublishFestival(w http.ResponseWriter, r *http.Request) {
@@ -321,7 +334,7 @@ func (h *festivalHandler) PublishFestival(w http.ResponseWriter, r *http.Request
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "festival published successfully"}, nil)
-	log.Println("festival published successfully:", festivalId)
+	h.log.Info("festival publiched: "+fmt.Sprint(festivalId), r.Context())
 }
 
 func (h *festivalHandler) CancelFestival(w http.ResponseWriter, r *http.Request) {
@@ -338,7 +351,7 @@ func (h *festivalHandler) CancelFestival(w http.ResponseWriter, r *http.Request)
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "festival cancelled successfully"}, nil)
-	log.Println("festival cancelled successfully:", festivalId)
+	h.log.Info("festival cancelled: "+fmt.Sprint(festivalId), r.Context())
 }
 
 func (h *festivalHandler) CompleteFestival(w http.ResponseWriter, r *http.Request) {
@@ -355,7 +368,7 @@ func (h *festivalHandler) CompleteFestival(w http.ResponseWriter, r *http.Reques
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "festival completed successfully"}, nil)
-	log.Println("festival completed successfully:", festivalId)
+	h.log.Info("festival completed: "+fmt.Sprint(festivalId), r.Context())
 }
 
 func (h *festivalHandler) OpenStore(w http.ResponseWriter, r *http.Request) {
@@ -372,7 +385,7 @@ func (h *festivalHandler) OpenStore(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "store opened successfully"}, nil)
-	log.Println("store opened successfully for festival:", festivalId)
+	h.log.Info("festival store opened: "+fmt.Sprint(festivalId), r.Context())
 }
 
 func (h *festivalHandler) CloseStore(w http.ResponseWriter, r *http.Request) {
@@ -389,7 +402,7 @@ func (h *festivalHandler) CloseStore(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "store closed successfully"}, nil)
-	log.Println("store closed successfully for festival:", festivalId)
+	h.log.Info("festival store closed: "+fmt.Sprint(festivalId), r.Context())
 }
 
 func (h *festivalHandler) AddImage(w http.ResponseWriter, r *http.Request) {
@@ -415,7 +428,7 @@ func (h *festivalHandler) AddImage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "image added successfully"}, nil)
-	log.Println("image added successfully for festival:", festivalId)
+	h.log.Info("added image to festival: "+fmt.Sprint(festivalId), r.Context())
 }
 
 func (h *festivalHandler) RemoveImage(w http.ResponseWriter, r *http.Request) {
@@ -439,7 +452,7 @@ func (h *festivalHandler) RemoveImage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "image removed successfully"}, nil)
-	log.Println("image removed successfully for festival:", festivalId)
+	h.log.Info("removed image from festival: "+fmt.Sprint(festivalId), r.Context())
 }
 
 func (h *festivalHandler) GetImages(w http.ResponseWriter, r *http.Request) {
@@ -495,7 +508,7 @@ func (h *festivalHandler) Employ(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, utils.Envelope{"message": "employee employed successfully"}, nil)
-	log.Println("employee employed successfully for festival:", festivalId)
+	h.log.Info("employee added to the festival: "+fmt.Sprint(festivalId), r.Context())
 }
 
 func (h *festivalHandler) Fire(w http.ResponseWriter, r *http.Request) {
@@ -519,7 +532,7 @@ func (h *festivalHandler) Fire(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "employee fired successfully"}, nil)
-	log.Println("employee fired successfully for festival:", festivalId)
+	h.log.Info("employee fired from the festival: "+fmt.Sprint(festivalId), r.Context())
 }
 
 func (h *festivalHandler) GetEmployeeCount(w http.ResponseWriter, r *http.Request) {

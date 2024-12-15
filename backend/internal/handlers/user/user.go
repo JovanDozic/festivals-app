@@ -736,7 +736,6 @@ func (h *userHandler) UpdateProfilePhoto(w http.ResponseWriter, r *http.Request)
 	}
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"message": "profile photo updated successfully"}, nil)
-	log.Println("profile photo updated successfully for user:", username)
 	h.log.Info("profile photo updated", r.Context())
 }
 

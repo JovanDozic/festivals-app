@@ -14,14 +14,16 @@ type AWSHandler interface {
 }
 
 type awsHandler struct {
+	log             servicesCommon.LogService
 	awsService      servicesCommon.AWSService
 	festivalService servicesFestival.FestivalService
 }
 
-func NewAWSHandler(awsService servicesCommon.AWSService, festivalService servicesFestival.FestivalService) AWSHandler {
+func NewAWSHandler(lg servicesCommon.LogService, as servicesCommon.AWSService, fs servicesFestival.FestivalService) AWSHandler {
 	return &awsHandler{
-		awsService:      awsService,
-		festivalService: festivalService,
+		awsService:      as,
+		festivalService: fs,
+		log:             lg,
 	}
 }
 
@@ -47,5 +49,5 @@ func (h *awsHandler) GetPresignedURL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.WriteJSON(w, http.StatusCreated, response, nil)
-	log.Println("retrieved presigned upload image URL")
+	h.log.Info("retrieved presigned upload image URL", r.Context())
 }
