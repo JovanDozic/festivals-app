@@ -44,13 +44,13 @@ type FestivalHandler interface {
 }
 
 type festivalHandler struct {
-	log             servicesCommon.LogService
+	log             servicesCommon.Logger
 	festivalService servicesFestival.FestivalService
 	locationService servicesCommon.LocationService
 }
 
 func NewFestivalHandler(
-	lg servicesCommon.LogService,
+	lg servicesCommon.Logger,
 	fs servicesFestival.FestivalService,
 	ls servicesCommon.LocationService,
 ) FestivalHandler {

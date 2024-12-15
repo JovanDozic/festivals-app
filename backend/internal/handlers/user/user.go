@@ -38,12 +38,12 @@ type UserHandler interface {
 }
 
 type userHandler struct {
-	log             servicesCommon.LogService
+	log             servicesCommon.Logger
 	userService     servicesUser.UserService
 	locationService servicesCommon.LocationService
 }
 
-func NewUserHandler(lg servicesCommon.LogService, us servicesUser.UserService, ls servicesCommon.LocationService) UserHandler {
+func NewUserHandler(lg servicesCommon.Logger, us servicesUser.UserService, ls servicesCommon.LocationService) UserHandler {
 	return &userHandler{userService: us, locationService: ls, log: lg}
 }
 

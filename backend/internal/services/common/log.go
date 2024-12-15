@@ -9,24 +9,24 @@ import (
 	"log"
 )
 
-type LogService interface {
+type Logger interface {
 	Info(msg string, ctx context.Context)
 	Error(msg string, ctx context.Context)
 }
 
-type logService struct {
+type logger struct {
 	logRepo  repositoriesCommon.LogRepo
 	userRepo repositories.UserRepo
 }
 
-func NewLogService(lr repositoriesCommon.LogRepo, ur repositories.UserRepo) LogService {
-	return &logService{
+func NewLogService(lr repositoriesCommon.LogRepo, ur repositories.UserRepo) Logger {
+	return &logger{
 		logRepo:  lr,
 		userRepo: ur,
 	}
 }
 
-func (s *logService) Info(msg string, ctx context.Context) {
+func (s *logger) Info(msg string, ctx context.Context) {
 
 	logModel := models.Log{
 		Type:        "INFO",
@@ -52,7 +52,7 @@ func (s *logService) Info(msg string, ctx context.Context) {
 	}
 }
 
-func (s *logService) Error(msg string, ctx context.Context) {
+func (s *logger) Error(msg string, ctx context.Context) {
 
 	log.Print(msg)
 

@@ -32,14 +32,14 @@ type OrderHandler interface {
 }
 
 type orderHandler struct {
-	log          servicesCommon.LogService
+	log          servicesCommon.Logger
 	orderService servicesFestival.OrderService
 	userService  servicesUser.UserService
 	emailService servicesCommon.EmailService
 }
 
 func NewOrderHandler(
-	lg servicesCommon.LogService,
+	lg servicesCommon.Logger,
 	os servicesFestival.OrderService,
 	us servicesUser.UserService,
 	es servicesCommon.EmailService,

@@ -37,13 +37,13 @@ type ItemHandler interface {
 }
 
 type itemHandler struct {
-	log             servicesCommon.LogService
+	log             servicesCommon.Logger
 	itemService     servicesFestival.ItemService
 	festivalService servicesFestival.FestivalService
 }
 
 func NewItemHandler(
-	lg servicesCommon.LogService,
+	lg servicesCommon.Logger,
 	is servicesFestival.ItemService,
 	fs servicesFestival.FestivalService,
 ) ItemHandler {

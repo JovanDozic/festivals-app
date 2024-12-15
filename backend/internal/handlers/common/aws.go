@@ -14,12 +14,12 @@ type AWSHandler interface {
 }
 
 type awsHandler struct {
-	log             servicesCommon.LogService
+	log             servicesCommon.Logger
 	awsService      servicesCommon.AWSService
 	festivalService servicesFestival.FestivalService
 }
 
-func NewAWSHandler(lg servicesCommon.LogService, as servicesCommon.AWSService, fs servicesFestival.FestivalService) AWSHandler {
+func NewAWSHandler(lg servicesCommon.Logger, as servicesCommon.AWSService, fs servicesFestival.FestivalService) AWSHandler {
 	return &awsHandler{
 		awsService:      as,
 		festivalService: fs,
