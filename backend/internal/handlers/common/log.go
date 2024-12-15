@@ -26,7 +26,7 @@ func NewLogHandler(ls services.LogService) LogHandler {
 
 func (h *logHandler) GetAllLogs(w http.ResponseWriter, r *http.Request) {
 
-	ok := utils.AuthAdminRole(r.Context())
+	ok := utils.AuthStaffRole(r.Context())
 	if !ok {
 		return
 	}

@@ -14,4 +14,8 @@ export class LogsService {
   getLogs(): Observable<Log[]> {
     return this.http.get<Log[]>(`${this.apiUrl}/log`);
   }
+
+  getLogsByRole(role: string): Observable<Log[]> {
+    return this.http.get<Log[]>(`${this.apiUrl}/log/${role}`);
+  }
 }

@@ -7,13 +7,28 @@
   </div>
 
   <div class="chip-container">
-    <mat-chip-set>
-      <mat-chip>Logs</mat-chip>
+    <mat-chip-listbox>
+      <mat-chip-option value="all" [selected]="true">All</mat-chip-option>
+      <mat-chip-option value="attendees">Attendees</mat-chip-option>
+      <mat-chip-option
+        *ngIf="
+          userRole === 'ADMINISTRATOR' ||
+          userRole === 'EMPLOYEE' ||
+          userRole === 'ORGANIZER'
+        "
+        value="employees"
+        >Employees</mat-chip-option
+      >
+      <mat-chip-option
+        *ngIf="userRole === 'ADMINISTRATOR' || userRole === 'ORGANIZER'"
+        value="organizers"
+        >Organizers</mat-chip-option
+      >
       <!-- <mat-chip>
         <span color="primary">{{ ticketTypesCount }}</span>
         {{ ticketTypesCount === 1 ? "Type" : "Types" }}
       </mat-chip> -->
-    </mat-chip-set>
+    </mat-chip-listbox>
   </div>
 
   <div class="profile-content" *ngIf="logs.length !== 0">

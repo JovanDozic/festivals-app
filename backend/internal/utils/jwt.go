@@ -124,3 +124,11 @@ func Auth(c context.Context) bool {
 	_, ok := c.Value(UserKey).(*Claims)
 	return ok
 }
+
+func AuthStaffRole(c context.Context) bool {
+	claims, ok := c.Value(UserKey).(*Claims)
+	if !ok {
+		return false
+	}
+	return claims.Role == string(modelsUser.RoleEmployee) || claims.Role == string(modelsUser.RoleOrganizer) || claims.Role == string(modelsUser.RoleAdmin)
+}

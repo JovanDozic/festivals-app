@@ -59,6 +59,24 @@ const authRoutes: Routes = [
   },
 ];
 
+const staffRoutes: Routes = [
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    data: { expectedRoles: ['EMPLOYEE', 'ORGANIZER', 'ADMINISTRATOR'] },
+    children: [
+      {
+        path: 'logs',
+        loadComponent: () =>
+          import('./features/user/all-logs/all-logs.component').then(
+            (c) => c.AllLogsComponent,
+          ),
+        title: 'Logs',
+      },
+    ],
+  },
+];
+
 const attendeeRoutes: Routes = [
   {
     path: '',
@@ -219,7 +237,6 @@ const organizerRoutes: Routes = [
           ),
         title: 'Orders',
       },
-      // ...
     ],
   },
 ];
@@ -336,14 +353,6 @@ const adminRoutes: Routes = [
           ),
         title: 'Users',
       },
-      {
-        path: 'admin/logs',
-        loadComponent: () =>
-          import('./features/admin/all-logs/all-logs.component').then(
-            (c) => c.AllLogsComponent,
-          ),
-        title: 'Logs',
-      },
     ],
   },
 ];
@@ -355,4 +364,5 @@ export const routes: Routes = [
   ...organizerRoutes,
   ...employeeRoutes,
   ...adminRoutes,
+  ...staffRoutes,
 ];

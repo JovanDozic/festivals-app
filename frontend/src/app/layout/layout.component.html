@@ -128,8 +128,12 @@
 
       <a
         mat-list-item
-        routerLink="/admin/logs"
-        *ngIf="visibleForRole('ADMINISTRATOR')"
+        routerLink="/logs"
+        *ngIf="
+          visibleForRole('ADMINISTRATOR') ||
+          visibleForRole('ORGANIZER') ||
+          visibleForRole('EMPLOYEE')
+        "
         #link="routerLinkActive"
         routerLinkActive
         [activated]="link.isActive"
