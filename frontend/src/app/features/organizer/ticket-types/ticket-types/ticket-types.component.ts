@@ -146,7 +146,7 @@ export class TicketTypesComponent implements OnInit {
   onDeleteTicketTypeClick(itemId: number, name: string) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
-        title: 'Fire Employee',
+        title: 'Delete Ticket Type',
         message: `Are you sure you want to delete ${name}? You won't be able to delete this ticket type if it has been used in any transactions.`,
         confirmButtonText: 'Confirm',
         cancelButtonText: 'Cancel',
@@ -164,7 +164,11 @@ export class TicketTypesComponent implements OnInit {
             },
             error: (error) => {
               console.log(error);
-              this.snackbarService.show('Error deleting ticket type');
+              if (error.status === 500) {
+                this.snackbarService.show('Ticket type has been used already');
+              } else {
+                this.snackbarService.show('Error deleting ticket type');
+              }
             },
           });
       }
