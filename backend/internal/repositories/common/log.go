@@ -30,8 +30,8 @@ func (r *logRepo) GetAll() ([]modelsUser.Log, error) {
 	var logs []modelsUser.Log
 	if err := r.db.
 		Preload("User").
+		Order("created_at DESC").
 		Find(&logs).
-		Order("created_at asc").
 		Error; err != nil {
 		return nil, err
 	}
@@ -45,8 +45,8 @@ func (r *logRepo) GetAllByRole(userRole modelsUser.UserRole) ([]modelsUser.Log, 
 		Preload("User").
 		Joins("JOIN users ON logs.user_id = users.id").
 		Where("users.role = ?", userRole).
+		Order("created_at DESC").
 		Find(&logs).
-		Order("created_at asc").
 		Error; err != nil {
 		return nil, err
 	}
