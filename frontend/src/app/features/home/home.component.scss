@@ -2,8 +2,7 @@
   position: relative;
   margin: 0 auto;
   padding: 20px;
-  height: 83.82vh;
-  margin: -16px;
+  height: 100vh;
   overflow: hidden !important;
 }
 
@@ -30,12 +29,10 @@
   position: absolute;
   top: -5px;
   left: 0px;
-  object-fit: cover;
   z-index: 1;
-  overflow: hidden;
+  object-fit: cover;
   width: 100%;
-  height: calc(100% + 10px);
-  overflow: hidden;
+  height: 100%;
 }
 
 h1 {
@@ -80,10 +77,6 @@ p {
   transition: background-color 0.25s ease;
 }
 
-.stat-button:hover {
-  background-color: rgba(255, 255, 255, 1);
-}
-
 :host-context([data-theme="light"]) .stat-button {
   background: #fbf8ff;
 }
@@ -93,14 +86,9 @@ p {
   color: #ddd;
 }
 
-:host-context([data-theme="light"]) .stat-button:hover {
-  background: #12131b;
-  color: #ddd;
-}
-
-:host-context([data-theme="dark"]) .stat-button:hover {
-  background: #fbf8ff;
-  color: #333;
+.stat-button:hover {
+  background: #4147e4;
+  color: #ddd !important;
 }
 
 @media (max-width: 768px) {

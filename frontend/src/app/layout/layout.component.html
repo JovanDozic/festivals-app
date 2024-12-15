@@ -154,8 +154,8 @@
       }}</span>
       <span class="user-role-title" *ngIf="!isLoggedIn()"> Festivals App </span>
     </mat-toolbar>
-    <div class="sidenav-scroll-wrapper">
-      <div class="sidenav-content">
+    <div class="sidenav-scroll-wrapper" [class.home-page-wrapper]="isHomePage">
+      <div class="sidenav-content" [class.home-page-content]="isHomePage">
         <ng-content></ng-content>
       </div>
     </div>

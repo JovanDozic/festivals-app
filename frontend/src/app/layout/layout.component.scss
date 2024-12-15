@@ -84,3 +84,18 @@ mat-sidenav-content {
   height: 36px;
   width: 36px;
 }
+
+.home-page {
+  overflow: hidden !important;
+}
+
+.home-page-wrapper {
+  // overflow: hidden !important;
+}
+
+.home-page-content {
+  overflow: hidden !important;
+  padding: 0 !important;
+  width: 100%;
+  border: none !important;
+}

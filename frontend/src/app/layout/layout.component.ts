@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   AfterViewInit,
+  OnInit,
 } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe, CommonModule } from '@angular/common';
@@ -17,6 +18,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ThemeService } from '../services/theme/theme.service';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-layout',
@@ -39,14 +42,21 @@ export class LayoutComponent implements AfterViewInit {
   private breakpointObserver = inject(BreakpointObserver);
   private authService = inject(AuthService);
   private themeService = inject(ThemeService);
+  private router = inject(Router);
 
   userRole = '';
   username = '';
+  isHomePage = false;
 
   constructor(private cdr: ChangeDetectorRef) {
     this.userRole = this.authService.getUserRole() ?? '';
     this.username = this.authService.getUsername() ?? '';
     this.themeService.initTheme();
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.isHomePage = event.urlAfterRedirects === '/home';
+      });
   }
 
   ngAfterViewInit() {
