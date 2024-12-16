@@ -63,14 +63,6 @@ func ReadJSON(w http.ResponseWriter, r *http.Request, dst any) error {
 	return nil
 }
 
-func ToInt(s string) int {
-	i, err := strconv.Atoi(s)
-	if err != nil {
-		return -1
-	}
-	return i
-}
-
 func ToUint(s string) uint {
 	i, err := strconv.Atoi(s)
 	if err != nil {
