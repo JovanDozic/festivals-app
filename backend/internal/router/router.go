@@ -43,7 +43,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	s3Presign := s3.NewPresignClient(s3Client)
 
 	// Init repositories
-	logRepo := reposCommon.NewLogRepo(db)
+	logRepo := reposUser.NewLogRepo(db)
 	userRepo := reposUser.NewUserRepo(db)
 	userProfileRepo := reposUser.NewUserProfileRepo(db)
 	addressRepo := reposCommon.NewAddressRepo(db)
@@ -56,8 +56,8 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// ...
 
 	// Init services
-	logger := servicesCommon.NewLogger(logRepo, userRepo)
-	logService := servicesCommon.NewLogService(logRepo)
+	logger := servicesUser.NewLogger(logRepo, userRepo)
+	logService := servicesUser.NewLogService(logRepo)
 	pdfGenerator := servicesCommon.NewPDFGenerator()
 	emailService := servicesCommon.NewEmailService(config)
 	locationService := servicesCommon.NewLocationService(addressRepo, cityRepo, countryRepo)
@@ -69,7 +69,7 @@ func Init(db *gorm.DB, config *config.Config) *mux.Router {
 	// ...
 
 	// Init handlers
-	logHandler := handlersCommon.NewLogHandler(logService)
+	logHandler := handlersUser.NewLogHandler(logService)
 	commonHandler := handlersCommon.NewHealthHandler(config)
 	userHandler := handlersUser.NewUserHandler(logger, userService, locationService)
 	festivalHandler := handlersFestival.NewFestivalHandler(logger, festivalService, locationService)

@@ -197,10 +197,6 @@ func (s *itemService) UpdateItemAndPrices(request dto.UpdateItemRequest) error {
 		return err
 	}
 
-	log.Printf("itemDb: %+v", itemDb)
-	log.Printf("priceListItemIds: %+v", priceListItemIds)
-	log.Printf("priceIdsDb: %+v", priceIdsDb)
-
 	// update item
 	itemDb.Name = request.Name
 	itemDb.Description = request.Description

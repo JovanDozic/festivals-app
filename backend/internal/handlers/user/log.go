@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	models "backend/internal/models/user"
-	services "backend/internal/services/common"
+	modelsUser "backend/internal/models/user"
+	servicesUser "backend/internal/services/user"
 	"backend/internal/utils"
 	"log"
 	"net/http"
@@ -15,10 +15,10 @@ type LogHandler interface {
 }
 
 type logHandler struct {
-	logService services.LogService
+	logService servicesUser.LogService
 }
 
-func NewLogHandler(ls services.LogService) LogHandler {
+func NewLogHandler(ls servicesUser.LogService) LogHandler {
 	return &logHandler{
 		logService: ls,
 	}
@@ -57,7 +57,7 @@ func (h *logHandler) GetLogsByRole(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logs, err := h.logService.GetByUserRole(models.UserRole(strings.ToUpper(role)))
+	logs, err := h.logService.GetByUserRole(modelsUser.UserRole(strings.ToUpper(role)))
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

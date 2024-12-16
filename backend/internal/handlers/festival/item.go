@@ -8,8 +8,8 @@ import (
 
 	modelsFestival "backend/internal/models/festival"
 
-	servicesCommon "backend/internal/services/common"
 	servicesFestival "backend/internal/services/festival"
+	servicesUser "backend/internal/services/user"
 	"backend/internal/utils"
 	"log"
 	"net/http"
@@ -37,13 +37,13 @@ type ItemHandler interface {
 }
 
 type itemHandler struct {
-	log             servicesCommon.Logger
+	log             servicesUser.Logger
 	itemService     servicesFestival.ItemService
 	festivalService servicesFestival.FestivalService
 }
 
 func NewItemHandler(
-	lg servicesCommon.Logger,
+	lg servicesUser.Logger,
 	is servicesFestival.ItemService,
 	fs servicesFestival.FestivalService,
 ) ItemHandler {

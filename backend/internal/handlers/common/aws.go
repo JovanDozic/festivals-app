@@ -4,6 +4,7 @@ import (
 	dto "backend/internal/dto/common"
 	servicesCommon "backend/internal/services/common"
 	servicesFestival "backend/internal/services/festival"
+	sevicesUser "backend/internal/services/user"
 	"backend/internal/utils"
 	"log"
 	"net/http"
@@ -14,12 +15,12 @@ type AWSHandler interface {
 }
 
 type awsHandler struct {
-	log             servicesCommon.Logger
+	log             sevicesUser.Logger
 	awsService      servicesCommon.AWSService
 	festivalService servicesFestival.FestivalService
 }
 
-func NewAWSHandler(lg servicesCommon.Logger, as servicesCommon.AWSService, fs servicesFestival.FestivalService) AWSHandler {
+func NewAWSHandler(lg sevicesUser.Logger, as servicesCommon.AWSService, fs servicesFestival.FestivalService) AWSHandler {
 	return &awsHandler{
 		awsService:      as,
 		festivalService: fs,

@@ -1,9 +1,8 @@
 package services
 
 import (
-	models "backend/internal/models/user"
-	repositoriesCommon "backend/internal/repositories/common"
-	repositories "backend/internal/repositories/user"
+	modelsUser "backend/internal/models/user"
+	reposUser "backend/internal/repositories/user"
 	"backend/internal/utils"
 	"context"
 	"log"
@@ -15,11 +14,11 @@ type Logger interface {
 }
 
 type logger struct {
-	logRepo  repositoriesCommon.LogRepo
-	userRepo repositories.UserRepo
+	logRepo  reposUser.LogRepo
+	userRepo reposUser.UserRepo
 }
 
-func NewLogger(lr repositoriesCommon.LogRepo, ur repositories.UserRepo) Logger {
+func NewLogger(lr reposUser.LogRepo, ur reposUser.UserRepo) Logger {
 	return &logger{
 		logRepo:  lr,
 		userRepo: ur,
@@ -28,7 +27,7 @@ func NewLogger(lr repositoriesCommon.LogRepo, ur repositories.UserRepo) Logger {
 
 func (s *logger) Info(msg string, ctx context.Context) {
 
-	logModel := models.Log{
+	logModel := modelsUser.Log{
 		Type:        "INFO",
 		Description: msg,
 	}
@@ -56,7 +55,7 @@ func (s *logger) Error(msg string, ctx context.Context) {
 
 	log.Print(msg)
 
-	logModel := models.Log{
+	logModel := modelsUser.Log{
 		Type:        "ERROR",
 		Description: msg,
 	}

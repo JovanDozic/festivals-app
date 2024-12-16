@@ -11,6 +11,7 @@ import (
 	modelsFestival "backend/internal/models/festival"
 
 	servicesCommon "backend/internal/services/common"
+	servicesUser "backend/internal/services/user"
 
 	servicesFestival "backend/internal/services/festival"
 	"backend/internal/utils"
@@ -44,13 +45,13 @@ type FestivalHandler interface {
 }
 
 type festivalHandler struct {
-	log             servicesCommon.Logger
+	log             servicesUser.Logger
 	festivalService servicesFestival.FestivalService
 	locationService servicesCommon.LocationService
 }
 
 func NewFestivalHandler(
-	lg servicesCommon.Logger,
+	lg servicesUser.Logger,
 	fs servicesFestival.FestivalService,
 	ls servicesCommon.LocationService,
 ) FestivalHandler {
