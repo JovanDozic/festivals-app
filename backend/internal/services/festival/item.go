@@ -1,13 +1,12 @@
-package services
+package festival
 
 import (
 	"backend/internal/config"
 	dto "backend/internal/dto/festival"
 	modelsCommon "backend/internal/models/common"
 	modelsFestival "backend/internal/models/festival"
-	reposCommon "backend/internal/repositories/common"
-	reposFestival "backend/internal/repositories/festival"
-	services "backend/internal/services/common"
+	"backend/internal/repos/common"
+	repos "backend/internal/repos/festival"
 	"backend/internal/utils"
 	"errors"
 	"log"
@@ -35,23 +34,23 @@ type ItemService interface {
 }
 
 type itemService struct {
-	config          *config.Config
-	itemRepo        reposFestival.ItemRepo
-	locationService services.LocationService
-	imageRepo       reposCommon.ImageRepo
+	config       *config.Config
+	itemRepo     repos.ItemRepo
+	locationRepo common.LocationRepo
+	imageRepo    common.ImageRepo
 }
 
 func NewItemService(
-	config *config.Config,
-	itemRepo reposFestival.ItemRepo,
-	locationService services.LocationService,
-	imageRepo reposCommon.ImageRepo,
+	cfg *config.Config,
+	ir repos.ItemRepo,
+	lr common.LocationRepo,
+	img common.ImageRepo,
 ) ItemService {
 	return &itemService{
-		config:          config,
-		itemRepo:        itemRepo,
-		locationService: locationService,
-		imageRepo:       imageRepo,
+		config:       cfg,
+		itemRepo:     ir,
+		locationRepo: lr,
+		imageRepo:    img,
 	}
 }
 
@@ -182,10 +181,6 @@ func (s *itemService) GetTicketTypes(itemId uint) (*dto.GetItemResponse, error) 
 func (s *itemService) UpdateItemAndPrices(request dto.UpdateItemRequest) error {
 
 	itemId := request.ID
-	var priceListItemIds []uint
-	for _, priceListItem := range request.PriceListItems {
-		priceListItemIds = append(priceListItemIds, priceListItem.ID)
-	}
 
 	itemDb, priceIdsDb, err := s.itemRepo.GetItemAndPriceListItemsIDs(itemId)
 	if err != nil {
@@ -251,13 +246,13 @@ func (s *itemService) CreateTransportPackageAddon(request dto.CreateTransportPac
 		ISO3: request.ArrivalCity.CountryISO3,
 	}
 
-	err := s.locationService.GetCityAndCountry(departureCity, departureCountry)
+	err := s.locationRepo.FillCityAndCountryModels(departureCity, departureCountry)
 	if err != nil {
 		log.Println("error getting city and country:", err)
 		return err
 	}
 
-	err = s.locationService.GetCityAndCountry(arrivalCity, arrivalCountry)
+	err = s.locationRepo.FillCityAndCountryModels(arrivalCity, arrivalCountry)
 	if err != nil {
 		log.Println("error getting city and country:", err)
 		return err

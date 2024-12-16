@@ -1,4 +1,4 @@
-package repositories
+package user
 
 import (
 	models "backend/internal/models/user"

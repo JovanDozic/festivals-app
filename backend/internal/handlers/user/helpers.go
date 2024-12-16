@@ -1,4 +1,4 @@
-package handlers
+package user
 
 import (
 	dto "backend/internal/dto/common"

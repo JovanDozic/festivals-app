@@ -1,20 +1,15 @@
-package handlers
+package festival
 
 import (
-	"fmt"
-
 	dtoFestival "backend/internal/dto/festival"
 	"backend/internal/models"
-
 	modelsCommon "backend/internal/models/common"
-
 	modelsFestival "backend/internal/models/festival"
-
-	servicesCommon "backend/internal/services/common"
-	servicesUser "backend/internal/services/user"
-
-	servicesFestival "backend/internal/services/festival"
+	"backend/internal/services/common"
+	"backend/internal/services/festival"
+	"backend/internal/services/user"
 	"backend/internal/utils"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -45,15 +40,15 @@ type FestivalHandler interface {
 }
 
 type festivalHandler struct {
-	log             servicesUser.Logger
-	festivalService servicesFestival.FestivalService
-	locationService servicesCommon.LocationService
+	log             user.Logger
+	festivalService festival.FestivalService
+	locationService common.LocationService
 }
 
 func NewFestivalHandler(
-	lg servicesUser.Logger,
-	fs servicesFestival.FestivalService,
-	ls servicesCommon.LocationService,
+	lg user.Logger,
+	fs festival.FestivalService,
+	ls common.LocationService,
 ) FestivalHandler {
 	return &festivalHandler{
 		festivalService: fs,

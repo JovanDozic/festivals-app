@@ -1,11 +1,11 @@
-package handlers
+package festival
 
 import (
 	dtoFestival "backend/internal/dto/festival"
 	models "backend/internal/models/festival"
-	servicesCommon "backend/internal/services/common"
-	servicesFestival "backend/internal/services/festival"
-	servicesUser "backend/internal/services/user"
+	"backend/internal/services/common"
+	"backend/internal/services/festival"
+	"backend/internal/services/user"
 	"backend/internal/utils"
 	"fmt"
 	"log"
@@ -32,17 +32,17 @@ type OrderHandler interface {
 }
 
 type orderHandler struct {
-	log          servicesUser.Logger
-	orderService servicesFestival.OrderService
-	userService  servicesUser.UserService
-	emailService servicesCommon.EmailService
+	log          user.Logger
+	orderService festival.OrderService
+	userService  user.UserService
+	emailService common.EmailService
 }
 
 func NewOrderHandler(
-	lg servicesUser.Logger,
-	os servicesFestival.OrderService,
-	us servicesUser.UserService,
-	es servicesCommon.EmailService,
+	lg user.Logger,
+	os festival.OrderService,
+	us user.UserService,
+	es common.EmailService,
 ) OrderHandler {
 	return &orderHandler{
 		orderService: os,

@@ -1,4 +1,4 @@
-package repositories
+package festival
 
 import (
 	dtoFestival "backend/internal/dto/festival"

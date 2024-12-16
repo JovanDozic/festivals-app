@@ -1,11 +1,13 @@
-package handlers
+package festival
 
 import (
+	dto "backend/internal/dto/common"
 	dtoCommon "backend/internal/dto/common"
 	dtoFestival "backend/internal/dto/festival"
 	"backend/internal/models"
 	modelsCommon "backend/internal/models/common"
 	modelsFestival "backend/internal/models/festival"
+	modelsUser "backend/internal/models/user"
 	services "backend/internal/services/festival"
 	"backend/internal/utils"
 	"log"
@@ -148,4 +150,21 @@ func MapFestivalToResponse(festival modelsFestival.Festival, images []modelsComm
 		Address:     address,
 		Images:      imageResponses,
 	}
+}
+
+func mapLogsToResponses(logs []modelsUser.Log) []dto.LogResponse {
+	responses := make([]dto.LogResponse, len(logs))
+	for i, log := range logs {
+		response := dto.LogResponse{
+			ID:        log.ID,
+			Message:   log.Description,
+			CreatedAt: log.CreatedAt,
+			Type:      log.Type,
+		}
+		if log.User != nil {
+			response.Username = &log.User.Username
+		}
+		responses[i] = response
+	}
+	return responses
 }

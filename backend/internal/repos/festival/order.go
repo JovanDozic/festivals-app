@@ -1,4 +1,4 @@
-package repositories
+package festival
 
 import (
 	models "backend/internal/models/festival"

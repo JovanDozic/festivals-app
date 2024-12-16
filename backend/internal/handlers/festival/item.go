@@ -1,16 +1,14 @@
-package handlers
+package festival
 
 import (
 	dto "backend/internal/dto/common"
 	dtoFestival "backend/internal/dto/festival"
 	"backend/internal/models"
-	"fmt"
-
 	modelsFestival "backend/internal/models/festival"
-
-	servicesFestival "backend/internal/services/festival"
-	servicesUser "backend/internal/services/user"
+	"backend/internal/services/festival"
+	"backend/internal/services/user"
 	"backend/internal/utils"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -37,15 +35,15 @@ type ItemHandler interface {
 }
 
 type itemHandler struct {
-	log             servicesUser.Logger
-	itemService     servicesFestival.ItemService
-	festivalService servicesFestival.FestivalService
+	log             user.Logger
+	itemService     festival.ItemService
+	festivalService festival.FestivalService
 }
 
 func NewItemHandler(
-	lg servicesUser.Logger,
-	is servicesFestival.ItemService,
-	fs servicesFestival.FestivalService,
+	lg user.Logger,
+	is festival.ItemService,
+	fs festival.FestivalService,
 ) ItemHandler {
 	return &itemHandler{
 		itemService:     is,

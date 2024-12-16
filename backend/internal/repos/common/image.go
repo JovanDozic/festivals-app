@@ -1,4 +1,4 @@
-package repositories
+package common
 
 import (
 	modelsCommon "backend/internal/models/common"

@@ -1,15 +1,16 @@
-package services
+package festival
 
 import (
 	dtoCommon "backend/internal/dto/common"
 	dtoFestival "backend/internal/dto/festival"
 	modelsCommon "backend/internal/models/common"
 	modelsFestival "backend/internal/models/festival"
-	reposCommon "backend/internal/repositories/common"
-	reposFestival "backend/internal/repositories/festival"
-	servicesCommon "backend/internal/services/common"
-	servicesUser "backend/internal/services/user"
+	"backend/internal/repos/common"
+	"backend/internal/repos/festival"
+	"backend/internal/services/user"
+	"backend/internal/utils"
 	"errors"
+	"fmt"
 	"log"
 	"strings"
 )
@@ -36,33 +37,29 @@ type OrderService interface {
 }
 
 type orderService struct {
-	orderRepo       reposFestival.OrderRepo
-	itemRepo        reposFestival.ItemRepo
-	festivalRepo    reposFestival.FestivalRepo
-	userService     servicesUser.UserService
-	imageRepo       reposCommon.ImageRepo
-	locationService servicesCommon.LocationService
-	pdfGenerator    servicesCommon.PDFGenerator
-	emailService    servicesCommon.EmailService
+	orderRepo    festival.OrderRepo
+	itemRepo     festival.ItemRepo
+	festivalRepo festival.FestivalRepo
+	userRepo     user.UserProvider
+	imageRepo    common.ImageRepo
+	locationRepo common.LocationRepo
 }
 
 func NewOrderService(
-	or reposFestival.OrderRepo,
-	ir reposFestival.ItemRepo,
-	fr reposFestival.FestivalRepo,
-	us servicesUser.UserService,
-	imr reposCommon.ImageRepo,
-	ls servicesCommon.LocationService,
-	pg servicesCommon.PDFGenerator,
+	or festival.OrderRepo,
+	ir festival.ItemRepo,
+	fr festival.FestivalRepo,
+	up user.UserProvider,
+	imr common.ImageRepo,
+	lr common.LocationRepo,
 ) OrderService {
 	return &orderService{
-		orderRepo:       or,
-		itemRepo:        ir,
-		festivalRepo:    fr,
-		userService:     us,
-		imageRepo:       imr,
-		locationService: ls,
-		pdfGenerator:    pg,
+		orderRepo:    or,
+		itemRepo:     ir,
+		festivalRepo: fr,
+		userRepo:     up,
+		imageRepo:    imr,
+		locationRepo: lr,
 	}
 }
 
@@ -118,7 +115,7 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 		return nil, errors.New("order not found")
 	}
 
-	attendee, err := s.userService.GetUserProfile(order.User.User.Username)
+	attendee, err := s.userRepo.GetUserProfile(order.User.User.Username)
 	if err != nil {
 		log.Println("error: ", err)
 		return nil, err
@@ -252,7 +249,7 @@ func (s *orderService) GetOrder(username string, orderId uint) (*dtoFestival.Ord
 
 	if bracelet != nil && bracelet.ID != 0 {
 		orderDto.BraceletStatus = &bracelet.Status
-		employee, err := s.userService.GetUserProfileById(bracelet.EmployeeID)
+		employee, err := s.userRepo.GetUserProfileById(bracelet.EmployeeID)
 		if err != nil {
 			log.Println("error: ", err)
 			return nil, err
@@ -346,7 +343,7 @@ func (s *orderService) GetOrdersEmployee(festivalId uint) ([]dtoFestival.OrderPr
 			orderDto.OrderType = "PACKAGE"
 		}
 
-		attendee, err := s.userService.GetUserProfile(order.User.User.Username)
+		attendee, err := s.userRepo.GetUserProfile(order.User.User.Username)
 		if err != nil {
 			log.Println("error: ", err)
 			return nil, err
@@ -416,7 +413,7 @@ func (s *orderService) GetBraceletOrdersAttendee(username string) ([]dtoFestival
 
 		if bracelet != nil && bracelet.ID != 0 {
 			orderDto.BraceletStatus = &bracelet.Status
-			employee, err := s.userService.GetUserProfileById(bracelet.EmployeeID)
+			employee, err := s.userRepo.GetUserProfileById(bracelet.EmployeeID)
 			if err != nil {
 				log.Println("error: ", err)
 				return nil, err
@@ -488,7 +485,7 @@ func (s *orderService) TopUpBracelet(username string, braceletId uint, amount fl
 
 func (s *orderService) CreateHelpRequest(username string, request dtoFestival.ActivateBraceletHelpRequest) error {
 
-	attendeeId, err := s.userService.GetUserID(username)
+	attendeeId, err := s.userRepo.GetUserID(username)
 	if err != nil {
 		return err
 	}
@@ -589,17 +586,23 @@ func (s *orderService) GetShippingLabel(orderId uint) ([]byte, error) {
 	attendee := order.Attendee
 	festival := order.Festival
 
-	attendeeAddress, err := s.locationService.GetAddressByID(*attendee.Address.AddressId)
+	attendeeAddress, err := s.locationRepo.GetAddressByID(*attendee.Address.AddressId)
 	if err != nil {
 		return nil, err
 	}
 
-	festivalAddressId, err := s.locationService.GetAddressByID(*festival.Address.AddressId)
+	festivalAddressId, err := s.locationRepo.GetAddressByID(*festival.Address.AddressId)
 	if err != nil {
 		return nil, err
 	}
 
-	pdfBytes, err := s.pdfGenerator.CreateShippingLabel(festivalAddressId, attendeeAddress, &festival, *attendee)
+	pdfBytes, err := utils.GenerateShippingLabelPDF(
+		festivalAddressId,
+		attendeeAddress,
+		festival.Name,
+		fmt.Sprintf("%s %s", attendee.FirstName, attendee.LastName),
+		attendee.PhoneNumber,
+	)
 	if err != nil {
 		return nil, err
 	}

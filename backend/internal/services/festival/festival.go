@@ -1,14 +1,13 @@
-package services
+package festival
 
 import (
 	"backend/internal/config"
 	modelsError "backend/internal/models"
 	modelsCommon "backend/internal/models/common"
 	modelsFestival "backend/internal/models/festival"
-	reposCommon "backend/internal/repositories/common"
-	reposFestival "backend/internal/repositories/festival"
-	reposUser "backend/internal/repositories/user"
-	servicesCommon "backend/internal/services/common"
+	"backend/internal/repos/common"
+	"backend/internal/repos/festival"
+	"backend/internal/repos/user"
 	"log"
 	"strings"
 )
@@ -41,29 +40,29 @@ type FestivalService interface {
 }
 
 type festivalService struct {
-	config          *config.Config
-	festivalRepo    reposFestival.FestivalRepo
-	userRepo        reposUser.UserRepo
-	locationService servicesCommon.LocationService
-	imageRepo       reposCommon.ImageRepo
-	orderRepo       reposFestival.OrderRepo
+	config       *config.Config
+	festivalRepo festival.FestivalRepo
+	userRepo     user.UserRepo
+	locationRepo common.LocationRepo
+	imageRepo    common.ImageRepo
+	orderRepo    festival.OrderRepo
 }
 
 func NewFestivalService(
 	cfg *config.Config,
-	fr reposFestival.FestivalRepo,
-	ur reposUser.UserRepo,
-	ls servicesCommon.LocationService,
-	ir reposCommon.ImageRepo,
-	or reposFestival.OrderRepo,
+	fr festival.FestivalRepo,
+	ur user.UserRepo,
+	lr common.LocationRepo,
+	ir common.ImageRepo,
+	or festival.OrderRepo,
 ) FestivalService {
 	return &festivalService{
-		config:          cfg,
-		festivalRepo:    fr,
-		userRepo:        ur,
-		locationService: ls,
-		imageRepo:       ir,
-		orderRepo:       or,
+		config:       cfg,
+		festivalRepo: fr,
+		userRepo:     ur,
+		locationRepo: lr,
+		imageRepo:    ir,
+		orderRepo:    or,
 	}
 }
 
@@ -77,7 +76,7 @@ func (s *festivalService) Create(festival *modelsFestival.Festival, username str
 		return err
 	}
 
-	err := s.locationService.CreateAddress(address)
+	err := s.locationRepo.CreateAddress(address)
 	if err != nil {
 		return err
 	}
@@ -387,7 +386,7 @@ func (s *festivalService) GetAddressID(festivalId uint) (uint, error) {
 		return 0, err
 	}
 
-	address, err := s.locationService.GetAddressByID(festival.AddressID)
+	address, err := s.locationRepo.GetAddressByID(festival.AddressID)
 	if err != nil {
 		return 0, err
 	}

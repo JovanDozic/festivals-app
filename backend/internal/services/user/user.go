@@ -1,4 +1,4 @@
-package services
+package user
 
 import (
 	"backend/internal/config"
@@ -7,9 +7,8 @@ import (
 	modelsError "backend/internal/models"
 	modelsCommon "backend/internal/models/common"
 	modelsUser "backend/internal/models/user"
-	reposCommon "backend/internal/repositories/common"
-	reposUser "backend/internal/repositories/user"
-	servicesCommon "backend/internal/services/common"
+	reposCommon "backend/internal/repos/common"
+	reposUser "backend/internal/repos/user"
 	"backend/internal/utils"
 	"log"
 	"strings"
@@ -36,15 +35,15 @@ type UserService interface {
 }
 
 type userService struct {
-	config          *config.Config
-	userRepo        reposUser.UserRepo
-	profileRepo     reposUser.UserProfileRepo
-	locationService servicesCommon.LocationService
-	imageRepo       reposCommon.ImageRepo
+	config       *config.Config
+	userRepo     reposUser.UserRepo
+	profileRepo  reposUser.UserProfileRepo
+	locationRepo reposCommon.LocationRepo
+	imageRepo    reposCommon.ImageRepo
 }
 
-func NewUserService(c *config.Config, r reposUser.UserRepo, p reposUser.UserProfileRepo, l servicesCommon.LocationService, i reposCommon.ImageRepo) UserService {
-	return &userService{userRepo: r, config: c, profileRepo: p, locationService: l, imageRepo: i}
+func NewUserService(c *config.Config, r reposUser.UserRepo, p reposUser.UserProfileRepo, l reposCommon.LocationRepo, i reposCommon.ImageRepo) UserService {
+	return &userService{userRepo: r, config: c, profileRepo: p, locationRepo: l, imageRepo: i}
 }
 
 func (s *userService) GetUsers() ([]modelsUser.UserProfile, error) {
@@ -269,7 +268,7 @@ func (s *userService) CreateUserAddress(username string, address *modelsCommon.A
 		return modelsError.ErrUserHasAddress
 	}
 
-	if err := s.locationService.CreateAddress(address); err != nil {
+	if err := s.locationRepo.CreateAddress(address); err != nil {
 		log.Println("error creating address", err)
 		return err
 	}

@@ -1,8 +1,8 @@
-package services
+package user
 
 import (
 	modelsUser "backend/internal/models/user"
-	reposUser "backend/internal/repositories/user"
+	reposUser "backend/internal/repos/user"
 	"backend/internal/utils"
 	"context"
 	"log"
