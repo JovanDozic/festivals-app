@@ -38,11 +38,10 @@ export class ViewLogComponent {
   log: Log | null = null;
 
   constructor() {
-    console.log(this.data);
     this.log = this.data.log;
   }
 
   closeDialog() {
-    this.dialogRef.close(false);
+    this.dialogRef.close();
   }
 }
