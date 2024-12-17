@@ -4,4 +4,5 @@ export interface Log {
   message: string;
   type: string;
   username: string;
+  role: string;
 }

@@ -26,12 +26,21 @@ func NewLogHandler(ls servicesUser.LogService) LogHandler {
 
 func (h *logHandler) GetAllLogs(w http.ResponseWriter, r *http.Request) {
 
-	ok := utils.AuthStaffRole(r.Context())
+	ok, role := utils.AuthGetRole(r.Context())
 	if !ok {
 		return
 	}
 
-	logs, err := h.logService.GetAll()
+	var logs []modelsUser.Log
+	var err error
+	switch *role {
+	case modelsUser.RoleAdmin:
+		logs, err = h.logService.GetAll()
+	case modelsUser.RoleOrganizer:
+		logs, err = h.logService.GetByUserRoles([]modelsUser.UserRole{modelsUser.RoleOrganizer, modelsUser.RoleEmployee, modelsUser.RoleAttendee})
+	case modelsUser.RoleEmployee:
+		logs, err = h.logService.GetByUserRoles([]modelsUser.UserRole{modelsUser.RoleEmployee, modelsUser.RoleAttendee})
+	}
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -40,7 +49,7 @@ func (h *logHandler) GetAllLogs(w http.ResponseWriter, r *http.Request) {
 	response := mapLogsToResponses(logs)
 
 	utils.WriteJSON(w, http.StatusOK, response, nil)
-	log.Println("logs retrieved for admin:" + utils.GetUsername(r.Context()))
+	log.Printf("logs retrieved for: %s (%v)", utils.GetUsername(r.Context()), role)
 }
 
 func (h *logHandler) GetLogsByRole(w http.ResponseWriter, r *http.Request) {

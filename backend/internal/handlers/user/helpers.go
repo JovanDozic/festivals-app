@@ -1,7 +1,7 @@
 package user
 
 import (
-	dto "backend/internal/dto/common"
+	dto "backend/internal/dto/user"
 	modelsUser "backend/internal/models/user"
 
 	"backend/internal/models"
@@ -49,6 +49,7 @@ func mapLogsToResponses(logs []modelsUser.Log) []dto.LogResponse {
 		}
 		if log.User != nil {
 			response.Username = &log.User.Username
+			response.Role = &log.User.Role
 		}
 		responses[i] = response
 	}

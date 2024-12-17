@@ -8,6 +8,7 @@ import (
 type LogService interface {
 	GetAll() ([]modelsUser.Log, error)
 	GetByUserRole(userRole modelsUser.UserRole) ([]modelsUser.Log, error)
+	GetByUserRoles(userRoles []modelsUser.UserRole) ([]modelsUser.Log, error)
 }
 
 type logService struct {
@@ -26,4 +27,8 @@ func (ls *logService) GetAll() ([]modelsUser.Log, error) {
 
 func (ls *logService) GetByUserRole(userRole modelsUser.UserRole) ([]modelsUser.Log, error) {
 	return ls.logRepo.GetAllByRole(userRole)
+}
+
+func (ls *logService) GetByUserRoles(userRoles []modelsUser.UserRole) ([]modelsUser.Log, error) {
+	return ls.logRepo.GetAllByRoles(userRoles)
 }

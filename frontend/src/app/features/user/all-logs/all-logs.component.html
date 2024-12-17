@@ -7,47 +7,40 @@
   </div>
 
   <div class="chip-container">
-    <mat-chip-listbox>
-      <mat-chip-option value="all" [selected]="true">All</mat-chip-option>
-      <mat-chip-option value="attendees">Attendees</mat-chip-option>
-      <mat-chip-option
-        *ngIf="
-          userRole === 'ADMINISTRATOR' ||
-          userRole === 'EMPLOYEE' ||
-          userRole === 'ORGANIZER'
-        "
-        value="employees"
-        >Employees</mat-chip-option
-      >
-      <mat-chip-option
-        *ngIf="userRole === 'ADMINISTRATOR' || userRole === 'ORGANIZER'"
-        value="organizers"
-        >Organizers</mat-chip-option
-      >
-      <!-- <mat-chip>
-        <span color="primary">{{ ticketTypesCount }}</span>
-        {{ ticketTypesCount === 1 ? "Type" : "Types" }}
-      </mat-chip> -->
+    <mat-chip-listbox
+      [(ngModel)]="selectedChip"
+      [multiple]="false"
+      [required]="true"
+    >
+      @for (option of filterOptions; track option) {
+        <mat-chip-option selected [selectable]="selectedChip !== option">{{
+          option
+        }}</mat-chip-option>
+      }
     </mat-chip-listbox>
   </div>
 
-  <div class="profile-content" *ngIf="logs.length !== 0">
+  <div class="profile-content" *ngIf="filteredLogs.length !== 0">
     <mat-card class="profile-card">
       <mat-card-content>
         <div class="table-container">
-          <table mat-table [dataSource]="logs">
+          <table mat-table [dataSource]="filteredLogs">
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef style="width: 25px">ID</th>
               <td mat-cell *matCellDef="let element">{{ element.id }}</td>
             </ng-container>
 
             <ng-container matColumnDef="username">
-              <th mat-header-cell *matHeaderCellDef style="width: 75px">
+              <th mat-header-cell *matHeaderCellDef style="width: 100px">
                 User
               </th>
               <td mat-cell *matCellDef="let element">
                 <span class="number-mono">
-                  {{ element.username == "" ? "system" : element.username }}
+                  {{
+                    ((element.role | slice: 0 : 2) || "") +
+                      " " +
+                      (element.username || "SYSTEM")
+                  }}
                 </span>
               </td>
             </ng-container>
@@ -64,10 +57,27 @@
             </ng-container>
 
             <ng-container matColumnDef="message">
-              <th mat-header-cell *matHeaderCellDef style="width: 200px">
-                User
+              <th mat-header-cell *matHeaderCellDef style="width: 100px">
+                Message
               </th>
-              <td mat-cell *matCellDef="let element">{{ element.message }}</td>
+              <td mat-cell *matCellDef="let element">
+                {{
+                  element.message.length > 20
+                    ? (element.message | slice: 0 : 20) + "..."
+                    : element.message
+                }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef style="width: 40px"></th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button (click)="onViewClick(element)">
+                  <mat-icon class="material-symbols-outlined" color="primary">
+                    visibility
+                  </mat-icon>
+                </button>
+              </td>
             </ng-container>
 
             <tr
@@ -83,5 +93,17 @@
 
   <div class="empty-list" *ngIf="!logs || logs.length === 0">
     <p>No logs in the system.</p>
+  </div>
+
+  <div class="empty-list" *ngIf="!logs || logs.length === 0">
+    <p>No logs in the system.</p>
+  </div>
+  <div
+    class="empty-list"
+    *ngIf="
+      logs && logs.length > 0 && (!filteredLogs || filteredLogs.length === 0)
+    "
+  >
+    <p>There are no logs that match the selected filter.</p>
   </div>
 </div>

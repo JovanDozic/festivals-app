@@ -1,6 +1,9 @@
 package dto
 
-import dto "backend/internal/dto/common"
+import (
+	dto "backend/internal/dto/common"
+	"time"
+)
 
 type HealthCheckResponse struct {
 	ServiceName string `json:"service_name"`
@@ -52,4 +55,13 @@ type UserListResponse struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	Role      string `json:"role"`
+}
+
+type LogResponse struct {
+	ID        uint      `json:"id"`
+	Username  *string   `json:"username"`
+	Role      *string   `json:"role"`
+	Message   string    `json:"message"`
+	Type      string    `json:"type"`
+	CreatedAt time.Time `json:"createdAt"`
 }

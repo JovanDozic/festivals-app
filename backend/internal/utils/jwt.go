@@ -112,12 +112,13 @@ func AuthEmployeeRole(c context.Context) bool {
 	return claims.Role == string(modelsUser.RoleEmployee)
 }
 
-func GetUsername(c context.Context) string {
+func AuthGetRole(c context.Context) (bool, *modelsUser.UserRole) {
 	claims, ok := c.Value(UserKey).(*Claims)
 	if !ok {
-		return ""
+		return false, nil
 	}
-	return claims.Username
+	role := modelsUser.UserRole(claims.Role)
+	return true, &role
 }
 
 func Auth(c context.Context) bool {
@@ -125,10 +126,10 @@ func Auth(c context.Context) bool {
 	return ok
 }
 
-func AuthStaffRole(c context.Context) bool {
+func GetUsername(c context.Context) string {
 	claims, ok := c.Value(UserKey).(*Claims)
 	if !ok {
-		return false
+		return ""
 	}
-	return claims.Role == string(modelsUser.RoleEmployee) || claims.Role == string(modelsUser.RoleOrganizer) || claims.Role == string(modelsUser.RoleAdmin)
+	return claims.Username
 }

@@ -13,11 +13,13 @@ import { Log } from '../../../models/common/log.model';
 import { LogsService } from '../../../services/user/logs.service';
 import { UserService } from '../../../services/user/user.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-all-logs',
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatTooltipModule,
     MatIconModule,
@@ -35,16 +37,50 @@ export class AllLogsComponent implements OnInit {
   private logService = inject(LogsService);
   private authService = inject(AuthService);
 
+  filterOptions: string[] = ['All'];
+  selectedChip = 'All';
+
   userRole: string = '';
   logs: Log[] = [];
-  displayedColumns = ['id', 'username', 'createdAt', 'message'];
+  displayedColumns = ['id', 'username', 'createdAt', 'message', 'actions'];
 
   ngOnInit() {
     this.userRole = this.authService.getUserRole() ?? 'ADMINISTRATOR';
+    this.setFilterOptions();
+    this.logService.getLogs().subscribe((logs) => (this.logs = logs));
+  }
 
-    this.logService.getLogs().subscribe((logs) => {
-      console.log(logs);
-      this.logs = logs;
-    });
+  private setFilterOptions() {
+    const roleFilters = {
+      ADMINISTRATOR: [
+        'All',
+        'System',
+        'Administrators',
+        'Attendees',
+        'Employees',
+        'Organizers',
+      ],
+      EMPLOYEE: ['All', 'Employees', 'Attendees'],
+      ORGANIZER: ['All', 'Organizers', 'Employees', 'Attendees'],
+    };
+    this.filterOptions =
+      roleFilters[this.userRole as keyof typeof roleFilters] ??
+      this.filterOptions;
+  }
+
+  get filteredLogs(): Log[] {
+    if (this.selectedChip === 'All') {
+      return this.logs;
+    }
+    if (this.selectedChip === 'System') {
+      return this.logs.filter((log) => !log.role);
+    }
+    return this.logs.filter(
+      (log) => log.role === this.selectedChip.slice(0, -1).toUpperCase(),
+    );
+  }
+
+  onViewClick(log: Log) {
+    throw new Error('Method not implemented.');
   }
 }
