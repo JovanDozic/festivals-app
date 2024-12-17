@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>View Log</h2>
+
+<mat-dialog-content *ngIf="this.log">
+  <span class="icon-property">
+    <mat-icon class="material-symbols-outlined" color="primary"> tag </mat-icon>
+    <span class="number-mono">{{ this.log.id }}</span>
+  </span>
+  <span class="icon-property">
+    <mat-icon class="material-symbols-outlined" color="primary">
+      calendar_month
+    </mat-icon>
+    <span class="number-mono">{{
+      this.log.createdAt | date: "dd-MMM-yyyy HH:mm:ss"
+    }}</span>
+  </span>
+  <span class="icon-property" *ngIf="this.log.username">
+    <mat-icon class="material-symbols-outlined" color="primary">
+      account_circle
+    </mat-icon>
+    User:
+    <b
+      ><span class="number-mono">{{ this.log.username }}</span></b
+    >
+  </span>
+  <span
+    class="icon-property continued"
+    *ngIf="this.log.username && this.log.role"
+  >
+    <mat-icon class="material-symbols-outlined" color="primary"> </mat-icon>
+    <span class="number-mono">{{ this.log.role }}</span>
+  </span>
+
+  <span class="icon-property">
+    <mat-icon class="material-symbols-outlined" color="primary">
+      list
+    </mat-icon>
+    Message: <b>{{ this.log.message }}</b>
+  </span>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+</mat-dialog-actions>

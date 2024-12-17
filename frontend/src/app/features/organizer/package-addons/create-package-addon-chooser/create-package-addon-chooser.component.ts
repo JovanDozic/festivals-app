@@ -1,18 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 
 interface Category {
@@ -25,20 +17,11 @@ interface Category {
   selector: 'app-create-package-addon-chooser',
   imports: [
     FormsModule,
-    CommonModule,
-    ReactiveFormsModule,
     MatInputModule,
-    MatFormFieldModule,
     MatButtonModule,
     MatCardModule,
-    MatDatepickerModule,
-    MatGridListModule,
     MatIconModule,
-    MatTabsModule,
-    MatStepperModule,
-    MatSlideToggleModule,
     MatDialogModule,
-    MatSelectModule,
     MatRadioModule,
   ],
   templateUrl: './create-package-addon-chooser.component.html',

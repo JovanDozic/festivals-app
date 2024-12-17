@@ -68,7 +68,7 @@ const staffRoutes: Routes = [
       {
         path: 'logs',
         loadComponent: () =>
-          import('./features/user/all-logs/all-logs.component').then(
+          import('./features/user/user-logs/all-logs/all-logs.component').then(
             (c) => c.AllLogsComponent,
           ),
         title: 'Logs',
