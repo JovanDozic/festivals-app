@@ -54,4 +54,11 @@ export class AccountComponent implements OnInit {
       });
     }
   }
+
+  onViewFestivalClick() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.router.navigate([`/admin/users/${id}/festivals`]);
+    }
+  }
 }

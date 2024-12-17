@@ -19,6 +19,7 @@ import (
 type FestivalHandler interface {
 	Create(w http.ResponseWriter, r *http.Request)
 	GetByOrganizer(w http.ResponseWriter, r *http.Request)
+	GetByOrganizerById(w http.ResponseWriter, r *http.Request)
 	GetByEmployee(w http.ResponseWriter, r *http.Request)
 	GetAll(w http.ResponseWriter, r *http.Request)
 	GetById(w http.ResponseWriter, r *http.Request)
@@ -146,6 +147,43 @@ func (h *festivalHandler) GetByOrganizer(w http.ResponseWriter, r *http.Request)
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivalsResponse.Festivals}, nil)
 	log.Println("festivals retrieved successfully for organizer", utils.GetUsername(r.Context()))
+}
+
+func (h *festivalHandler) GetByOrganizerById(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.AuthAdminRole(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	organizerId, err := GetIDParamFromRequest(r, "organizerId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	}
+
+	festivals, err := h.festivalService.GetByOrganizerById(organizerId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	festivalsResponse := dtoFestival.FestivalsResponse{
+		Festivals: make([]dtoFestival.FestivalResponse, len(festivals)),
+	}
+
+	for i, festival := range festivals {
+		images, err := h.festivalService.GetImages(festival.ID)
+		if err != nil {
+			log.Println("error:", err)
+			continue
+		}
+		festivalsResponse.Festivals[i] = MapFestivalToResponse(festival, images)
+	}
+
+	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivalsResponse.Festivals}, nil)
+	log.Printf("festivals retrieved successfully for organizer ID: %d by admin: %s", organizerId, utils.GetUsername(r.Context()))
 }
 
 func (h *festivalHandler) GetAll(w http.ResponseWriter, r *http.Request) {

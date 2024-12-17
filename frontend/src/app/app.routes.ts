@@ -353,6 +353,14 @@ const adminRoutes: Routes = [
           ),
         title: 'Users',
       },
+      {
+        path: 'admin/users/:id/festivals',
+        loadComponent: () =>
+          import(
+            './features/admin/organizer-festivals/organizer-festivals.component'
+          ).then((c) => c.OrganizerFestivalsComponent),
+        title: "Organizer's Festivals",
+      },
     ],
   },
 ];

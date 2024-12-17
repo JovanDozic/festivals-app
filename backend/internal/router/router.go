@@ -53,6 +53,7 @@ func Init(c *container.Container) *mux.Router {
 	pR.HandleFunc("/festival", c.Handlers.Festival.Create).Methods(http.MethodPost)
 	pR.HandleFunc("/festival/attendee", c.Handlers.Festival.GetAll).Methods(http.MethodGet)
 	pR.HandleFunc("/festival/organizer", c.Handlers.Festival.GetByOrganizer).Methods(http.MethodGet)
+	pR.HandleFunc("/festival/organizer/{organizerId}", c.Handlers.Festival.GetByOrganizerById).Methods(http.MethodGet)
 	pR.HandleFunc("/festival/employee", c.Handlers.Festival.GetByEmployee).Methods(http.MethodGet)
 	pR.HandleFunc("/festival/{festivalId}", c.Handlers.Festival.GetById).Methods(http.MethodGet)
 	pR.HandleFunc("/festival/{festivalId}", c.Handlers.Festival.Update).Methods(http.MethodPut)
