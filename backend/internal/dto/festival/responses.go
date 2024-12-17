@@ -28,6 +28,10 @@ type FestivalPropCountResponse struct {
 	Count      int  `json:"count"`
 }
 
+type PropCountResponse struct {
+	Count int `json:"count"`
+}
+
 // this one returns only the current price
 type ItemResponse struct {
 	ItemId          uint       `json:"itemId"`

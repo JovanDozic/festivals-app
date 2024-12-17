@@ -157,4 +157,12 @@ export class FestivalService {
       .get<{ festivals: Festival[] }>(`${this.apiUrl}/festival/organizer/${id}`)
       .pipe(map((response) => response.festivals));
   }
+
+  getFestivalsCountByOrganizerId(id: number): Observable<number> {
+    return this.http
+      .get<FestivalPropCountResponse>(
+        `${this.apiUrl}/festival/organizer/${id}/count`,
+      )
+      .pipe(map((response) => response.count));
+  }
 }

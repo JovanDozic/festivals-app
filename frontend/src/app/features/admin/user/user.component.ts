@@ -14,6 +14,7 @@ import {
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FestivalService } from '../../../services/festival/festival.service';
 
 @Component({
   selector: 'app-user',
@@ -32,14 +33,27 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AccountComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private authService = inject(AuthService);
+  private festivalService = inject(FestivalService);
   private userService = inject(UserService);
   readonly dialog = inject(MatDialog);
 
   userProfile: UserProfileResponse | null = null;
+  festivalsCount: number = 0;
 
   ngOnInit() {
     this.getUserProfile();
+    this.loadFestivalsCount();
+  }
+
+  loadFestivalsCount() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.festivalService
+        .getFestivalsCountByOrganizerId(Number(id))
+        .subscribe((response) => {
+          this.festivalsCount = response;
+        });
+    }
   }
 
   goBack() {
@@ -51,6 +65,9 @@ export class AccountComponent implements OnInit {
     if (id) {
       this.userService.getUserById(Number(id)).subscribe((response) => {
         this.userProfile = response;
+        if (this.userProfile.role === 'ORGANIZER') {
+          this.loadFestivalsCount();
+        }
       });
     }
   }

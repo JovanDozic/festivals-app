@@ -19,13 +19,22 @@
 .profile-content {
   display: flex;
   flex-direction: row;
-  gap: 40px;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
 .profile-card {
   padding: 16px;
   width: 100%;
+  max-width: calc(100% / 2 - 32px);
+}
+
+.count-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
 }
 
 h1 {

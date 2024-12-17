@@ -19,7 +19,8 @@ import (
 type FestivalHandler interface {
 	Create(w http.ResponseWriter, r *http.Request)
 	GetByOrganizer(w http.ResponseWriter, r *http.Request)
-	GetByOrganizerById(w http.ResponseWriter, r *http.Request)
+	GetByOrganizerId(w http.ResponseWriter, r *http.Request)
+	GetCountByOrganizerId(w http.ResponseWriter, r *http.Request)
 	GetByEmployee(w http.ResponseWriter, r *http.Request)
 	GetAll(w http.ResponseWriter, r *http.Request)
 	GetById(w http.ResponseWriter, r *http.Request)
@@ -149,7 +150,7 @@ func (h *festivalHandler) GetByOrganizer(w http.ResponseWriter, r *http.Request)
 	log.Println("festivals retrieved successfully for organizer", utils.GetUsername(r.Context()))
 }
 
-func (h *festivalHandler) GetByOrganizerById(w http.ResponseWriter, r *http.Request) {
+func (h *festivalHandler) GetByOrganizerId(w http.ResponseWriter, r *http.Request) {
 
 	if !utils.AuthAdminRole(r.Context()) {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
@@ -162,7 +163,7 @@ func (h *festivalHandler) GetByOrganizerById(w http.ResponseWriter, r *http.Requ
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 	}
 
-	festivals, err := h.festivalService.GetByOrganizerById(organizerId)
+	festivals, err := h.festivalService.GetByOrganizerId(organizerId)
 	if err != nil {
 		log.Println("error:", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -184,6 +185,33 @@ func (h *festivalHandler) GetByOrganizerById(w http.ResponseWriter, r *http.Requ
 
 	utils.WriteJSON(w, http.StatusOK, utils.Envelope{"festivals": festivalsResponse.Festivals}, nil)
 	log.Printf("festivals retrieved successfully for organizer ID: %d by admin: %s", organizerId, utils.GetUsername(r.Context()))
+}
+
+func (h *festivalHandler) GetCountByOrganizerId(w http.ResponseWriter, r *http.Request) {
+
+	if !utils.Auth(r.Context()) {
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		return
+	}
+
+	organizerId, err := GetIDParamFromRequest(r, "organizerId")
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	}
+
+	count, err := h.festivalService.GetCountByOrganizerId(organizerId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, dtoFestival.PropCountResponse{
+		Count: count,
+	}, nil)
+	log.Println("festivals count retrieved successfully for organizer:", organizerId)
+
 }
 
 func (h *festivalHandler) GetAll(w http.ResponseWriter, r *http.Request) {

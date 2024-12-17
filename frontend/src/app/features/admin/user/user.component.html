@@ -23,6 +23,14 @@
       <mat-card-content>
         <span class="icon-property">
           <mat-icon class="material-symbols-outlined" color="primary">
+            admin_panel_settings
+          </mat-icon>
+          <strong>Role:</strong>
+          <span class="number-mono">{{ userProfile.role }}</span>
+        </span>
+
+        <span class="icon-property">
+          <mat-icon class="material-symbols-outlined" color="primary">
             horizontal_rule
           </mat-icon>
           <strong>Username:</strong>
@@ -100,6 +108,24 @@
       </mat-card-content>
     </mat-card>
 
-    <button mat-button (click)="onViewFestivalClick()">View festivals</button>
+    <mat-card
+      class="profile-card count-card"
+      *ngIf="userProfile.role === 'ORGANIZER'"
+    >
+      <mat-card-title>Festivals</mat-card-title>
+      <mat-card-content>
+        <span class="big-card-count"> {{ festivalsCount }}</span>
+      </mat-card-content>
+      <mat-card-actions>
+        <button
+          class="main-card-action"
+          mat-button
+          color="primary"
+          (click)="onViewFestivalClick()"
+        >
+          View
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
 </div>
