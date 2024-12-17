@@ -9,7 +9,9 @@ import {
 } from '@angular/material/dialog';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -27,22 +29,35 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import {
+  MatOptionModule,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
 import {
   ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { forkJoin, map, Observable, of } from 'rxjs';
+import { forkJoin, map, Observable, of, startWith } from 'rxjs';
 import { ImageService } from '../../../services/image/image.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import * as countries from 'i18n-iso-countries';
+import enLocale from 'i18n-iso-countries/langs/en.json';
+
+import { MatSelectModule } from '@angular/material/select';
 
 interface ImagePreview {
   id?: number;
   file?: File;
   previewUrl: string | ArrayBuffer | null;
   isNew: boolean;
+}
+
+interface Country {
+  name: string;
+  iso3: string;
 }
 
 @Component({
@@ -65,6 +80,9 @@ interface ImagePreview {
     MatDialogActions,
     MatTabsModule,
     MatProgressSpinnerModule,
+    NgxMatSelectSearchModule,
+    MatOptionModule,
+    MatSelectModule,
   ],
   providers: [provideNativeDateAdapter()],
 })
@@ -82,11 +100,18 @@ export class EditFestivalComponent implements OnInit {
   basicInfoFormGroup: FormGroup;
   addressFormGroup: FormGroup;
 
+  countryFilterCtrl: FormControl = new FormControl('');
+
+  countriesList: Country[] = [];
+  filteredCountries$: Observable<Country[]>;
+
   images: ImagePreview[] = [];
   imagesToDelete: number[] = [];
   isUploading = false;
 
   constructor() {
+    countries.registerLocale(enLocale);
+
     this.basicInfoFormGroup = this.fb.group({
       nameCtrl: ['', Validators.required],
       descriptionCtrl: ['', Validators.required],
@@ -103,6 +128,35 @@ export class EditFestivalComponent implements OnInit {
       postalCodeCtrl: ['', Validators.required],
       countryISO3Ctrl: ['', [Validators.required, Validators.maxLength(3)]],
     });
+
+    this.countriesList = Object.entries(
+      countries.getNames('en', { select: 'official' }),
+    )
+      .map(([iso2, name]) => {
+        const iso3 = countries.alpha2ToAlpha3(iso2);
+        if (iso3) {
+          return { name, iso3 };
+        }
+        return null;
+      })
+      .filter((country): country is Country => country !== null);
+
+    // Setup filtered countries observable using the search FormControl
+    this.filteredCountries$ = this.countryFilterCtrl.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterCountries(value || '')),
+    );
+  }
+
+  private _filterCountries(value: string): Country[] {
+    const filterValue = value.toLowerCase();
+    return this.countriesList.filter((country) =>
+      country.name.toLowerCase().includes(filterValue),
+    );
+  }
+
+  get countryISO3Ctrl(): FormControl {
+    return this.addressFormGroup.get('countryISO3Ctrl') as FormControl;
   }
 
   ngOnInit() {
@@ -130,6 +184,10 @@ export class EditFestivalComponent implements OnInit {
         isNew: false,
       }));
     }
+  }
+
+  compareIso3(c1: string, c2: string): boolean {
+    return c1 === c2;
   }
 
   saveChanges() {

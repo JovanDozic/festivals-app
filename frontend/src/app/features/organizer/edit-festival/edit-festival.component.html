@@ -123,9 +123,25 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Country (ISO3)</mat-label>
-            <input matInput formControlName="countryISO3Ctrl" required />
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Country</mat-label>
+            <mat-select
+              formControlName="countryISO3Ctrl"
+              required
+              [compareWith]="compareIso3"
+            >
+              <ngx-mat-select-search
+                [formControl]="countryFilterCtrl"
+                placeholderLabel="Search country"
+                noEntriesFoundLabel="No country found"
+              ></ngx-mat-select-search>
+              <mat-option
+                *ngFor="let country of filteredCountries$ | async"
+                [value]="country.iso3"
+              >
+                {{ country.name }}
+              </mat-option>
+            </mat-select>
             <mat-error *ngIf="addressFormGroup.get('countryISO3Ctrl')?.invalid">
               Country is <strong>required</strong>.
             </mat-error>
