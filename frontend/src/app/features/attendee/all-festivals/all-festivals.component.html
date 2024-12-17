@@ -153,7 +153,21 @@
     </mat-card>
   </div>
 
-  <div class="empty-list" *ngIf="!isLoading && festivals.length === 0">
-    <p>There are no available festivals.</p>
+  <div
+    class="empty-list"
+    *ngIf="!isLoading && (!festivals || festivals.length === 0)"
+  >
+    <p>There are no festivals in the system.</p>
+  </div>
+  <div
+    class="empty-list"
+    *ngIf="
+      !isLoading &&
+      festivals &&
+      festivals.length > 0 &&
+      (!filteredFestivals || filteredFestivals.length === 0)
+    "
+  >
+    <p>There are no festivals that match the selected filter.</p>
   </div>
 </div>
