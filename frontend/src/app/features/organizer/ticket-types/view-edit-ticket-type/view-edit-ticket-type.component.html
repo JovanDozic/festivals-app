@@ -32,6 +32,14 @@
               required
             />
           </mat-form-field>
+          <mat-error
+            *ngIf="
+              infoFormGroup.get('availableNumberCtrl')?.hasError('lessThanSold')
+            "
+          >
+            Available Number can not be less than number of already sold ticket
+            types.
+          </mat-error>
         </div>
       </form>
     </mat-tab>

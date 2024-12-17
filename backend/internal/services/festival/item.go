@@ -192,6 +192,11 @@ func (s *itemService) UpdateItemAndPrices(request dto.UpdateItemRequest) error {
 		return err
 	}
 
+	// check if available number changed, if so, update remaining number
+	if itemDb.AvailableNumber != request.AvailableNumber {
+		itemDb.RemainingNumber += request.AvailableNumber - itemDb.AvailableNumber
+	}
+
 	// update item
 	itemDb.Name = request.Name
 	itemDb.Description = request.Description

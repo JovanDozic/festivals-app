@@ -85,7 +85,20 @@ export class ViewEditTicketTypeComponent implements OnInit {
     this.infoFormGroup = this.fb.group({
       nameCtrl: ['', Validators.required],
       descriptionCtrl: ['', Validators.required],
-      availableNumberCtrl: [0, Validators.required],
+      availableNumberCtrl: [
+        0,
+        [
+          Validators.required,
+          (control: any) => {
+            const value = control.value;
+            const availableNumber = this.ticketType?.availableNumber ?? 0;
+            const remainingNumber = this.ticketType?.remainingNumber ?? 0;
+            return value < availableNumber - remainingNumber
+              ? { lessThanSold: true }
+              : null;
+          },
+        ],
+      ],
     });
 
     this.fixedPriceFormGroup = this.fb.group({
