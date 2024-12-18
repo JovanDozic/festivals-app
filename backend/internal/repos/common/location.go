@@ -3,6 +3,7 @@ package common
 import (
 	"backend/internal/models"
 	modelsCommon "backend/internal/models/common"
+	"errors"
 	"log"
 
 	"gorm.io/gorm"
@@ -55,9 +56,17 @@ func (r *locationRepo) UpdateCity(city *modelsCommon.City) error {
 }
 
 func (r *locationRepo) CreateAddress(address *modelsCommon.Address) error {
+
+	var country modelsCommon.Country
+	err := r.db.Where("iso3 = ?", address.City.Country.ISO3).First(&country).Error
+	if err != nil {
+		return errors.New("country not found")
+	}
+
 	if err := r.db.Omit("Country").FirstOrCreate(&address.City, modelsCommon.City{
 		Name:      address.City.Name,
-		CountryID: address.City.CountryID,
+		CountryID: country.ID,
+		Country:   country,
 	}).Error; err != nil {
 		return err
 	}

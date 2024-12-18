@@ -14,10 +14,12 @@ import { CreateAddressRequest } from '../../../models/common/create-address-requ
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { CountryPickerComponent } from '../../../shared/country-picker/country-picker.component';
 
 @Component({
   selector: 'app-register-attendee',
   imports: [
+    CountryPickerComponent,
     CommonModule,
     ReactiveFormsModule,
     MatInputModule,
