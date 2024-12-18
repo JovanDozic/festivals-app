@@ -25,7 +25,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import { CustomDateAdapter } from '../../../../shared/date-formats/date-adapter';
+import { CUSTOM_DATE_FORMATS } from '../../../../shared/date-formats/date-formats';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
@@ -60,7 +66,11 @@ import { CityRequest } from '../../../../models/common/address.model';
     './create-transport-package-addon.component.scss',
     '../../../../app.component.scss',
   ],
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+  ],
 })
 export class CreateTransportPackageAddonComponent {
   private fb = inject(FormBuilder);

@@ -13,7 +13,13 @@ import { CreateUpdateUserProfileRequest } from '../../../models/user/user-reques
 import { CreateAddressRequest } from '../../../models/common/create-address-request.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import { CustomDateAdapter } from '../../../shared/date-formats/date-adapter';
+import { CUSTOM_DATE_FORMATS } from '../../../shared/date-formats/date-formats';
 import { CountryPickerComponent } from '../../../shared/country-picker/country-picker.component';
 
 @Component({
@@ -34,7 +40,11 @@ import { CountryPickerComponent } from '../../../shared/country-picker/country-p
     './register-attendee.component.scss',
     '../../../app.component.scss',
   ],
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+  ],
 })
 export class RegisterAttendeeComponent {
   private fb = inject(FormBuilder);

@@ -21,7 +21,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UserService } from '../../../../services/user/user.service';
 import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
@@ -31,6 +30,13 @@ import {
   UpdateStaffProfileRequest,
 } from '../../../../models/user/user-requests';
 import { forkJoin } from 'rxjs';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import { CustomDateAdapter } from '../../../../shared/date-formats/date-adapter';
+import { CUSTOM_DATE_FORMATS } from '../../../../shared/date-formats/date-formats';
 
 @Component({
   selector: 'app-edit-employee',
@@ -54,7 +60,11 @@ import { forkJoin } from 'rxjs';
     './edit-employee.component.scss',
     '../../../../app.component.scss',
   ],
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+  ],
 })
 export class EditEmployeeComponent implements OnInit {
   private fb = inject(FormBuilder);

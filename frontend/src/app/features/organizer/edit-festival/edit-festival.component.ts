@@ -31,7 +31,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import {
   MatOptionModule,
-  provideNativeDateAdapter,
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
 } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
@@ -47,6 +49,8 @@ import * as countries from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
 import { MatSelectModule } from '@angular/material/select';
 import { CountryPickerComponent } from '../../../shared/country-picker/country-picker.component';
+import { CustomDateAdapter } from '../../../shared/date-formats/date-adapter';
+import { CUSTOM_DATE_FORMATS } from '../../../shared/date-formats/date-formats';
 
 interface ImagePreview {
   id?: number;
@@ -80,7 +84,11 @@ interface ImagePreview {
     MatOptionModule,
     MatSelectModule,
   ],
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+  ],
 })
 export class EditFestivalComponent implements OnInit {
   private fb = inject(FormBuilder);
