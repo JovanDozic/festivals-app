@@ -53,8 +53,15 @@ export class FestivalOrdersComponent implements OnInit {
   isLoading = true;
   orders: OrderPreviewDTO[] = [];
 
-  filterOptions: string[] = [];
-  selectedChip = '';
+  filterOptions: string[] = [
+    'All',
+    'Pending',
+    'Issued',
+    'Activated',
+    'Help Requested',
+    'Rejected',
+  ];
+  selectedChip = 'All';
 
   constructor() {}
 
@@ -98,34 +105,6 @@ export class FestivalOrdersComponent implements OnInit {
         next: (orders) => {
           this.orders = orders;
           this.isLoading = false;
-
-          this.filterOptions = [];
-          this.filterOptions.push('All');
-          this.filterOptions.push(
-            'Pending ' + orders.filter((order) => !order.braceletStatus).length,
-          );
-          this.filterOptions.push(
-            'Issued ' +
-              orders.filter((order) => order.braceletStatus === 'ISSUED')
-                .length,
-          );
-          this.filterOptions.push(
-            'Activated ' +
-              orders.filter((order) => order.braceletStatus === 'ACTIVATED')
-                .length,
-          );
-          this.filterOptions.push(
-            'Help Requested ' +
-              orders.filter(
-                (order) => order.braceletStatus === 'HELP_REQUESTED',
-              ).length,
-          );
-          this.filterOptions.push(
-            'Rejected ' +
-              orders.filter((order) => order.braceletStatus === 'REJECTED')
-                .length,
-          );
-          this.selectedChip = 'All';
         },
         error: (error) => {
           console.log(error);
