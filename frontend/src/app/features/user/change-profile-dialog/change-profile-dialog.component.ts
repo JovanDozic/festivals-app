@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { UserService } from '../../../services/user/user.service';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-change-profile-dialog',

@@ -130,11 +130,13 @@
               required
               [compareWith]="compareIso3"
             >
-              <ngx-mat-select-search
-                [formControl]="countryFilterCtrl"
-                placeholderLabel="Search country"
-                noEntriesFoundLabel="No country found"
-              ></ngx-mat-select-search>
+              <mat-option>
+                <ngx-mat-select-search
+                  [formControl]="countryFilterCtrl"
+                  placeholderLabel="Search country"
+                  noEntriesFoundLabel="No country found"
+                ></ngx-mat-select-search>
+              </mat-option>
               <mat-option
                 *ngFor="let country of filteredCountries$ | async"
                 [value]="country.iso3"

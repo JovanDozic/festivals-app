@@ -24,7 +24,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
-import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { OrderService } from '../../../../services/festival/order.service';

@@ -20,7 +20,7 @@ import {
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { Router } from '@angular/router';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { ImageService } from '../../../services/image/image.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 

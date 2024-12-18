@@ -24,7 +24,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UserService } from '../../../../services/user/user.service';
-import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { Employee } from '../../../../models/festival/festival.model';
 import {
   UpdateStaffEmailRequest,

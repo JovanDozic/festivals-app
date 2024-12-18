@@ -30,7 +30,7 @@ import {
 import { MatTabsModule } from '@angular/material/tabs';
 import { UserService } from '../../../services/user/user.service';
 import { CreateProfileRequest } from '../../../models/user/user-requests';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { MatSelectModule } from '@angular/material/select';
 
 export interface Role {

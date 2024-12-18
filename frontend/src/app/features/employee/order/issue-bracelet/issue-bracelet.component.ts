@@ -26,7 +26,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ItemService } from '../../../../services/festival/item.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';

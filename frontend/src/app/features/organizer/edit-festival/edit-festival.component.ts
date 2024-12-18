@@ -34,7 +34,7 @@ import {
   provideNativeDateAdapter,
 } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import {
   ConfirmationDialogComponent,
   ConfirmationDialogData,

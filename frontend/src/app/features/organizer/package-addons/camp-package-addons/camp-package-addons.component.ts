@@ -5,7 +5,7 @@ import {
 } from '../../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FestivalService } from '../../../../services/festival/festival.service';
-import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';

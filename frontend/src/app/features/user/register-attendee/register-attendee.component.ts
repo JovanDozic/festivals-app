@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../../services/auth/auth.service';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { UserService } from '../../../services/user/user.service';
 import { CreateUpdateUserProfileRequest } from '../../../models/user/user-requests';
 import { CreateAddressRequest } from '../../../models/common/create-address-request.model';
