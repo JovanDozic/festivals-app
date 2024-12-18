@@ -28,7 +28,7 @@ interface Country {
     MatOptionModule,
   ],
   templateUrl: './country-picker.component.html',
-  styleUrls: ['./country-picker.component.scss', '../../app.component.scss'],
+  styleUrls: ['./country-picker.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

@@ -1,10 +1,11 @@
-<mat-form-field appearance="outline" class="full-width">
+<mat-form-field appearance="outline" style="width: 100%">
   <mat-label>Country</mat-label>
   <mat-select
     [value]="selectedCountryISO3"
     (selectionChange)="onSelectionChange($event)"
     required
     [compareWith]="compareIso3"
+    panelClass="mat-country-field"
   >
     <mat-option>
       <ngx-mat-select-search

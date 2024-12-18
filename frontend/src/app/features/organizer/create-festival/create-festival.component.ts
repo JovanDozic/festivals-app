@@ -23,6 +23,7 @@ import { Router } from '@angular/router';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { ImageService } from '../../../services/image/image.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CountryPickerComponent } from '../../../shared/country-picker/country-picker.component';
 
 interface ImagePreview {
   file: File;
@@ -34,6 +35,7 @@ interface ImagePreview {
   templateUrl: './create-festival.component.html',
   styleUrls: ['./create-festival.component.scss'],
   imports: [
+    CountryPickerComponent,
     CommonModule,
     ReactiveFormsModule,
     MatInputModule,

@@ -61,6 +61,13 @@ mat-card-subtitle {
   justify-content: space-between;
 }
 
+.card-content-list {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
 mat-card-actions {
   margin-top: 5px;
 }
