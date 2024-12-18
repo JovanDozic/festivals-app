@@ -12,11 +12,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatTableModule } from '@angular/material/table';
 import { MatStepperModule } from '@angular/material/stepper';
 import {
   FormBuilder,
@@ -38,10 +36,12 @@ import { firstValueFrom, Observable, throwError } from 'rxjs';
 import { OrderService } from '../../../../services/festival/order.service';
 import { StorePaymentDialogComponent } from '../store-payment-dialog/store-payment-dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CountryPickerComponent } from '../../../../shared/country-picker/country-picker.component';
 
 @Component({
   selector: 'app-store-ticket',
   imports: [
+    CountryPickerComponent,
     CommonModule,
     ReactiveFormsModule,
     MatButtonModule,

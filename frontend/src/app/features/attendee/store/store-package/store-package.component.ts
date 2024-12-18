@@ -45,10 +45,12 @@ import { StorePaymentDialogComponent } from '../store-payment-dialog/store-payme
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CountryResponse } from '../../../../models/common/address.model';
 import { MatSelectModule } from '@angular/material/select';
+import { CountryPickerComponent } from '../../../../shared/country-picker/country-picker.component';
 
 @Component({
   selector: 'app-store-package',
   imports: [
+    CountryPickerComponent,
     CommonModule,
     ReactiveFormsModule,
     FormsModule,

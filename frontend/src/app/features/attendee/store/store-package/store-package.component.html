@@ -557,10 +557,11 @@
                   <input matInput formControlName="postalCodeCtrl" />
                 </mat-form-field>
 
-                <mat-form-field appearance="outline">
-                  <mat-label>Country (ISO3)</mat-label>
-                  <input matInput formControlName="countryISO3Ctrl" />
-                </mat-form-field>
+                <app-country-picker
+                  formControlName="countryISO3Ctrl"
+                  style="margin-top: 5px"
+                >
+                </app-country-picker>
               </div>
             </mat-card-content>
           </mat-card>
