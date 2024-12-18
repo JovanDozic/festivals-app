@@ -1,0 +1,28 @@
+<mat-form-field appearance="outline" style="width: 100%">
+  <mat-label>Country</mat-label>
+  <mat-select
+    [value]="selectedCountryISO3"
+    (selectionChange)="onSelectionChange($event)"
+    required
+    [compareWith]="compareIso3"
+    panelClass="mat-country-field"
+  >
+    <mat-option>
+      <ngx-mat-select-search
+        [formControl]="countryFilterCtrl"
+        placeholderLabel="Search country"
+        noEntriesFoundLabel="No country found"
+        class="ngx-scroll"
+      ></ngx-mat-select-search>
+    </mat-option>
+    <mat-option
+      *ngFor="let country of filteredCountries$ | async"
+      [value]="country.iso3"
+    >
+      {{ country.name }}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="!selectedCountryISO3">
+    Country is <strong>required</strong>.
+  </mat-error>
+</mat-form-field>

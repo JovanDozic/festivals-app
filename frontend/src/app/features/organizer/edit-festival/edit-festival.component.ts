@@ -9,7 +9,9 @@ import {
 } from '@angular/material/dialog';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -27,16 +29,28 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import {
+  MatOptionModule,
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import {
   ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { forkJoin, map, Observable, of } from 'rxjs';
+import { forkJoin, map, Observable, of, startWith } from 'rxjs';
 import { ImageService } from '../../../services/image/image.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import * as countries from 'i18n-iso-countries';
+import enLocale from 'i18n-iso-countries/langs/en.json';
+import { MatSelectModule } from '@angular/material/select';
+import { CountryPickerComponent } from '../../../shared/country-picker/country-picker.component';
+import { CustomDateAdapter } from '../../../shared/date-formats/date-adapter';
+import { CUSTOM_DATE_FORMATS } from '../../../shared/date-formats/date-formats';
 
 interface ImagePreview {
   id?: number;
@@ -50,6 +64,7 @@ interface ImagePreview {
   templateUrl: './edit-festival.component.html',
   styleUrls: ['./edit-festival.component.scss', '../../../app.component.scss'],
   imports: [
+    CountryPickerComponent,
     CommonModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -65,8 +80,15 @@ interface ImagePreview {
     MatDialogActions,
     MatTabsModule,
     MatProgressSpinnerModule,
+    NgxMatSelectSearchModule,
+    MatOptionModule,
+    MatSelectModule,
   ],
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+  ],
 })
 export class EditFestivalComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -87,6 +109,8 @@ export class EditFestivalComponent implements OnInit {
   isUploading = false;
 
   constructor() {
+    countries.registerLocale(enLocale);
+
     this.basicInfoFormGroup = this.fb.group({
       nameCtrl: ['', Validators.required],
       descriptionCtrl: ['', Validators.required],
@@ -101,7 +125,10 @@ export class EditFestivalComponent implements OnInit {
       apartmentSuiteCtrl: [''],
       cityCtrl: ['', Validators.required],
       postalCodeCtrl: ['', Validators.required],
-      countryISO3Ctrl: ['', [Validators.required, Validators.maxLength(3)]],
+      countryISO3Ctrl: [
+        this.data.address?.countryISO3,
+        [Validators.required, Validators.maxLength(3)],
+      ],
     });
   }
 

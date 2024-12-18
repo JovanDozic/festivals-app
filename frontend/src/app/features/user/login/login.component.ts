@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../../services/auth/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { Router } from '@angular/router';
 
 @Component({

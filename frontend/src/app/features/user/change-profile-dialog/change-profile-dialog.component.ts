@@ -16,8 +16,14 @@ import {
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { UserService } from '../../../services/user/user.service';
-import { provideNativeDateAdapter } from '@angular/material/core';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import { CustomDateAdapter } from '../../../shared/date-formats/date-adapter';
+import { CUSTOM_DATE_FORMATS } from '../../../shared/date-formats/date-formats';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-change-profile-dialog',
@@ -36,7 +42,11 @@ import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
     './change-profile-dialog.component.scss',
     '../../../app.component.scss',
   ],
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+  ],
 })
 export class ChangeProfileDialogComponent implements OnInit {
   private userService = inject(UserService);

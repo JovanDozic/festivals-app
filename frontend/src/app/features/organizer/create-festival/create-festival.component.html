@@ -18,7 +18,7 @@
       <mat-card-content>
         <mat-stepper [linear]="true" #stepper>
           <!-- Step 1: Basic Info -->
-          <mat-step [stepControl]="basicInfoFormGroup" [editable]="false">
+          <mat-step [stepControl]="basicInfoFormGroup" [editable]="true">
             <form [formGroup]="basicInfoFormGroup">
               <ng-template matStepLabel>Basic Info</ng-template>
               <div class="form-fields">
@@ -120,10 +120,11 @@
                   <input matInput formControlName="postalCodeCtrl" />
                 </mat-form-field>
 
-                <mat-form-field appearance="outline">
-                  <mat-label>Country (ISO3)</mat-label>
-                  <input matInput formControlName="countryISO3Ctrl" />
-                </mat-form-field>
+                <app-country-picker
+                  formControlName="countryISO3Ctrl"
+                  style="width: 100%"
+                >
+                </app-country-picker>
               </div>
 
               <button mat-stroked-button (click)="addFestivalAddress()">

@@ -123,13 +123,11 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Country (ISO3)</mat-label>
-            <input matInput formControlName="countryISO3Ctrl" required />
-            <mat-error *ngIf="addressFormGroup.get('countryISO3Ctrl')?.invalid">
-              Country is <strong>required</strong>.
-            </mat-error>
-          </mat-form-field>
+          <app-country-picker
+            formControlName="countryISO3Ctrl"
+            style="margin-top: 15px"
+          >
+          </app-country-picker>
         </div>
       </form>
     </mat-tab>

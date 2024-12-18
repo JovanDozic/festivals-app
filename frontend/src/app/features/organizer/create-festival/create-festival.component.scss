@@ -16,7 +16,7 @@ form {
 
 .form-fields {
   display: flex;
-  justify-content: left;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -46,7 +46,7 @@ mat-card-header {
 
 mat-form-field {
   margin-bottom: 20px;
-  width: 100%;
+  width: 100% !important;
 }
 
 .error-message {
