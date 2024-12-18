@@ -305,3 +305,18 @@ img[mat-card-image] {
 .color-error {
   color: #ff5449;
 }
+
+// * {
+//   &::-webkit-scrollbar {
+//     width: 8px;
+//   }
+
+//   &::-webkit-scrollbar-thumb {
+//     background-color: rgba(0, 0, 0, 0.2);
+//     border-radius: 4px;
+
+//     &:hover {
+//       background-color: rgba(0, 0, 0, 0.4);
+//     }
+//   }
+// }
