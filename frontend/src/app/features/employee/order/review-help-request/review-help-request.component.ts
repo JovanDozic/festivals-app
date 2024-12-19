@@ -69,8 +69,6 @@ export class ReviewHelpRequestComponent implements OnInit {
   order: OrderDTO | null = null;
   helpRequest: ActivationHelpRequestDTO | null = null;
 
-  constructor() {}
-
   ngOnInit(): void {
     this.loadOrder();
     this.loadHelpRequest();

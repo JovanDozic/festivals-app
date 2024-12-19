@@ -13,14 +13,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
 import { UserService } from '../../../../services/user/user.service';
 import { OrderService } from '../../../../services/festival/order.service';
-import {
-  Festival,
-  OrderDTO,
-  OrderPreviewDTO,
-} from '../../../../models/festival/festival.model';
+import { Festival, OrderDTO } from '../../../../models/festival/festival.model';
 import { AddressResponse } from '../../../../models/common/address-response.model';
 import { UserProfileResponse } from '../../../../models/user/user-responses';
 import { IssueBraceletComponent } from '../issue-bracelet/issue-bracelet.component';
+import { ReviewHelpRequestComponent } from '../review-help-request/review-help-request.component';
 
 @Component({
   selector: 'app-order',
@@ -54,8 +51,6 @@ export class OrderComponent implements OnInit {
   order: OrderDTO | null = null;
   userProfile: UserProfileResponse | null = null;
   address: AddressResponse | null = null;
-
-  constructor() {}
 
   ngOnInit() {
     this.loadFestival();
@@ -163,5 +158,27 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  reviewHelpRequest(order: OrderDTO) {}
+  reviewHelpRequest(order: OrderDTO) {
+    const dialogRef = this.dialog.open(ReviewHelpRequestComponent, {
+      data: {
+        festivalId: this.festival?.id,
+        orderId: order.orderId,
+        festivalTicketId: order.festivalTicketId,
+        attendeeUsername: order.attendee.username,
+        braceletId: order.bracelet?.braceletId,
+      },
+      width: '800px',
+      height: '715px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.snackbarService.show(
+          'Activation help request reviewed successfully',
+        );
+        this.loadOrder();
+      }
+    });
+  }
 }

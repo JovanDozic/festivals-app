@@ -43,8 +43,6 @@ export class OrderComponent implements OnInit {
   userProfile: UserProfileResponse | null = null;
   address: AddressResponse | null = null;
 
-  constructor() {}
-
   ngOnInit() {
     this.loadOrder();
     this.loadUser();

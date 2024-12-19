@@ -5,6 +5,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormGroup,
@@ -99,7 +100,7 @@ export class ViewEditTicketTypeComponent implements OnInit {
         0,
         [
           Validators.required,
-          (control: any) => {
+          (control: AbstractControl) => {
             const value = control.value;
             const availableNumber = this.ticketType?.availableNumber ?? 0;
             const remainingNumber = this.ticketType?.remainingNumber ?? 0;

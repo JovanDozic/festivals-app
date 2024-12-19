@@ -39,7 +39,7 @@ import {
   ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { count, firstValueFrom, Observable, throwError } from 'rxjs';
+import { firstValueFrom, Observable, throwError } from 'rxjs';
 import { OrderService } from '../../../../services/festival/order.service';
 import { StorePaymentDialogComponent } from '../store-payment-dialog/store-payment-dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -438,8 +438,7 @@ export class StorePackageComponent implements OnInit {
       await firstValueFrom(this.updateAddress());
       const orderResponse = await firstValueFrom(this.createOrder());
 
-      const orderId =
-        (orderResponse as any).orderId || (orderResponse as any).data?.orderId;
+      const orderId = orderResponse.orderId;
 
       if (orderId) {
         this.openPaymentDialog(orderId);
@@ -455,7 +454,7 @@ export class StorePackageComponent implements OnInit {
     }
   }
 
-  updateProfile(): Observable<any> {
+  updateProfile(): Observable<void> {
     if (this.personalFormGroup.valid) {
       return this.userService.updateUserProfile({
         firstName: this.personalFormGroup.get('firstNameCtrl')?.value,
@@ -469,7 +468,7 @@ export class StorePackageComponent implements OnInit {
     return throwError(() => new Error('Personal form is invalid'));
   }
 
-  updateEmail(): Observable<any> {
+  updateEmail(): Observable<void> {
     if (this.personalFormGroup.valid) {
       return this.userService.updateUserEmail(
         this.personalFormGroup.get('emailCtrl')?.value,
@@ -478,7 +477,7 @@ export class StorePackageComponent implements OnInit {
     return throwError(() => new Error('Email form is invalid'));
   }
 
-  updateAddress(): Observable<any> {
+  updateAddress(): Observable<void> {
     if (this.addressFormGroup.valid) {
       return this.userService.updateUserAddress({
         street: this.addressFormGroup.get('streetCtrl')?.value,
@@ -492,7 +491,9 @@ export class StorePackageComponent implements OnInit {
     return throwError(() => new Error('Address form is invalid'));
   }
 
-  createOrder(): Observable<any> {
+  createOrder(): Observable<{
+    orderId: number;
+  }> {
     if (
       this.selectedTicket &&
       this.festival &&

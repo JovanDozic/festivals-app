@@ -9,10 +9,6 @@ import { FestivalService } from '../../../services/festival/festival.service';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  ConfirmationDialogComponent,
-  ConfirmationDialogData,
-} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({

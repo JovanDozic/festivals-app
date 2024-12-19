@@ -9,9 +9,7 @@ import {
 } from '@angular/material/dialog';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -41,7 +39,7 @@ import {
   ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { forkJoin, map, Observable, of, startWith } from 'rxjs';
+import { forkJoin, map, Observable, of } from 'rxjs';
 import { ImageService } from '../../../services/image/image.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';

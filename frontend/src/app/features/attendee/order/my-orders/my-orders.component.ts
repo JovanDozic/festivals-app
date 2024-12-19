@@ -42,8 +42,6 @@ export class MyOrdersComponent implements OnInit {
   filterOptions: string[] = ['All', 'Upcoming Festivals', 'Past Festivals'];
   selectedChip = 'All';
 
-  constructor() {}
-
   getSkeletonBgColor(): string {
     const isDarkTheme =
       document.documentElement.getAttribute('data-theme') === 'dark';

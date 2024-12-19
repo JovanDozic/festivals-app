@@ -218,8 +218,14 @@ export class CreateTicketTypeComponent {
       this.ticketTypeId &&
       this.data.festivalId
     ) {
+      interface VariablePriceForm {
+        priceCtrl: number;
+        dateFromCtrl: Date;
+        dateToCtrl: Date;
+      }
+
       const variablePrices: VariablePrice[] =
-        this.variablePricesFormArray.value.map((vp: any) => ({
+        this.variablePricesFormArray.value.map((vp: VariablePriceForm) => ({
           price: vp.priceCtrl,
           dateFrom: vp.dateFromCtrl,
           dateTo: vp.dateToCtrl,

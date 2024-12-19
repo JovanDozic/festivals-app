@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { FestivalService } from '../../services/festival/festival.service';
 import { Router } from '@angular/router';
@@ -15,8 +14,8 @@ export class HomeComponent implements OnInit {
   private festivalService = inject(FestivalService);
   private router = inject(Router);
 
-  festivalCount: number = 0;
-  attendeesCount: number = 0;
+  festivalCount = 0;
+  attendeesCount = 0;
 
   ngOnInit(): void {
     this.festivalService.getFestivalsCount().subscribe((response) => {

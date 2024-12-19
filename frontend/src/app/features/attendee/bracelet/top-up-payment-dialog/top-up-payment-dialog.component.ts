@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-top-up-payment-dialog',

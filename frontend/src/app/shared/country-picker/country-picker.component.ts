@@ -1,7 +1,7 @@
-import { Component, OnInit, forwardRef } from '@angular/core';
+import { Component, forwardRef } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import * as countries from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
@@ -43,8 +43,12 @@ export class CountryPickerComponent implements ControlValueAccessor {
   filteredCountries$: Observable<Country[]>;
   selectedCountryISO3: string | null = null;
 
-  private onChange: (value: string | null) => void = () => {};
-  private onTouched: () => void = () => {};
+  private onChange: (value: string | null) => void = () => {
+    // no-op
+  };
+  private onTouched: () => void = () => {
+    // no-op
+  };
 
   constructor() {
     countries.registerLocale(enLocale);
@@ -74,7 +78,6 @@ export class CountryPickerComponent implements ControlValueAccessor {
     );
   }
 
-  // ControlValueAccessor Methods
   writeValue(value: string | null): void {
     this.selectedCountryISO3 = value;
   }
@@ -101,7 +104,6 @@ export class CountryPickerComponent implements ControlValueAccessor {
     this.onTouched();
   }
 
-  // Optional: Comparison function if needed
   compareIso3(c1: string, c2: string): boolean {
     return c1 === c2;
   }

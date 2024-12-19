@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
@@ -44,7 +44,6 @@ export class FestivalOrdersComponent implements OnInit {
   private snackbarService = inject(SnackbarService);
   private orderService = inject(OrderService);
   private festivalService = inject(FestivalService);
-  private dialog = inject(MatDialog);
 
   festival: Festival | null = null;
   isLoading = true;
@@ -55,12 +54,10 @@ export class FestivalOrdersComponent implements OnInit {
     'Pending',
     'Issued',
     'Activated',
-    'Help Requested', // ovo mozda i ne stavljamo ovde jer je tesko to dobaviti u orders
+    'Help Requested',
     'Rejected',
   ];
-  selectedChip = 'All'; // todo: change to activated required
-
-  constructor() {}
+  selectedChip = 'All';
 
   getSkeletonBgColor(): string {
     const isDarkTheme =

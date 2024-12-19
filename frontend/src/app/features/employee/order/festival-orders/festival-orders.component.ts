@@ -16,7 +16,6 @@ import {
 } from '../../../../models/festival/festival.model';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { FormsModule } from '@angular/forms';
-import { ItemService } from '../../../../services/festival/item.service';
 import { FestivalService } from '../../../../services/festival/festival.service';
 import { IssueBraceletComponent } from '../issue-bracelet/issue-bracelet.component';
 import { ReviewHelpRequestComponent } from '../review-help-request/review-help-request.component';
@@ -62,8 +61,6 @@ export class FestivalOrdersComponent implements OnInit {
     'Rejected',
   ];
   selectedChip = 'All';
-
-  constructor() {}
 
   getSkeletonBgColor(): string {
     const isDarkTheme =
