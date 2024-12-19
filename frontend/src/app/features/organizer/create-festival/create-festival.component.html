@@ -163,12 +163,14 @@
               </div>
               <mat-grid-list cols="3" rowHeight="200px">
                 <mat-grid-tile *ngFor="let image of images">
-                  <img
+                  <button
                     class="image-button"
                     (click)="removeImage(image)"
-                    aria-label="Remove image"
-                    [src]="image.previewUrl"
-                  />
+                    (keydown.enter)="removeImage(image)"
+                    [attr.aria-label]="'Remove image'"
+                  >
+                    <img [src]="image.previewUrl" [alt]="'Festival image'" />
+                  </button>
                 </mat-grid-tile>
               </mat-grid-list>
             </div>

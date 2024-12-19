@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Edit Festival</h2>
 
 <mat-dialog-content>
-  <mat-tab-group>
+  <mat-tab-group [selectedIndex]="2">
     <mat-tab label="Basic Information">
       <form [formGroup]="basicInfoFormGroup">
         <ng-template matStepLabel>Basic Info</ng-template>
@@ -136,7 +136,7 @@
       <div class="image-grid">
         <div class="form-fields-image">
           <div>
-            <h2>Images Preview</h2>
+            <h2>Images</h2>
             <p>Click on any image to remove it.</p>
           </div>
           <button mat-stroked-button (click)="fileInput.click()" type="button">
@@ -154,12 +154,14 @@
         </div>
         <mat-grid-list cols="3" rowHeight="170px" class="grid-list">
           <mat-grid-tile *ngFor="let image of images">
-            <img
+            <button
               class="image-button"
               (click)="removeImage(image)"
-              aria-label="Remove image"
-              [src]="image.previewUrl"
-            />
+              (keydown.enter)="removeImage(image)"
+              [attr.aria-label]="'Remove image'"
+            >
+              <img [src]="image.previewUrl" [alt]="'Festival image'" />
+            </button>
           </mat-grid-tile>
         </mat-grid-list>
       </div>
