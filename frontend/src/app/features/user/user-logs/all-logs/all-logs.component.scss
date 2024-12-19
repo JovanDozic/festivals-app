@@ -50,15 +50,15 @@
   background-color: transparent;
 }
 
-// .table-container::-webkit-scrollbar {
-//   width: 8px;
-// }
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
 
-// .table-container::-webkit-scrollbar-thumb {
-//   background-color: rgba(0, 0, 0, 0.2);
-//   border-radius: 4px;
-// }
+.table-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
 
-// .table-container::-webkit-scrollbar-thumb:hover {
-//   background-color: rgba(0, 0, 0, 0.4);
-// }
+.table-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
