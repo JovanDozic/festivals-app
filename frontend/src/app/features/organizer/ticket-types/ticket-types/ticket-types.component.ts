@@ -165,7 +165,9 @@ export class TicketTypesComponent implements OnInit {
             error: (error) => {
               console.log(error);
               if (error.status === 500) {
-                this.snackbarService.show('Ticket type has been used already');
+                this.snackbarService.show(
+                  'Ticket type has been bought already',
+                );
               } else {
                 this.snackbarService.show('Error deleting ticket type');
               }
