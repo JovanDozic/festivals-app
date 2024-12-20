@@ -498,7 +498,7 @@ func (h *userHandler) UpdateUserProfile(w http.ResponseWriter, r *http.Request) 
 	updatedProfile := modelsUser.UserProfile{
 		FirstName:   input.FirstName,
 		LastName:    input.LastName,
-		DateOfBirth: utils.ParseDate(input.DateOfBirth),
+		DateOfBirth: input.DateOfBirth,
 		PhoneNumber: input.PhoneNumber,
 	}
 

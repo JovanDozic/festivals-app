@@ -1,5 +1,7 @@
 package dto
 
+import "time"
+
 type RegisterUserRequest struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
@@ -24,10 +26,10 @@ type ChangePasswordRequest struct {
 }
 
 type UpdateUserProfileRequest struct {
-	FirstName   string `json:"firstName"`
-	LastName    string `json:"lastName"`
-	DateOfBirth string `json:"dateOfBirth" validate:"datetime=2006-01-02"`
-	PhoneNumber string `json:"phoneNumber"`
+	FirstName   string    `json:"firstName"`
+	LastName    string    `json:"lastName"`
+	DateOfBirth time.Time `json:"dateOfBirth"`
+	PhoneNumber string    `json:"phoneNumber"`
 }
 
 type UpdateStaffProfileRequest struct {
