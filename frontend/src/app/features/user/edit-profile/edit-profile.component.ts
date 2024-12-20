@@ -141,9 +141,17 @@ export class EditProfileComponent {
       countryISO3: this.addressFormGroup.get('countryISO3Ctrl')?.value,
     };
 
+    let addressCall = null;
+
+    if (this.data.address !== null) {
+      addressCall = this.userService.updateUserAddress(requestAddress);
+    } else {
+      addressCall = this.userService.createAddress(requestAddress);
+    }
+
     forkJoin({
       profile: this.userService.updateUserProfile(requestProfile),
-      address: this.userService.updateUserAddress(requestAddress),
+      address: addressCall,
       email: this.userService.updateUserEmail(emailRequest),
     }).subscribe({
       next: () => {

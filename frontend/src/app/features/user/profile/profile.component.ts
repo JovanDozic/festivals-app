@@ -16,6 +16,8 @@ import { ChangePasswordDialogComponent } from '../change-password-dialog/change-
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ChangeProfilePhotoDialogComponent } from '../change-profile-photo-dialog/change-profile-photo-dialog.component';
 import { EditProfileComponent } from '../edit-profile/edit-profile.component';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
+import { CreateUpdateUserProfileRequest } from '../../../models/user/user-requests';
 
 @Component({
   selector: 'app-profile',
@@ -34,6 +36,7 @@ import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 export class ProfileComponent implements OnInit {
   private authService = inject(AuthService);
   private userService = inject(UserService);
+  private snackbarService = inject(SnackbarService);
   readonly dialog = inject(MatDialog);
 
   userProfile: UserProfileResponse | null = null;
@@ -43,8 +46,35 @@ export class ProfileComponent implements OnInit {
   }
 
   getUserProfile() {
-    this.userService.getUserProfile().subscribe((response) => {
-      this.userProfile = response;
+    this.userService.getUserProfile().subscribe({
+      next: (response) => {
+        this.userProfile = response;
+      },
+      error: (error) => {
+        this.snackbarService.show(
+          'User profile was not created completely, creating temporary profile...',
+        );
+        console.error(error);
+        if (error.status === 404) {
+          const request: CreateUpdateUserProfileRequest = {
+            firstName: 'FIRST NAME',
+            lastName: 'LAST NAME',
+            dateOfBirth: new Date('2002-01-21'),
+            phoneNumber: 'PHONE NUMBER',
+          };
+          this.userService.createUserProfile(request).subscribe({
+            next: () => {
+              this.getUserProfile();
+            },
+            error: (error) => {
+              this.snackbarService.show(
+                "Couldn't create temporary user profile",
+              );
+              console.error(error);
+            },
+          });
+        }
+      },
     });
   }
 
@@ -74,6 +104,7 @@ export class ProfileComponent implements OnInit {
       data: this.userProfile,
       height: '550px',
       width: '500px',
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe((success) => {

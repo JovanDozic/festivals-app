@@ -73,7 +73,10 @@ export class LayoutComponent implements AfterViewInit {
   }
 
   isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
+    if (!this.authService.isLoggedIn()) return false;
+    const hasUsername = !!this.username;
+    const hasRole = !!this.userRole;
+    return hasUsername && hasRole;
   }
 
   toggleTheme(): void {
