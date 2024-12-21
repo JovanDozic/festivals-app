@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -12,7 +12,6 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  ActivateBraceletRequest,
   OrderDTO,
   TopUpBraceletRequest,
 } from '../../../../models/festival/festival.model';
@@ -25,8 +24,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
-import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
-import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { OrderService } from '../../../../services/festival/order.service';
 import { TopUpPaymentDialogComponent } from '../top-up-payment-dialog/top-up-payment-dialog.component';

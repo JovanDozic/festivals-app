@@ -3,7 +3,6 @@ import {
   Component,
   inject,
   AfterViewInit,
-  OnInit,
 } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe, CommonModule } from '@angular/common';
@@ -53,8 +52,12 @@ export class LayoutComponent implements AfterViewInit {
     this.username = this.authService.getUsername() ?? '';
     this.themeService.initTheme();
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: any) => {
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
+        ),
+      )
+      .subscribe((event: NavigationEnd) => {
         this.isHomePage = event.urlAfterRedirects === '/home';
       });
   }
@@ -70,7 +73,10 @@ export class LayoutComponent implements AfterViewInit {
   }
 
   isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
+    if (!this.authService.isLoggedIn()) return false;
+    const hasUsername = !!this.username;
+    const hasRole = !!this.userRole;
+    return hasUsername && hasRole;
   }
 
   toggleTheme(): void {

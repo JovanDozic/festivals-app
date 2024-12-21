@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -16,7 +16,6 @@ import {
 } from '../../../../models/festival/festival.model';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { FormsModule } from '@angular/forms';
-import { ItemService } from '../../../../services/festival/item.service';
 import { FestivalService } from '../../../../services/festival/festival.service';
 import { IssueBraceletComponent } from '../issue-bracelet/issue-bracelet.component';
 import { ReviewHelpRequestComponent } from '../review-help-request/review-help-request.component';
@@ -53,10 +52,15 @@ export class FestivalOrdersComponent implements OnInit {
   isLoading = true;
   orders: OrderPreviewDTO[] = [];
 
-  filterOptions: string[] = [];
-  selectedChip = '';
-
-  constructor() {}
+  filterOptions: string[] = [
+    'All',
+    'Pending',
+    'Issued',
+    'Activated',
+    'Help Requested',
+    'Rejected',
+  ];
+  selectedChip = 'All';
 
   getSkeletonBgColor(): string {
     const isDarkTheme =
@@ -98,34 +102,6 @@ export class FestivalOrdersComponent implements OnInit {
         next: (orders) => {
           this.orders = orders;
           this.isLoading = false;
-
-          this.filterOptions = [];
-          this.filterOptions.push('All');
-          this.filterOptions.push(
-            'Pending ' + orders.filter((order) => !order.braceletStatus).length,
-          );
-          this.filterOptions.push(
-            'Issued ' +
-              orders.filter((order) => order.braceletStatus === 'ISSUED')
-                .length,
-          );
-          this.filterOptions.push(
-            'Activated ' +
-              orders.filter((order) => order.braceletStatus === 'ACTIVATED')
-                .length,
-          );
-          this.filterOptions.push(
-            'Help Requested ' +
-              orders.filter(
-                (order) => order.braceletStatus === 'HELP_REQUESTED',
-              ).length,
-          );
-          this.filterOptions.push(
-            'Rejected ' +
-              orders.filter((order) => order.braceletStatus === 'REJECTED')
-                .length,
-          );
-          this.selectedChip = 'All';
         },
         error: (error) => {
           console.log(error);

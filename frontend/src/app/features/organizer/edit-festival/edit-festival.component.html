@@ -123,13 +123,11 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Country (ISO3)</mat-label>
-            <input matInput formControlName="countryISO3Ctrl" required />
-            <mat-error *ngIf="addressFormGroup.get('countryISO3Ctrl')?.invalid">
-              Country is <strong>required</strong>.
-            </mat-error>
-          </mat-form-field>
+          <app-country-picker
+            formControlName="countryISO3Ctrl"
+            style="margin-top: 15px"
+          >
+          </app-country-picker>
         </div>
       </form>
     </mat-tab>
@@ -138,7 +136,7 @@
       <div class="image-grid">
         <div class="form-fields-image">
           <div>
-            <h2>Images Preview</h2>
+            <h2>Images</h2>
             <p>Click on any image to remove it.</p>
           </div>
           <button mat-stroked-button (click)="fileInput.click()" type="button">
@@ -156,12 +154,14 @@
         </div>
         <mat-grid-list cols="3" rowHeight="170px" class="grid-list">
           <mat-grid-tile *ngFor="let image of images">
-            <img
+            <button
               class="image-button"
               (click)="removeImage(image)"
-              aria-label="Remove image"
-              [src]="image.previewUrl"
-            />
+              (keydown.enter)="removeImage(image)"
+              [attr.aria-label]="'Remove image'"
+            >
+              <img [src]="image.previewUrl" [alt]="'Festival image'" />
+            </button>
           </mat-grid-tile>
         </mat-grid-list>
       </div>

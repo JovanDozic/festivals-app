@@ -1,13 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  MatDialogModule,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
-import { Router } from '@angular/router';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-top-up-payment-dialog',

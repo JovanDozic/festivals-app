@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Employee, Festival } from '../../../models/festival/festival.model';
+import { Festival } from '../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FestivalService } from '../../../services/festival/festival.service';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -13,10 +13,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
-import {
-  ConfirmationDialogComponent,
-  ConfirmationDialogData,
-} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { UserService } from '../../../services/user/user.service';
 import { UserProfileResponse } from '../../../models/user/user-responses';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
@@ -42,7 +38,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
     '../../../app.component.scss',
   ],
 })
-export class OrganizerFestivalsComponent {
+export class OrganizerFestivalsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private festivalService = inject(FestivalService);
@@ -55,7 +51,7 @@ export class OrganizerFestivalsComponent {
   organizer: UserProfileResponse | undefined;
   displayedColumns = ['username', 'email', 'name', 'phoneNumber', 'actions'];
 
-  organizerId: number = 0;
+  organizerId = 0;
 
   ngOnInit() {
     this.loadOrganizer();

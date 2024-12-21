@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AuthService } from '../../../services/auth/auth.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -8,10 +7,6 @@ import { UserProfileResponse } from '../../../models/user/user-responses';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
-import {
-  ConfirmationDialogComponent,
-  ConfirmationDialogData,
-} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FestivalService } from '../../../services/festival/festival.service';
@@ -38,7 +33,7 @@ export class AccountComponent implements OnInit {
   readonly dialog = inject(MatDialog);
 
   userProfile: UserProfileResponse | null = null;
-  festivalsCount: number = 0;
+  festivalsCount = 0;
 
   ngOnInit() {
     this.getUserProfile();

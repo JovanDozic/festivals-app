@@ -40,12 +40,7 @@ export class UserService {
   }
 
   updateUserProfile(updatedProfile: CreateUpdateUserProfileRequest) {
-    return this.http.put<void>(`${this.apiUrl}/user/profile`, {
-      firstName: updatedProfile.firstName,
-      lastName: updatedProfile.lastName,
-      dateOfBirth: formatDate(updatedProfile.dateOfBirth),
-      phoneNumber: updatedProfile.phoneNumber,
-    });
+    return this.http.put<void>(`${this.apiUrl}/user/profile`, updatedProfile);
   }
 
   updateUserEmail(email: string) {

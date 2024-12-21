@@ -5,7 +5,7 @@ import {
 } from '../../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FestivalService } from '../../../../services/festival/festival.service';
-import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -165,7 +165,9 @@ export class TicketTypesComponent implements OnInit {
             error: (error) => {
               console.log(error);
               if (error.status === 500) {
-                this.snackbarService.show('Ticket type has been used already');
+                this.snackbarService.show(
+                  'Ticket type has been bought already',
+                );
               } else {
                 this.snackbarService.show('Error deleting ticket type');
               }

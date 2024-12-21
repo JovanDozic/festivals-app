@@ -41,7 +41,7 @@ export class AllLogsComponent implements OnInit {
   filterOptions: string[] = ['All'];
   selectedChip = 'All';
 
-  userRole: string = '';
+  userRole = '';
   logs: Log[] = [];
   displayedColumns = ['id', 'username', 'createdAt', 'message', 'actions'];
 

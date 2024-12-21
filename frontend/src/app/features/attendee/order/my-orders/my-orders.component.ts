@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -41,8 +41,6 @@ export class MyOrdersComponent implements OnInit {
 
   filterOptions: string[] = ['All', 'Upcoming Festivals', 'Past Festivals'];
   selectedChip = 'All';
-
-  constructor() {}
 
   getSkeletonBgColor(): string {
     const isDarkTheme =

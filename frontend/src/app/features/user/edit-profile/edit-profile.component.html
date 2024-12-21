@@ -1,0 +1,131 @@
+<h2 mat-dialog-title>Change Profile Information</h2>
+
+<mat-dialog-content>
+  <mat-tab-group>
+    <mat-tab label="Profile">
+      <form [formGroup]="infoFormGroup">
+        <div class="form-fields">
+          <mat-form-field appearance="outline" disabled>
+            <mat-label>Username</mat-label>
+            <input
+              matInput
+              formControlName="usernameCtrl"
+              required
+              autocomplete="off"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="emailCtrl" required />
+            <mat-error *ngIf="infoFormGroup.get('emailCtrl')?.invalid">
+              Email is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstNameCtrl" required />
+            <mat-error *ngIf="infoFormGroup.get('firstNameCtrl')?.invalid">
+              First name is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastNameCtrl" required />
+            <mat-error *ngIf="infoFormGroup.get('lastNameCtrl')?.invalid">
+              Last name is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Date of Birth</mat-label>
+            <input
+              matInput
+              [matDatepicker]="pickerEnd"
+              formControlName="dateOfBirthCtrl"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="pickerEnd"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #pickerEnd></mat-datepicker>
+            <mat-error *ngIf="infoFormGroup.get('dateOfBirthCtrl')?.invalid">
+              Date of birth is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="phoneNumberCtrl" required />
+            <mat-error *ngIf="infoFormGroup.get('phoneNumberCtrl')?.invalid">
+              Phone number is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-tab>
+
+    <mat-tab label="Address">
+      <form [formGroup]="addressFormGroup">
+        <ng-template matStepLabel>Address</ng-template>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Street</mat-label>
+            <input matInput formControlName="streetCtrl" required />
+            <mat-error *ngIf="addressFormGroup.get('streetCtrl')?.invalid">
+              Street is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Number</mat-label>
+            <input matInput formControlName="numberCtrl" required />
+            <mat-error *ngIf="addressFormGroup.get('numberCtrl')?.invalid">
+              Number is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Apartment / Suite</mat-label>
+            <input matInput formControlName="apartmentSuiteCtrl" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="cityCtrl" required />
+            <mat-error *ngIf="addressFormGroup.get('cityCtrl')?.invalid">
+              City is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Postal Code</mat-label>
+            <input matInput formControlName="postalCodeCtrl" required />
+            <mat-error *ngIf="addressFormGroup.get('postalCodeCtrl')?.invalid">
+              Postal Code is <strong>required</strong>.
+            </mat-error>
+          </mat-form-field>
+
+          <app-country-picker
+            formControlName="countryISO3Ctrl"
+            style="margin-top: 15px"
+          >
+          </app-country-picker>
+        </div>
+      </form>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="saveChanges()">Save</button>
+</mat-dialog-actions>

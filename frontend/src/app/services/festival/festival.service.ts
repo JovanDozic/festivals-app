@@ -128,13 +128,13 @@ export class FestivalService {
       .pipe(map((response) => response.festival));
   }
 
-  deleteFestivalImage(festivalId: number, imageId: number): Observable<any> {
+  deleteFestivalImage(festivalId: number, imageId: number) {
     return this.http.delete(
       `${this.apiUrl}/festival/${festivalId}/image/${imageId}`,
     );
   }
 
-  addFestivalImage(festivalId: number, imageUrl: string): Observable<any> {
+  addFestivalImage(festivalId: number, imageUrl: string) {
     return this.http.post(`${this.apiUrl}/festival/${festivalId}/image`, {
       imageUrl,
     });

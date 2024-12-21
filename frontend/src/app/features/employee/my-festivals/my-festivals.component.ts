@@ -6,13 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { Festival } from '../../../models/festival/festival.model';
 import { FestivalService } from '../../../services/festival/festival.service';
-import { SnackbarService } from '../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  ConfirmationDialogComponent,
-  ConfirmationDialogData,
-} from '../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({

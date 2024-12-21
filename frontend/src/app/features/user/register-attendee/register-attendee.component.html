@@ -51,7 +51,6 @@
           </mat-step>
 
           <!-- Step 2: Personal Information -->
-
           <mat-step [stepControl]="personalFormGroup" [editable]="false">
             <form [formGroup]="personalFormGroup">
               <ng-template matStepLabel>Personal Information</ng-template>
@@ -136,10 +135,11 @@
                   <input matInput formControlName="postalCodeCtrl" required />
                 </mat-form-field>
 
-                <mat-form-field appearance="outline">
-                  <mat-label>Country (ISO3)</mat-label>
-                  <input matInput formControlName="countryISO3Ctrl" required />
-                </mat-form-field>
+                <app-country-picker
+                  formControlName="countryISO3Ctrl"
+                  style="margin-top: 15px"
+                >
+                </app-country-picker>
               </div>
               <div>
                 <button

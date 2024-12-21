@@ -38,17 +38,27 @@
       </button>
       <button
         mat-icon-button
-        matTooltip="Change profile information"
-        color="primary"
+        matTooltip="{{
+          userProfile.firstName == 'FIRST NAME' || !userProfile.address
+            ? 'Complete your profile'
+            : 'Edit Profile'
+        }}"
         (click)="changeProfile()"
       >
-        <mat-icon class="material-symbols-outlined" color="primary">
+        <mat-icon
+          class="material-symbols-outlined"
+          color="{{
+            userProfile.firstName == 'FIRST NAME' || !userProfile.address
+              ? 'warn'
+              : 'primary'
+          }}"
+        >
           badge
         </mat-icon>
       </button>
       <button
         mat-icon-button
-        matTooltip="Change profile photo"
+        matTooltip="Update profile photo"
         color="primary"
         (click)="changeProfilePhoto()"
       >

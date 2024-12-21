@@ -67,14 +67,8 @@ func (u *UpdateUserProfileRequest) Validate() error {
 	if u.LastName == "" {
 		return models.ErrMissingFields
 	}
-	if u.DateOfBirth == "" {
-		return models.ErrMissingFields
-	}
 	if u.PhoneNumber == "" {
 		return models.ErrMissingFields
-	}
-	if !utils.IsDateValid(u.DateOfBirth) {
-		return models.ErrInvalidDateFormat
 	}
 	return nil
 }

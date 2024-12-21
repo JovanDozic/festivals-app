@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
+import { Router, RouterLink } from '@angular/router';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -10,10 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { OrderService } from '../../../../services/festival/order.service';
-import {
-  OrderDTO,
-  OrderPreviewDTO,
-} from '../../../../models/festival/festival.model';
+import { OrderDTO } from '../../../../models/festival/festival.model';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { FormsModule } from '@angular/forms';
 import { ActivateBraceletComponent } from '../activate-bracelet/activate-bracelet.component';
@@ -59,8 +56,6 @@ export class MyBraceletsComponent implements OnInit {
     'Rejected',
   ];
   selectedChip = 'Active';
-
-  constructor() {}
 
   ngOnInit() {
     this.loadBracelets();

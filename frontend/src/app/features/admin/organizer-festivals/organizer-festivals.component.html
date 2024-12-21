@@ -166,17 +166,6 @@
     </mat-card>
   </div>
 
-  <button
-    mat-fab
-    extended
-    class="main-action"
-    color="primary"
-    routerLink="create"
-  >
-    <mat-icon>add</mat-icon>
-    Create Festival
-  </button>
-
   <div class="empty-list" *ngIf="!isLoading && festivals.length === 0">
     <p>
       You do not have any festivals. Click the button below to create a new one.

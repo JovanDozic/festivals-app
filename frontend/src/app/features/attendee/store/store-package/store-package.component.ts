@@ -10,7 +10,7 @@ import {
 } from '../../../../models/festival/festival.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FestivalService } from '../../../../services/festival/festival.service';
-import { SnackbarService } from '../../../../shared/snackbar/snackbar.service';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -39,16 +39,18 @@ import {
   ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
-import { count, firstValueFrom, Observable, throwError } from 'rxjs';
+import { firstValueFrom, Observable, throwError } from 'rxjs';
 import { OrderService } from '../../../../services/festival/order.service';
 import { StorePaymentDialogComponent } from '../store-payment-dialog/store-payment-dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CountryResponse } from '../../../../models/common/address.model';
 import { MatSelectModule } from '@angular/material/select';
+import { CountryPickerComponent } from '../../../../shared/country-picker/country-picker.component';
 
 @Component({
   selector: 'app-store-package',
   imports: [
+    CountryPickerComponent,
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
@@ -436,8 +438,7 @@ export class StorePackageComponent implements OnInit {
       await firstValueFrom(this.updateAddress());
       const orderResponse = await firstValueFrom(this.createOrder());
 
-      const orderId =
-        (orderResponse as any).orderId || (orderResponse as any).data?.orderId;
+      const orderId = orderResponse.orderId;
 
       if (orderId) {
         this.openPaymentDialog(orderId);
@@ -453,7 +454,7 @@ export class StorePackageComponent implements OnInit {
     }
   }
 
-  updateProfile(): Observable<any> {
+  updateProfile(): Observable<void> {
     if (this.personalFormGroup.valid) {
       return this.userService.updateUserProfile({
         firstName: this.personalFormGroup.get('firstNameCtrl')?.value,
@@ -467,7 +468,7 @@ export class StorePackageComponent implements OnInit {
     return throwError(() => new Error('Personal form is invalid'));
   }
 
-  updateEmail(): Observable<any> {
+  updateEmail(): Observable<void> {
     if (this.personalFormGroup.valid) {
       return this.userService.updateUserEmail(
         this.personalFormGroup.get('emailCtrl')?.value,
@@ -476,7 +477,7 @@ export class StorePackageComponent implements OnInit {
     return throwError(() => new Error('Email form is invalid'));
   }
 
-  updateAddress(): Observable<any> {
+  updateAddress(): Observable<void> {
     if (this.addressFormGroup.valid) {
       return this.userService.updateUserAddress({
         street: this.addressFormGroup.get('streetCtrl')?.value,
@@ -490,7 +491,9 @@ export class StorePackageComponent implements OnInit {
     return throwError(() => new Error('Address form is invalid'));
   }
 
-  createOrder(): Observable<any> {
+  createOrder(): Observable<{
+    orderId: number;
+  }> {
     if (
       this.selectedTicket &&
       this.festival &&
