@@ -29,8 +29,6 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import {
   MatOptionModule,
-  DateAdapter,
-  MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
   provideNativeDateAdapter,
 } from '@angular/material/core';
