@@ -25,17 +25,14 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import {
   MatOptionModule,
-  DateAdapter,
-  MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
+  provideNativeDateAdapter,
 } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UserService } from '../../../services/user/user.service';
 import { CreateProfileRequest } from '../../../models/user/user-requests';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { MatSelectModule } from '@angular/material/select';
-import { CustomDateAdapter } from '../../../shared/date-formats/date-adapter';
-import { CUSTOM_DATE_FORMATS } from '../../../shared/date-formats/date-formats';
 
 export interface Role {
   value: string;
@@ -65,8 +62,7 @@ export interface Role {
   templateUrl: './register-user.component.html',
   styleUrls: ['./register-user.component.scss', '../../../app.component.scss'],
   providers: [
-    { provide: DateAdapter, useClass: CustomDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
+    provideNativeDateAdapter(),
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
   ],
 })

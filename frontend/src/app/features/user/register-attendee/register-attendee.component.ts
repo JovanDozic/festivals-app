@@ -14,12 +14,9 @@ import { CreateAddressRequest } from '../../../models/common/create-address-requ
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
+  provideNativeDateAdapter,
 } from '@angular/material/core';
-import { CustomDateAdapter } from '../../../shared/date-formats/date-adapter';
-import { CUSTOM_DATE_FORMATS } from '../../../shared/date-formats/date-formats';
 import { CountryPickerComponent } from '../../../shared/country-picker/country-picker.component';
 
 @Component({
@@ -41,8 +38,7 @@ import { CountryPickerComponent } from '../../../shared/country-picker/country-p
     '../../../app.component.scss',
   ],
   providers: [
-    { provide: DateAdapter, useClass: CustomDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
+    provideNativeDateAdapter(),
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
   ],
 })

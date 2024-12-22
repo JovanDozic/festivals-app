@@ -32,6 +32,7 @@ import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
+  provideNativeDateAdapter,
 } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
@@ -47,8 +48,6 @@ import * as countries from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
 import { MatSelectModule } from '@angular/material/select';
 import { CountryPickerComponent } from '../../../shared/country-picker/country-picker.component';
-import { CustomDateAdapter } from '../../../shared/date-formats/date-adapter';
-import { CUSTOM_DATE_FORMATS } from '../../../shared/date-formats/date-formats';
 
 interface ImagePreview {
   id?: number;
@@ -83,8 +82,7 @@ interface ImagePreview {
     MatSelectModule,
   ],
   providers: [
-    { provide: DateAdapter, useClass: CustomDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
+    provideNativeDateAdapter(),
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
   ],
 })

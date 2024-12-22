@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Create Travel Package Addon</h2>
 
 <mat-dialog-content>
-  <mat-stepper [linear]="true" #stepper [selectedIndex]="1">
+  <mat-stepper [linear]="true" #stepper>
     <mat-step [stepControl]="infoFormGroup" [editable]="false">
       <form [formGroup]="infoFormGroup">
         <ng-template matStepLabel>Info</ng-template>
@@ -43,7 +43,6 @@
         [linear]="true"
         #configStepper
         class="configuration-step"
-        [selectedIndex]="3"
       >
         <form [formGroup]="configurationFormGroup">
           <mat-step>

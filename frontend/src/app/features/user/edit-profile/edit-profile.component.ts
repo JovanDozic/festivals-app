@@ -23,9 +23,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import {
   MatOptionModule,
-  DateAdapter,
-  MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
+  provideNativeDateAdapter,
 } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
@@ -36,8 +35,6 @@ import * as countries from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
 import { MatSelectModule } from '@angular/material/select';
 import { CountryPickerComponent } from '../../../shared/country-picker/country-picker.component';
-import { CustomDateAdapter } from '../../../shared/date-formats/date-adapter';
-import { CUSTOM_DATE_FORMATS } from '../../../shared/date-formats/date-formats';
 import { UserService } from '../../../services/user/user.service';
 import { CreateUpdateUserProfileRequest } from '../../../models/user/user-requests';
 import { UpdateAddressRequest } from '../../../models/common/create-address-request.model';
@@ -69,8 +66,7 @@ import { UserProfileResponse } from '../../../models/user/user-responses';
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss', '../../../app.component.scss'],
   providers: [
-    { provide: DateAdapter, useClass: CustomDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
+    provideNativeDateAdapter(),
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
   ],
 })
