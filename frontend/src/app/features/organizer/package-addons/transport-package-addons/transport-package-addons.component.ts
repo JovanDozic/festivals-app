@@ -62,7 +62,7 @@ export class TransportPackageAddonsComponent implements OnInit {
       this.itemService.getTransportAddons(Number(id)).subscribe({
         next: (response) => {
           this.transportAddons = response;
-          this.transportCount = this.transportAddons.length;
+          this.transportCount = this.transportAddons?.length ?? 0;
         },
         error: (error) => {
           console.log(error);

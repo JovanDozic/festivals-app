@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Create Travel Package Addon</h2>
 
 <mat-dialog-content>
-  <mat-stepper [linear]="true" #stepper>
+  <mat-stepper [linear]="true" #stepper [selectedIndex]="1">
     <mat-step [stepControl]="infoFormGroup" [editable]="false">
       <form [formGroup]="infoFormGroup">
         <ng-template matStepLabel>Info</ng-template>
@@ -43,6 +43,7 @@
         [linear]="true"
         #configStepper
         class="configuration-step"
+        [selectedIndex]="3"
       >
         <form [formGroup]="configurationFormGroup">
           <mat-step>
@@ -73,7 +74,7 @@
 
           <mat-step>
             <ng-template matStepLabel>Departure City</ng-template>
-            <div class="form-field">
+            <div class="form-field form-field-two">
               <mat-form-field appearance="outline">
                 <mat-label>City Name</mat-label>
                 <input
@@ -83,8 +84,7 @@
                   required
                 />
               </mat-form-field>
-            </div>
-            <div class="form-field form-field-two">
+
               <mat-form-field appearance="outline">
                 <mat-label>Postal Code</mat-label>
                 <input
@@ -94,15 +94,13 @@
                   required
                 />
               </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Country (ISO3)</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="departureCountryISO3Ctrl"
-                  required
-                />
-              </mat-form-field>
+            </div>
+            <div class="form-field">
+              <app-country-picker
+                formControlName="departureCountryISO3Ctrl"
+                style="margin-top: 5px"
+              >
+              </app-country-picker>
             </div>
             <div>
               <button mat-button matStepperPrevious>Back</button>
@@ -123,7 +121,7 @@
 
           <mat-step>
             <ng-template matStepLabel>Arrival City</ng-template>
-            <div class="form-field">
+            <div class="form-field form-field-two">
               <mat-form-field appearance="outline">
                 <mat-label>City Name</mat-label>
                 <input
@@ -133,8 +131,7 @@
                   required
                 />
               </mat-form-field>
-            </div>
-            <div class="form-field form-field-two">
+
               <mat-form-field appearance="outline">
                 <mat-label>Postal Code</mat-label>
                 <input
@@ -144,15 +141,13 @@
                   required
                 />
               </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Country (ISO3)</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="arrivalCountryISO3Ctrl"
-                  required
-                />
-              </mat-form-field>
+            </div>
+            <div class="form-field">
+              <app-country-picker
+                formControlName="arrivalCountryISO3Ctrl"
+                style="margin-top: 5px"
+              >
+              </app-country-picker>
             </div>
             <div>
               <button mat-button matStepperPrevious>Back</button>

@@ -40,10 +40,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { CityRequest } from '../../../../models/common/address.model';
+import { CountryPickerComponent } from '../../../../shared/country-picker/country-picker.component';
 
 @Component({
   selector: 'app-create-transport-package-addon',
   imports: [
+    CountryPickerComponent,
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
