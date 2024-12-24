@@ -1,7 +1,5 @@
 # Festivals App
 
-Bachelor thesis project for Databases 2 course at the Faculty of Technical Sciences, University of Novi Sad, Serbia.
-
 ## Overview
 
 Festivals App is a full-stack application designed to streamline the management of music festivals. The app provides a seamless experience for both festival staff and attendees, featuring subsystems for ticket sales, custom package creation (including camp and travel packages), and bracelet management.
