@@ -41,8 +41,8 @@ The database follows a normalized structure to ensure data integrity and efficie
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/JovanDozic/diplomski-rad-2024.git
-   cd diplomski-rad-2024/backend
+   git clone https://github.com/JovanDozic/festivals-app.git
+   cd festivals-app/backend
    ```
 2. Install dependencies:
    ```bash
@@ -59,7 +59,7 @@ The database follows a normalized structure to ensure data integrity and efficie
 
 1. Navigate to the frontend directory:
    ```bash
-   cd diplomski-rad-2024/frontend
+   cd festivals-app/frontend
    ```
 2. Install dependencies:
    ```bash
