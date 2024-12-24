@@ -73,7 +73,9 @@ The database follows a normalized structure to ensure data integrity and efficie
 ### Database
 
 1. Create PostgreSQL database and setup connection string as an environment variable.
-2. Migration code will create all tables, create `admin` account and fill in `countries` table.
+2. Migration code wi
+
+ll create all tables, create `admin` account and fill in `countries` table.
 
 ## Usage
 
