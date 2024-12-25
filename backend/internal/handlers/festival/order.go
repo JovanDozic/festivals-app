@@ -534,12 +534,17 @@ func (h *orderHandler) TopUpBracelet(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	bracelet, err := h.orderService.GetBraceletById(braceletId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
 	email := h.userService.GetUserEmail(username)
 	if email != "" {
-		if err := h.emailService.SendEmail(
-			email,
-			"Bracelet Top Up Receipt",
-			fmt.Sprintf("Payment for Bracelet top up is successful! Top Up amount: $%.2f", input.Amount),
+		if err := h.emailService.SendBraceletTopUpConfirmation(
+			email, "Bracelet Top-Up Confirmation", "", *bracelet, input.Amount,
 		); err != nil {
 			log.Println("error:", err)
 		}

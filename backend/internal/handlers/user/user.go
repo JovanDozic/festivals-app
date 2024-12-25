@@ -291,7 +291,7 @@ func (h *userHandler) ChangePassword(w http.ResponseWriter, r *http.Request) {
 
 func (h *userHandler) CreateUserAddress(w http.ResponseWriter, r *http.Request) {
 
-	if !utils.AuthAttendeeRole(r.Context()) {
+	if !utils.Auth(r.Context()) {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
