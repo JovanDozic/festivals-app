@@ -25,7 +25,7 @@ func Init(dbConfig struct{ ConnectionString, RootAdminPassword string }) (*gorm.
 	migrateFestivalModels(db)
 
 	if isTableEmpty(db, "countries") {
-		err := runSQLScript(db, "countries.sql")
+		err := runSQLScript(db, "assets/countries.sql")
 		if err != nil {
 			log.Println("error running countries.sql:", err)
 			return nil, err

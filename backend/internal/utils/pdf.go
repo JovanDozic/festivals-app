@@ -18,7 +18,7 @@ func GenerateShippingLabelPDF(fromAddr, toAddr *models.Address, festivalName, at
 			Ht: 150,
 		},
 	})
-	pdf.AddUTF8Font("DejaVu", "", "DejaVuSansCondensed.ttf")
+	pdf.AddUTF8Font("DejaVu", "", "assets/DejaVuSansCondensed.ttf")
 	pdf.AddPage()
 
 	pdf.Ln(2)

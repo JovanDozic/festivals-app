@@ -51,7 +51,7 @@ func (e *emailService) SendEmail(to, subject, body string) error {
 
 func (e *emailService) SendBraceletTopUpConfirmation(to, subject, body string, bracelet models.Bracelet, amount float64) error {
 
-	templateData, err := os.ReadFile("template.html")
+	templateData, err := os.ReadFile("assets/template.html")
 	if err != nil {
 		return fmt.Errorf("failed to read email template: %w", err)
 	}
