@@ -11,7 +11,7 @@ import {
   MatDialogActions,
 } from '@angular/material/dialog';
 
-export interface ConfirmationDialogData {
+export interface PeterAlertData {
   title: string;
   message: string;
   confirmButtonText: string;
@@ -28,10 +28,11 @@ export interface ConfirmationDialogData {
     MatDialogContent,
     MatDialogActions,
   ],
+  styleUrls: ['./peter-alert.component.scss'],
 })
 export class PeterAlertComponent {
   readonly dialogRef = inject(MatDialogRef<PeterAlertComponent>);
-  readonly data = inject<ConfirmationDialogData>(MAT_DIALOG_DATA);
+  readonly data = inject<PeterAlertData>(MAT_DIALOG_DATA);
 
   closeDialog(confirm: boolean) {
     this.dialogRef.close({ confirm });

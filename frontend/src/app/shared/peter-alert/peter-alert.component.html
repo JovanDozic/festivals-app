@@ -1,10 +1,9 @@
-<h2 mat-dialog-title>{{ data.title }}</h2>
-<mat-dialog-content>{{ data.message }}</mat-dialog-content>
+<h2 mat-dialog-title>Peter Alert</h2>
+<mat-dialog-content>
+  <img class="peter" src="peter.jpg" alt="" />
+</mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button color="warn" (click)="closeDialog(false)">
-    {{ data.cancelButtonText }}
-  </button>
-  <button mat-flat-button color="primary" (click)="closeDialog(true)">
-    {{ data.confirmButtonText }}
+  <button mat-stroked-button color="primary" (click)="closeDialog(true)">
+    OK
   </button>
 </mat-dialog-actions>

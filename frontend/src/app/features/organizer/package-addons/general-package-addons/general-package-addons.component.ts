@@ -17,6 +17,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { ItemService } from '../../../../services/festival/item.service';
 import { CreateGeneralPackageAddonComponent } from '../create-general-package-addon/create-general-package-addon.component';
+import { PeterAlertComponent } from '../../../../shared/peter-alert/peter-alert.component';
 
 @Component({
   selector: 'app-general-package-addons',
@@ -109,6 +110,14 @@ export class GeneralPackageAddonsComponent implements OnInit {
       if (result) {
         this.loadAddons();
       }
+    });
+  }
+
+  onDeleteAddonClick(_t29: GeneralAddonDTO) {
+    this.dialog.open(PeterAlertComponent, {
+      data: null,
+      width: '250px',
+      height: 'auto',
     });
   }
 }
