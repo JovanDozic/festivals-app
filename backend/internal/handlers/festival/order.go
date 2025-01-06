@@ -103,7 +103,7 @@ func (h *orderHandler) CreateTicketOrder(w http.ResponseWriter, r *http.Request)
 
 	email := h.userService.GetUserEmail(username)
 	if email != "" {
-		if err := h.emailService.SendEmail(email, "Order Created", fmt.Sprintf("Ticket Order #%d created successfully!", order.ID)); err != nil {
+		if err := h.emailService.SendOrderConfirmation(email, "Ticket Order Confirmation", "", "Ticket", order); err != nil {
 			log.Println("error:", err)
 		}
 	} else {
@@ -214,7 +214,7 @@ func (h *orderHandler) CreatePackageOrder(w http.ResponseWriter, r *http.Request
 
 	email := h.userService.GetUserEmail(username)
 	if email != "" {
-		if err := h.emailService.SendEmail(email, "Order Created", fmt.Sprintf("Package Order #%d created successfully!", order.ID)); err != nil {
+		if err := h.emailService.SendOrderConfirmation(email, "Package Order Confirmation", "", "Package", order); err != nil {
 			log.Println("error:", err)
 		}
 	} else {
@@ -396,11 +396,7 @@ func (h *orderHandler) IssueBracelet(w http.ResponseWriter, r *http.Request) {
 
 	email := h.userService.GetUserEmail(attendee.Username)
 	if email != "" {
-		if err := h.emailService.SendEmail(
-			email,
-			"Bracelet Issued",
-			fmt.Sprintf("Bracelet for Order #%d issued and sent to your address!", input.OrderId),
-		); err != nil {
+		if err := h.emailService.SendBraceletIssuedConfirmation(email, "Bracelet Issued", "", bracelet); err != nil {
 			log.Println("error:", err)
 		}
 	} else {
@@ -474,13 +470,16 @@ func (h *orderHandler) ActivateBracelet(w http.ResponseWriter, r *http.Request) 
 		}
 	}
 
+	bracelet, err := h.orderService.GetBraceletById(braceletId)
+	if err != nil {
+		log.Println("error:", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
 	email := h.userService.GetUserEmail(username)
 	if email != "" {
-		if err := h.emailService.SendEmail(
-			email,
-			"Bracelet Activated",
-			"Bracelet activated successfully!",
-		); err != nil {
+		if err := h.emailService.SendBraceletActivatedConfirmation(email, "Bracelet Activated", "", *bracelet); err != nil {
 			log.Println("error:", err)
 		}
 	} else {
@@ -681,11 +680,7 @@ func (h *orderHandler) ApproveHelpRequest(w http.ResponseWriter, r *http.Request
 
 	bracelet, err := h.orderService.GetBraceletById(braceletId)
 	if err == nil {
-		if err := h.emailService.SendEmail(
-			bracelet.Attendee.User.Email,
-			"Bracelet Activated (via Help Request)",
-			"Employee approved your activation help request and Bracelet is now activated!",
-		); err != nil {
+		if err := h.emailService.SendBraceletHelpRequestApproved(bracelet.Attendee.User.Email, "Bracelet Activated (via Help Request)", "", *bracelet); err != nil {
 			log.Println("error:", err)
 		}
 	} else {
@@ -718,11 +713,7 @@ func (h *orderHandler) RejectHelpRequest(w http.ResponseWriter, r *http.Request)
 
 	bracelet, err := h.orderService.GetBraceletById(braceletId)
 	if err == nil {
-		if err := h.emailService.SendEmail(
-			bracelet.Attendee.User.Email,
-			"Bracelet Activation Rejected (via Help Request)",
-			"Employee rejected your activation help request and Bracelet is now in rejected state.",
-		); err != nil {
+		if err := h.emailService.SendBraceletHelpRequestRejected(bracelet.Attendee.User.Email, "Bracelet Activation Rejected (via Help Request)", "", *bracelet); err != nil {
 			log.Println("error:", err)
 		}
 	} else {
