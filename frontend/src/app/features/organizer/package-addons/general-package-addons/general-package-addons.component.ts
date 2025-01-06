@@ -113,7 +113,7 @@ export class GeneralPackageAddonsComponent implements OnInit {
     });
   }
 
-  onDeleteAddonClick(_t29: GeneralAddonDTO) {
+  onDeleteAddonClick() {
     this.dialog.open(PeterAlertComponent, {
       data: null,
       width: '250px',
