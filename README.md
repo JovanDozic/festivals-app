@@ -69,14 +69,15 @@ The database follows a normalized structure to ensure data integrity and efficie
    ```bash
    ng serve
    ```
+   or using debugger in Visual Studio Code (needs launch files from `frontend-setup`).
 
 ### Database
 
-1. Create PostgreSQL database and setup connection string as an environment variable.
-2. Migration code will create all tables, create `admin` account and fill in `countries` table.
+1. Create a PostgreSQL database and setup connection string as an environment variable.
+2. Migration code will create all tables, create an `admin` account and fill in `countries` table.
 
 ## Usage
 
 1. Access the app via the frontend URL (default: `http://localhost:4200`).
-2. Register as an attendee, or login as `admin` (default password is defined in environment variables, by default it's `admin`) to register other administrators or organizers.
+2. Register as an attendee, or login as `admin` to register other administrators or organizers (default password is defined in environment variables, by default it is `admin`).
 3. Enjoy!
