@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: festivals-app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+    environment:
+      APP_API_VERSION: "v1"
+      APP_NAME: "backend"
+      APP_PORT: "4000"
+      APP_ENV: "dev"
+      DB_CONNECTION_STRING: "${DB_CONNECTION_STRING}"
+      ROOT_ADMIN_PASSWORD: "admin"
+      JWT_SECRET: "${JWT_SECRET_KEY}"
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: "eu-west-1"
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME}
+      SMTP_HOST: "smtp.gmail.com"
+      SMTP_PORT: "587"
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM: "Festivals App"
+    volumes:
+      - ./backend/cmd/api/assets:/app/assets
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres-data:
